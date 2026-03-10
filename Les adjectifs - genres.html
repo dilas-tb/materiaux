@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les adjectifs – Drag & Drop</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 28px 16px 40px;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            color: #a78bfa;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 0.88rem;
+            color: #6b7280;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        /* ── Adjektiv-Info-Box ── */
+        .adj-info {
+            background: #16213e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 14px 28px;
+            margin-bottom: 22px;
+            text-align: center;
+            min-width: 260px;
+        }
+
+        .adj-info .adj-de {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f3f4f6;
+        }
+
+        .adj-info .adj-tip {
+            font-size: 0.78rem;
+            color: #4b5563;
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        .adj-info .adj-note {
+            font-size: 0.82rem;
+            color: #7c3aed;
+            margin-top: 6px;
+        }
+
+        /* ── Pool ── */
+        .pool-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        #pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            min-height: 56px;
+            background: #12122a;
+            border: 2px dashed #2d2d5e;
+            border-radius: 14px;
+            padding: 14px 18px;
+            width: 100%;
+            max-width: 720px;
+            margin-bottom: 28px;
+            transition: border-color 0.3s;
+        }
+
+        #pool.drag-over {
+            border-color: #a78bfa;
+        }
+
+        /* ── Chips ── */
+        .chip {
+            background: linear-gradient(135deg, #2d2d5e, #3b2d6e);
+            color: #e0e0e0;
+            border: 1px solid #4b3d8e;
+            border-radius: 24px;
+            padding: 9px 20px;
+            font-size: 1rem;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(124,58,237,0.35);
+        }
+
+        .chip.dragging {
+            opacity: 0.45;
+            cursor: grabbing;
+        }
+
+        .chip.correct {
+            background: linear-gradient(135deg, #064e3b, #065f46);
+            border-color: #10b981;
+            color: #6ee7b7;
+            cursor: default;
+            animation: flashGreen 0.5s ease;
+        }
+
+        @keyframes flashGreen {
+            0%   { box-shadow: 0 0 0px #10b981; }
+            50%  { box-shadow: 0 0 18px 6px #10b981; }
+            100% { box-shadow: 0 0 4px #10b981; }
+        }
+
+        /* ── Drop-Zonen Grid ── */
+        .zones-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+            max-width: 720px;
+            margin-bottom: 28px;
+        }
+
+        .zone-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .zone-title {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        .zone-title span {
+            display: block;
+            font-size: 0.72rem;
+            color: #4b5563;
+            text-transform: none;
+            letter-spacing: 0;
+            margin-top: 2px;
+        }
+
+        .dropzone {
+            min-height: 80px;
+            background: #16213e;
+            border: 2px dashed #2d2d5e;
+            border-radius: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            transition: border-color 0.25s, background 0.25s;
+            position: relative;
+        }
+
+        .dropzone .placeholder {
+            font-size: 0.8rem;
+            color: #374151;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .dropzone.drag-over {
+            border-color: #a78bfa;
+            background: rgba(167,139,250,0.07);
+        }
+
+        .dropzone.flash-correct {
+            animation: zoneFlash 0.55s ease;
+        }
+
+        @keyframes zoneFlash {
+            0%   { background: #16213e; }
+            40%  { background: rgba(16, 185, 129, 0.18); }
+            100% { background: #16213e; }
+        }
+
+        .dropzone.flash-wrong {
+            animation: zoneWrong 0.45s ease;
+        }
+
+        @keyframes zoneWrong {
+            0%   { background: #16213e; }
+            40%  { background: rgba(239, 68, 68, 0.18); }
+            100% { background: #16213e; }
+        }
+
+        /* ── Feedback Toast ── */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #064e3b;
+            border: 1px solid #10b981;
+            color: #6ee7b7;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 999;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        #toast.wrong {
+            background: #450a0a;
+            border-color: #ef4444;
+            color: #fca5a5;
+        }
+
+        /* ── Buttons ── */
+        .btn-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 28px;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(124,58,237,0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124,58,237,0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #a78bfa;
+            border: 2px solid #a78bfa;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(167,139,250,0.12);
+        }
+
+        /* ── Score ── */
+        .score-bar {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 18px;
+        }
+
+        .score-bar span {
+            color: #a78bfa;
+            font-weight: bold;
+        }
+
+        /* ── Completed Banner ── */
+        #completedBanner {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #064e3b, #065f46);
+            border: 1px solid #10b981;
+            border-radius: 18px;
+            padding: 22px 36px;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 420px;
+        }
+
+        #completedBanner.visible { display: flex; }
+
+        #completedBanner .banner-emoji { font-size: 2.4rem; }
+        #completedBanner .banner-text {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #6ee7b7;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 500px) {
+            .zones-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Les adjectifs</h1>
+<p class="subtitle">Ziehe jede Form in die richtige Spalte!</p>
+
+<div class="score-bar">Richtig platziert: <span id="scoreNum">0</span> / <span id="scoreTotal">0</span></div>
+
+<div class="adj-info" id="adjInfo">
+    <div class="adj-de" id="adjDe">—</div>
+    <div class="adj-tip" id="adjTip"></div>
+    <div class="adj-note" id="adjNote"></div>
+</div>
+
+<div id="completedBanner">
+    <div class="banner-emoji">🎉</div>
+    <div class="banner-text">Super! Alle Formen richtig sortiert!</div>
+</div>
+
+<p class="pool-label">Wortpool</p>
+<div id="pool"></div>
+
+<div class="zones-grid">
+    <div class="zone-wrapper">
+        <div class="zone-title">Singulier masculin <span>z. B. un chat …</span></div>
+        <div class="dropzone" id="zone-sing-masc" data-zone="sing-masc">
+            <span class="placeholder">Hierher ziehen</span>
+        </div>
+    </div>
+    <div class="zone-wrapper">
+        <div class="zone-title">Singulier féminin <span>z. B. une chatte …</span></div>
+        <div class="dropzone" id="zone-sing-fem" data-zone="sing-fem">
+            <span class="placeholder">Hierher ziehen</span>
+        </div>
+    </div>
+    <div class="zone-wrapper">
+        <div class="zone-title">Pluriel masculin <span>z. B. des chats …</span></div>
+        <div class="dropzone" id="zone-plur-masc" data-zone="plur-masc">
+            <span class="placeholder">Hierher ziehen</span>
+        </div>
+    </div>
+    <div class="zone-wrapper">
+        <div class="zone-title">Pluriel féminin <span>z. B. des chattes …</span></div>
+        <div class="dropzone" id="zone-plur-fem" data-zone="plur-fem">
+            <span class="placeholder">Hierher ziehen</span>
+        </div>
+    </div>
+</div>
+
+<div class="btn-row">
+    <button class="btn btn-primary" onclick="newRound()">🔀 Neues Adjektiv</button>
+    <button class="btn btn-secondary" onclick="showSolution()">💡 Lösung zeigen</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── Datenbasis ──────────────────────────────────────────────────────────────
+// pluriel: regelm. = sing + s; Ausnahmen explizit angegeben
+// Sonderregel: Adjektive auf -s / -x im Maskulin Singular → Plural identisch
+const adjectives = [
+    { masc: "bon",        fem: "bonne",       de: "gut",               tip: "unregelmäßig" },
+    { masc: "mauvais",    fem: "mauvaise",     de: "schlecht",          tip: "" },
+    { masc: "grand",      fem: "grande",       de: "groß",              tip: "" },
+    { masc: "petit",      fem: "petite",       de: "klein",             tip: "" },
+    { masc: "beau",       fem: "belle",        de: "schön",             tip: "unregelmäßig",
+      plurMasc: "beaux" },
+    { masc: "nouveau",    fem: "nouvelle",     de: "neu",               tip: "unregelmäßig",
+      plurMasc: "nouveaux" },
+    { masc: "vieux",      fem: "vieille",      de: "alt",               tip: "unregelmäßig",
+      plurMasc: "vieux" },
+    { masc: "jeune",      fem: "jeune",        de: "jung",              tip: "m = f" },
+    { masc: "gentil",     fem: "gentille",     de: "freundlich",        tip: "unregelmäßig" },
+    { masc: "méchant",    fem: "méchante",     de: "böse",              tip: "" },
+    { masc: "sympa",      fem: "sympa",        de: "nett, sympathisch", tip: "m = f · unveränderlich",
+      plurMasc: "sympa", plurFem: "sympa" },
+    { masc: "content",    fem: "contente",     de: "fröhlich",          tip: "" },
+    { masc: "triste",     fem: "triste",       de: "traurig",           tip: "m = f" },
+    { masc: "heureux",    fem: "heureuse",     de: "glücklich",         tip: "-eux / -euse",
+      plurMasc: "heureux" },
+    { masc: "fatigué",    fem: "fatiguée",     de: "müde",              tip: "" },
+    { masc: "malade",     fem: "malade",       de: "krank",             tip: "m = f" },
+    { masc: "facile",     fem: "facile",       de: "leicht",            tip: "m = f" },
+    { masc: "difficile",  fem: "difficile",    de: "schwierig",         tip: "m = f" },
+    { masc: "rapide",     fem: "rapide",       de: "schnell",           tip: "m = f" },
+    { masc: "lent",       fem: "lente",        de: "langsam",           tip: "" },
+    { masc: "chaud",      fem: "chaude",       de: "warm, heiß",        tip: "" },
+    { masc: "froid",      fem: "froide",       de: "kalt",              tip: "" },
+    { masc: "cher",       fem: "chère",        de: "teuer",             tip: "unregelmäßig" },
+    { masc: "important",  fem: "importante",   de: "wichtig",           tip: "" },
+    { masc: "intelligent",fem: "intelligente", de: "intelligent",       tip: "" },
+    { masc: "intéressant",fem: "intéressante", de: "interessant",       tip: "" },
+    { masc: "vrai",       fem: "vraie",        de: "richtig",           tip: "" },
+    { masc: "faux",       fem: "fausse",       de: "falsch",            tip: "unregelmäßig",
+      plurMasc: "faux" },
+    { masc: "seul",       fem: "seule",        de: "allein, einsam",    tip: "" },
+    { masc: "propre",     fem: "propre",       de: "sauber",            tip: "m = f" },
+    { masc: "nul",        fem: "nulle",        de: "doof",              tip: "unregelmäßig" },
+    { masc: "bête",       fem: "bête",         de: "dumm",              tip: "m = f" },
+    { masc: "sale",       fem: "sale",         de: "dreckig",           tip: "m = f" },
+    { masc: "fort",       fem: "forte",        de: "stark",             tip: "" },
+    { masc: "faible",     fem: "faible",       de: "schwach",           tip: "m = f" },
+    { masc: "rouge",      fem: "rouge",        de: "rot",               tip: "m = f" },
+    { masc: "vert",       fem: "verte",        de: "grün",              tip: "" },
+    { masc: "jaune",      fem: "jaune",        de: "gelb",              tip: "m = f" },
+    { masc: "noir",       fem: "noire",        de: "schwarz",           tip: "" },
+    { masc: "blanc",      fem: "blanche",      de: "weiß",              tip: "unregelmäßig",
+      plurMasc: "blancs" },
+    { masc: "bleu",       fem: "bleue",        de: "blau",              tip: "" },
+    { masc: "marron",     fem: "marron",       de: "braun",             tip: "m = f · unveränderlich",
+      plurMasc: "marron", plurFem: "marron" },
+    { masc: "gris",       fem: "grise",        de: "grau",              tip: "",
+      plurMasc: "gris" },
+    { masc: "orange",     fem: "orange",       de: "orange",            tip: "m = f · unveränderlich",
+      plurMasc: "orange", plurFem: "orange" },
+    { masc: "violet",     fem: "violette",     de: "violett",           tip: "unregelmäßig" }
+];
+
+// ── Pluralbildung ────────────────────────────────────────────────────────────
+function buildPlural(form) {
+    if (!form) return form;
+    // endet auf -s, -x, -z → unveränderlich
+    if (/[sxz]$/.test(form)) return form;
+    // endet auf -eau → -eaux
+    if (form.endsWith('eau')) return form + 'x';
+    // endet auf -al → -aux (Standardregel, hier selten)
+    if (form.endsWith('al')) return form.slice(0,-2) + 'aux';
+    return form + 's';
+}
+
+function getForms(adj) {
+    const singMasc = adj.masc;
+    const singFem  = adj.fem;
+    const plurMasc = adj.plurMasc ?? buildPlural(adj.masc);
+    const plurFem  = adj.plurFem  ?? buildPlural(adj.fem);
+    return { singMasc, singFem, plurMasc, plurFem };
+}
+
+// ── Zustand ──────────────────────────────────────────────────────────────────
+let currentAdj = null;
+let correctMap  = {};   // chipId → zoneId
+let placedMap   = {};   // chipId → zoneId (bereits richtig platziert)
+let draggedId   = null;
+let scoreCorrect = 0;
+let scoreTotal   = 0;
+let toastTimer   = null;
+
+// ── Runde starten ────────────────────────────────────────────────────────────
+function newRound() {
+    // Zufälliges Adjektiv
+    currentAdj = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const f = getForms(currentAdj);
+
+    placedMap = {};
+    correctMap = {};
+
+    // Info-Box
+    document.getElementById('adjDe').textContent = currentAdj.de;
+    document.getElementById('adjTip').textContent = currentAdj.tip ? '(' + currentAdj.tip + ')' : '';
+
+    // Hinweis bei identischen Formen
+    const note = buildNote(f);
+    document.getElementById('adjNote').textContent = note;
+
+    // Banner verstecken
+    document.getElementById('completedBanner').classList.remove('visible');
+
+    // Zonen leeren
+    ['sing-masc','sing-fem','plur-masc','plur-fem'].forEach(z => {
+        const el = document.getElementById('zone-' + z);
+        el.innerHTML = '<span class="placeholder">Hierher ziehen</span>';
+    });
+
+    // Chips erzeugen
+    // Wir sammeln UNIQUE forms und merken uns, welche Zonen zu jeder Form passen
+    // Doppelte Formen (z. B. rouge/rouge) → ein Chip, aber zwei akzeptierte Zonen
+    const zoneFormMap = {
+        'sing-masc': f.singMasc,
+        'sing-fem':  f.singFem,
+        'plur-masc': f.plurMasc,
+        'plur-fem':  f.plurFem
+    };
+
+    // Gruppiere Zonen nach ihrer Form
+    const formToZones = {};
+    for (const [zone, form] of Object.entries(zoneFormMap)) {
+        if (!formToZones[form]) formToZones[form] = [];
+        formToZones[form].push(zone);
+    }
+
+    // Für jede einzigartige Form einen Chip erstellen
+    const chips = [];
+    let chipIdx = 0;
+    for (const [form, zones] of Object.entries(formToZones)) {
+        const chipId = 'chip-' + chipIdx++;
+        chips.push({ chipId, form, zones });
+        // correctMap: dieser Chip gehört in eine dieser Zonen
+        correctMap[chipId] = zones; // Array!
+    }
+
+    // Chips shufflen und in Pool
+    shuffleArray(chips);
+    const pool = document.getElementById('pool');
+    pool.innerHTML = '';
+    chips.forEach(({ chipId, form }) => {
+        const chip = createChip(chipId, form);
+        pool.appendChild(chip);
+    });
+
+    updateScore();
+}
+
+function buildNote(f) {
+    const pairs = [
+        [f.singMasc, f.singFem,  'Sing. mask. = Sing. fem.'],
+        [f.plurMasc, f.plurFem,  'Plur. mask. = Plur. fem.'],
+        [f.singMasc, f.plurMasc, 'Sing. mask. = Plur. mask.'],
+        [f.singFem,  f.plurFem,  'Sing. fem. = Plur. fem.'],
+        [f.singMasc, f.singFem,  null], // handled above
+    ];
+    const notes = new Set();
+    if (f.singMasc === f.singFem)  notes.add('Sing. mask. = Sing. fem.');
+    if (f.plurMasc === f.plurFem)  notes.add('Plur. mask. = Plur. fem.');
+    if (f.singMasc === f.plurMasc) notes.add('Sing. mask. = Plur. mask.');
+    if (f.singFem  === f.plurFem)  notes.add('Sing. fem. = Plur. fem.');
+    return [...notes].join(' · ');
+}
+
+// ── Chip erstellen ────────────────────────────────────────────────────────────
+function createChip(id, text) {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.id = id;
+    chip.textContent = text;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', onDragStart);
+    chip.addEventListener('dragend',   onDragEnd);
+
+    // Touch-Support
+    chip.addEventListener('touchstart', onTouchStart, { passive: true });
+    chip.addEventListener('touchmove',  onTouchMove,  { passive: false });
+    chip.addEventListener('touchend',   onTouchEnd);
+
+    return chip;
+}
+
+// ── Drag & Drop (Maus) ────────────────────────────────────────────────────────
+function onDragStart(e) {
+    draggedId = e.target.id;
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function onDragEnd(e) {
+    e.target.classList.remove('dragging');
+}
+
+document.querySelectorAll('.dropzone').forEach(zone => {
+    zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('drag-over');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        if (draggedId) handleDrop(draggedId, zone.dataset.zone);
+    });
+});
+
+// Pool als Drop-Ziel (zurücklegen)
+const poolEl = document.getElementById('pool');
+poolEl.addEventListener('dragover', e => { e.preventDefault(); poolEl.classList.add('drag-over'); });
+poolEl.addEventListener('dragleave', () => poolEl.classList.remove('drag-over'));
+poolEl.addEventListener('drop', e => {
+    e.preventDefault();
+    poolEl.classList.remove('drag-over');
+    if (draggedId) returnToPool(draggedId);
+});
+
+// ── Touch-Drag ────────────────────────────────────────────────────────────────
+let touchClone = null;
+let touchChipId = null;
+let touchOffX = 0, touchOffY = 0;
+
+function onTouchStart(e) {
+    const chip = e.currentTarget;
+    if (chip.classList.contains('correct')) return;
+    touchChipId = chip.id;
+    const rect = chip.getBoundingClientRect();
+    const t = e.touches[0];
+    touchOffX = t.clientX - rect.left;
+    touchOffY = t.clientY - rect.top;
+
+    touchClone = chip.cloneNode(true);
+    touchClone.style.cssText = `
+        position:fixed; z-index:9999; pointer-events:none; opacity:0.85;
+        left:${rect.left}px; top:${rect.top}px;
+        width:${rect.width}px; margin:0;
+    `;
+    document.body.appendChild(touchClone);
+    chip.classList.add('dragging');
+}
+
+function onTouchMove(e) {
+    if (!touchClone) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    touchClone.style.left = (t.clientX - touchOffX) + 'px';
+    touchClone.style.top  = (t.clientY - touchOffY) + 'px';
+}
+
+function onTouchEnd(e) {
+    if (!touchClone) return;
+    const chip = document.getElementById(touchChipId);
+    chip && chip.classList.remove('dragging');
+
+    const t = e.changedTouches[0];
+    touchClone.remove();
+    touchClone = null;
+
+    // Element unter dem Finger finden
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (!el) return;
+    const zone = el.closest('.dropzone');
+    if (zone) {
+        handleDrop(touchChipId, zone.dataset.zone);
+    } else if (el.closest('#pool')) {
+        returnToPool(touchChipId);
+    }
+    touchChipId = null;
+}
+
+// ── Drop-Logik ────────────────────────────────────────────────────────────────
+function handleDrop(chipId, zoneId) {
+    const chip = document.getElementById(chipId);
+    if (!chip || chip.classList.contains('correct')) return;
+
+    const acceptedZones = correctMap[chipId];
+    const isCorrect = acceptedZones.includes(zoneId);
+
+    if (isCorrect) {
+        // Chip in Zone platzieren
+        const zone = document.getElementById('zone-' + zoneId);
+        removePlaceholder(zone);
+        chip.classList.add('correct');
+        chip.draggable = false;
+        zone.appendChild(chip);
+        zone.classList.add('flash-correct');
+        zone.addEventListener('animationend', () => zone.classList.remove('flash-correct'), { once: true });
+
+        placedMap[chipId] = zoneId;
+        scoreCorrect++;
+        scoreTotal++;
+        updateScore();
+        showToast('👍 Super!', false);
+
+        // Falls dieser Chip mehrere Zonen abdeckt: restliche Zonen auch als korrekt markieren (Phantom-Chips)
+        acceptedZones.forEach(z => {
+            if (z !== zoneId) {
+                // Phantom-Chip (visuell zeigen, dass diese Zone als korrekt gilt)
+                const phantom = document.createElement('div');
+                phantom.className = 'chip correct';
+                phantom.textContent = chip.textContent;
+                const phantomZone = document.getElementById('zone-' + z);
+                removePlaceholder(phantomZone);
+                phantomZone.appendChild(phantom);
+                phantomZone.classList.add('flash-correct');
+                phantomZone.addEventListener('animationend', () => phantomZone.classList.remove('flash-correct'), { once: true });
+            }
+        });
+
+        checkCompleted();
+    } else {
+        const zone = document.getElementById('zone-' + zoneId);
+        zone.classList.add('flash-wrong');
+        zone.addEventListener('animationend', () => zone.classList.remove('flash-wrong'), { once: true });
+        scoreTotal++;
+        updateScore();
+        showToast('❌ Nochmal versuchen!', true);
+    }
+}
+
+function returnToPool(chipId) {
+    const chip = document.getElementById(chipId);
+    if (!chip || chip.classList.contains('correct')) return;
+    poolEl.appendChild(chip);
+}
+
+function removePlaceholder(zone) {
+    const ph = zone.querySelector('.placeholder');
+    if (ph) ph.remove();
+}
+
+// ── Abschluss ─────────────────────────────────────────────────────────────────
+function checkCompleted() {
+    // Alle Chips korrekt platziert?
+    const allChips = Object.keys(correctMap);
+    const allDone = allChips.every(id => {
+        const chip = document.getElementById(id);
+        return chip && chip.classList.contains('correct');
+    });
+    if (allDone) {
+        setTimeout(() => {
+            document.getElementById('completedBanner').classList.add('visible');
+        }, 600);
+    }
+}
+
+// ── Lösung ────────────────────────────────────────────────────────────────────
+function showSolution() {
+    if (!currentAdj) return;
+    const f = getForms(currentAdj);
+    const zoneFormMap = {
+        'sing-masc': f.singMasc,
+        'sing-fem':  f.singFem,
+        'plur-masc': f.plurMasc,
+        'plur-fem':  f.plurFem
+    };
+
+    // Alle noch nicht platzierten Chips finden und an richtige Stelle setzen
+    Object.entries(correctMap).forEach(([chipId, zones]) => {
+        const chip = document.getElementById(chipId);
+        if (!chip || chip.classList.contains('correct')) return;
+        const targetZone = zones[0];
+        chip.classList.add('correct');
+        chip.draggable = false;
+        const zone = document.getElementById('zone-' + targetZone);
+        removePlaceholder(zone);
+        zone.appendChild(chip);
+
+        // Phantom-Chips für gleiche Formen
+        zones.slice(1).forEach(z => {
+            const phantom = document.createElement('div');
+            phantom.className = 'chip correct';
+            phantom.textContent = chip.textContent;
+            const phantomZone = document.getElementById('zone-' + z);
+            removePlaceholder(phantomZone);
+            phantomZone.appendChild(phantom);
+        });
+    });
+
+    document.getElementById('completedBanner').classList.add('visible');
+}
+
+// ── Hilfsfunktionen ────────────────────────────────────────────────────────────
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+function updateScore() {
+    document.getElementById('scoreNum').textContent   = scoreCorrect;
+    document.getElementById('scoreTotal').textContent = scoreTotal;
+}
+
+function showToast(msg, isWrong) {
+    const toast = document.getElementById('toast');
+    if (toastTimer) clearTimeout(toastTimer);
+    toast.textContent = msg;
+    toast.className = 'show' + (isWrong ? ' wrong' : '');
+    toastTimer = setTimeout(() => { toast.className = ''; }, 1800);
+}
+
+// ── Start ─────────────────────────────────────────────────────────────────────
+newRound();
+</script>
+</body>
+</html>

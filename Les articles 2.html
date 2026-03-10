@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les articles français</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #002395 0%, #ffffff 50%, #ED2939 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,35,149,0.15);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #002395;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .progress-bar-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 12px;
+            margin: 15px 0 5px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #002395, #ED2939);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-label {
+            text-align: right;
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        /* Reference Box */
+        .reference-box {
+            background: #f0f4ff;
+            border-left: 5px solid #002395;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin-bottom: 18px;
+            font-size: 0.97em;
+        }
+
+        .reference-box h3 {
+            color: #002395;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .ref-table th {
+            background: #002395;
+            color: white;
+            padding: 7px 12px;
+            text-align: left;
+            font-size: 0.92em;
+        }
+
+        .ref-table td {
+            padding: 6px 12px;
+            border-bottom: 1px solid #d0d8f0;
+            font-size: 0.92em;
+        }
+
+        .ref-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ref-table tr:nth-child(even) td {
+            background: #e8eeff;
+        }
+
+        /* Stage Cards */
+        .stage {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .stage.locked {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .stage-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .stage-number {
+            background: #002395;
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .stage-number.done {
+            background: #27ae60;
+        }
+
+        .stage-title {
+            flex: 1;
+        }
+
+        .stage-title h2 {
+            color: #002395;
+            font-size: 1.3em;
+        }
+
+        .stage-title p {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 3px;
+        }
+
+        .lock-icon {
+            font-size: 1.6em;
+        }
+
+        /* Quiz Styles */
+        .question-block {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+        }
+
+        .question-block p {
+            font-size: 1.05em;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 9px 20px;
+            border: 2px solid #002395;
+            border-radius: 25px;
+            background: white;
+            color: #002395;
+            font-size: 0.97em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #002395;
+            color: white;
+        }
+
+        .option-btn.correct {
+            background: #27ae60;
+            border-color: #27ae60;
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background: #ED2939;
+            border-color: #ED2939;
+            color: white;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        /* Fill-in-the-blank */
+        .fill-input {
+            border: 2px solid #002395;
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-size: 1em;
+            width: 90px;
+            text-align: center;
+            color: #002395;
+            font-weight: bold;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .fill-input:focus {
+            border-color: #ED2939;
+        }
+
+        .fill-input.correct {
+            border-color: #27ae60;
+            background: #eafaf1;
+            color: #27ae60;
+        }
+
+        .fill-input.wrong {
+            border-color: #ED2939;
+            background: #fff0f0;
+            color: #ED2939;
+        }
+
+        .sentence-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 1.05em;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8eeff;
+        }
+
+        .sentence-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Drag and Drop */
+        .drag-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 12px;
+            min-height: 60px;
+            margin-bottom: 18px;
+        }
+
+        .drag-item {
+            padding: 8px 16px;
+            background: #002395;
+            color: white;
+            border-radius: 20px;
+            cursor: grab;
+            font-size: 0.97em;
+            user-select: none;
+            transition: transform 0.15s, opacity 0.15s;
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(1.07);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.4;
+        }
+
+        .drop-zone {
+            min-height: 50px;
+            border: 2px dashed #002395;
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .drop-zone.drag-over {
+            background: #e8eeff;
+        }
+
+        .drop-zone .drag-item {
+            background: #ED2939;
+        }
+
+        .drop-sentence-label {
+            font-size: 0.88em;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        /* Feedback */
+        .feedback {
+            padding: 12px 18px;
+            border-radius: 10px;
+            margin-top: 14px;
+            font-weight: 600;
+            display: none;
+            font-size: 1em;
+        }
+
+        .feedback.success {
+            background: #eafaf1;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+
+        .feedback.error {
+            background: #fff0f0;
+            color: #ED2939;
+            border: 1px solid #ED2939;
+        }
+
+        .feedback.warning {
+            background: #fffbea;
+            color: #c0850a;
+            border: 1px solid #f0c040;
+        }
+
+        /* Buttons */
+        .check-btn {
+            background: #002395;
+            color: white;
+            border: none;
+            padding: 11px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: background 0.2s, transform 0.1s;
+            font-weight: 600;
+        }
+
+        .check-btn:hover {
+            background: #0033cc;
+            transform: translateY(-1px);
+        }
+
+        .check-btn:disabled {
+            background: #aaa;
+            cursor: default;
+            transform: none;
+        }
+
+        .next-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 11px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-left: 10px;
+            transition: background 0.2s;
+            font-weight: 600;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background: #219a52;
+        }
+
+        /* Score display */
+        .score-display {
+            text-align: right;
+            font-size: 0.92em;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        /* Final Result */
+        #final-result {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 36px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,35,149,0.15);
+            margin-bottom: 25px;
+        }
+
+        #final-result h2 {
+            font-size: 2em;
+            color: #002395;
+            margin-bottom: 12px;
+        }
+
+        #final-result .big-score {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #ED2939;
+            margin: 10px 0;
+        }
+
+        #final-result p {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .trophy {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+
+        /* Vocabulary List */
+        #vocab-section {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        #vocab-section h2 {
+            color: #002395;
+            font-size: 1.4em;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .vocab-card {
+            background: #f0f4ff;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid #002395;
+        }
+
+        .vocab-card.fem {
+            border-left-color: #ED2939;
+        }
+
+        .vocab-card .fr {
+            font-weight: bold;
+            color: #002395;
+            font-size: 1em;
+        }
+
+        .vocab-card.fem .fr {
+            color: #ED2939;
+        }
+
+        .vocab-card .de {
+            color: #555;
+            font-size: 0.88em;
+            margin-top: 2px;
+        }
+
+        .vocab-card .genre {
+            font-size: 0.78em;
+            color: #aaa;
+            margin-top: 3px;
+            font-style: italic;
+        }
+
+        /* Tooltip hint */
+        .hint {
+            font-size: 0.82em;
+            color: #888;
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.7em; }
+            .stage { padding: 18px; }
+            .vocab-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <header>
+        <div style="font-size:2.5em; margin-bottom:8px">🇫🇷</div>
+        <h1>Les articles français</h1>
+        <p>Übungsstation von Anthropics Claude und Tim Bauerschmidt</p>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="global-progress"></div>
+        </div>
+        <div class="progress-label" id="progress-label">Stufe 0 von 5 abgeschlossen</div>
+    </header>
+
+    <!-- ======================== STAGE 1 ======================== -->
+    <div class="stage" id="stage1">
+        <div class="stage-header">
+            <div class="stage-number" id="snum1">1</div>
+            <div class="stage-title">
+                <h2>Masculin ou féminin ? – Das grammatische Geschlecht</h2>
+                <p>Lerne: le (m.) / la (f.) – der bestimmte Artikel im Singular</p>
+            </div>
+            <span class="lock-icon" id="lock1"></span>
+        </div>
+
+        <div class="reference-box">
+            <h3>📌 Merkkasten: Le bestimmte Artikel im Singular</h3>
+            <table class="ref-table">
+                <tr>
+                    <th>Genus</th>
+                    <th>Bestimmter Artikel</th>
+                    <th>Beispiel</th>
+                    <th>Bedeutung</th>
+                </tr>
+                <tr>
+                    <td>Maskulin (m.)</td>
+                    <td><strong>le</strong></td>
+                    <td>le garçon</td>
+                    <td>der Junge</td>
+                </tr>
+                <tr>
+                    <td>Feminin (f.)</td>
+                    <td><strong>la</strong></td>
+                    <td>la fille</td>
+                    <td>das Mädchen</td>
+                </tr>
+            </table>
+            <p class="hint">💡 Tipp: Im Französischen hat jedes Nomen ein Genus (Geschlecht). Das musst du einfach mitlernen!</p>
+        </div>
+
+        <div id="s1-questions"></div>
+
+        <div class="score-display" id="s1-score"></div>
+        <div class="feedback" id="s1-feedback"></div>
+        <button class="check-btn" onclick="checkStage1()">✔ Antworten prüfen</button>
+        <button class="next-btn" id="s1-next" onclick="unlockStage(2)">Weiter zu Stufe 2 →</button>
+    </div>
+
+    <!-- ======================== STAGE 2 ======================== -->
+    <div class="stage locked" id="stage2">
+        <div class="stage-header">
+            <div class="stage-number" id="snum2">2</div>
+            <div class="stage-title">
+                <h2>L'article indéfini – Der unbestimmte Artikel</h2>
+                <p>Lerne: un (m.) / une (f.) – bestimmt oder unbestimmt?</p>
+            </div>
+            <span class="lock-icon" id="lock2">🔒</span>
+        </div>
+
+        <div class="reference-box">
+            <h3>📌 Merkkasten: Bestimmt vs. Unbestimmt</h3>
+            <table class="ref-table">
+                <tr>
+                    <th>Artikel</th>
+                    <th>Maskulin</th>
+                    <th>Feminin</th>
+                    <th>Bedeutung</th>
+                </tr>
+                <tr>
+                    <td>Bestimmt</td>
+                    <td><strong>le</strong></td>
+                    <td><strong>la</strong></td>
+                    <td>der / die / das (bekannt)</td>
+                </tr>
+                <tr>
+                    <td>Unbestimmt</td>
+                    <td><strong>un</strong></td>
+                    <td><strong>une</strong></td>
+                    <td>ein / eine (unbekannt)</td>
+                </tr>
+            </table>
+            <p class="hint">💡 Tipp: <em>Le chat</em> = die Katze (eine bestimmte, bekannte). <em>Un chat</em> = eine Katze (irgendeine).</p>
+        </div>
+
+        <div id="s2-questions"></div>
+
+        <div class="score-display" id="s2-score"></div>
+        <div class="feedback" id="s2-feedback"></div>
+        <button class="check-btn" onclick="checkStage2()">✔ Antworten prüfen</button>
+        <button class="next-btn" id="s2-next" onclick="unlockStage(3)">Weiter zu Stufe 3 →</button>
+    </div>
+
+    <!-- ======================== STAGE 3 ======================== -->
+    <div class="stage locked" id="stage3">
+        <div class="stage-header">
+            <div class="stage-number" id="snum3">3</div>
+            <div class="stage-title">
+                <h2>L'élision – Artikel vor Vokalen und H</h2>
+                <p>Lerne: le/la → l' vor Vokal oder stummem H</p>
+            </div>
+            <span class="lock-icon" id="lock3">🔒</span>
+        </div>
+
+        <div class="reference-box">
+            <h3>📌 Merkkasten: L'élision – Verschmelzung</h3>
+            <table class="ref-table">
+                <tr>
+                    <th>Situation</th>
+                    <th>Artikel</th>
+                    <th>Beispiel</th>
+                    <th>Bedeutung</th>
+                </tr>
+                <tr>
+                    <td>Vor Konsonant (m.)</td>
+                    <td><strong>le</strong></td>
+                    <td>le livre</td>
+                    <td>das Buch</td>
+                </tr>
+                <tr>
+                    <td>Vor Konsonant (f.)</td>
+                    <td><strong>la</strong></td>
+                    <td>la porte</td>
+                    <td>die Tür</td>
+                </tr>
+                <tr>
+                    <td>Vor Vokal oder H (m./f.)</td>
+                    <td><strong>l'</strong></td>
+                    <td>l'arbre, l'hôtel</td>
+                    <td>der Baum, das Hotel</td>
+                </tr>
+            </table>
+            <p class="hint">💡 Vokale: a, e, i, o, u – Vor diesen Buchstaben und vor stummem H wird le/la zu l'.</p>
+        </div>
+
+        <div id="s3-questions"></div>
+
+        <div class="score-display" id="s3-score"></div>
+        <div class="feedback" id="s3-feedback"></div>
+        <button class="check-btn" onclick="checkStage3()">✔ Antworten prüfen</button>
+        <button class="next-btn" id="s3-next" onclick="unlockStage(4)">Weiter zu Stufe 4 →</button>
+    </div>
+
+    <!-- ======================== STAGE 4 ======================== -->
+    <div class="stage locked" id="stage4">
+        <div class="stage-header">
+            <div class="stage-number" id="snum4">4</div>
+            <div class="stage-title">
+                <h2>Le Pluriel – Die Pluralartikel</h2>
+                <p>Lerne: les (bestimmt) / des (unbestimmt) im Plural</p>
+            </div>
+            <span class="lock-icon" id="lock4">🔒</span>
+        </div>
+
+        <div class="reference-box">
+            <h3>📌 Merkkasten: Singular → Plural</h3>
+            <table class="ref-table">
+                <tr>
+                    <th>Artikel</th>
+                    <th>Singular (m.)</th>
+                    <th>Singular (f.)</th>
+                    <th>Plural</th>
+                </tr>
+                <tr>
+                    <td>Bestimmt</td>
+                    <td>le / l'</td>
+                    <td>la / l'</td>
+                    <td><strong>les</strong></td>
+                </tr>
+                <tr>
+                    <td>Unbestimmt</td>
+                    <td>un</td>
+                    <td>une</td>
+                    <td><strong>des</strong></td>
+                </tr>
+            </table>
+            <p class="hint">💡 Achtung: <em>des</em> bedeutet „einige / mehrere" – im Deutschen sagt man das oft gar nicht! Z.B. <em>J'ai des amis.</em> = Ich habe Freunde.</p>
+        </div>
+
+        <div id="s4-questions"></div>
+
+        <div class="score-display" id="s4-score"></div>
+        <div class="feedback" id="s4-feedback"></div>
+        <button class="check-btn" onclick="checkStage4()">✔ Antworten prüfen</button>
+        <button class="next-btn" id="s4-next" onclick="unlockStage(5)">Weiter zu Stufe 5 →</button>
+    </div>
+
+    <!-- ======================== STAGE 5 ======================== -->
+    <div class="stage locked" id="stage5">
+        <div class="stage-header">
+            <div class="stage-number" id="snum5">5</div>
+            <div class="stage-title">
+                <h2>Tout ensemble ! – Alles zusammen</h2>
+                <p>Wähle für jeden Satz den richtigen Artikel aus allen gelernten Formen</p>
+            </div>
+            <span class="lock-icon" id="lock5">🔒</span>
+        </div>
+
+        <div class="reference-box">
+            <h3>📌 Übersicht aller Artikel</h3>
+            <table class="ref-table">
+                <tr>
+                    <th></th>
+                    <th>Maskulin Sg.</th>
+                    <th>Feminin Sg.</th>
+                    <th>Vor Vokal/H</th>
+                    <th>Plural</th>
+                </tr>
+                <tr>
+                    <td><strong>Bestimmt</strong></td>
+                    <td>le</td>
+                    <td>la</td>
+                    <td>l'</td>
+                    <td>les</td>
+                </tr>
+                <tr>
+                    <td><strong>Unbestimmt</strong></td>
+                    <td>un</td>
+                    <td>une</td>
+                    <td>un / une</td>
+                    <td>des</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="s5-questions"></div>
+
+        <div class="score-display" id="s5-score"></div>
+        <div class="feedback" id="s5-feedback"></div>
+        <button class="check-btn" onclick="checkStage5()">✔ Antworten prüfen</button>
+        <button class="next-btn" id="s5-next" onclick="showFinalResult()">🏆 Ergebnis anzeigen</button>
+    </div>
+
+    <!-- Final Result -->
+    <div id="final-result">
+        <div class="trophy" id="trophy-icon">🏆</div>
+        <h2>Félicitations !</h2>
+        <div class="big-score" id="final-score-display">0 / 0</div>
+        <p id="final-feedback-text"></p>
+        <button class="check-btn" onclick="location.reload()" style="margin-top:20px">🔄 Nochmal üben</button>
+    </div>
+
+    <!-- ======================== VOCABULARY ======================== -->
+    <div id="vocab-section">
+        <h2>📚 Vocabulaire – Die Vokabeln der Aufgaben</h2>
+        <p style="color:#888; font-size:0.9em; margin-bottom:14px">
+            <span style="display:inline-block; width:14px; height:14px; background:#002395; border-radius:3px; margin-right:5px; vertical-align:middle"></span>Maskulin &nbsp;
+            <span style="display:inline-block; width:14px; height:14px; background:#ED2939; border-radius:3px; margin-right:5px; vertical-align:middle"></span>Feminin
+        </p>
+        <div class="vocab-grid" id="vocab-grid"></div>
+    </div>
+
+</div>
+
+<script>
+// =============================================
+// DATA
+// =============================================
+
+const vocab = [
+    { fr: "le garçon", de: "der Junge", genre: "m." },
+    { fr: "la fille", de: "das Mädchen", genre: "f." },
+    { fr: "le chat", de: "die Katze", genre: "m." },
+    { fr: "la maison", de: "das Haus", genre: "f." },
+    { fr: "le chien", de: "der Hund", genre: "m." },
+    { fr: "la voiture", de: "das Auto", genre: "f." },
+    { fr: "le livre", de: "das Buch", genre: "m." },
+    { fr: "la table", de: "der Tisch / Tisch", genre: "f." },
+    { fr: "le stylo", de: "der Stift", genre: "m." },
+    { fr: "la porte", de: "die Tür", genre: "f." },
+    { fr: "le jardin", de: "der Garten", genre: "m." },
+    { fr: "la fleur", de: "die Blume", genre: "f." },
+    { fr: "l'arbre (m.)", de: "der Baum", genre: "m." },
+    { fr: "l'école (f.)", de: "die Schule", genre: "f." },
+    { fr: "l'ami (m.)", de: "der Freund", genre: "m." },
+    { fr: "l'amie (f.)", de: "die Freundin", genre: "f." },
+    { fr: "l'hôtel (m.)", de: "das Hotel", genre: "m." },
+    { fr: "l'heure (f.)", de: "die Stunde / Uhr", genre: "f." },
+    { fr: "les enfants", de: "die Kinder", genre: "pl." },
+    { fr: "les livres", de: "die Bücher", genre: "pl." },
+    { fr: "des amis", de: "(einige) Freunde", genre: "pl." },
+    { fr: "des fleurs", de: "(einige) Blumen", genre: "pl." },
+    { fr: "la pomme", de: "der Apfel", genre: "f." },
+    { fr: "le pain", de: "das Brot", genre: "m." },
+    { fr: "la rue", de: "die Straße", genre: "f." },
+    { fr: "le professeur", de: "der Lehrer", genre: "m." },
+    { fr: "la classe", de: "die Klasse / das Klassenzimmer", genre: "f." },
+    { fr: "l'orange (f.)", de: "die Orange", genre: "f." },
+    { fr: "l'enfant (m.)", de: "das Kind", genre: "m." },
+    { fr: "la fenêtre", de: "das Fenster", genre: "f." },
+];
+
+// Scores per stage
+const scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+const totals = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+// =============================================
+// STAGE 1 DATA – le / la
+// =============================================
+const s1Data = [
+    { sentence: "___ garçon (m.) est grand.", options: ["le", "la", "un", "une"], answer: "le", hint: "garçon = Junge → maskulin" },
+    { sentence: "___ fille (f.) chante.", options: ["le", "la", "un", "une"], answer: "la", hint: "fille = Mädchen → feminin" },
+    { sentence: "___ chat (m.) dort.", options: ["le", "la", "un", "une"], answer: "le", hint: "chat = Katze → maskulin" },
+    { sentence: "___ maison (f.) est belle.", options: ["le", "la", "un", "une"], answer: "la", hint: "maison = Haus → feminin" },
+    { sentence: "___ chien (m.) court vite.", options: ["le", "la", "un", "une"], answer: "le", hint: "chien = Hund → maskulin" },
+    { sentence: "___ voiture (f.) est rouge.", options: ["le", "la", "un", "une"], answer: "la", hint: "voiture = Auto → feminin" },
+    { sentence: "___ livre (m.) est intéressant.", options: ["le", "la", "un", "une"], answer: "le", hint: "livre = Buch → maskulin" },
+    { sentence: "___ porte (f.) est ouverte.", options: ["le", "la", "un", "une"], answer: "la", hint: "porte = Tür → feminin" },
+];
+
+// =============================================
+// STAGE 2 DATA – le/la vs. un/une
+// =============================================
+const s2Data = [
+    { sentence: "Je vois ___ chien (m.) dans le jardin.", context: "(Ich sehe einen Hund – unbekannt)", options: ["le", "la", "un", "une"], answer: "un" },
+    { sentence: "___ chien (m.) de Paul est petit.", context: "(Pauls Hund – bekannt)", options: ["le", "la", "un", "une"], answer: "le" },
+    { sentence: "Elle a ___ fleur (f.).", context: "(Sie hat eine Blume – irgendeine)", options: ["le", "la", "un", "une"], answer: "une" },
+    { sentence: "___ fleur (f.) est jolie.", context: "(Die Blume – eine bestimmte)", options: ["le", "la", "un", "une"], answer: "la" },
+    { sentence: "Il lit ___ livre (m.).", context: "(Er liest ein Buch – irgendein)", options: ["le", "la", "un", "une"], answer: "un" },
+    { sentence: "___ livre (m.) est sur la table.", context: "(Das Buch – das bekannte)", options: ["le", "la", "un", "une"], answer: "le" },
+    { sentence: "C'est ___ fille (f.) sympa.", context: "(Das ist ein nettes Mädchen – unbekannt)", options: ["le", "la", "un", "une"], answer: "une" },
+    { sentence: "___ professeur (m.) explique.", context: "(Der Lehrer – bekannt)", options: ["le", "la", "un", "une"], answer: "le" },
+];
+
+// =============================================
+// STAGE 3 DATA – l' vor Vokal/H
+// =============================================
+const s3Data = [
+    { before: "", word: "arbre (m.)", fullWord: "arbre", options: ["le", "la", "l'"], answer: "l'", reason: "Vokal: a" },
+    { before: "", word: "stylo (m.)", fullWord: "stylo", options: ["le", "la", "l'"], answer: "le", reason: "Konsonant: s → le (m.)" },
+    { before: "", word: "amie (f.)", fullWord: "amie", options: ["le", "la", "l'"], answer: "l'", reason: "Vokal: a" },
+    { before: "", word: "hôtel (m.)", fullWord: "hôtel", options: ["le", "la", "l'"], answer: "l'", reason: "Stummes H" },
+    { before: "", word: "copine (f.)", fullWord: "copine", options: ["le", "la", "l'"], answer: "la", reason: "Konsonant: c → le (m.)" },
+    { before: "", word: "orange (m.)", fullWord: "orange", options: ["le", "la", "l'"], answer: "l'", reason: "Vokal: o" },
+    { before: "", word: "enfant (m.)", fullWord: "enfant", options: ["le", "la", "l'"], answer: "l'", reason: "Vokal: e" },
+    { before: "", word: "livre (m.)", fullWord: "livre", options: ["le", "la", "l'"], answer: "le", reason: "Konsonant: l → le (m.)" },
+    { before: "", word: "porte (f.)", fullWord: "porte", options: ["le", "la", "l'"], answer: "la", reason: "Konsonant: p → la (f.)" },
+    { before: "", word: "classe (f.)", fullWord: "classe", options: ["le", "la", "l'"], answer: "la", reason: "Konsonant: c → la (f.)" },
+];
+
+// =============================================
+// STAGE 4 DATA – les / des
+// =============================================
+const s4Data = [
+    {
+        sentence: "Je vois ___ enfants dans la rue.",
+        context: "(Ich sehe Kinder – unbekannte Gruppe)",
+        options: ["les", "des", "le", "la"],
+        answer: "des"
+    },
+    {
+        sentence: "___ enfants jouent dans le jardin.",
+        context: "(Die Kinder – bekannte Gruppe)",
+        options: ["les", "des", "le", "la"],
+        answer: "les"
+    },
+    {
+        sentence: "Elle achète ___ fleurs.",
+        context: "(Sie kauft Blumen – einige, unbekannt)",
+        options: ["les", "des", "le", "la"],
+        answer: "des"
+    },
+    {
+        sentence: "___ fleurs sont belles.",
+        context: "(Die Blumen – bestimmte Blumen)",
+        options: ["les", "des", "le", "la"],
+        answer: "les"
+    },
+    {
+        sentence: "Il a ___ amis sympa.",
+        context: "(Er hat Freunde – unbestimmt)",
+        options: ["les", "des", "le", "la"],
+        answer: "des"
+    },
+    {
+        sentence: "___ livres sont sur la table.",
+        context: "(Die Bücher – bestimmt)",
+        options: ["les", "des", "le", "la"],
+        answer: "les"
+    },
+    {
+        sentence: "Je mange ___ pommes.",
+        context: "(Ich esse Äpfel – unbestimmt/einige)",
+        options: ["les", "des", "le", "la"],
+        answer: "des"
+    },
+    {
+        sentence: "___ professeurs sont dans la classe.",
+        context: "(Die Lehrer – bekannt)",
+        options: ["les", "des", "le", "la"],
+        answer: "les"
+    },
+];
+
+// =============================================
+// STAGE 5 DATA – All together
+// =============================================
+const s5Data = [
+    { sentence: "Je mange ___ pain.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "le", note: "pain (m.) → bestimmt, Sg." },
+    { sentence: "___ amie de Marie est sympa.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "l'", note: "amie (f.) beginnt mit Vokal" },
+    { sentence: "Il y a ___ hôtel ici.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "un", note: "hôtel (m.) → unbestimmt, H" },
+    { sentence: "___ fenêtres sont ouvertes.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "les", note: "fenêtres (f.) → Plural, bestimmt" },
+    { sentence: "Elle a ___ chats.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "des", note: "chats (m.) → Plural, unbestimmt" },
+    { sentence: "___ école est grande.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "l'", note: "école (f.) beginnt mit Vokal" },
+    { sentence: "Je cherche ___ stylo.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "un", note: "stylo (m.) → unbestimmt, Sg." },
+    { sentence: "___ voiture est dans la rue.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "la", note: "voiture (f.) → bestimmt, Sg." },
+    { sentence: "Il lit ___ livres.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "des", note: "livres (m.) → Plural, unbestimmt" },
+    { sentence: "___ orange est sucrée.", options: ["le", "la", "l'", "les", "un", "une", "des"], answer: "l'", note: "orange (f.) beginnt mit Vokal" },
+];
+
+// =============================================
+// BUILD STAGE 1
+// =============================================
+function buildStage1() {
+    const container = document.getElementById('s1-questions');
+    totals[1] = s1Data.length;
+    s1Data.forEach((item, i) => {
+        const block = document.createElement('div');
+        block.className = 'question-block';
+        block.innerHTML = `
+            <p>${i + 1}. <span style="font-style:italic">${item.sentence.replace('___', '<strong style="color:#002395">___</strong>')}</span></p>
+            <div class="options" id="s1-opts-${i}">
+                ${item.options.map(o => `<button class="option-btn" data-q="${i}" data-v="${o}" onclick="selectOption(this, 1)">${o}</button>`).join('')}
+            </div>
+        `;
+        container.appendChild(block);
+    });
+}
+
+// =============================================
+// BUILD STAGE 2
+// =============================================
+function buildStage2() {
+    const container = document.getElementById('s2-questions');
+    totals[2] = s2Data.length;
+    s2Data.forEach((item, i) => {
+        const block = document.createElement('div');
+        block.className = 'question-block';
+        block.innerHTML = `
+            <p>${i + 1}. <em>${item.sentence.replace('___', '<strong style="color:#002395">___</strong>')}</em><br>
+            <span style="color:#888; font-size:0.88em">${item.context}</span></p>
+            <div class="options" id="s2-opts-${i}">
+                ${item.options.map(o => `<button class="option-btn" data-q="${i}" data-v="${o}" onclick="selectOption(this, 2)">${o}</button>`).join('')}
+            </div>
+        `;
+        container.appendChild(block);
+    });
+}
+
+// =============================================
+// BUILD STAGE 3
+// =============================================
+function buildStage3() {
+    const container = document.getElementById('s3-questions');
+    totals[3] = s3Data.length;
+    s3Data.forEach((item, i) => {
+        const block = document.createElement('div');
+        block.className = 'question-block';
+        block.innerHTML = `
+            <p>${i + 1}. Welcher Artikel steht vor <strong style="color:#002395">${item.fullWord}</strong>?
+            <span style="color:#888; font-size:0.85em"> (Beginnt mit: <em>${item.fullWord[0].toUpperCase()}</em>)</span></p>
+            <div class="options" id="s3-opts-${i}">
+                ${item.options.map(o => `<button class="option-btn" data-q="${i}" data-v="${o}" onclick="selectOption(this, 3)">${o}</button>`).join('')}
+            </div>
+        `;
+        container.appendChild(block);
+    });
+}
+
+// =============================================
+// BUILD STAGE 4
+// =============================================
+function buildStage4() {
+    const container = document.getElementById('s4-questions');
+    totals[4] = s4Data.length;
+    s4Data.forEach((item, i) => {
+        const block = document.createElement('div');
+        block.className = 'question-block';
+        block.innerHTML = `
+            <p>${i + 1}. <em>${item.sentence.replace('___', '<strong style="color:#002395">___</strong>')}</em><br>
+            <span style="color:#888; font-size:0.88em">${item.context}</span></p>
+            <div class="options" id="s4-opts-${i}">
+                ${item.options.map(o => `<button class="option-btn" data-q="${i}" data-v="${o}" onclick="selectOption(this, 4)">${o}</button>`).join('')}
+            </div>
+        `;
+        container.appendChild(block);
+    });
+}
+
+// =============================================
+// BUILD STAGE 5
+// =============================================
+function buildStage5() {
+    const container = document.getElementById('s5-questions');
+    totals[5] = s5Data.length;
+    s5Data.forEach((item, i) => {
+        const block = document.createElement('div');
+        block.className = 'question-block';
+        block.innerHTML = `
+            <p>${i + 1}. <em>${item.sentence.replace('___', '<strong style="color:#002395">___</strong>')}</em><br>
+            <span style="color:#888; font-size:0.82em">Hinweis: ${item.note}</span></p>
+            <div class="options" id="s5-opts-${i}">
+                ${item.options.map(o => `<button class="option-btn" data-q="${i}" data-v="${o}" onclick="selectOption(this, 5)">${o}</button>`).join('')}
+            </div>
+        `;
+        container.appendChild(block);
+    });
+}
+
+// =============================================
+// OPTION SELECTION (Multi-Choice per question)
+// =============================================
+function selectOption(btn, stage) {
+    const q = btn.dataset.q;
+    const opts = document.querySelectorAll(`#s${stage}-opts-${q} .option-btn`);
+    opts.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    // Visual highlight for selected (not yet checked)
+    opts.forEach(b => {
+        b.style.background = '';
+        b.style.color = '';
+        b.style.borderColor = '';
+    });
+    btn.style.background = '#002395';
+    btn.style.color = 'white';
+    btn.style.borderColor = '#002395';
+}
+
+// =============================================
+// CHECK STAGE GENERIC
+// =============================================
+function checkStageGeneric(stageNum, data, optsPrefix) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const opts = document.querySelectorAll(`#s${stagePrefix(stageNum)}-opts-${i} .option-btn`);
+        let selected = null;
+        opts.forEach(b => {
+            if (b.style.background === 'rgb(0, 35, 149)' || b.classList.contains('selected')) {
+                selected = b;
+            }
+        });
+
+        opts.forEach(b => {
+            b.disabled = true;
+            b.style.background = '';
+            b.style.color = '';
+            b.style.borderColor = '';
+        });
+
+        opts.forEach(b => {
+            if (b.dataset.v === item.answer) {
+                b.classList.add('correct');
+            }
+        });
+
+        if (selected) {
+            if (selected.dataset.v === item.answer) {
+                correct++;
+                selected.classList.add('correct');
+            } else {
+                selected.classList.add('wrong');
+            }
+        }
+    });
+    return correct;
+}
+
+function stagePrefix(n) { return n; }
+
+function checkStage(n, data) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const opts = document.querySelectorAll(`#s${n}-opts-${i} .option-btn`);
+        let selected = null;
+        opts.forEach(b => {
+            if (b.style.background === 'rgb(0, 35, 149)') selected = b;
+        });
+
+        opts.forEach(b => {
+            b.disabled = true;
+            b.style.background = '';
+            b.style.color = '';
+            b.style.borderColor = '';
+        });
+
+        opts.forEach(b => {
+            if (b.dataset.v === item.answer) b.classList.add('correct');
+        });
+
+        if (selected) {
+            if (selected.dataset.v === item.answer) {
+                correct++;
+                selected.classList.add('correct');
+            } else {
+                selected.classList.add('wrong');
+            }
+        }
+    });
+    return correct;
+}
+
+function showStageFeedback(n, correct, total) {
+    scores[n] = correct;
+    const pct = Math.round((correct / total) * 100);
+    const fb = document.getElementById(`s${n}-feedback`);
+    const sc = document.getElementById(`s${n}-score`);
+    sc.textContent = `Ergebnis: ${correct} / ${total} (${pct}%)`;
+    fb.style.display = 'block';
+
+    const nextBtn = document.getElementById(`s${n}-next`);
+    if (pct >= 60) {
+        fb.className = 'feedback success';
+        fb.textContent = `✅ Super! Du hast ${correct} von ${total} Aufgaben richtig (${pct}%). Weiter zur nächsten Stufe!`;
+        nextBtn.style.display = 'inline-block';
+    } else if (pct >= 40) {
+        fb.className = 'feedback warning';
+        fb.textContent = `⚠️ Knapp! ${correct} von ${total} richtig (${pct}%). Schau nochmal in den Merkkasten. Du kannst trotzdem weitermachen.`;
+        nextBtn.style.display = 'inline-block';
+    } else {
+        fb.className = 'feedback error';
+        fb.textContent = `❌ Noch nicht ganz. ${correct} von ${total} richtig (${pct}%). Lies den Merkkasten nochmal durch! Du kannst trotzdem weitermachen.`;
+        nextBtn.style.display = 'inline-block';
+    }
+
+    document.querySelector(`#stage${n} .check-btn`).disabled = true;
+    updateProgress();
+}
+
+function checkStage1() { showStageFeedback(1, checkStage(1, s1Data), s1Data.length); }
+function checkStage2() { showStageFeedback(2, checkStage(2, s2Data), s2Data.length); }
+function checkStage3() { showStageFeedback(3, checkStage(3, s3Data), s3Data.length); }
+function checkStage4() { showStageFeedback(4, checkStage(4, s4Data), s4Data.length); }
+function checkStage5() { showStageFeedback(5, checkStage(5, s5Data), s5Data.length); }
+
+// =============================================
+// UNLOCK NEXT STAGE
+// =============================================
+function unlockStage(n) {
+    const stage = document.getElementById(`stage${n}`);
+    stage.classList.remove('locked');
+    document.getElementById(`lock${n}`).textContent = '';
+
+    // Build the stage when unlocked
+    if (n === 2) buildStage2();
+    if (n === 3) buildStage3();
+    if (n === 4) buildStage4();
+    if (n === 5) buildStage5();
+
+    // Hide previous next button
+    document.getElementById(`s${n-1}-next`).style.display = 'none';
+    document.getElementById(`snum${n-1}`).classList.add('done');
+    document.getElementById(`snum${n-1}`).textContent = '✓';
+
+    stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    updateProgress();
+}
+
+// =============================================
+// PROGRESS
+// =============================================
+function updateProgress() {
+    // Count completed stages (next button visible = checked)
+    let done = 0;
+    for (let i = 1; i <= 5; i++) {
+        if (document.getElementById(`s${i}-feedback`).style.display === 'block') done++;
+    }
+    const pct = Math.round((done / 5) * 100);
+    document.getElementById('global-progress').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = `Stufe ${done} von 5 abgeschlossen`;
+}
+
+// =============================================
+// FINAL RESULT
+// =============================================
+function showFinalResult() {
+    document.getElementById(`s5-next`).style.display = 'none';
+    document.getElementById(`snum5`).classList.add('done');
+    document.getElementById(`snum5`).textContent = '✓';
+
+    let totalCorrect = 0, totalQ = 0;
+    for (let i = 1; i <= 5; i++) {
+        totalCorrect += scores[i];
+        totalQ += totals[i] || 0;
+    }
+
+    const pct = Math.round((totalCorrect / totalQ) * 100);
+    const fr = document.getElementById('final-result');
+    fr.style.display = 'block';
+    document.getElementById('final-score-display').textContent = `${totalCorrect} / ${totalQ} (${pct}%)`;
+
+    const trophy = document.getElementById('trophy-icon');
+    const text = document.getElementById('final-feedback-text');
+
+    if (pct >= 85) {
+        trophy.textContent = '🥇';
+        text.innerHTML = '<strong>Excellent !</strong> Du hast alle Artikel perfekt gemeistert! Weiter so! 🌟';
+    } else if (pct >= 65) {
+        trophy.textContent = '🥈';
+        text.innerHTML = '<strong>Très bien !</strong> Du hast schon viel verstanden. Übe die schwierigen Aufgaben nochmal!';
+    } else if (pct >= 45) {
+        trophy.textContent = '🥉';
+        text.innerHTML = '<strong>Pas mal !</strong> Du bist auf dem richtigen Weg. Schau die Merkkästen nochmal an und versuche es erneut!';
+    } else {
+        trophy.textContent = '💪';
+        text.innerHTML = '<strong>Continue !</strong> Artikel sind am Anfang schwer. Lies die Regeln nochmal und versuche es nochmal – du schaffst das!';
+    }
+
+    fr.scrollIntoView({ behavior: 'smooth' });
+    updateProgress();
+}
+
+// =============================================
+// BUILD VOCABULARY
+// =============================================
+function buildVocab() {
+    const grid = document.getElementById('vocab-grid');
+    vocab.forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'vocab-card' + (v.genre === 'f.' ? ' fem' : '');
+        card.innerHTML = `
+            <span class="fr">${v.fr}</span>
+            <span class="de">${v.de}</span>
+            <span class="genre">${v.genre}</span>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// =============================================
+// INIT
+// =============================================
+buildStage1();
+buildVocab();
+</script>
+</body>
+</html>

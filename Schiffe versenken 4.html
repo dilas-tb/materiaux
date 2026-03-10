@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bataille Navale - Verben auf -er</title>
+    <style>
+        :root {
+            --water: #3498db;
+            --water-dark: #2980b9;
+            --ship: #7f8c8d;
+            --hit: #e74c3c;
+            --miss: #aed6f1;
+            --grid-border: #bdc3c7;
+            --valid: #27ae60;
+            --invalid: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { margin-bottom: 5px; font-size: 1.5rem; text-align: center; }
+        .subtitle { margin-bottom: 15px; color: #7f8c8d; text-align: center; font-size: 0.9rem; }
+
+        /* --- Screens --- */
+        .screen { display: none; width: 100%; max-width: 800px; }
+        .active { display: block; }
+
+        /* --- Phase 1: Vokabeln --- */
+        .form-group {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .verb-inputs {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr); /* Mobile first */
+            gap: 10px;
+            margin: 20px 0;
+        }
+        @media (min-width: 500px) {
+            .verb-inputs { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--water-dark);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        button:hover { background-color: var(--water); }
+        button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+
+        /* --- Phase 2: Setup Info --- */
+        .validation-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--ship);
+            font-size: 0.9rem;
+        }
+        .validation-status { margin-top: 5px; font-weight: bold; }
+        .status-ok { color: var(--valid); }
+        .status-err { color: var(--invalid); }
+
+        /* --- Phase 3: Game Layout (IMMER untereinander) --- */
+        .game-board {
+            display: flex;
+            flex-direction: column; /* Erzwingt vertikales Layout */
+            gap: 30px;
+            align-items: center;
+        }
+
+        .grid-wrapper {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h2 { 
+            text-align: center; 
+            color: var(--water-dark); 
+            border-bottom: 2px solid #eee; 
+            padding-bottom: 10px; 
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+        
+        th, td {
+            border: 1px solid var(--grid-border);
+            min-width: 40px; /* Kleiner für Mobile */
+            height: 35px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 0.85rem;
+            user-select: none;
+            padding: 2px;
+        }
+
+        th { background-color: #f9f9f9; font-weight: bold; }
+        
+        /* Erste Spalte (Pronomen) sticky machen beim horizontalen Scrollen auf sehr kleinen Handys */
+        td:first-child, th:first-child { 
+            background-color: #eee; 
+            font-weight: bold; 
+            position: sticky;
+            left: 0;
+            z-index: 10;
+        }
+
+        /* Interaktive Zellen */
+        .cell { cursor: pointer; }
+        
+        /* Zustände */
+        .is-ship { background-color: var(--ship) !important; color: white; }
+        .is-hit { background-color: var(--hit) !important; color: white; }
+        .is-miss { background-color: var(--miss) !important; }
+        
+        .marker { font-weight: bold; font-size: 1.1rem; display: block; }
+        
+        .legend {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .dot { width: 10px; height: 10px; display: inline-block; margin-right: 5px; border-radius: 50%;}
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Bataille navale</h1>
+        <div class="subtitle">Trainer für regelmäßige Verben auf -er. Konzeption: Tim Bauerschmidt.</div>
+    </header>
+
+    <!-- PHASE 1: SETUP VERBEN -->
+    <div id="screen-input" class="screen active">
+        <div class="form-group">
+            <h3>Schritt 1: Verben prüfen</h3>
+            <p>Suche dir einen Partner und öffnet beide dieses Spiel auf eurem Rechner. Ihr könnt die Verben ändern oder so lassen. Wichtig ist nur, dass ihr beide die gleichen Verben habt.</p>
+            <div class="verb-inputs" id="verbInputs">
+                <!-- Wird per JS gefüllt -->
+            </div>
+            <button onclick="goToShipPlacement()">Weiter zur Flotte &raquo;</button>
+        </div>
+    </div>
+
+    <!-- PHASE 2: SCHIFFE PLATZIEREN -->
+    <div id="screen-setup" class="screen">
+        
+        <div class="validation-box" id="validationInfo">
+            <div><strong>Aufgabe:</strong> Verteile deine Schiffe.</div>
+            <div style="margin-top:5px; font-size: 0.85rem; color: #555;">
+                Erforderlich:
+                <br>• 1x Flugzeugträger (3 Kästchen)
+                <br>• 2x Fregatte (2 Kästchen)
+                <br>• 3x Zerstörer (1 Kästchen)
+                <br><i>Schiffe dürfen sich nicht berühren (auch nicht diagonal)!</i>
+            </div>
+            <div id="currentStatus" class="validation-status status-err">Aktuell: 0 Schiffe gesetzt</div>
+        </div>
+
+        <div class="grid-wrapper">
+            <h2>Ma flotte</h2>
+            <table id="setupTable"></table>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="startGameBtn" onclick="startGame()" disabled>Spiel starten!</button>
+        </div>
+        <br><br>
+    </div>
+
+    <!-- PHASE 3: SPIELEN -->
+    <div id="screen-game" class="screen">
+        
+        <div class="legend">
+            <div><span class="dot" style="background:var(--ship)"></span>Schiff</div>
+            <div><span class="dot" style="background:var(--hit)"></span>Treffer (touché)</div>
+            <div><span class="dot" style="background:var(--miss)"></span>Wasser (à l'eau)</div>
+        </div>
+
+        <div class="game-board">
+            <!-- Linkes Grid: Meine Schiffe (Verteidigung) -->
+            <div class="grid-wrapper">
+                <h2>1. Ma flotte (Verteidigung)</h2>
+                <div style="text-align:center; font-size:0.8rem; color:#666; margin-bottom:5px;">
+                    Verzeichne hier die Schüsse deines Gegners.
+                </div>
+                <table id="fleetTable"></table>
+            </div>
+
+            <!-- Rechtes Grid: Mein Radar (Angriff) -->
+            <div class="grid-wrapper">
+                <h2>2. Mes tirs (Angriff)</h2>
+                <div style="text-align:center; font-size:0.8rem; color:#666; margin-bottom:5px;">
+                    Verzeichne hier deine Schüsse. Einmal klicken: Treffer, zweites Mal: Wasser. So behälst du den Überblick.
+                </div>
+                <table id="radarTable"></table>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; margin-bottom: 50px;">
+             <button onclick="location.reload()" style="background-color: #e74c3c;">Spiel beenden / Neu starten</button>
+        </div>
+    </div>
+
+<script>
+    // --- KONFIGURATION ---
+    const PRONOUNS = ["je / j'", "tu", "il / elle / on", "nous", "vous", "ils / elles"];
+    // Da wir 9 Verben brauchen, passen wir die Zeilen an das Schiffe-Versenken-Standard 9x9 an? 
+    // Nein, im Original hattest du Pronomen: je, tu, il, elle, on, nous, vous, ils, elles (9 Stück).
+    // Das behalten wir bei, damit das Grid quadratisch bleibt (9 Verben x 9 Pronomen).
+    
+    const ROWS = ["je / j'", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles"];
+    
+    // Voreingestellte Verben (Update Teil 1)
+    const DEFAULT_VERBS = [
+        "chercher", "arriver", "trouver", 
+        "habiter", "aimer", "travailler", 
+        "jouer", "écouter", "parler"
+    ];
+    
+    let VERBS = [];
+    let myShips = new Set(); // Stores IDs like "2-5"
+    
+    // --- INIT ---
+    window.onload = function() {
+        const inputContainer = document.getElementById('verbInputs');
+        DEFAULT_VERBS.forEach((verb, index) => {
+            let input = document.createElement('input');
+            input.value = verb;
+            input.id = "verb_" + (index + 1);
+            inputContainer.appendChild(input);
+        });
+    };
+
+    // --- PHASE 1 -> 2 ---
+    function goToShipPlacement() {
+        VERBS = [];
+        for(let i=1; i<=9; i++) {
+            let val = document.getElementById("verb_" + i).value.trim();
+            if(!val) val = "Verb " + i;
+            VERBS.push(val);
+        }
+
+        document.getElementById('screen-input').classList.remove('active');
+        document.getElementById('screen-setup').classList.add('active');
+        
+        renderGrid("setupTable", "setup");
+    }
+
+    // --- GRID RENDERER ---
+    function renderGrid(tableId, mode) {
+        const table = document.getElementById(tableId);
+        table.innerHTML = "";
+
+        // Header
+        let thead = document.createElement('thead');
+        let headerRow = document.createElement('tr');
+        headerRow.appendChild(document.createElement('th'));
+        VERBS.forEach(verb => {
+            let th = document.createElement('th');
+            let span = document.createElement('span');
+            // Bei langen Verben Text rotieren oder kürzen? Wir lassen es responsive.
+            span.textContent = verb;
+            th.appendChild(span);
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Body
+        let tbody = document.createElement('tbody');
+        ROWS.forEach((pronoun, rIndex) => {
+            let tr = document.createElement('tr');
+            
+            let tdPronoun = document.createElement('td');
+            tdPronoun.textContent = pronoun;
+            tr.appendChild(tdPronoun);
+
+            for(let cIndex=0; cIndex<9; cIndex++) {
+                let td = document.createElement('td');
+                td.className = "cell";
+                td.dataset.row = rIndex;
+                td.dataset.col = cIndex;
+                const id = rIndex + "-" + cIndex;
+                td.dataset.id = id;
+
+                if(mode === "setup") {
+                    td.onclick = () => { toggleSetupShip(td); };
+                } else if(mode === "fleet") {
+                    if(myShips.has(id)) td.classList.add("is-ship");
+                    td.onclick = () => toggleFleetDamage(td);
+                } else if(mode === "radar") {
+                    td.onclick = () => toggleRadarShot(td);
+                }
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+    }
+
+    // --- SETUP LOGIK & VALIDIERUNG (Update Teil 2) ---
+    function toggleSetupShip(cell) {
+        const id = cell.dataset.id;
+        
+        if(myShips.has(id)) {
+            myShips.delete(id);
+            cell.classList.remove("is-ship");
+        } else {
+            // Prüfung: Maximal 10 Kästchen erlaubt
+            if(myShips.size >= 10) return; 
+            myShips.add(id);
+            cell.classList.add("is-ship");
+        }
+        validateFleet();
+    }
+
+    function validateFleet() {
+        const btn = document.getElementById('startGameBtn');
+        const statusDiv = document.getElementById('currentStatus');
+        
+        // Algorithmus zum Finden der Schiffe (Inseln)
+        const grid = Array(9).fill(null).map(() => Array(9).fill(0));
+        myShips.forEach(id => {
+            const [r, c] = id.split('-').map(Number);
+            grid[r][c] = 1;
+        });
+
+        const shipsFound = []; 
+        const visited = new Set();
+        let isValidShapes = true;
+
+        // Flood Fill / DFS um verbundene Zellen zu finden
+        for(let r=0; r<9; r++) {
+            for(let c=0; c<9; c++) {
+                if(grid[r][c] === 1 && !visited.has(`${r}-${c}`)) {
+                    let shipCells = [];
+                    let stack = [[r,c]];
+                    visited.add(`${r}-${c}`);
+                    
+                    while(stack.length > 0) {
+                        let [curR, curC] = stack.pop();
+                        shipCells.push({r: curR, c: curC});
+
+                        // Nachbarn prüfen (oben, unten, links, rechts)
+                        const neighbors = [[-1,0], [1,0], [0,-1], [0,1]];
+                        for(let n of neighbors) {
+                            let nr = curR + n[0];
+                            let nc = curC + n[1];
+                            let nid = `${nr}-${nc}`;
+                            if(nr>=0 && nr<9 && nc>=0 && nc<9 && grid[nr][nc] === 1 && !visited.has(nid)) {
+                                visited.add(nid);
+                                stack.push([nr,nc]);
+                            }
+                        }
+                    }
+
+                    // Form prüfen: Ist das Schiff eine Linie?
+                    // Entweder alle r sind gleich ODER alle c sind gleich
+                    const rows = shipCells.map(c => c.r);
+                    const cols = shipCells.map(c => c.c);
+                    const isHorizontal = rows.every(val => val === rows[0]);
+                    const isVertical = cols.every(val => val === cols[0]);
+
+                    if(!isHorizontal && !isVertical) {
+                        isValidShapes = false; // "L" Form oder Block
+                    }
+                    shipsFound.push(shipCells.length);
+                }
+            }
+        }
+
+        // Check diagonale Berührungen (vereinfacht: Grid-Abstands-Check)
+        // Bei Battleship dürfen Schiffe sich normalerweise auch nicht über Ecken berühren.
+        // Das wird im obigen DFS bereits als getrennte Schiffe erkannt (weil nur orthogonal gesucht wird).
+        // ABER wir müssen prüfen, ob ein Schiff ein anderes berührt.
+        // Um es einfach zu halten: Der obige DFS trennt diagonale Blöcke. 
+        // Wenn ich zwei 1er diagonal setze, sind es zwei 1er. Das ist okay.
+
+        // Zählen
+        let counts = { 1: 0, 2: 0, 3: 0, 'other': 0 };
+        shipsFound.forEach(size => {
+            if(counts[size] !== undefined) counts[size]++;
+            else counts['other']++;
+        });
+
+        // Anforderungen: 1x3, 2x2, 3x1
+        const req3 = 1;
+        const req2 = 2;
+        const req1 = 3;
+        
+        let msg = [];
+        let isComplete = true;
+
+        if(!isValidShapes) {
+            msg.push("Gerade Linien bilden!");
+            isComplete = false;
+        }
+        if(counts['other'] > 0) {
+            msg.push("Schiffe zu groß (>3)!");
+            isComplete = false;
+        }
+
+        // Fein-Feedback
+        if(counts[3] !== req3) { msg.push(`${counts[3]}/${req3} Dreier`); isComplete = false; }
+        if(counts[2] !== req2) { msg.push(`${counts[2]}/${req2} Zweier`); isComplete = false; }
+        if(counts[1] !== req1) { msg.push(`${counts[1]}/${req1} Einer`); isComplete = false; }
+
+        if(isComplete) {
+            statusDiv.textContent = "Flotte bereit! (3x1, 2x2, 1x3)";
+            statusDiv.className = "validation-status status-ok";
+            btn.disabled = false;
+        } else {
+            statusDiv.textContent = "Fehlt/Falsch: " + msg.join(", ");
+            statusDiv.className = "validation-status status-err";
+            btn.disabled = true;
+        }
+    }
+
+    // --- PHASE 2 -> 3 ---
+    function startGame() {
+        document.getElementById('screen-setup').classList.remove('active');
+        document.getElementById('screen-game').classList.add('active');
+        renderGrid("fleetTable", "fleet");
+        renderGrid("radarTable", "radar");
+    }
+
+    // --- GAMEPLAY (Wie gehabt) ---
+    function toggleFleetDamage(cell) {
+        const isShip = myShips.has(cell.dataset.id);
+        if (cell.classList.contains('is-hit')) {
+            cell.classList.remove('is-hit'); cell.classList.add('is-miss');
+            cell.innerHTML = "<span class='marker'>O</span>";
+        } else if (cell.classList.contains('is-miss')) {
+            cell.classList.remove('is-miss'); cell.innerHTML = "";
+        } else {
+            if(isShip) {
+                cell.classList.add('is-hit'); cell.innerHTML = "<span class='marker'>X</span>"; 
+            } else {
+                cell.classList.add('is-miss'); cell.innerHTML = "<span class='marker'>O</span>";
+            }
+        }
+    }
+    function toggleRadarShot(cell) {
+        if (cell.classList.contains('is-hit')) {
+            cell.classList.remove('is-hit'); cell.classList.add('is-miss');
+            cell.innerHTML = "<span class='marker'>O</span>";
+        } else if (cell.classList.contains('is-miss')) {
+            cell.classList.remove('is-miss'); cell.innerHTML = "";
+        } else {
+            cell.classList.add('is-hit'); cell.innerHTML = "<span class='marker'>X</span>";
+        }
+    }
+</script>
+</body>
+</html>

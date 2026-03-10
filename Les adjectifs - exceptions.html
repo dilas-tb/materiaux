@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les adjectifs – Besonderheiten</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 0 0 60px 0;
+        }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, #12122a, #1e1e3f);
+            border-bottom: 2px solid #2d2d5e;
+            padding: 28px 20px 22px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: #a78bfa;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* ── Navigation Tabs ── */
+        .tab-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 20px 16px 0;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        .tab-btn {
+            padding: 9px 18px;
+            border-radius: 22px;
+            border: 2px solid #2d2d5e;
+            background: transparent;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .tab-btn:hover { border-color: #a78bfa; color: #a78bfa; }
+
+        .tab-btn.active {
+            background: #a78bfa;
+            border-color: #a78bfa;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+
+        /* ── Content Wrapper ── */
+        .content {
+            max-width: 860px;
+            margin: 24px auto 0;
+            padding: 0 16px;
+        }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* ── Erklär-Karten ── */
+        .explain-card {
+            background: #16213e;
+            border: 1px solid #2d2d5e;
+            border-radius: 16px;
+            padding: 22px 26px;
+            margin-bottom: 18px;
+        }
+
+        .explain-card h2 {
+            font-size: 1.15rem;
+            color: #a78bfa;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .explain-card h2 .num {
+            background: #a78bfa;
+            color: #1a1a2e;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .explain-card p {
+            color: #c4c4d4;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .explain-card p:last-child { margin-bottom: 0; }
+
+        .highlight {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .fr { color: #7dd3fc; font-style: italic; }
+
+        .rule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .rule-item {
+            background: #12122a;
+            border: 1px solid #2d2d5e;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+        }
+
+        .rule-item .rule-head {
+            color: #a78bfa;
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        /* Große-Drei-Tabelle */
+        .trois-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 0.9rem;
+        }
+
+        .trois-table th {
+            background: #12122a;
+            color: #a78bfa;
+            padding: 10px 14px;
+            border: 1px solid #2d2d5e;
+            text-align: center;
+        }
+
+        .trois-table td {
+            padding: 9px 14px;
+            border: 1px solid #2d2d5e;
+            text-align: center;
+            color: #e0e0e0;
+        }
+
+        .trois-table tr:nth-child(even) td { background: #12122a; }
+
+        .trois-table .special { color: #fbbf24; font-weight: bold; }
+
+        /* ── Aufgaben-Bereich ── */
+        .task-intro {
+            background: #16213e;
+            border-left: 4px solid #a78bfa;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 18px;
+            margin-bottom: 22px;
+            font-size: 0.92rem;
+            color: #c4c4d4;
+            line-height: 1.6;
+        }
+
+        /* ── Aufgabe 1: Wortstellung ── */
+        .sentence-task {
+            background: #16213e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 20px 22px;
+            margin-bottom: 14px;
+        }
+
+        .sentence-task .q-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .sentence-task .q-text {
+            font-size: 1.05rem;
+            color: #f3f4f6;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .sentence-task .q-text em { color: #fbbf24; font-style: normal; font-weight: bold; }
+
+        .choices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .choice-btn {
+            padding: 9px 18px;
+            border-radius: 22px;
+            border: 2px solid #2d2d5e;
+            background: transparent;
+            color: #e0e0e0;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.22s;
+        }
+
+        .choice-btn:hover:not(:disabled) { border-color: #a78bfa; color: #a78bfa; }
+        .choice-btn.correct { border-color: #10b981; background: rgba(16,185,129,0.15); color: #6ee7b7; }
+        .choice-btn.wrong   { border-color: #ef4444; background: rgba(239,68,68,0.12);  color: #fca5a5; }
+        .choice-btn:disabled { cursor: default; opacity: 0.7; }
+
+        .feedback-line {
+            margin-top: 10px;
+            font-size: 0.88rem;
+            min-height: 20px;
+            color: #6ee7b7;
+        }
+
+        .feedback-line.err { color: #fca5a5; }
+
+        /* ── Lückentext ── */
+        .gap-sentence {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: #f3f4f6;
+            margin-bottom: 6px;
+        }
+
+        .gap {
+            display: inline-block;
+            border-bottom: 2px solid #a78bfa;
+            min-width: 80px;
+            text-align: center;
+            padding: 2px 8px;
+            margin: 0 4px;
+            color: #a78bfa;
+            font-weight: bold;
+        }
+
+        .gap-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #a78bfa;
+            color: #a78bfa;
+            font-size: 1rem;
+            font-weight: bold;
+            min-width: 80px;
+            width: 110px;
+            text-align: center;
+            outline: none;
+            padding: 2px 4px;
+        }
+
+        .gap-input.correct { border-color: #10b981; color: #6ee7b7; }
+        .gap-input.wrong   { border-color: #ef4444; color: #fca5a5; }
+        .gap-input:disabled { opacity: 0.85; }
+
+        /* ── Drag-Sort ── */
+        .word-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 48px;
+            background: #12122a;
+            border: 2px dashed #2d2d5e;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .word-pool.drag-over { border-color: #a78bfa; }
+
+        .sort-slot-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            color: #f3f4f6;
+        }
+
+        .sort-slot {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 100px;
+            min-height: 38px;
+            border: 2px dashed #4b3d8e;
+            border-radius: 10px;
+            padding: 4px 10px;
+            background: #12122a;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .sort-slot.drag-over { border-color: #a78bfa; background: rgba(167,139,250,0.08); }
+        .sort-slot.correct   { border-color: #10b981; background: rgba(16,185,129,0.1); }
+        .sort-slot.wrong     { border-color: #ef4444; background: rgba(239,68,68,0.1); }
+
+        .word-tile {
+            background: linear-gradient(135deg, #2d2d5e, #3b2d6e);
+            border: 1px solid #4b3d8e;
+            border-radius: 20px;
+            padding: 7px 16px;
+            font-size: 0.95rem;
+            color: #e0e0e0;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .word-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(124,58,237,0.3); }
+        .word-tile.dragging { opacity: 0.4; }
+
+        /* ── Check-Button ── */
+        .check-btn {
+            padding: 11px 28px;
+            border-radius: 26px;
+            border: none;
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-top: 12px;
+            box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+        }
+
+        .check-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124,58,237,0.55); }
+
+        .reset-btn {
+            padding: 9px 22px;
+            border-radius: 22px;
+            border: 2px solid #4b5563;
+            background: transparent;
+            color: #9ca3af;
+            font-size: 0.88rem;
+            cursor: pointer;
+            margin-top: 12px;
+            margin-left: 10px;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover { border-color: #a78bfa; color: #a78bfa; }
+
+        /* ── Score ── */
+        .score-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 18px;
+            padding: 12px 18px;
+            background: #12122a;
+            border-radius: 12px;
+            border: 1px solid #2d2d5e;
+        }
+
+        .score-row span { font-size: 0.88rem; color: #6b7280; }
+        .score-row strong { color: #a78bfa; }
+
+        /* ── Toast ── */
+        #toast {
+            position: fixed;
+            bottom: 28px; left: 50%;
+            transform: translateX(-50%) translateY(70px);
+            background: #064e3b;
+            border: 1px solid #10b981;
+            color: #6ee7b7;
+            padding: 11px 26px;
+            border-radius: 28px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            pointer-events: none;
+            z-index: 999;
+            white-space: nowrap;
+        }
+
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #toast.err  { background: #450a0a; border-color: #ef4444; color: #fca5a5; }
+
+        /* ── Responsive ── */
+        @media (max-width: 520px) {
+            header h1 { font-size: 1.4rem; }
+            .trois-table { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Les adjectifs – Besonderheiten</h1>
+    <p>Erklärungen &amp; Übungen zu den wichtigsten Ausnahmen</p>
+</header>
+
+<!-- Tab-Bar -->
+<div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('erklaerung')">📖 Erklärung</button>
+    <button class="tab-btn" onclick="showTab('aufgabe1')">✏️ Aufgabe 1 – Stellung</button>
+    <button class="tab-btn" onclick="showTab('aufgabe2')">✏️ Aufgabe 2 – Die großen Drei</button>
+    <button class="tab-btn" onclick="showTab('aufgabe3')">✏️ Aufgabe 3 – Endungen</button>
+    <button class="tab-btn" onclick="showTab('aufgabe4')">✏️ Aufgabe 4 – Plural</button>
+</div>
+
+<div class="content">
+
+    <!-- ════════════════════════════════════════════════════
+         ERKLÄRUNG
+    ════════════════════════════════════════════════════ -->
+    <div class="section active" id="sec-erklaerung">
+
+        <div class="explain-card">
+            <h2><span class="num">1</span> Adjektive vor dem Nomen</h2>
+            <p>Die meisten Adjektive stehen im Französischen <span class="highlight">hinter</span> dem Nomen –
+               das ist die Grundregel. Aber eine kleine Gruppe sehr häufiger, kurzer Adjektive stellt sich
+               <span class="highlight">davor</span>. Du kannst sie mit dem Merksatz
+               <span class="highlight">BAGS</span> einteilen:</p>
+            <div class="rule-grid">
+			    <div class="rule-item">
+                    <div class="rule-head">✨ Schönheit (beauty)</div>
+                    <span class="fr">beau, joli</span>
+                </div>
+				<div class="rule-item">
+                    <div class="rule-head">📅 Alter (age)</div>
+                    <span class="fr">jeune, vieux, nouveau</span>
+                </div>
+				<div class="rule-item">
+                    <div class="rule-head">👍 Gut/Schlecht (good)</div>
+                    <span class="fr">bon, mauvais</span>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-head">🏔 Größe (size)</div>
+                    <span class="fr">grand, petit</span>
+                </div>
+            </div>
+            <p style="margin-top:14px;">Beispiel: <span class="fr">C'est un <span class="highlight">bon</span> film.</span>
+               – Das ist ein guter Film. (bon steht <em>vor</em> film)</p>
+        </div>
+
+        <div class="explain-card">
+            <h2><span class="num">2</span> Die „großen Drei": beau, nouveau, vieux</h2>
+            <p>Diese drei Adjektive verändern ihre Form besonders stark. Steht das männliche Nomen
+               mit einem <span class="highlight">Vokal</span> (a, e, i, o, u) oder einem
+               <span class="highlight">stummen h</span>, braucht man eine „weiche Brücke",
+               damit zwei Vokale nicht aufeinandertreffen. Dann nimmt das Adjektiv eine
+               <span class="highlight">Sonderform</span> an:</p>
+            <table class="trois-table">
+                <tr>
+                    <th>Adjektiv</th>
+                    <th>Mask. Sing.<br><small>(vor Konsonant)</small></th>
+                    <th class="special">Mask. Sing.<br><small>(vor Vokal / stumm. h)</small></th>
+                    <th>Fem. Sing.</th>
+                    <th>Mask. Plur.</th>
+                    <th>Fem. Plur.</th>
+                </tr>
+                <tr>
+                    <td>schön</td>
+                    <td class="fr">beau</td>
+                    <td class="fr special">bel</td>
+                    <td class="fr">belle</td>
+                    <td class="fr">beaux</td>
+                    <td class="fr">belles</td>
+                </tr>
+                <tr>
+                    <td>neu</td>
+                    <td class="fr">nouveau</td>
+                    <td class="fr special">nouvel</td>
+                    <td class="fr">nouvelle</td>
+                    <td class="fr">nouveaux</td>
+                    <td class="fr">nouvelles</td>
+                </tr>
+                <tr>
+                    <td>alt</td>
+                    <td class="fr">vieux</td>
+                    <td class="fr special">vieil</td>
+                    <td class="fr">vieille</td>
+                    <td class="fr">vieux</td>
+                    <td class="fr">vieilles</td>
+                </tr>
+            </table>
+            <p style="margin-top:12px;">Beispiele: <span class="fr">un <span class="highlight">beau</span> jardin</span>
+               – aber: <span class="fr">un <span class="highlight">bel</span> arbre</span> (arbre beginnt mit Vokal)</p>
+        </div>
+
+        <div class="explain-card">
+            <h2><span class="num">3</span> Besondere Endungen – weibliche Form</h2>
+            <p>Die Grundregel lautet: Männliche Grundform + <span class="highlight">-e</span> = weibliche Form.
+               Manche Adjektive folgen aber einem anderen Muster:</p>
+            <div class="rule-grid">
+                <div class="rule-item">
+                    <div class="rule-head">-e → -e (gleich)</div>
+                    <span class="fr">rouge → rouge</span><br>
+                    <span style="font-size:0.8rem;color:#6b7280;">männl. = weibl.</span>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-head">-eux → -euse</div>
+                    <span class="fr">heureux → heureuse</span>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-head">-if → -ive</div>
+                    <span class="fr">sportif → sportive</span>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-head">-er → -ère</div>
+                    <span class="fr">premier → première</span>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-head">-on/-en/-el → Konsonant doppeln + -e</div>
+                    <span class="fr">bon → bonne<br>mignon → mignonne</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="explain-card">
+            <h2><span class="num">4</span> Besondere Pluralformen</h2>
+            <p>Grundregel: Singular + <span class="highlight">-s</span> = Plural. Ausnahmen:</p>
+            <div class="rule-grid">
+                <div class="rule-item">
+                    <div class="rule-head">-s / -x → unverändert</div>
+                    <span class="fr">gris → gris<br>faux → faux</span>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-head">-eau → -eaux</div>
+                    <span class="fr">beau → beaux<br>nouveau → nouveaux</span>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-head">-al → -aux</div>
+                    <span class="fr">génial → géniaux<br>local → locaux</span>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-head">unveränderlich</div>
+                    <span class="fr">marron → marron<br>orange → orange</span>
+                </div>
+            </div>
+            <p style="margin-top:12px;font-size:0.85rem;color:#6b7280;">
+                💡 Tipp: Lerne zu jeder Regel <em>ein</em> gutes Beispiel auswendig –
+                dann kannst du die Regel immer darauf zurückführen.
+            </p>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════
+         AUFGABE 1 – Stellung (vor / hinter dem Nomen)
+    ════════════════════════════════════════════════════ -->
+    <div class="section" id="sec-aufgabe1">
+        <div class="task-intro">
+            <strong>Aufgabe 1 – Wo steht das Adjektiv?</strong><br>
+            Wähle für jede Aufgabe die grammatikalisch richtige Wortstellung.
+            Denke an die BAGS-Regel: <em>Größe, Alter, Schönheit, gut/schlecht</em> → <strong>vor</strong> dem Nomen!
+        </div>
+        <div id="q1-container"></div>
+        <div class="score-row" id="score1">
+            <span>Richtig: <strong id="s1c">0</strong> / <strong id="s1t">0</strong></span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════
+         AUFGABE 2 – Die großen Drei
+    ════════════════════════════════════════════════════ -->
+    <div class="section" id="sec-aufgabe2">
+        <div class="task-intro">
+            <strong>Aufgabe 2 – beau, nouveau, vieux</strong><br>
+            Trage die richtige Form des Adjektivs in die Lücke ein.
+            Achte darauf, ob das Nomen mit einem Vokal oder einem stummen <em>h</em> beginnt!
+        </div>
+        <div id="q2-container"></div>
+        <button class="check-btn" onclick="checkGap('q2')">✔ Überprüfen</button>
+        <button class="reset-btn" onclick="resetGap('q2')">↺ Zurücksetzen</button>
+        <div class="score-row" id="score2">
+            <span>Richtig: <strong id="s2c">0</strong> / <strong id="s2t">0</strong></span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════
+         AUFGABE 3 – Weibliche Endungen
+    ════════════════════════════════════════════════════ -->
+    <div class="section" id="sec-aufgabe3">
+        <div class="task-intro">
+            <strong>Aufgabe 3 – Die weibliche Form</strong><br>
+            Bilde die weibliche Form des Adjektivs. Tippe deine Antwort in die Lücke.
+        </div>
+        <div id="q3-container"></div>
+        <button class="check-btn" onclick="checkGap('q3')">✔ Überprüfen</button>
+        <button class="reset-btn" onclick="resetGap('q3')">↺ Zurücksetzen</button>
+        <div class="score-row" id="score3">
+            <span>Richtig: <strong id="s3c">0</strong> / <strong id="s3t">0</strong></span>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════
+         AUFGABE 4 – Plural sortieren (Drag & Drop)
+    ════════════════════════════════════════════════════ -->
+    <div class="section" id="sec-aufgabe4">
+        <div class="task-intro">
+            <strong>Aufgabe 4 – Pluralformen sortieren</strong><br>
+            Ordne die Adjektive durch Drag &amp; Drop der richtigen Pluralregel zu.
+        </div>
+        <div id="q4-container"></div>
+        <button class="check-btn" onclick="checkSort()">✔ Überprüfen</button>
+        <button class="reset-btn" onclick="buildSort()">↺ Zurücksetzen</button>
+        <div class="score-row" id="score4">
+            <span>Richtig: <strong id="s4c">0</strong> / <strong id="s4t">0</strong></span>
+        </div>
+    </div>
+
+</div><!-- /content -->
+
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// TAB-STEUERUNG
+// ════════════════════════════════════════════════════════════════
+function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+// ════════════════════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════════════════════
+let toastTimer;
+function toast(msg, err=false) {
+    const t = document.getElementById('toast');
+    clearTimeout(toastTimer);
+    t.textContent = msg;
+    t.className = 'show' + (err ? ' err' : '');
+    toastTimer = setTimeout(() => t.className = '', 2000);
+}
+
+// ════════════════════════════════════════════════════════════════
+// AUFGABE 1 – Multiple Choice: Wortstellung
+// ════════════════════════════════════════════════════════════════
+const q1Data = [
+    {
+        question: 'Wie lautet der korrekte Satz?',
+        hint: 'bon = gut → BAGS → vor dem Nomen',
+        options: ['C\'est un film bon.', 'C\'est un bon film.'],
+        correct: 1
+    },
+    {
+        question: 'Wie lautet der korrekte Satz?',
+        hint: 'intéressant = interessant → kein BAGS-Adjektiv → hinter dem Nomen',
+        options: ['C\'est un intéressant livre.', 'C\'est un livre intéressant.'],
+        correct: 1
+    },
+    {
+        question: 'Wie lautet der korrekte Satz?',
+        hint: 'petit = klein → Größe → BAGS → vor dem Nomen',
+        options: ['C\'est un petit chat.', 'C\'est un chat petit.'],
+        correct: 0
+    },
+    {
+        question: 'Wie lautet der korrekte Satz?',
+        hint: 'rouge = rot → kein BAGS-Adjektiv → hinter dem Nomen',
+        options: ['Elle porte une rouge robe.', 'Elle porte une robe rouge.'],
+        correct: 1
+    },
+    {
+        question: 'Wie lautet der korrekte Satz?',
+        hint: 'vieux = alt → Alter → BAGS → vor dem Nomen',
+        options: ['C\'est un vieux château.', 'C\'est un château vieux.'],
+        correct: 0
+    },
+    {
+        question: 'Wie lautet der korrekte Satz?',
+        hint: 'mauvais = schlecht → BAGS → vor dem Nomen',
+        options: ['C\'est une idée mauvaise.', 'C\'est une mauvaise idée.'],
+        correct: 1
+    },
+    {
+        question: 'Wie lautet der korrekte Satz?',
+        hint: 'rapide = schnell → kein BAGS-Adjektiv → hinter dem Nomen',
+        options: ['C\'est une voiture rapide.', 'C\'est une rapide voiture.'],
+        correct: 0
+    },
+    {
+        question: 'Wie lautet der korrekte Satz?',
+        hint: 'beau = schön → Schönheit → BAGS → vor dem Nomen',
+        options: ['C\'est un beau tableau.', 'C\'est un tableau beau.'],
+        correct: 0
+    }
+];
+
+let s1c = 0, s1t = 0;
+
+function buildQ1() {
+    const cont = document.getElementById('q1-container');
+    cont.innerHTML = '';
+    q1Data.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'sentence-task';
+        div.innerHTML = `
+            <div class="q-label">Aufgabe ${i+1}</div>
+            <div class="q-text">${q.question}</div>
+            <div class="choices" id="choices-${i}">
+                ${q.options.map((o,j) => `
+                    <button class="choice-btn" onclick="answerQ1(${i},${j})" id="cb-${i}-${j}">${o}</button>
+                `).join('')}
+            </div>
+            <div class="feedback-line" id="fb-${i}"></div>
+        `;
+        cont.appendChild(div);
+    });
+}
+
+function answerQ1(qi, chosen) {
+    const q = q1Data[qi];
+    const fb = document.getElementById('fb-' + qi);
+    const btns = document.querySelectorAll(`#choices-${qi} .choice-btn`);
+    btns.forEach(b => b.disabled = true);
+    s1t++;
+    if (chosen === q.correct) {
+        btns[chosen].classList.add('correct');
+        fb.textContent = '👍 Richtig! ' + q.hint;
+        fb.className = 'feedback-line';
+        s1c++;
+        toast('👍 Super!');
+    } else {
+        btns[chosen].classList.add('wrong');
+        btns[q.correct].classList.add('correct');
+        fb.textContent = '❌ Leider falsch. ' + q.hint;
+        fb.className = 'feedback-line err';
+        toast('❌ Schau nochmal in die Erklärung!', true);
+    }
+    document.getElementById('s1c').textContent = s1c;
+    document.getElementById('s1t').textContent = s1t;
+}
+
+// ════════════════════════════════════════════════════════════════
+// AUFGABE 2 – Lückentext: Die großen Drei
+// ════════════════════════════════════════════════════════════════
+const q2Data = [
+    { before: 'C\'est un', adj: 'beau', after: 'jardin.', answer: 'beau',
+      hint: 'jardin beginnt mit Konsonant → beau' },
+    { before: 'C\'est un', adj: 'beau', after: 'arbre.', answer: 'bel',
+      hint: 'arbre beginnt mit Vokal → bel' },
+    { before: 'C\'est un', adj: 'nouveau', after: 'appartement.', answer: 'nouvel',
+      hint: 'appartement beginnt mit Vokal → nouvel' },
+    { before: 'C\'est un', adj: 'vieux', after: 'homme.', answer: 'vieil',
+      hint: 'homme hat stummes h → vieil' },
+    { before: 'C\'est un', adj: 'vieux', after: 'château.', answer: 'vieux',
+      hint: 'château beginnt mit Konsonant → vieux' },
+    { before: 'Ce sont de', adj: 'beau', after: 'tableaux.', answer: 'beaux',
+      hint: 'Plural mask. von beau → beaux' },
+    { before: 'C\'est une', adj: 'beau', after: 'maison.', answer: 'belle',
+      hint: 'Femininum von beau → belle' },
+    { before: 'Ce sont de', adj: 'nouveau', after: 'idées.', answer: 'nouvelles',
+      hint: 'Plural fem. von nouveau → nouvelles' },
+];
+
+function buildQ2() {
+    const cont = document.getElementById('q2-container');
+    cont.innerHTML = '';
+    q2Data.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'sentence-task';
+        div.innerHTML = `
+            <div class="q-label">Aufgabe ${i+1} – Welche Form von „${item.adj}"?</div>
+            <div class="gap-sentence">
+                ${item.before}
+                <input class="gap-input" id="q2-inp-${i}" placeholder="?" autocomplete="off" spellcheck="false">
+                ${item.after}
+            </div>
+            <div class="feedback-line" id="q2-fb-${i}"></div>
+        `;
+        cont.appendChild(div);
+    });
+}
+
+function checkGap(qid) {
+    const data = qid === 'q2' ? q2Data : q3Data;
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${qid}-inp-${i}`);
+        const fb  = document.getElementById(`${qid}-fb-${i}`);
+        if (!inp) return;
+        const val = inp.value.trim().toLowerCase();
+        inp.disabled = true;
+        if (val === item.answer.toLowerCase()) {
+            inp.classList.add('correct'); inp.classList.remove('wrong');
+            fb.textContent = '✅ ' + item.hint;
+            fb.className = 'feedback-line';
+            correct++;
+        } else {
+            inp.classList.add('wrong'); inp.classList.remove('correct');
+            fb.textContent = `❌ Richtig: „${item.answer}" – ${item.hint}`;
+            fb.className = 'feedback-line err';
+        }
+    });
+    const total = data.length;
+    if (qid === 'q2') {
+        document.getElementById('s2c').textContent = correct;
+        document.getElementById('s2t').textContent = total;
+    } else {
+        document.getElementById('s3c').textContent = correct;
+        document.getElementById('s3t').textContent = total;
+    }
+    toast(correct === total ? '🎉 Alles richtig!' : `${correct} von ${total} richtig.`, correct < total);
+}
+
+function resetGap(qid) {
+    const data = qid === 'q2' ? q2Data : q3Data;
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${qid}-inp-${i}`);
+        const fb  = document.getElementById(`${qid}-fb-${i}`);
+        if (inp) { inp.value = ''; inp.disabled = false; inp.className = 'gap-input'; }
+        if (fb)  { fb.textContent = ''; fb.className = 'feedback-line'; }
+    });
+    if (qid === 'q2') { document.getElementById('s2c').textContent = 0; document.getElementById('s2t').textContent = 0; }
+    else              { document.getElementById('s3c').textContent = 0; document.getElementById('s3t').textContent = 0; }
+}
+
+// ════════════════════════════════════════════════════════════════
+// AUFGABE 3 – Lückentext: Weibliche Endungen
+// ════════════════════════════════════════════════════════════════
+const q3Data = [
+    { before: 'Elle est très', after: '(heureux).', answer: 'heureuse',
+      hint: '-eux → -euse' },
+    { before: 'C\'est une fille', after: '(sportif).', answer: 'sportive',
+      hint: '-if → -ive' },
+    { before: 'C\'est la', after: 'fois (premier).', answer: 'première',
+      hint: '-er → -ère' },
+    { before: 'C\'est une', after: 'idée (bon).', answer: 'bonne',
+      hint: '-on → Verdopplung + -e: bon → bonne' },
+    { before: 'La voiture est', after: '(blanc).', answer: 'blanche',
+      hint: 'blanc → blanche (unregelmäßig)' },
+    { before: 'Elle est très', after: '(doux).', answer: 'douce',
+      hint: '-oux → -ouce (unregelmäßig)' },
+    { before: 'C\'est une robe', after: '(rouge).', answer: 'rouge',
+      hint: 'Endet auf -e → bleibt gleich: rouge = rouge' },
+    { before: 'Elle est', after: '(faux).', answer: 'fausse',
+      hint: 'faux → fausse (unregelmäßig, Verdopplung)' },
+];
+
+function buildQ3() {
+    const cont = document.getElementById('q3-container');
+    cont.innerHTML = '';
+    q3Data.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'sentence-task';
+        div.innerHTML = `
+            <div class="q-label">Aufgabe ${i+1} – Weibliche Form</div>
+            <div class="gap-sentence">
+                ${item.before}
+                <input class="gap-input" id="q3-inp-${i}" placeholder="?" autocomplete="off" spellcheck="false">
+                ${item.after}
+            </div>
+            <div class="feedback-line" id="q3-fb-${i}"></div>
+        `;
+        cont.appendChild(div);
+    });
+}
+
+// ════════════════════════════════════════════════════════════════
+// AUFGABE 4 – Drag & Drop: Pluralformen sortieren
+// ════════════════════════════════════════════════════════════════
+const sortCategories = [
+    { id: 'regel-s',    label: '+ s  (Standardregel)',        rule: '+s' },
+    { id: 'regel-sx',   label: '-s / -x → unverändert',      rule: 'unchanged' },
+    { id: 'regel-eaux', label: '-eau → -eaux',                rule: '-eaux' },
+    { id: 'regel-aux',  label: '-al → -aux',                  rule: '-aux' },
+];
+
+const sortItems = [
+    { word: 'petit',    rule: '+s' },
+    { word: 'grand',    rule: '+s' },
+    { word: 'fatigué',  rule: '+s' },
+    { word: 'gris',     rule: 'unchanged' },
+    { word: 'faux',     rule: 'unchanged' },
+    { word: 'heureux',  rule: 'unchanged' },
+    { word: 'beau',     rule: '-eaux' },
+    { word: 'nouveau',  rule: '-eaux' },
+    { word: 'génial',   rule: '-aux' },
+    { word: 'local',    rule: '-aux' },
+];
+
+let dragTile = null;
+
+function buildSort() {
+    const cont = document.getElementById('q4-container');
+    cont.innerHTML = '';
+
+    // Pool
+    const poolDiv = document.createElement('div');
+    poolDiv.id = 'sort-pool';
+    poolDiv.className = 'word-pool';
+
+    const shuffled = [...sortItems].sort(() => Math.random() - 0.5);
+    shuffled.forEach(item => poolDiv.appendChild(makeTile(item.word, item.rule)));
+
+    // Pool Drag-Events
+    poolDiv.addEventListener('dragover', e => { e.preventDefault(); poolDiv.classList.add('drag-over'); });
+    poolDiv.addEventListener('dragleave', () => poolDiv.classList.remove('drag-over'));
+    poolDiv.addEventListener('drop', e => {
+        e.preventDefault(); poolDiv.classList.remove('drag-over');
+        if (dragTile) poolDiv.appendChild(dragTile);
+    });
+
+    cont.appendChild(poolDiv);
+
+    // Zonen
+    sortCategories.forEach(cat => {
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'margin-bottom:12px;';
+
+        const label = document.createElement('div');
+        label.style.cssText = 'font-size:0.82rem;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;margin-bottom:6px;';
+        label.textContent = cat.label;
+
+        const zone = document.createElement('div');
+        zone.className = 'sort-slot';
+        zone.id = 'szone-' + cat.id;
+        zone.dataset.rule = cat.rule;
+        zone.style.cssText = 'min-width:300px; flex-wrap:wrap; gap:8px; justify-content:flex-start; padding:10px 14px; min-height:52px;';
+
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault(); zone.classList.remove('drag-over');
+            if (dragTile) zone.appendChild(dragTile);
+        });
+
+        // Touch
+        zone.addEventListener('touchstart', () => {}, { passive: true });
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(zone);
+        cont.appendChild(wrapper);
+    });
+
+    document.getElementById('s4c').textContent = 0;
+    document.getElementById('s4t').textContent = 0;
+}
+
+function makeTile(word, rule) {
+    const tile = document.createElement('div');
+    tile.className = 'word-tile';
+    tile.textContent = word;
+    tile.draggable = true;
+    tile.dataset.rule = rule;
+
+    tile.addEventListener('dragstart', () => { dragTile = tile; tile.classList.add('dragging'); });
+    tile.addEventListener('dragend',   () => { tile.classList.remove('dragging'); dragTile = null; });
+
+    // Touch
+    let tClone = null, tOffX = 0, tOffY = 0;
+    tile.addEventListener('touchstart', e => {
+        const t = e.touches[0];
+        const r = tile.getBoundingClientRect();
+        tOffX = t.clientX - r.left; tOffY = t.clientY - r.top;
+        tClone = tile.cloneNode(true);
+        tClone.style.cssText = `position:fixed;z-index:9999;pointer-events:none;opacity:0.85;
+            left:${r.left}px;top:${r.top}px;width:${r.width}px;margin:0;`;
+        document.body.appendChild(tClone);
+        dragTile = tile;
+        tile.classList.add('dragging');
+    }, { passive: true });
+
+    tile.addEventListener('touchmove', e => {
+        e.preventDefault();
+        const t = e.touches[0];
+        if (tClone) { tClone.style.left=(t.clientX-tOffX)+'px'; tClone.style.top=(t.clientY-tOffY)+'px'; }
+    }, { passive: false });
+
+    tile.addEventListener('touchend', e => {
+        tile.classList.remove('dragging');
+        if (tClone) { tClone.remove(); tClone = null; }
+        const t = e.changedTouches[0];
+        const el = document.elementFromPoint(t.clientX, t.clientY);
+        if (!el) return;
+        const zone = el.closest('.sort-slot');
+        if (zone) zone.appendChild(tile);
+        else {
+            const pool = document.getElementById('sort-pool');
+            if (el.closest('#sort-pool')) pool.appendChild(tile);
+        }
+        dragTile = null;
+    });
+
+    return tile;
+}
+
+function checkSort() {
+    let correct = 0, total = 0;
+
+    sortCategories.forEach(cat => {
+        const zone = document.getElementById('szone-' + cat.id);
+        const tiles = zone.querySelectorAll('.word-tile');
+        tiles.forEach(tile => {
+            total++;
+            if (tile.dataset.rule === cat.rule) {
+                tile.style.background = 'linear-gradient(135deg,#064e3b,#065f46)';
+                tile.style.borderColor = '#10b981';
+                tile.style.color = '#6ee7b7';
+                correct++;
+            } else {
+                tile.style.background = 'linear-gradient(135deg,#450a0a,#7f1d1d)';
+                tile.style.borderColor = '#ef4444';
+                tile.style.color = '#fca5a5';
+            }
+        });
+    });
+
+    // Nicht platzierten Wörtern im Pool
+    document.querySelectorAll('#sort-pool .word-tile').forEach(tile => {
+        total++;
+        tile.style.borderColor = '#ef4444';
+    });
+
+    document.getElementById('s4c').textContent = correct;
+    document.getElementById('s4t').textContent = total;
+    toast(correct === total ? '🎉 Alles richtig!' : `${correct} von ${total} richtig.`, correct < total);
+}
+
+// ════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════
+buildQ1();
+buildQ2();
+buildQ3();
+buildSort();
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retro Space-Verben: -ER</title>
+  <style>
+    html, body { height: 100%; background:#0b0e13; color:#e8f0ff; margin:0; font-family: "Press Start 2P", monospace; }
+    @font-face {
+      font-family: 'Press Start 2P';
+      src: local('Press Start 2P'), url('https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euO8T-267oIAQAu6jDQyK3nVivXJUulhcT9GXw.woff2') format('woff2');
+      font-display: swap;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 12px; }
+    .hud { display:flex; flex-wrap: wrap; gap: 8px; align-items:center; justify-content:space-between; margin-bottom: 8px; font-size: 12px; }
+    .badge { background:#152033; border:2px solid #3a5ca8; padding:8px 10px; border-radius:8px; box-shadow:0 0 0 2px #0b0e13 inset; }
+    .btn { cursor:pointer; }
+    .muted { opacity:0.8 }
+    #gameCanvas { width: 100%; height: auto; image-rendering: pixelated; background: radial-gradient(ellipse at center, #0a0f1f 0%, #070a12 60%, #05070b 100%); border:2px solid #3a5ca8; border-radius:12px; box-shadow:0 0 24px #0a1530 inset, 0 0 24px #0a1530; }
+    .help { margin-top: 10px; font-size: 12px; color:#a8c1ff; }
+    .help kbd { background:#0e1422; border:2px solid #3a5ca8; padding:3px 6px; border-radius:6px; }
+    .footer { margin-top: 10px; font-size: 10px; color:#8aa0d6 }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hud">
+      <div class="badge" id="score">Punkte: 0</div>
+      <div class="badge" id="lives">Leben: <span id="lifeIcons">❤❤❤</span></div>
+      <div class="badge" id="timer">Zeit: 2:30</div>
+      <div class="badge muted" id="speed">Tempo: 1.0×</div>
+      <div class="badge btn" id="restartBtn" title="Neustart (Enter)">⟲ Neustart</div>
+    </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="help">Steuern: <kbd>←</kbd>/<kbd>→</kbd> bewegen • Schießen mit <kbd>1</kbd> je, <kbd>2</kbd> tu, <kbd>3</kbd> il/elle/on, <kbd>4</kbd> nous, <kbd>5</kbd> vous, <kbd>6</kbd> ils/elles.<br/>Runde dauert 2:30 Minuten. Alle 30 Sekunden steigen Fallgeschwindigkeit & Spawn-Rate. Falsches Pronomen zerstört den Asteroiden nicht.</div>
+    <div class="footer">Hinweis: Bei regelmäßigen -ER-Verben lauten die Endungen: je <strong>-e</strong>, tu <strong>-es</strong>, il/elle/on <strong>-e</strong>, nous <strong>-ons</strong>, vous <strong>-ez</strong>, ils/elles <strong>-ent</strong>. Besondere Schreibungen: <em>manger → nous mangeons</em>, <em>commencer → nous commençons</em>.</div>
+  </div>
+  <script>
+    const canvas=document.getElementById('gameCanvas');
+    const ctx=canvas.getContext('2d');
+    const WIDTH=canvas.width,HEIGHT=canvas.height;
+    const ship={x:WIDTH/2,y:HEIGHT-60,w:28,h:60,speed:260,vx:0};
+    const ROUND_SECONDS=150,SPEED_STEP_EVERY=30;
+    let asteroidBaseSpeed=70,spawnIntervalMs=1200;
+    const minSpawnIntervalMs=420;
+    let bullets=[],asteroids=[],pressed={},score=0,lives=3,running=false,over=false,timeLeft=ROUND_SECONDS,speedMultiplier=1.0,lastSpawn=0,lastTime=performance.now();
+    const VERBS=['aimer','adorer','travailler','chercher','parler','donner','regarder','manger','écouter','trouver','arriver','jouer','chanter','demander','commencer'];
+    const keyToPronoun={'1':'je','2':'tu','3':'il/elle/on','4':'nous','5':'vous','6':'ils/elles'};
+    let shootCooldown=0; // verhindert Brute Force
+    function stem(v){return v.slice(0,-2)}
+    function conjugateEr(v){const s=stem(v),f={'je':s+'e','tu':s+'es','il/elle/on':s+'e','nous':s+'ons','vous':s+'ez','ils/elles':s+'ent'};if(v.endsWith('ger'))f['nous']=s+'eons';if(v.endsWith('cer')){const b=v.slice(0,-3);f['nous']=b+'çons'}return f}
+    function spawnAsteroid(){const v=VERBS[Math.floor(Math.random()*VERBS.length)],c=conjugateEr(v),ps=Object.keys(c),p=ps[Math.floor(Math.random()*ps.length)],form=c[p],allowed=ps.filter(pr=>c[pr]===form),x=40+Math.random()*(WIDTH-80),speed=(asteroidBaseSpeed*speedMultiplier)*(0.9+Math.random()*0.25);asteroids.push({x,y:-20,vy:speed,txt:form,allowed,infinitive:v})}
+    function shoot(pr){if(performance.now()<shootCooldown)return;shootCooldown=performance.now()+250;bullets.push({x:ship.x,y:ship.y-ship.h/2,vy:-520,pronounKey:pr});playSound('shoot')}
+    window.addEventListener('keydown',e=>{const k=e.key;if(k==='ArrowLeft'||k==='a')pressed.left=true;if(k==='ArrowRight'||k==='d')pressed.right=true;if(keyToPronoun[k]){e.preventDefault();if(running)shoot(keyToPronoun[k])}if(k==='Enter')startGame()});
+    window.addEventListener('keyup',e=>{const k=e.key;if(k==='ArrowLeft'||k==='a')pressed.left=false;if(k==='ArrowRight'||k==='d')pressed.right=false});
+    document.getElementById('restartBtn').addEventListener('click',startGame);
+    function startGame(){score=0;lives=3;timeLeft=ROUND_SECONDS;speedMultiplier=1.0;over=false;asteroids=[];bullets=[];lastSpawn=0;lastTime=performance.now();asteroidBaseSpeed=70;spawnIntervalMs=1200;running=true;updateHUD();loop();playMusic()}
+    function endGame(){running=false;over=true;drawOverlay();stopMusic()}
+    function loop(){if(!running)return;const now=performance.now(),dt=Math.min(0.033,(now-lastTime)/1000);lastTime=now;timeLeft-=dt;if(timeLeft<=0){timeLeft=0;endGame()}const elapsed=ROUND_SECONDS-timeLeft,step=Math.floor(elapsed/SPEED_STEP_EVERY);speedMultiplier=1+step*0.2;spawnIntervalMs=Math.max(minSpawnIntervalMs,1200-step*150);lastSpawn+=dt*1000;if(lastSpawn>=spawnIntervalMs){lastSpawn=0;spawnAsteroid()}ship.vx=0;if(pressed.left)ship.vx-=ship.speed;if(pressed.right)ship.vx+=ship.speed;ship.x+=ship.vx*dt;ship.x=Math.max(30,Math.min(WIDTH-30,ship.x));for(let b of bullets)b.y+=b.vy*dt;bullets=bullets.filter(b=>b.y>-40);for(let a of asteroids)a.y+=a.vy*dt;for(let i=asteroids.length-1;i>=0;i--){const a=asteroids[i];let destroyed=false;for(let j=bullets.length-1;j>=0;j--){const b=bullets[j];if(Math.abs(b.x-a.x)<36&&Math.abs(b.y-a.y)<24){if(a.allowed.includes(b.pronounKey)){asteroids.splice(i,1);bullets.splice(j,1);score+=100;destroyed=true;playSound('explode');break}else{bullets.splice(j,1)}}}if(!destroyed){if(a.y>ship.y-10&&Math.abs(a.x-ship.x)<40){asteroids.splice(i,1);lives--;playSound('hit');if(lives<=0)endGame()}else if(a.y>HEIGHT+30){asteroids.splice(i,1)}}}updateHUD();render();requestAnimationFrame(loop)}
+    function render(){ctx.clearRect(0,0,WIDTH,HEIGHT);for(let i=0;i<60;i++){const sx=(i*97)%WIDTH,sy=((i*47)+Math.floor(performance.now()/50))%HEIGHT;ctx.fillStyle=(i%7===0)?'#b9d0ff':'#6d8adf';ctx.fillRect(sx,sy,2,2)}drawShip(ship.x,ship.y);ctx.font='12px "Press Start 2P"';ctx.textAlign='center';ctx.textBaseline='middle';for(const b of bullets){ctx.fillStyle='#a8ffb0';ctx.beginPath();ctx.arc(b.x,b.y,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#dff9e1';ctx.fillText(shortPronoun(b.pronounKey),b.x,b.y-12)}for(const a of asteroids){drawAsteroid(a.x,a.y);ctx.fillStyle='#ffd18a';ctx.font='16px "Press Start 2P"';ctx.fillText(a.txt,a.x,a.y);ctx.fillStyle='#99a7d6';ctx.font='9px "Press Start 2P"';ctx.fillText('('+a.infinitive+')',a.x,a.y+16)}if(over)drawOverlay()}
+    function drawShip(x,y){ctx.save();ctx.translate(x,y);ctx.fillStyle='#6bd0ff';ctx.beginPath();ctx.moveTo(0,-ship.h/2);ctx.lineTo(-ship.w/2,ship.h/2);ctx.lineTo(ship.w/2,ship.h/2);ctx.closePath();ctx.fill();ctx.strokeStyle='#2aa0df';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='#bde8ff';ctx.fillRect(-5,-10,10,20);ctx.restore()}
+    function drawAsteroid(x,y){ctx.save();ctx.translate(x,y);ctx.fillStyle='#6e5b4a';ctx.beginPath();ctx.moveTo(0,0);for(let i=0;i<7;i++){const angle=(i/7)*Math.PI*2+Math.random()*0.3;const r=18+Math.random()*8;ctx.lineTo(Math.cos(angle)*r,Math.sin(angle)*r)}ctx.closePath();ctx.fill();ctx.strokeStyle='#3f342b';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#8a7764';ctx.beginPath();ctx.arc(-8,-6,5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(9,3,6,0,Math.PI*2);ctx.fill();ctx.restore()}
+    function drawOverlay(){ctx.save();ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,0,WIDTH,HEIGHT);ctx.fillStyle='#e8f0ff';ctx.textAlign='center';ctx.font='22px "Press Start 2P"';ctx.fillText('Runde beendet',WIDTH/2,HEIGHT/2-40);ctx.font='16px "Press Start 2P"';ctx.fillText('Punkte: '+score,WIDTH/2,HEIGHT/2);ctx.font='12px "Press Start 2P"';ctx.fillText('Enter für Neustart',WIDTH/2,HEIGHT/2+40);ctx.restore()}
+    function shortPronoun(p){switch(p){case 'je':return 'je';case 'tu':return 'tu';case 'il/elle/on':return 'il';case 'nous':return 'nous';case 'vous':return 'vous';case 'ils/elles':return 'ils'}return p}
+    function updateHUD(){document.getElementById('score').textContent='Punkte: '+score;document.getElementById('timer').textContent='Zeit: '+formatTime(timeLeft);document.getElementById('speed').textContent='Tempo: '+speedMultiplier.toFixed(1)+'×';document.getElementById('lifeIcons').textContent='❤'.repeat(Math.max(0,lives));document.getElementById('lives').title=lives+' Leben'}
+    function formatTime(sec){sec=Math.max(0,Math.floor(sec));const m=Math.floor(sec/60),s=sec%60;return m+':'+String(s).padStart(2,'0')}
+    // === Sound ===
+    let audioCtx=null,bgmSource=null;
+    function initAudio(){if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)()}}
+    function playSound(type){initAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='square';switch(type){case 'shoot':o.frequency.value=440;break;case 'explode':o.frequency.value=120;break;case 'hit':o.frequency.value=200;break}g.gain.setValueAtTime(0.1,audioCtx.currentTime);o.start();o.stop(audioCtx.currentTime+0.15)}
+    function playMusic(){initAudio();if(bgmSource)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.setValueAtTime(220,audioCtx.currentTime);g.gain.setValueAtTime(0.05,audioCtx.currentTime);o.connect(g);g.connect(audioCtx.destination);o.start();bgmSource=o}
+    function stopMusic(){if(bgmSource){bgmSource.stop();bgmSource=null}}
+    startGame();
+  </script>
+</body>
+</html>

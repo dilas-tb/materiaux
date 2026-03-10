@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La comparaison des adjectifs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 0 0 60px 0;
+        }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, #12122a, #1e1e3f);
+            border-bottom: 2px solid #2d2d5e;
+            padding: 28px 20px 22px;
+            text-align: center;
+        }
+        header h1 { font-size: 2rem; color: #a78bfa; letter-spacing: 2px; margin-bottom: 6px; }
+        header p  { color: #6b7280; font-size: 0.9rem; }
+
+        /* ── Tab-Bar ── */
+        .tab-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 20px 16px 0;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .tab-btn {
+            padding: 9px 18px;
+            border-radius: 22px;
+            border: 2px solid #2d2d5e;
+            background: transparent;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .tab-btn:hover { border-color: #a78bfa; color: #a78bfa; }
+        .tab-btn.active { background: #a78bfa; border-color: #a78bfa; color: #1a1a2e; font-weight: bold; }
+
+        /* ── Content ── */
+        .content {
+            max-width: 860px;
+            margin: 24px auto 0;
+            padding: 0 16px;
+        }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* ── Erklär-Karten ── */
+        .explain-card {
+            background: #16213e;
+            border: 1px solid #2d2d5e;
+            border-radius: 16px;
+            padding: 22px 26px;
+            margin-bottom: 18px;
+        }
+        .explain-card h2 {
+            font-size: 1.15rem;
+            color: #a78bfa;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .explain-card h2 .num {
+            background: #a78bfa;
+            color: #1a1a2e;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .explain-card p {
+            color: #c4c4d4;
+            line-height: 1.75;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+        .explain-card p:last-child { margin-bottom: 0; }
+
+        .hl  { color: #fbbf24; font-weight: bold; }
+        .fr  { color: #7dd3fc; font-style: italic; }
+        .grn { color: #6ee7b7; font-weight: bold; }
+
+        /* ── Vergleichs-Schema-Tabelle ── */
+        .schema-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 0.9rem;
+        }
+        .schema-table th {
+            background: #12122a;
+            color: #a78bfa;
+            padding: 10px 14px;
+            border: 1px solid #2d2d5e;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .schema-table td {
+            padding: 9px 14px;
+            border: 1px solid #2d2d5e;
+            text-align: center;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+        .schema-table tr:nth-child(even) td { background: #12122a; }
+        .schema-table .cat { color: #a78bfa; font-weight: bold; text-align: left; }
+        .schema-table .form { color: #7dd3fc; font-style: italic; }
+        .schema-table .ex   { color: #9ca3af; font-size: 0.82rem; }
+
+        /* ── Unregelmäßige Box ── */
+        .irreg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .irreg-item {
+            background: #12122a;
+            border: 1px solid #2d2d5e;
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+        .irreg-item .adj { color: #fbbf24; font-weight: bold; font-size: 1rem; margin-bottom: 6px; }
+        .irreg-item .forms { font-size: 0.88rem; color: #c4c4d4; line-height: 1.7; }
+        .irreg-item .forms span { color: #7dd3fc; font-style: italic; }
+
+        /* ── Merkhilfe-Box ── */
+        .memo-box {
+            background: linear-gradient(135deg, #1e1040, #2d1b6e);
+            border: 1px solid #7c3aed;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 14px;
+            font-size: 0.92rem;
+            color: #ddd6fe;
+            line-height: 1.7;
+        }
+        .memo-box strong { color: #a78bfa; }
+
+        /* ── Aufgaben ── */
+        .task-intro {
+            background: #16213e;
+            border-left: 4px solid #a78bfa;
+            border-radius: 0 12px 12px 0;
+            padding: 14px 18px;
+            margin-bottom: 22px;
+            font-size: 0.92rem;
+            color: #c4c4d4;
+            line-height: 1.6;
+        }
+
+        /* Multiple Choice */
+        .mc-card {
+            background: #16213e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 20px 22px;
+            margin-bottom: 14px;
+        }
+        .mc-card .q-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        .mc-card .q-text {
+            font-size: 1.05rem;
+            color: #f3f4f6;
+            margin-bottom: 14px;
+            line-height: 1.65;
+        }
+        .mc-card .q-text em { color: #fbbf24; font-style: normal; font-weight: bold; }
+        .choices { display: flex; flex-wrap: wrap; gap: 10px; }
+        .choice-btn {
+            padding: 9px 18px;
+            border-radius: 22px;
+            border: 2px solid #2d2d5e;
+            background: transparent;
+            color: #e0e0e0;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.22s;
+        }
+        .choice-btn:hover:not(:disabled) { border-color: #a78bfa; color: #a78bfa; }
+        .choice-btn.correct { border-color: #10b981; background: rgba(16,185,129,0.15); color: #6ee7b7; }
+        .choice-btn.wrong   { border-color: #ef4444; background: rgba(239,68,68,0.12);  color: #fca5a5; }
+        .choice-btn:disabled { cursor: default; opacity: 0.75; }
+        .feedback-line { margin-top: 10px; font-size: 0.88rem; min-height: 20px; color: #6ee7b7; }
+        .feedback-line.err { color: #fca5a5; }
+
+        /* Lückentext */
+        .gap-card {
+            background: #16213e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-bottom: 14px;
+        }
+        .gap-card .q-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        .gap-sentence {
+            font-size: 1.05rem;
+            line-height: 2.2;
+            color: #f3f4f6;
+        }
+        .gap-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #a78bfa;
+            color: #a78bfa;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 130px;
+            text-align: center;
+            outline: none;
+            padding: 2px 4px;
+            margin: 0 4px;
+        }
+        .gap-input.correct { border-color: #10b981; color: #6ee7b7; }
+        .gap-input.wrong   { border-color: #ef4444; color: #fca5a5; }
+        .gap-input:disabled { opacity: 0.85; }
+
+        /* Satz bauen (Drag & Drop) */
+        .build-card {
+            background: #16213e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-bottom: 14px;
+        }
+        .build-card .q-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        .build-card .transl {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+        .word-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 48px;
+            background: #12122a;
+            border: 2px dashed #2d2d5e;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            transition: border-color 0.2s;
+        }
+        .word-pool.drag-over { border-color: #a78bfa; }
+        .drop-zone {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 52px;
+            background: #0f172a;
+            border: 2px dashed #4b3d8e;
+            border-radius: 10px;
+            padding: 10px 12px;
+            transition: border-color 0.2s;
+        }
+        .drop-zone.drag-over { border-color: #a78bfa; background: rgba(167,139,250,0.06); }
+        .word-tile {
+            background: linear-gradient(135deg, #2d2d5e, #3b2d6e);
+            border: 1px solid #4b3d8e;
+            border-radius: 20px;
+            padding: 7px 14px;
+            font-size: 0.95rem;
+            color: #e0e0e0;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+            white-space: nowrap;
+        }
+        .word-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(124,58,237,0.35); }
+        .word-tile.dragging { opacity: 0.35; }
+        .build-fb { font-size: 0.88rem; margin-top: 8px; min-height: 20px; color: #6ee7b7; }
+        .build-fb.err { color: #fca5a5; }
+
+        /* Übersetzungsaufgabe */
+        .trans-card {
+            background: #16213e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-bottom: 14px;
+        }
+        .trans-card .q-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        .trans-card .de-sentence {
+            font-size: 1.05rem;
+            color: #fbbf24;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .trans-input {
+            width: 100%;
+            background: #12122a;
+            border: 2px solid #2d2d5e;
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 0.98rem;
+            padding: 11px 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .trans-input:focus { border-color: #a78bfa; }
+        .trans-input.correct { border-color: #10b981; background: rgba(16,185,129,0.07); }
+        .trans-input.wrong   { border-color: #ef4444; }
+        .trans-input:disabled { opacity: 0.8; }
+        .trans-solution {
+            margin-top: 8px;
+            font-size: 0.88rem;
+            color: #7dd3fc;
+            font-style: italic;
+            display: none;
+        }
+
+        /* Buttons */
+        .check-btn {
+            padding: 11px 28px;
+            border-radius: 26px;
+            border: none;
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-top: 12px;
+            box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+        }
+        .check-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124,58,237,0.55); }
+        .reset-btn {
+            padding: 9px 22px;
+            border-radius: 22px;
+            border: 2px solid #4b5563;
+            background: transparent;
+            color: #9ca3af;
+            font-size: 0.88rem;
+            cursor: pointer;
+            margin-top: 12px;
+            margin-left: 10px;
+            transition: all 0.2s;
+        }
+        .reset-btn:hover { border-color: #a78bfa; color: #a78bfa; }
+
+        /* Score */
+        .score-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 18px;
+            padding: 12px 18px;
+            background: #12122a;
+            border-radius: 12px;
+            border: 1px solid #2d2d5e;
+        }
+        .score-row span { font-size: 0.88rem; color: #6b7280; }
+        .score-row strong { color: #a78bfa; }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 28px; left: 50%;
+            transform: translateX(-50%) translateY(70px);
+            background: #064e3b;
+            border: 1px solid #10b981;
+            color: #6ee7b7;
+            padding: 11px 26px;
+            border-radius: 28px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            pointer-events: none;
+            z-index: 999;
+            white-space: nowrap;
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #toast.err  { background: #450a0a; border-color: #ef4444; color: #fca5a5; }
+
+        @media (max-width: 540px) {
+            header h1 { font-size: 1.4rem; }
+            .schema-table { font-size: 0.76rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>La comparaison des adjectifs</h1>
+    <p>Die Steigerung der Adjektive im Französischen – Erklärung &amp; Übungen</p>
+</header>
+
+<div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('erklaerung', this)">📖 Erklärung</button>
+    <button class="tab-btn" onclick="showTab('aufgabe1', this)">✏️ Aufgabe 1 – Komparativ erkennen</button>
+    <button class="tab-btn" onclick="showTab('aufgabe2', this)">✏️ Aufgabe 2 – Formen einsetzen</button>
+    <button class="tab-btn" onclick="showTab('aufgabe3', this)">✏️ Aufgabe 3 – Sätze bauen</button>
+    <button class="tab-btn" onclick="showTab('aufgabe4', this)">✏️ Aufgabe 4 – Übersetzen</button>
+</div>
+
+<div class="content">
+
+    <!-- ════════════ ERKLÄRUNG ════════════ -->
+    <div class="section active" id="sec-erklaerung">
+
+        <div class="explain-card">
+            <h2><span class="num">1</span> Der Komparativ – Vergleich zwischen zwei Dingen</h2>
+            <p>Im Deutschen sagst du: <span class="hl">„größer als", „kleiner als", „genauso groß wie"</span>.
+               Im Französischen baut man den Komparativ mit
+               <span class="hl">plus / moins / aussi … que</span> um das Adjektiv herum:</p>
+            <table class="schema-table">
+                <tr>
+                    <th>Deutsch</th>
+                    <th>Französisch</th>
+                    <th>Formel</th>
+                    <th>Beispiel</th>
+                </tr>
+                <tr>
+                    <td>größer / stärker als</td>
+                    <td class="form"><span class="fr">plus … que</span></td>
+                    <td>Überlegen­heitskmp.</td>
+                    <td class="ex"><span class="fr">Marie est plus grande que Luc.</span></td>
+                </tr>
+                <tr>
+                    <td>kleiner / schwächer als</td>
+                    <td class="form"><span class="fr">moins … que</span></td>
+                    <td>Unterlegenheits­kmp.</td>
+                    <td class="ex"><span class="fr">Ce film est moins long que l'autre.</span></td>
+                </tr>
+                <tr>
+                    <td>genauso … wie</td>
+                    <td class="form"><span class="fr">aussi … que</span></td>
+                    <td>Gleichheits­kmp.</td>
+                    <td class="ex"><span class="fr">Il est aussi grand que son frère.</span></td>
+                </tr>
+            </table>
+            <div class="memo-box">
+                💡 <strong>Merke:</strong> Das Adjektiv passt sich wie immer in
+                <strong>Genus &amp; Numerus</strong> an das Nomen an, auf das es sich bezieht –
+                egal ob Komparativ oder Superlativ!<br>
+                <span class="fr">Marie est plus <span style="color:#fbbf24;">grande</span> que Luc.</span>
+                (grande → fem., weil Marie)
+            </div>
+        </div>
+
+        <div class="explain-card">
+            <h2><span class="num">2</span> Der Superlativ – das Äußerste innerhalb einer Gruppe</h2>
+            <p>Der Superlativ sagt aus, dass etwas das <span class="hl">Größte, Kleinste, Schönste …</span>
+               innerhalb einer Gruppe ist. Die Formel lautet:</p>
+            <table class="schema-table">
+                <tr>
+                    <th>Deutsch</th>
+                    <th>Französisch</th>
+                    <th>Beispiel</th>
+                </tr>
+                <tr>
+                    <td>der/die/das … -ste (größte)</td>
+                    <td class="form"><span class="fr">le / la / les plus …</span></td>
+                    <td class="ex"><span class="fr">C'est le film le plus intéressant de la classe.</span></td>
+                </tr>
+                <tr>
+                    <td>der/die/das … -ste (kleinste)</td>
+                    <td class="form"><span class="fr">le / la / les moins …</span></td>
+                    <td class="ex"><span class="fr">C'est la ville la moins grande de France.</span></td>
+                </tr>
+            </table>
+            <p style="margin-top:12px;">
+                Nach dem Superlativ steht für „in / von" immer <span class="hl">de</span>:<br>
+                <span class="fr">le plus grand <span class="hl">de</span> la classe</span> – der Größte der Klasse.
+            </p>
+            <p>Die Stellung des Superlativs folgt der normalen Adjektiv-Stellung:
+               Steht das Adjektiv normalerweise <em>vor</em> dem Nomen, steht auch der Superlativ davor;
+               steht es danach, folgt auch der Superlativ:</p>
+            <table class="schema-table">
+                <tr>
+                    <th>Adjektiv nach dem Nomen</th>
+                    <th>Adjektiv vor dem Nomen</th>
+                </tr>
+                <tr>
+                    <td class="ex"><span class="fr">le film <strong>le plus intéressant</strong></span></td>
+                    <td class="ex"><span class="fr"><strong>le plus beau</strong> film</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="explain-card">
+            <h2><span class="num">3</span> Unregelmäßige Steigerungs­formen</h2>
+            <p>Drei Adjektive haben <span class="hl">eigene, unregelmäßige Komparativ- und Superlativformen</span>,
+               die du auswendig lernen musst – genau wie im Deutschen „gut → besser → am besten":</p>
+            <div class="irreg-grid">
+                <div class="irreg-item">
+                    <div class="adj">bon / bonne</div>
+                    <div class="forms">
+                        gut<br>
+                        Komp.: <span>meilleur(e) que</span><br>
+                        Sup.: <span>le/la/les meilleur(e)(s)</span>
+                    </div>
+                </div>
+                <div class="irreg-item">
+                    <div class="adj">mauvais(e)</div>
+                    <div class="forms">
+                        schlecht<br>
+                        Komp.: <span>plus mauvais(e) que</span><br>
+                        <em style="color:#6b7280;font-size:0.8rem;">oder: pire que</em><br>
+                        Sup.: <span>le/la/les plus mauvais(e)(s)</span>
+                    </div>
+                </div>
+                <div class="irreg-item">
+                    <div class="adj">petit(e)</div>
+                    <div class="forms">
+                        klein / jung<br>
+                        Komp. (Alter): <span>moindre que</span><br>
+                        Komp. (Größe): <span>plus petit(e) que</span><br>
+                        Sup.: <span>le/la moindre</span>
+                    </div>
+                </div>
+            </div>
+            <div class="memo-box" style="margin-top:16px;">
+                💡 <strong>Eselsbrücke für meilleur:</strong>
+                Denk an „Meilleur" – klingt wie <em>„mein Eur(o)"</em>, und den besten Euro
+                wählt man immer aus! 😄<br>
+                <strong>Achtung:</strong> <span class="fr">meilleur</span> ersetzt
+                <span class="fr">plus bon</span> – man sagt <em>nie</em>
+                <span style="color:#ef4444;text-decoration:line-through;">plus bon</span>!
+            </div>
+        </div>
+
+        <div class="explain-card">
+            <h2><span class="num">4</span> Übersicht: alle Formen auf einen Blick</h2>
+            <table class="schema-table">
+                <tr>
+                    <th>Positiv</th>
+                    <th>Komparativ (+)</th>
+                    <th>Komparativ (=)</th>
+                    <th>Komparativ (−)</th>
+                    <th>Superlativ (+)</th>
+                </tr>
+                <tr>
+                    <td><span class="fr">grand</span></td>
+                    <td><span class="fr">plus grand que</span></td>
+                    <td><span class="fr">aussi grand que</span></td>
+                    <td><span class="fr">moins grand que</span></td>
+                    <td><span class="fr">le plus grand</span></td>
+                </tr>
+                <tr>
+                    <td><span class="fr">intéressant</span></td>
+                    <td><span class="fr">plus intéressant que</span></td>
+                    <td><span class="fr">aussi intéressant que</span></td>
+                    <td><span class="fr">moins intéressant que</span></td>
+                    <td><span class="fr">le plus intéressant</span></td>
+                </tr>
+                <tr>
+                    <td><span class="fr">bon</span></td>
+                    <td><span class="fr" style="color:#fbbf24;">meilleur que</span></td>
+                    <td><span class="fr">aussi bon que</span></td>
+                    <td><span class="fr">moins bon que</span></td>
+                    <td><span class="fr" style="color:#fbbf24;">le meilleur</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ════════════ AUFGABE 1 – Komparativ erkennen (MC) ════════════ -->
+    <div class="section" id="sec-aufgabe1">
+        <div class="task-intro">
+            <strong>Aufgabe 1 – Komparativ erkennen &amp; zuordnen</strong><br>
+            Wähle die richtige Übersetzung oder die passende Komparativform.
+            Nutze die Erklärungsseite, wenn du unsicher bist!
+        </div>
+        <div id="q1-container"></div>
+        <div class="score-row">
+            <span>Richtig: <strong id="s1c">0</strong> / <strong id="s1t">0</strong></span>
+        </div>
+    </div>
+
+    <!-- ════════════ AUFGABE 2 – Lückentext ════════════ -->
+    <div class="section" id="sec-aufgabe2">
+        <div class="task-intro">
+            <strong>Aufgabe 2 – Richtige Form einsetzen</strong><br>
+            Trage die passende Komparativ- oder Superlativform in die Lücke ein.
+            Beachte Genus, Numerus und eventuelle Unregelmäßigkeiten!
+        </div>
+        <div id="q2-container"></div>
+        <button class="check-btn" onclick="checkGap()">✔ Überprüfen</button>
+        <button class="reset-btn" onclick="resetGap()">↺ Zurücksetzen</button>
+        <div class="score-row">
+            <span>Richtig: <strong id="s2c">0</strong> / <strong id="s2t">0</strong></span>
+        </div>
+    </div>
+
+    <!-- ════════════ AUFGABE 3 – Sätze bauen (Drag & Drop) ════════════ -->
+    <div class="section" id="sec-aufgabe3">
+        <div class="task-intro">
+            <strong>Aufgabe 3 – Sätze richtig zusammenbauen</strong><br>
+            Ziehe die Wörter in die richtige Reihenfolge, um einen korrekten
+            Komparativ- oder Superlativsatz zu bilden.
+        </div>
+        <div id="q3-container"></div>
+        <button class="check-btn" onclick="checkAllSentences()">✔ Alle überprüfen</button>
+        <button class="reset-btn" onclick="buildAllSentences()">↺ Zurücksetzen</button>
+        <div class="score-row">
+            <span>Richtig: <strong id="s3c">0</strong> / <strong id="s3t">0</strong></span>
+        </div>
+    </div>
+
+    <!-- ════════════ AUFGABE 4 – Übersetzen ════════════ -->
+    <div class="section" id="sec-aufgabe4">
+        <div class="task-intro">
+            <strong>Aufgabe 4 – Ins Französische übersetzen</strong><br>
+            Übersetze die deutschen Sätze ins Französische. Klicke auf
+            <em>„Lösung anzeigen"</em>, wenn du nicht weiterkommst.
+        </div>
+        <div id="q4-container"></div>
+        <button class="check-btn" onclick="checkTranslations()">✔ Überprüfen</button>
+        <button class="reset-btn" onclick="buildTranslations()">↺ Zurücksetzen</button>
+        <div class="score-row">
+            <span>Richtig: <strong id="s4c">0</strong> / <strong id="s4t">0</strong></span>
+        </div>
+    </div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════
+function showTab(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('active');
+    btn.classList.add('active');
+}
+
+let toastTimer;
+function toast(msg, err=false) {
+    const t = document.getElementById('toast');
+    clearTimeout(toastTimer);
+    t.textContent = msg;
+    t.className = 'show' + (err ? ' err' : '');
+    toastTimer = setTimeout(() => t.className = '', 2200);
+}
+
+// ═══════════════════════════════════════════════
+// AUFGABE 1 – Multiple Choice
+// ═══════════════════════════════════════════════
+const q1Data = [
+    {
+        text: 'Was bedeutet: <em>„Marie est plus grande que Luc."</em>?',
+        options: [
+            'Marie ist genauso groß wie Luc.',
+            'Marie ist größer als Luc.',
+            'Marie ist kleiner als Luc.',
+            'Luc ist größer als Marie.'
+        ],
+        correct: 1,
+        hint: 'plus … que = mehr/größer als → Überlegenheitskomparativ'
+    },
+    {
+        text: 'Welcher Satz bedeutet: <em>„Dieser Film ist genauso lang wie der andere."</em>?',
+        options: [
+            'Ce film est plus long que l\'autre.',
+            'Ce film est moins long que l\'autre.',
+            'Ce film est aussi long que l\'autre.',
+            'Ce film est le plus long.'
+        ],
+        correct: 2,
+        hint: 'aussi … que = genauso … wie → Gleichheitskomparativ'
+    },
+    {
+        text: 'Wie bildet man den Superlativ von <em>„intéressant"</em> (mask.)?',
+        options: [
+            'plus intéressant',
+            'le plus intéressant',
+            'le meilleur intéressant',
+            'aussi intéressant que'
+        ],
+        correct: 1,
+        hint: 'Superlativ: le/la/les + plus + Adjektiv'
+    },
+    {
+        text: 'Welche Form ist die korrekte Steigerung von <em>„bon"</em>?',
+        options: [
+            'plus bon que',
+            'le plus bon',
+            'meilleur que',
+            'aussi meilleur que'
+        ],
+        correct: 2,
+        hint: '„bon" hat eine unregelmäßige Form: meilleur(e) – nie „plus bon"!'
+    },
+    {
+        text: 'Was bedeutet: <em>„C\'est la moins bonne idée de la classe."</em>?',
+        options: [
+            'Das ist die beste Idee der Klasse.',
+            'Das ist genauso eine gute Idee wie in der Klasse.',
+            'Das ist eine weniger gute Idee.',
+            'Das ist die schlechteste Idee der Klasse.'
+        ],
+        correct: 3,
+        hint: 'la moins … = die am wenigsten … → der negative Superlativ'
+    },
+    {
+        text: 'Welcher Satz ist grammatikalisch korrekt?',
+        options: [
+            'C\'est le film le plus intéressant de la classe.',
+            'C\'est le film plus intéressant de la classe.',
+            'C\'est le film le plus intéressant en la classe.',
+            'C\'est le plus intéressant film de la classe.'
+        ],
+        correct: 0,
+        hint: 'Superlativ nach dem Nomen: Artikel + Nomen + le/la + plus + Adj. Und: „de" nach dem Superlativ!'
+    },
+    {
+        text: 'Wie lautet der korrekte Komparativsatz? <em>(Paul = 1,80 m, Anna = 1,80 m)</em>',
+        options: [
+            'Paul est plus grand qu\'Anna.',
+            'Paul est moins grand qu\'Anna.',
+            'Paul est aussi grand qu\'Anna.',
+            'Paul est le plus grand.'
+        ],
+        correct: 2,
+        hint: 'Gleiche Größe → Gleichheitskomparativ: aussi … que'
+    },
+    {
+        text: 'Welche Form passt? <em>„Ce sont les ___ élèves de l\'école." (bon, Superlativ fem. pl.)</em>',
+        options: [
+            'les plus bonnes',
+            'les meilleures',
+            'les plus meilleures',
+            'les meilleurs'
+        ],
+        correct: 1,
+        hint: 'Superlativ von bon (fem. pl.) = les meilleures – unregelmäßig!'
+    }
+];
+
+let s1c = 0, s1t = 0;
+
+function buildQ1() {
+    const cont = document.getElementById('q1-container');
+    cont.innerHTML = '';
+    q1Data.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'mc-card';
+        div.innerHTML = `
+            <div class="q-label">Frage ${i+1} von ${q1Data.length}</div>
+            <div class="q-text">${q.text}</div>
+            <div class="choices" id="ch1-${i}">
+                ${q.options.map((o,j)=>`
+                    <button class="choice-btn" onclick="answerQ1(${i},${j})">${o}</button>
+                `).join('')}
+            </div>
+            <div class="feedback-line" id="fb1-${i}"></div>
+        `;
+        cont.appendChild(div);
+    });
+}
+
+function answerQ1(qi, chosen) {
+    const q = q1Data[qi];
+    const btns = document.querySelectorAll(`#ch1-${qi} .choice-btn`);
+    btns.forEach(b => b.disabled = true);
+    s1t++;
+    if (chosen === q.correct) {
+        btns[chosen].classList.add('correct');
+        document.getElementById('fb1-'+qi).textContent = '✅ Richtig! ' + q.hint;
+        s1c++;
+        toast('👍 Super!');
+    } else {
+        btns[chosen].classList.add('wrong');
+        btns[q.correct].classList.add('correct');
+        const fb = document.getElementById('fb1-'+qi);
+        fb.textContent = '❌ Leider nicht. ' + q.hint;
+        fb.className = 'feedback-line err';
+        toast('❌ Nochmal in die Erklärung schauen!', true);
+    }
+    document.getElementById('s1c').textContent = s1c;
+    document.getElementById('s1t').textContent = s1t;
+}
+
+// ═══════════════════════════════════════════════
+// AUFGABE 2 – Lückentext
+// ═══════════════════════════════════════════════
+const q2Data = [
+    {
+        before: 'Paris est',
+        after: '(grand) que Lyon.',
+        answer: 'plus grande',
+        accept: ['plus grand', 'plus grande'],
+        hint: 'Überlegenheitskomparativ: plus + grand(e) + que. Paris ist feminin (la ville).'
+    },
+    {
+        before: 'Cette pizza est',
+        after: '(bon) que l\'autre.',
+        answer: 'meilleure',
+        accept: ['meilleure', 'meilleur'],
+        hint: 'Unregelmäßige Form: bon → meilleur(e). Pizza ist feminin → meilleure.'
+    },
+    {
+        before: 'C\'est',
+        after: 'film (intéressant) de l\'année. (mask.)',
+        answer: 'le plus intéressant',
+        accept: ['le plus intéressant'],
+        hint: 'Superlativ: le/la + plus + Adjektiv. Danach: de.'
+    },
+    {
+        before: 'Cette robe est',
+        after: '(cher) que les autres.',
+        answer: 'moins chère',
+        accept: ['moins chère', 'moins cher'],
+        hint: 'Unterlegenheitskomparativ: moins + cher/chère + que.'
+    },
+    {
+        before: 'Il est',
+        after: '(intelligent) que sa sœur.',
+        answer: 'aussi intelligent',
+        accept: ['aussi intelligent', 'aussi intelligente'],
+        hint: 'Gleichheitskomparativ: aussi + intelligent + que.'
+    },
+    {
+        before: 'Ce sont',
+        after: 'élèves (bon) de l\'école. (fem. pl.)',
+        answer: 'les meilleures',
+        accept: ['les meilleures'],
+        hint: 'Superlativ von bon (fem. pl.) = les meilleures – unregelmäßig!'
+    },
+    {
+        before: 'Ce cours est',
+        after: '(difficile) que je pensais.',
+        answer: 'plus difficile',
+        accept: ['plus difficile'],
+        hint: 'Überlegenheitskomparativ: plus + difficile. Kein Genusproblem: difficile endet auf -e.'
+    },
+    {
+        before: 'C\'est',
+        after: 'voiture (rapide) du monde. (fem.)',
+        answer: 'la plus rapide',
+        accept: ['la plus rapide'],
+        hint: 'Superlativ fem.: la + plus + rapide. Danach: du (= de + le).'
+    }
+];
+
+function buildQ2() {
+    const cont = document.getElementById('q2-container');
+    cont.innerHTML = '';
+    q2Data.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'gap-card';
+        div.innerHTML = `
+            <div class="q-label">Aufgabe ${i+1}</div>
+            <div class="gap-sentence">
+                ${item.before}
+                <input class="gap-input" id="q2inp-${i}" placeholder="?" autocomplete="off" spellcheck="false" style="width:180px;">
+                ${item.after}
+            </div>
+            <div class="feedback-line" id="q2fb-${i}"></div>
+        `;
+        cont.appendChild(div);
+    });
+}
+
+function checkGap() {
+    let correct = 0;
+    q2Data.forEach((item, i) => {
+        const inp = document.getElementById('q2inp-'+i);
+        const fb  = document.getElementById('q2fb-'+i);
+        inp.disabled = true;
+        const val = inp.value.trim().toLowerCase();
+        const ok = item.accept.some(a => a.toLowerCase() === val);
+        if (ok) {
+            inp.classList.add('correct'); inp.classList.remove('wrong');
+            fb.textContent = '✅ Richtig! ' + item.hint;
+            fb.className = 'feedback-line';
+            correct++;
+        } else {
+            inp.classList.add('wrong'); inp.classList.remove('correct');
+            fb.textContent = `❌ Richtig wäre: „${item.answer}" – ${item.hint}`;
+            fb.className = 'feedback-line err';
+        }
+    });
+    document.getElementById('s2c').textContent = correct;
+    document.getElementById('s2t').textContent = q2Data.length;
+    toast(correct === q2Data.length ? '🎉 Alles richtig!' : `${correct} von ${q2Data.length} richtig.`, correct < q2Data.length);
+}
+
+function resetGap() {
+    q2Data.forEach((_, i) => {
+        const inp = document.getElementById('q2inp-'+i);
+        const fb  = document.getElementById('q2fb-'+i);
+        inp.value = ''; inp.disabled = false;
+        inp.className = 'gap-input';
+        fb.textContent = ''; fb.className = 'feedback-line';
+    });
+    document.getElementById('s2c').textContent = 0;
+    document.getElementById('s2t').textContent = 0;
+}
+
+// ═══════════════════════════════════════════════
+// AUFGABE 3 – Sätze bauen (Drag & Drop)
+// ═══════════════════════════════════════════════
+const q3Data = [
+    {
+        translation: 'Marie ist größer als Luc.',
+        words: ['est', 'que', 'plus', 'grande', 'Luc.', 'Marie'],
+        correct: ['Marie', 'est', 'plus', 'grande', 'que', 'Luc.']
+    },
+    {
+        translation: 'Das ist der schönste Film des Jahres.',
+        words: ['film', 'le', 'beau', 'plus', 'de', 'C\'est', 'l\'année.', 'le'],
+        correct: ['C\'est', 'le', 'plus', 'beau', 'film', 'de', 'l\'année.']
+    },
+    {
+        translation: 'Diese Torte ist genauso gut wie die andere.',
+        words: ['que', 'est', 'l\'autre.', 'Ce gâteau', 'bonne', 'aussi'],
+        correct: ['Ce gâteau', 'est', 'aussi', 'bonne', 'que', 'l\'autre.']
+    },
+    {
+        translation: 'Er ist der beste Schüler der Klasse.',
+        words: ['de', 'élève', 'Il', 'meilleur', 'est', 'le', 'la classe.'],
+        correct: ['Il', 'est', 'le', 'meilleur', 'élève', 'de', 'la classe.']
+    },
+    {
+        translation: 'Dieses Buch ist weniger interessant als das andere.',
+        words: ['intéressant', 'Ce livre', 'moins', 'l\'autre.', 'est', 'que'],
+        correct: ['Ce livre', 'est', 'moins', 'intéressant', 'que', 'l\'autre.']
+    },
+    {
+        translation: 'Sie sind die besten Schülerinnen der Schule.',
+        words: ['de', 'meilleures', 'l\'école.', 'élèves', 'Ce sont', 'les'],
+        correct: ['Ce sont', 'les', 'meilleures', 'élèves', 'de', 'l\'école.']
+    }
+];
+
+let activeDragTile = null;
+
+function buildAllSentences() {
+    const cont = document.getElementById('q3-container');
+    cont.innerHTML = '';
+    q3Data.forEach((item, si) => {
+        const card = document.createElement('div');
+        card.className = 'build-card';
+
+        const lbl = document.createElement('div');
+        lbl.className = 'q-label';
+        lbl.textContent = `Aufgabe ${si+1}`;
+
+        const transl = document.createElement('div');
+        transl.className = 'transl';
+        transl.textContent = '🇩🇪 ' + item.translation;
+
+        const pool = document.createElement('div');
+        pool.className = 'word-pool';
+        pool.id = 'pool3-' + si;
+
+        const zone = document.createElement('div');
+        zone.className = 'drop-zone';
+        zone.id = 'zone3-' + si;
+
+        const fb = document.createElement('div');
+        fb.className = 'build-fb';
+        fb.id = 'fb3-' + si;
+
+        const shuffled = [...item.words].sort(() => Math.random() - 0.5);
+        shuffled.forEach(w => pool.appendChild(makeBuildTile(w, si)));
+
+        [pool, zone].forEach(container => {
+            container.addEventListener('dragover', e => { e.preventDefault(); container.classList.add('drag-over'); });
+            container.addEventListener('dragleave', () => container.classList.remove('drag-over'));
+            container.addEventListener('drop', e => {
+                e.preventDefault(); container.classList.remove('drag-over');
+                if (activeDragTile) container.appendChild(activeDragTile);
+            });
+        });
+
+        card.append(lbl, transl, pool, zone, fb);
+        cont.appendChild(card);
+    });
+    document.getElementById('s3c').textContent = 0;
+    document.getElementById('s3t').textContent = 0;
+}
+
+function makeBuildTile(word, si) {
+    const tile = document.createElement('div');
+    tile.className = 'word-tile';
+    tile.textContent = word;
+    tile.draggable = true;
+    tile.dataset.word = word;
+    tile.dataset.si = si;
+
+    tile.addEventListener('dragstart', () => { activeDragTile = tile; tile.classList.add('dragging'); });
+    tile.addEventListener('dragend',   () => { tile.classList.remove('dragging'); activeDragTile = null; });
+
+    // Touch support
+    let clone = null, offX = 0, offY = 0;
+    tile.addEventListener('touchstart', e => {
+        const t = e.touches[0], r = tile.getBoundingClientRect();
+        offX = t.clientX - r.left; offY = t.clientY - r.top;
+        clone = tile.cloneNode(true);
+        clone.style.cssText = `position:fixed;z-index:9999;pointer-events:none;opacity:0.85;
+            left:${r.left}px;top:${r.top}px;width:${r.width}px;margin:0;`;
+        document.body.appendChild(clone);
+        activeDragTile = tile;
+        tile.classList.add('dragging');
+    }, { passive: true });
+
+    tile.addEventListener('touchmove', e => {
+        e.preventDefault();
+        const t = e.touches[0];
+        if (clone) { clone.style.left=(t.clientX-offX)+'px'; clone.style.top=(t.clientY-offY)+'px'; }
+    }, { passive: false });
+
+    tile.addEventListener('touchend', e => {
+        tile.classList.remove('dragging');
+        if (clone) { clone.remove(); clone = null; }
+        const t = e.changedTouches[0];
+        const el = document.elementFromPoint(t.clientX, t.clientY);
+        const target = el ? (el.closest('.drop-zone') || el.closest('.word-pool')) : null;
+        if (target) target.appendChild(tile);
+        activeDragTile = null;
+    });
+
+    return tile;
+}
+
+function checkAllSentences() {
+    let correct = 0, total = q3Data.length;
+    q3Data.forEach((item, si) => {
+        const zone = document.getElementById('zone3-' + si);
+        const fb   = document.getElementById('fb3-' + si);
+        const placed = Array.from(zone.querySelectorAll('.word-tile')).map(t => t.dataset.word);
+        const ok = JSON.stringify(placed) === JSON.stringify(item.correct);
+        if (ok) {
+            correct++;
+            fb.textContent = '✅ Perfekt!';
+            fb.className = 'build-fb';
+            zone.querySelectorAll('.word-tile').forEach(t => {
+                t.style.background = 'linear-gradient(135deg,#064e3b,#065f46)';
+                t.style.borderColor = '#10b981'; t.style.color = '#6ee7b7';
+            });
+        } else {
+            fb.textContent = '❌ Nicht ganz richtig. Lösung: ' + item.correct.join(' ');
+            fb.className = 'build-fb err';
+            zone.querySelectorAll('.word-tile').forEach(t => {
+                t.style.background = 'linear-gradient(135deg,#450a0a,#7f1d1d)';
+                t.style.borderColor = '#ef4444'; t.style.color = '#fca5a5';
+            });
+        }
+    });
+    document.getElementById('s3c').textContent = correct;
+    document.getElementById('s3t').textContent = total;
+    toast(correct === total ? '🎉 Alle Sätze richtig!' : `${correct} von ${total} Sätzen richtig.`, correct < total);
+}
+
+// ═══════════════════════════════════════════════
+// AUFGABE 4 – Übersetzen
+// ═══════════════════════════════════════════════
+const q4Data = [
+    {
+        de: 'Berlin ist größer als München.',
+        solution: 'Berlin est plus grand(e) que Munich.',
+        accept: ['berlin est plus grande que munich', 'berlin est plus grand que munich',
+                 'berlin est plus grand que munich.', 'berlin est plus grande que munich.']
+    },
+    {
+        de: 'Das ist der beste Film des Jahres.',
+        solution: 'C\'est le meilleur film de l\'année.',
+        accept: ["c'est le meilleur film de l'année", "c'est le meilleur film de l'annee",
+                 "c'est le meilleur film de l'année.", "c'est le meilleur film de l'annee."]
+    },
+    {
+        de: 'Sie ist genauso intelligent wie ihr Bruder.',
+        solution: 'Elle est aussi intelligente que son frère.',
+        accept: ['elle est aussi intelligente que son frère', 'elle est aussi intelligente que son frere',
+                 'elle est aussi intelligente que son frère.', 'elle est aussi intelligente que son frere.']
+    },
+    {
+        de: 'Das ist die interessanteste Idee der Klasse.',
+        solution: 'C\'est l\'idée la plus intéressante de la classe.',
+        accept: ["c'est l'idée la plus intéressante de la classe",
+                 "c'est l'idee la plus interessante de la classe",
+                 "c'est l'idée la plus intéressante de la classe.",
+                 "c'est l'idee la plus interessante de la classe."]
+    },
+    {
+        de: 'Dieses Restaurant ist weniger teuer als das andere.',
+        solution: 'Ce restaurant est moins cher que l\'autre.',
+        accept: ["ce restaurant est moins cher que l'autre",
+                 "ce restaurant est moins cher que l'autre."]
+    },
+    {
+        de: 'Das sind die besten Schülerinnen der Schule.',
+        solution: 'Ce sont les meilleures élèves de l\'école.',
+        accept: ["ce sont les meilleures élèves de l'école",
+                 "ce sont les meilleures eleves de l'ecole",
+                 "ce sont les meilleures élèves de l'école.",
+                 "ce sont les meilleures eleves de l'ecole."]
+    }
+];
+
+function buildTranslations() {
+    const cont = document.getElementById('q4-container');
+    cont.innerHTML = '';
+    q4Data.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'trans-card';
+        card.innerHTML = `
+            <div class="q-label">Satz ${i+1} von ${q4Data.length}</div>
+            <div class="de-sentence">🇩🇪 ${item.de}</div>
+            <input class="trans-input" id="t4inp-${i}" placeholder="Französische Übersetzung eingeben …"
+                   autocomplete="off" spellcheck="false">
+            <div class="trans-solution" id="t4sol-${i}">💡 Musterlösung: <em>${item.solution}</em></div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+                <button class="reset-btn" style="margin:0;font-size:0.8rem;padding:6px 14px;"
+                        onclick="showSolution(${i})">💡 Lösung anzeigen</button>
+            </div>
+            <div class="feedback-line" id="t4fb-${i}"></div>
+        `;
+        cont.appendChild(card);
+    });
+    document.getElementById('s4c').textContent = 0;
+    document.getElementById('s4t').textContent = 0;
+}
+
+function showSolution(i) {
+    document.getElementById('t4sol-'+i).style.display = 'block';
+}
+
+function normalise(str) {
+    return str.trim().toLowerCase()
+        .replace(/[éèêë]/g,'e').replace(/[àâ]/g,'a')
+        .replace(/[ùûü]/g,'u').replace(/[îï]/g,'i')
+        .replace(/[ôö]/g,'o').replace(/ç/g,'c')
+        .replace(/œ/g,'oe').replace(/[.!?]$/,'');
+}
+
+function checkTranslations() {
+    let correct = 0;
+    q4Data.forEach((item, i) => {
+        const inp = document.getElementById('t4inp-'+i);
+        const fb  = document.getElementById('t4fb-'+i);
+        inp.disabled = true;
+        const val = normalise(inp.value);
+        const ok = item.accept.some(a => normalise(a) === val);
+        if (ok) {
+            inp.classList.add('correct');
+            fb.textContent = '✅ Très bien!';
+            fb.className = 'feedback-line';
+            correct++;
+        } else {
+            inp.classList.add('wrong');
+            fb.textContent = '❌ Schau dir die Musterlösung an.';
+            fb.className = 'feedback-line err';
+            document.getElementById('t4sol-'+i).style.display = 'block';
+        }
+    });
+    document.getElementById('s4c').textContent = correct;
+    document.getElementById('s4t').textContent = q4Data.length;
+    toast(correct === q4Data.length ? '🎉 Excellent!' : `${correct} von ${q4Data.length} richtig.`, correct < q4Data.length);
+}
+
+function resetTranslations() { buildTranslations(); }
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+buildQ1();
+buildQ2();
+buildAllSentences();
+buildTranslations();
+</script>
+</body>
+</html>

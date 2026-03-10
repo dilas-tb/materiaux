@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Französisch -er Verben Trainer</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --success: #27ae60;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            color: var(--secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #game-container {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-top: 0;
+        }
+
+        .flag-strip {
+            height: 5px;
+            width: 100%;
+            background: linear-gradient(to right, #002395 33%, #ffffff 33%, #ffffff 66%, #ed2939 66%);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+        }
+
+        /* Game Elements */
+        .question-box {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .verb-highlight {
+            color: var(--accent);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.start-btn {
+            background-color: var(--success);
+            font-size: 1.3rem;
+            padding: 20px 40px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        /* Stats bar */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .timer { color: var(--accent); }
+        .score { color: var(--success); }
+
+        /* Feedback Animation */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake {
+            animation: shake 0.3s;
+        }
+
+        .correct { background-color: var(--success) !important; }
+        .wrong { background-color: var(--accent) !important; }
+
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="flag-strip"></div>
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen active">
+        <h1>La Conjugaison!</h1>
+        <h2>Das -er Verben Rennen</h2>
+        <p>Du hast 60 Sekunden Zeit.<br>Konjugiere so viele Verben wie möglich richtig!</p>
+        <p style="font-size: 0.9rem; color: #7f8c8d;">Beinhaltet: parler, habiter, manger, aimer, etc.</p>
+        <button class="start-btn" onclick="startGame()">Commencer le jeu !</button>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen">
+        <div class="stats">
+            <div class="timer">Zeit: <span id="time-display">60</span>s</div>
+            <div class="score">Punkte: <span id="score-display">0</span></div>
+        </div>
+        
+        <div class="question-box">
+            <span id="pronoun-display">Je</span> 
+            <span id="verb-display" class="verb-highlight">(parler)</span>
+        </div>
+
+        <div class="options-grid" id="options-container">
+            <!-- Buttons generate here -->
+        </div>
+    </div>
+
+    <!-- END SCREEN -->
+    <div id="end-screen" class="screen">
+        <h1>Fini!</h1>
+        <p>Deine Zeit ist um.</p>
+        <h2 style="font-size: 2rem; color: var(--primary);">Ergebnis: <span id="final-score">0</span></h2>
+        <p id="feedback-text">Nicht schlecht!</p>
+        <button class="start-btn" onclick="showStartScreen()">Nochmal spielen</button>
+    </div>
+</div>
+
+<script>
+    // Konfiguration
+    const gameDuration = 60; 
+    
+    // Daten: Verben und Pronomen
+    const verbs = [
+        'parler', 'visiter', 'préparer', 'chanter', 'danser', 'rester', 'discuter',
+        'regarder', 'compter', 'jouer', 'travailler', 'demander', 'filmer',
+        'fermer', 'quitter', 'détester', 'donner', 'trouver', 'chercher', 'raconter'
+    ];
+    
+    // Anmerkung: 'manger' und 'commencer' sind hier vereinfacht behandelt (erste Lernstufe).
+    // Wenn du 'manger' mit 'mangeons' möchtest, sag Bescheid, dann aktiviere ich die Sonderregel.
+    
+    const pronouns = [
+        { text: 'je',   ending: 'e' },
+        { text: 'tu',   ending: 'es' },
+        { text: 'il',   ending: 'e' },
+        { text: 'elle', ending: 'e' },
+        { text: 'on',   ending: 'e' },
+        { text: 'nous', ending: 'ons' },
+        { text: 'vous', ending: 'ez' },
+        { text: 'ils',  ending: 'ent' },
+        { text: 'elles', ending: 'ent' }
+    ];
+
+    let score = 0;
+    let timer = gameDuration;
+    let timerInterval;
+    let isClickable = true;
+
+    // DOM Elemente
+    const startScreen = document.getElementById('start-screen');
+    const gameScreen = document.getElementById('game-screen');
+    const endScreen = document.getElementById('end-screen');
+    const scoreDisplay = document.getElementById('score-display');
+    const timeDisplay = document.getElementById('time-display');
+    const pronounDisplay = document.getElementById('pronoun-display');
+    const verbDisplay = document.getElementById('verb-display');
+    const optionsContainer = document.getElementById('options-container');
+    const finalScore = document.getElementById('final-score');
+    const feedbackText = document.getElementById('feedback-text');
+
+    function showStartScreen() {
+        startScreen.classList.add('active');
+        gameScreen.classList.remove('active');
+        endScreen.classList.remove('active');
+    }
+
+    function startGame() {
+        score = 0;
+        timer = gameDuration;
+        scoreDisplay.textContent = score;
+        timeDisplay.textContent = timer;
+        
+        startScreen.classList.remove('active');
+        endScreen.classList.remove('active');
+        gameScreen.classList.add('active');
+
+        nextQuestion();
+
+        timerInterval = setInterval(() => {
+            timer--;
+            timeDisplay.textContent = timer;
+            if (timer <= 0) {
+                endGame();
+            }
+        }, 1000);
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);
+        gameScreen.classList.remove('active');
+        endScreen.classList.add('active');
+        finalScore.textContent = score;
+
+        // Feedback Text basierend auf Score
+        if (score < 5) feedbackText.textContent = "Einfach noch ein bisschen weiterüben!";
+        else if (score < 15) feedbackText.textContent = "Bien joué! (Gut gemacht!)";
+        else if (score < 25) feedbackText.textContent = "Très bien! (Sehr gut!)";
+        else feedbackText.textContent = "Excellent! Tu es un pro!";
+    }
+
+    function nextQuestion() {
+        isClickable = true;
+        optionsContainer.innerHTML = ''; // Clear buttons
+
+        // 1. Wähle zufälliges Verb und Pronomen
+        const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
+        const randomPronounObj = pronouns[Math.floor(Math.random() * pronouns.length)];
+        
+        // Stamm bilden (er wegstreichen)
+        const stem = randomVerb.slice(0, -2);
+        
+        // Richtige Antwort bauen
+        const correctEnding = randomPronounObj.ending;
+        const correctAnswer = stem + correctEnding;
+
+        // Sonderfall für "Je" bei Vokal (l'élision)
+        let displayPronoun = randomPronounObj.text;
+        const vowels = ['a', 'e', 'h', 'i', 'o', 'u']; // h muet wird hier simpel behandelt
+        if (displayPronoun === 'Je' && vowels.includes(randomVerb.charAt(0))) {
+            displayPronoun = "J'";
+        }
+
+        pronounDisplay.textContent = displayPronoun;
+        verbDisplay.textContent = `+ ${randomVerb}`;
+
+        // 2. Erstelle falsche Antworten (Distractors)
+        let options = [correctAnswer];
+        
+        // Wir nehmen Endungen von anderen Pronomen als falsche Optionen
+        while (options.length < 3) {
+            const randomOtherPronoun = pronouns[Math.floor(Math.random() * pronouns.length)];
+            const wrongAnswer = stem + randomOtherPronoun.ending;
+            
+            // Verhindern, dass die Antwort doppelt vorkommt (z.B. Il und Elle haben beide -e)
+            if (!options.includes(wrongAnswer)) {
+                options.push(wrongAnswer);
+            }
+        }
+
+        // 3. Mischen
+        options.sort(() => Math.random() - 0.5);
+
+        // 4. Buttons erstellen
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            
+            // Wenn es J' ist, kein Leerzeichen, sonst Leerzeichen
+            const separator = (displayPronoun === "J'") ? "" : " ";
+            btn.textContent = displayPronoun + separator + opt; // Voller Satz im Button
+            
+            btn.onclick = () => checkAnswer(opt, correctAnswer, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected, correct, btnElement) {
+        if (!isClickable) return;
+        isClickable = false;
+
+        if (selected === correct) {
+            btnElement.classList.add('correct');
+            score++;
+            scoreDisplay.textContent = score;
+            setTimeout(() => nextQuestion(), 500); // Kurze Pause für Feedback
+        } else {
+            btnElement.classList.add('wrong');
+            // Zeige die richtige Antwort an
+            const allBtns = optionsContainer.querySelectorAll('button');
+            allBtns.forEach(b => {
+                 // Einfacher Check, welcher Button den richtigen Text enthält
+                 if (b.textContent.includes(correct)) {
+                     b.classList.add('correct');
+                 }
+            });
+            setTimeout(() => nextQuestion(), 1000); // Längere Pause bei Fehler
+        }
+    }
+
+</script>
+
+</body>
+</html>

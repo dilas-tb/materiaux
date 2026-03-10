@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Verbes en -ER | Français</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #002395 0%, #ffffff 50%, #ED2939 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 950px; margin: 0 auto; }
+
+        /* ── HEADER ── */
+        header {
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,35,149,.15);
+        }
+        header h1 { font-size: 2.4em; color: #002395; margin-bottom: 8px; }
+        header p  { color: #666; font-size: 1.05em; }
+
+        .progress-bar-container {
+            background: #e0e0e0; border-radius: 10px;
+            height: 12px; margin: 14px 0 4px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg,#002395,#ED2939);
+            border-radius: 10px; transition: width .5s ease; width: 0%;
+        }
+        .progress-label { text-align: right; font-size: .85em; color: #888; }
+
+        /* ── STAGE CARD ── */
+        .stage {
+            background: white; border-radius: 20px;
+            padding: 28px; margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.08);
+            transition: opacity .3s;
+        }
+        .stage.locked { opacity: .4; pointer-events: none; }
+
+        .stage-header {
+            display: flex; align-items: center;
+            gap: 15px; margin-bottom: 22px;
+        }
+        .stage-number {
+            background: #002395; color: white;
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 1.2em; flex-shrink: 0;
+        }
+        .stage-number.done { background: #27ae60; }
+        .stage-title h2  { color: #002395; font-size: 1.25em; }
+        .stage-title p   { color: #888; font-size: .9em; margin-top: 3px; }
+        .lock-icon       { font-size: 1.6em; margin-left: auto; }
+
+        /* ── REFERENCE BOX ── */
+        .reference-box {
+            background: #f0f4ff; border-left: 5px solid #002395;
+            border-radius: 10px; padding: 16px 20px; margin-bottom: 20px;
+        }
+        .reference-box h3 { color: #002395; margin-bottom: 10px; font-size: 1em; }
+
+        .ref-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: .91em; }
+        .ref-table th {
+            background: #002395; color: white;
+            padding: 7px 12px; text-align: left;
+        }
+        .ref-table td { padding: 6px 12px; border-bottom: 1px solid #d0d8f0; }
+        .ref-table tr:last-child td { border-bottom: none; }
+        .ref-table tr:nth-child(even) td { background: #e8eeff; }
+
+        .highlight-ending { color: #ED2939; font-weight: bold; }
+        .muted  { color: #aaa; font-style: italic; font-size: .85em; }
+        .hint   { font-size: .83em; color: #777; font-style: italic; margin-top: 6px; }
+
+        /* pronunciation badge */
+        .pron {
+            display: inline-block;
+            background: #fff3f3; border: 1px solid #ED2939;
+            color: #ED2939; border-radius: 6px;
+            padding: 1px 7px; font-size: .82em; font-weight: bold;
+            margin-left: 6px;
+        }
+
+        /* ── QUESTION BLOCK ── */
+        .question-block {
+            background: #f8f9ff; border-radius: 12px;
+            padding: 16px 18px; margin-bottom: 12px;
+        }
+        .question-block p { font-size: 1.02em; color: #333; margin-bottom: 10px; font-weight: 500; }
+
+        /* ── MULTIPLE CHOICE ── */
+        .options { display: flex; flex-wrap: wrap; gap: 10px; }
+        .option-btn {
+            padding: 8px 20px;
+            border: 2px solid #002395; border-radius: 25px;
+            background: white; color: #002395;
+            font-size: .96em; cursor: pointer; font-weight: 600;
+            transition: all .18s;
+        }
+        .option-btn:hover:not(:disabled) { background: #002395; color: white; }
+        .option-btn.selected { background: #002395; color: white; }
+        .option-btn.correct  { background: #27ae60 !important; border-color: #27ae60 !important; color: white !important; }
+        .option-btn.wrong    { background: #ED2939 !important; border-color: #ED2939 !important; color: white !important; }
+        .option-btn:disabled { cursor: default; }
+
+        /* ── FILL-IN ── */
+        .fill-input {
+            border: 2px solid #002395; border-radius: 8px;
+            padding: 6px 10px; font-size: 1em;
+            width: 110px; text-align: center;
+            color: #002395; font-weight: bold; outline: none;
+            transition: border-color .2s;
+        }
+        .fill-input:focus { border-color: #ED2939; }
+        .fill-input.correct { border-color: #27ae60; background: #eafaf1; color: #27ae60; }
+        .fill-input.wrong   { border-color: #ED2939; background: #fff0f0; color: #ED2939; }
+
+        .sentence-row {
+            display: flex; align-items: center; flex-wrap: wrap;
+            gap: 8px; font-size: 1.02em;
+            padding: 10px 0; border-bottom: 1px solid #e8eeff;
+        }
+        .sentence-row:last-child { border-bottom: none; }
+
+        /* correction label */
+        .correction { font-size: .85em; color: #27ae60; font-weight: bold; }
+        .correction.err { color: #ED2939; }
+
+        /* ── MATCH / SORT ── */
+        .match-row {
+            display: grid; grid-template-columns: 1fr auto 1fr;
+            align-items: center; gap: 10px;
+            padding: 10px 0; border-bottom: 1px solid #e8eeff;
+        }
+        .match-row:last-child { border-bottom: none; }
+        .match-left  { font-weight: 600; color: #002395; }
+        .match-arrow { color: #aaa; font-size: 1.2em; }
+
+        /* ── DRAG & DROP ── */
+        .drag-pool {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            padding: 14px; background: #f0f4ff;
+            border-radius: 12px; min-height: 56px; margin-bottom: 16px;
+        }
+        .drag-item {
+            padding: 7px 16px; background: #002395; color: white;
+            border-radius: 20px; cursor: grab; font-size: .95em;
+            user-select: none; transition: transform .15s, opacity .15s;
+        }
+        .drag-item:active { cursor: grabbing; transform: scale(1.07); }
+        .drag-item.dragging { opacity: .35; }
+        .drag-item.in-zone  { background: #ED2939; }
+
+        .drop-zone {
+            min-height: 48px; border: 2px dashed #002395;
+            border-radius: 10px; padding: 8px 12px;
+            margin-bottom: 10px;
+            display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+            transition: background .2s;
+        }
+        .drop-zone.drag-over { background: #e8eeff; }
+        .drop-label { font-size: .85em; color: #888; margin-bottom: 3px; }
+
+        /* ── PRONOUN SORT GAME ── */
+        .pronoun-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px; margin-bottom: 16px;
+        }
+        .pronoun-bucket {
+            background: #f0f4ff; border-radius: 12px;
+            padding: 12px; min-height: 80px;
+        }
+        .pronoun-bucket h4 {
+            color: #002395; font-size: .92em; margin-bottom: 8px;
+            border-bottom: 2px solid #002395; padding-bottom: 4px;
+        }
+        .pronoun-bucket .drop-zone {
+            border: 2px dashed #aac; min-height: 44px; margin: 0;
+        }
+
+        /* ── FEEDBACK ── */
+        .feedback {
+            padding: 11px 16px; border-radius: 10px;
+            margin-top: 12px; font-weight: 600;
+            display: none; font-size: .97em;
+        }
+        .feedback.success { background: #eafaf1; color: #27ae60; border: 1px solid #27ae60; }
+        .feedback.error   { background: #fff0f0; color: #ED2939;  border: 1px solid #ED2939; }
+        .feedback.warning { background: #fffbea; color: #c0850a;  border: 1px solid #f0c040; }
+
+        .score-display { text-align: right; font-size: .9em; color: #888; margin-top: 6px; }
+
+        /* ── BUTTONS ── */
+        .check-btn {
+            background: #002395; color: white; border: none;
+            padding: 10px 28px; border-radius: 25px;
+            font-size: .97em; cursor: pointer; margin-top: 14px;
+            font-weight: 600; transition: background .2s, transform .1s;
+        }
+        .check-btn:hover  { background: #0033cc; transform: translateY(-1px); }
+        .check-btn:disabled { background: #aaa; cursor: default; transform: none; }
+
+        .next-btn {
+            background: #27ae60; color: white; border: none;
+            padding: 10px 28px; border-radius: 25px;
+            font-size: .97em; cursor: pointer;
+            margin-top: 10px; margin-left: 10px;
+            font-weight: 600; display: none;
+            transition: background .2s;
+        }
+        .next-btn:hover { background: #219a52; }
+
+        /* ── FINAL ── */
+        #final-result {
+            display: none; background: white; border-radius: 20px;
+            padding: 36px; text-align: center;
+            box-shadow: 0 8px 32px rgba(0,35,149,.15);
+            margin-bottom: 25px;
+        }
+        #final-result h2   { font-size: 1.9em; color: #002395; margin-bottom: 10px; }
+        .big-score  { font-size: 3.2em; font-weight: bold; color: #ED2939; margin: 8px 0; }
+        .trophy     { font-size: 4em; margin-bottom: 8px; }
+
+        /* ── VOCAB ── */
+        #vocab-section {
+            background: white; border-radius: 20px;
+            padding: 28px; margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.08);
+        }
+        #vocab-section h2 { color: #002395; font-size: 1.35em; margin-bottom: 18px; }
+
+        .vocab-tabs { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+        .vtab {
+            padding: 7px 18px; border-radius: 20px;
+            border: 2px solid #002395; background: white; color: #002395;
+            cursor: pointer; font-weight: 600; font-size: .9em; transition: all .2s;
+        }
+        .vtab.active, .vtab:hover { background: #002395; color: white; }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(185px,1fr));
+            gap: 10px;
+        }
+        .vocab-card {
+            background: #f0f4ff; border-radius: 10px;
+            padding: 10px 14px; border-left: 4px solid #002395;
+        }
+        .vocab-card.verb { border-left-color: #c0850a; background: #fffbea; }
+        .vocab-card .fr  { font-weight: bold; color: #002395; font-size: .97em; }
+        .vocab-card.verb .fr { color: #c0850a; }
+        .vocab-card .de  { color: #555; font-size: .87em; margin-top: 2px; }
+        .vocab-card .extra { color: #aaa; font-size: .78em; font-style: italic; margin-top: 2px; }
+
+        @media(max-width:600px){
+            header h1 { font-size:1.6em; }
+            .stage { padding: 16px; }
+            .pronoun-grid { grid-template-columns: 1fr; }
+            .vocab-grid   { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+    <div style="font-size:2.4em;margin-bottom:6px">🇫🇷</div>
+    <h1>Les verbes en <span style="color:#ED2939">-er</span></h1>
+    <p>Konjugation regelmäßiger Verben auf <em>-er</em> - Übung von Anthropics KI Claude und Tim Bauerschmidt</p>
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="global-progress"></div>
+    </div>
+    <div class="progress-label" id="progress-label">Stufe 0 von 6 abgeschlossen</div>
+</header>
+
+<!-- ══════════════ STAGE 1 – Die Endungen kennenlernen ══════════════ -->
+<div class="stage" id="stage1">
+    <div class="stage-header">
+        <div class="stage-number" id="snum1">1</div>
+        <div class="stage-title">
+            <h2>Die Personalendungen – Was hängt dran?</h2>
+            <p>Lerne die 6 Endungen und ihre Aussprache</p>
+        </div>
+        <span class="lock-icon" id="lock1"></span>
+    </div>
+
+    <div class="reference-box">
+        <h3>📌 Merkkasten: Regelmäßige <em>-er</em>-Verben im Présent</h3>
+        <p style="margin-bottom:10px;font-size:.93em">
+            Stamm + Endung: <strong>parler</strong> → Stamm <strong style="color:#002395">parl-</strong> + Endung
+        </p>
+        <table class="ref-table">
+            <tr>
+                <th>Person</th><th>Pronomen</th><th>Endung</th>
+                <th>Beispiel</th><th>Aussprache</th>
+            </tr>
+            <tr>
+                <td>1. Sg.</td><td><strong>je</strong></td>
+                <td><span class="highlight-ending">-e</span></td>
+                <td>je parl<span class="highlight-ending">e</span></td>
+                <td><span class="pron">[parl]</span> stumm</td>
+            </tr>
+            <tr>
+                <td>2. Sg.</td><td><strong>tu</strong></td>
+                <td><span class="highlight-ending">-es</span></td>
+                <td>tu parl<span class="highlight-ending">es</span></td>
+                <td><span class="pron">[parl]</span> stumm</td>
+            </tr>
+            <tr>
+                <td>3. Sg.</td><td><strong>il/elle/on</strong></td>
+                <td><span class="highlight-ending">-e</span></td>
+                <td>il parl<span class="highlight-ending">e</span></td>
+                <td><span class="pron">[parl]</span> stumm</td>
+            </tr>
+            <tr>
+                <td>1. Pl.</td><td><strong>nous</strong></td>
+                <td><span class="highlight-ending">-ons</span></td>
+                <td>nous parl<span class="highlight-ending">ons</span></td>
+                <td><span class="pron">[parlong]</span> hörbar!</td>
+            </tr>
+            <tr>
+                <td>2. Pl.</td><td><strong>vous</strong></td>
+                <td><span class="highlight-ending">-ez</span></td>
+                <td>vous parl<span class="highlight-ending">ez</span></td>
+                <td><span class="pron">[parlee]</span> hörbar!</td>
+            </tr>
+            <tr>
+                <td>3. Pl.</td><td><strong>ils/elles</strong></td>
+                <td><span class="highlight-ending">-ent</span></td>
+                <td>ils parl<span class="highlight-ending">ent</span></td>
+                <td><span class="pron">[parl]</span> stumm!</td>
+            </tr>
+        </table>
+        <p class="hint">💡 Faustregel: Die Endungen -e, -es und -ent sind "stumm" → man hört immer nur den Stamm! Nur <strong>-ons</strong> und <strong>-ez</strong> sind hörbar.</p>
+    </div>
+
+    <!-- Quiz: Endung erraten -->
+    <div id="s1-questions"></div>
+
+    <div class="score-display" id="s1-score"></div>
+    <div class="feedback" id="s1-feedback"></div>
+    <button class="check-btn" onclick="checkStage1()">✔ Antworten prüfen</button>
+    <button class="next-btn" id="s1-next" onclick="unlockStage(2)">Weiter zu Stufe 2 →</button>
+</div>
+
+<!-- ══════════════ STAGE 2 – Pronomen zuordnen ══════════════ -->
+<div class="stage locked" id="stage2">
+    <div class="stage-header">
+        <div class="stage-number" id="snum2">2</div>
+        <div class="stage-title">
+            <h2>Les pronoms – Wer macht was?</h2>
+            <p>Ordne die Personalformen den richtigen Pronomen zu</p>
+        </div>
+        <span class="lock-icon" id="lock2">🔒</span>
+    </div>
+
+    <div class="reference-box">
+        <h3>📌 Merkkasten: Personalformen im Überblick</h3>
+        <table class="ref-table">
+            <tr><th>Pronomen</th><th>Deutsch</th><th>Singular / Plural</th><th>Endung klingt wie …</th></tr>
+            <tr><td>je</td><td>ich</td><td>Singular</td><td>Stamm allein</td></tr>
+            <tr><td>tu</td><td>du</td><td>Singular</td><td>Stamm allein</td></tr>
+            <tr><td>il / elle / on</td><td>er / sie / man</td><td>Singular</td><td>Stamm allein</td></tr>
+            <tr><td>nous</td><td>wir</td><td>Plural</td><td>[ɔ̃] oder [-ong]</td></tr>
+            <tr><td>vous</td><td>ihr / Sie</td><td>Plural</td><td>[e] oder [-ee]</td></tr>
+            <tr><td>ils / elles</td><td>sie (Pl.)</td><td>Plural</td><td>Stamm allein</td></tr>
+        </table>
+        <p class="hint">💡 <em>on</em> bedeutet „man" – im Alltag wird es oft auch für „wir" benutzt!</p>
+    </div>
+
+    <p style="margin-bottom:12px;color:#555;font-size:.95em">
+        Welches Pronomen passt zur markierten Verbform? Wähle die richtige Antwort.
+    </p>
+    <div id="s2-questions"></div>
+
+    <div class="score-display" id="s2-score"></div>
+    <div class="feedback" id="s2-feedback"></div>
+    <button class="check-btn" onclick="checkStage2()">✔ Antworten prüfen</button>
+    <button class="next-btn" id="s2-next" onclick="unlockStage(3)">Weiter zu Stufe 3 →</button>
+</div>
+
+<!-- ══════════════ STAGE 3 – Aussprache / Klingt gleich? ══════════════ -->
+<div class="stage locked" id="stage3">
+    <div class="stage-header">
+        <div class="stage-number" id="snum3">3</div>
+        <div class="stage-title">
+            <h2>La Prononciation – Hörbar oder stumm?</h2>
+            <p>Entscheide: Klingt die Verbform anders oder gleich?</p>
+        </div>
+        <span class="lock-icon" id="lock3">🔒</span>
+    </div>
+
+    <div class="reference-box">
+        <h3>📌 Merkkasten: Stille Endungen vs. hörbare Endungen</h3>
+        <table class="ref-table">
+            <tr><th>Endung</th><th>Person</th><th>Hörbar?</th><th>Klang</th></tr>
+            <tr><td>-e</td><td>je</td><td>❌ stumm</td><td>-</td></tr>
+            <tr><td>-es</td><td>tu</td><td>❌ stumm</td><td>-</td></tr>
+            <tr><td>-e</td><td>il/elle/on</td><td>❌ stumm</td><td>-</td></tr>
+            <tr><td>-ons</td><td>nous</td><td>✅ hörbar</td><td>[ɔ̃] oder [-ong]</td></tr>
+            <tr><td>-ez</td><td>vous</td><td>✅ hörbar</td><td>[e] oder [-ee]</td></tr>
+            <tr><td>-ent</td><td>ils/elles</td><td>❌ stumm</td><td>= Stamm</td></tr>
+        </table>
+        <p class="hint">💡 Das bedeutet: <em>je parle, tu parles, il parle, ils parlent</em> klingen alle gleich – <strong>[paʁl]</strong>! Man braucht das Pronomen, um die Person zu erkennen.</p>
+    </div>
+
+    <p style="margin-bottom:12px;color:#555;font-size:.95em">
+        Klingen die beiden Formen <strong>gleich</strong> oder <strong>verschieden</strong>?
+    </p>
+    <div id="s3-questions"></div>
+
+    <div class="score-display" id="s3-score"></div>
+    <div class="feedback" id="s3-feedback"></div>
+    <button class="check-btn" onclick="checkStage3()">✔ Antworten prüfen</button>
+    <button class="next-btn" id="s3-next" onclick="unlockStage(4)">Weiter zu Stufe 4 →</button>
+</div>
+
+<!-- ══════════════ STAGE 4 – Lückentext (Stamm + Endung) ══════════════ -->
+<div class="stage locked" id="stage4">
+    <div class="stage-header">
+        <div class="stage-number" id="snum4">4</div>
+        <div class="stage-title">
+            <h2>À toi ! – Konjugiere selbst</h2>
+            <p>Fülle die Lücken: Schreibe die richtige Verbform</p>
+        </div>
+        <span class="lock-icon" id="lock4">🔒</span>
+    </div>
+
+    <div class="reference-box">
+        <h3>📌 Schnell-Referenz: <em>parler</em> → <em>parl-</em> + Endung</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">
+            <span style="background:#002395;color:white;padding:4px 12px;border-radius:20px;font-size:.9em">je parl<b>e</b></span>
+            <span style="background:#002395;color:white;padding:4px 12px;border-radius:20px;font-size:.9em">tu parl<b>es</b></span>
+            <span style="background:#002395;color:white;padding:4px 12px;border-radius:20px;font-size:.9em">il/elle parl<b>e</b></span>
+            <span style="background:#ED2939;color:white;padding:4px 12px;border-radius:20px;font-size:.9em">nous parl<b>ons</b></span>
+            <span style="background:#ED2939;color:white;padding:4px 12px;border-radius:20px;font-size:.9em">vous parl<b>ez</b></span>
+            <span style="background:#002395;color:white;padding:4px 12px;border-radius:20px;font-size:.9em">ils/elles parl<b>ent</b></span>
+        </div>
+    </div>
+
+    <p style="margin-bottom:14px;color:#555;font-size:.95em">
+        Schreibe die vollständige konjugierte Form in das Feld (Pronomen weglassen).
+    </p>
+    <div id="s4-questions"></div>
+
+    <div class="score-display" id="s4-score"></div>
+    <div class="feedback" id="s4-feedback"></div>
+    <button class="check-btn" onclick="checkStage4()">✔ Antworten prüfen</button>
+    <button class="next-btn" id="s4-next" onclick="unlockStage(5)">Weiter zu Stufe 5 →</button>
+</div>
+
+<!-- ══════════════ STAGE 5 – Sätze bilden (Drag & Drop) ══════════════ -->
+<div class="stage locked" id="stage5">
+    <div class="stage-header">
+        <div class="stage-number" id="snum5">5</div>
+        <div class="stage-title">
+            <h2>Construis des phrases ! – Sätze bauen</h2>
+            <p>Ziehe die Wörter in die richtige Reihenfolge</p>
+        </div>
+        <span class="lock-icon" id="lock5">🔒</span>
+    </div>
+
+    <div class="reference-box">
+        <h3>📌 Satzbau im Français</h3>
+        <p style="font-size:.92em">
+            Wie im Deutschen: <strong>Pronomen + Verbform + Rest</strong><br>
+            z.B. <em>Elle <span style="color:#ED2939">chante</span> une chanson.</em> – Sie singt ein Lied.
+        </p>
+        <p class="hint">💡 Das Pronomen bestimmt die Endung – deshalb niemals weglassen!</p>
+    </div>
+
+    <div id="s5-questions"></div>
+
+    <div class="score-display" id="s5-score"></div>
+    <div class="feedback" id="s5-feedback"></div>
+    <button class="check-btn" onclick="checkStage5()">✔ Sätze prüfen</button>
+    <button class="next-btn" id="s5-next" onclick="unlockStage(6)">Weiter zu Stufe 6 →</button>
+</div>
+
+<!-- ══════════════ STAGE 6 – Alles zusammen ══════════════ -->
+<div class="stage locked" id="stage6">
+    <div class="stage-header">
+        <div class="stage-number" id="snum6">6</div>
+        <div class="stage-title">
+            <h2>Tout ensemble ! – Alles auf einmal</h2>
+            <p>Gemischte Aufgaben zu allen Aspekten der -er-Verben</p>
+        </div>
+        <span class="lock-icon" id="lock6">🔒</span>
+    </div>
+
+    <div class="reference-box">
+        <h3>📌 Dein Spickzettel</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:.9em">
+            <span>✅ Stamm = Infinitiv ohne <strong>-er</strong></span>
+            <span>✅ Stumme Endungen: <strong>-e, -es, -ent</strong></span>
+            <span>✅ Hörbare Endungen: <strong>-ons, -ez</strong></span>
+            <span>✅ Plural: <strong>les/des</strong></span>
+        </div>
+    </div>
+
+    <div id="s6-questions"></div>
+
+    <div class="score-display" id="s6-score"></div>
+    <div class="feedback" id="s6-feedback"></div>
+    <button class="check-btn" onclick="checkStage6()">✔ Antworten prüfen</button>
+    <button class="next-btn" id="s6-next" onclick="showFinalResult()">🏆 Ergebnis anzeigen</button>
+</div>
+
+<!-- ══════════════ FINAL RESULT ══════════════ -->
+<div id="final-result">
+    <div class="trophy" id="trophy-icon">🏆</div>
+    <h2>Félicitations !</h2>
+    <div class="big-score" id="final-score-display"></div>
+    <p id="final-feedback-text"></p>
+    <p style="margin-top:12px;color:#aaa;font-size:.9em">
+        Bien fait ! Deine Übung wird sich auszahlen! 💪
+    </p>
+</div>
+
+<!-- ══════════════ VOCABULARY ══════════════ -->
+<div id="vocab-section">
+    <h2>📚 Vocabulaire – Vokabelliste</h2>
+    <div class="vocab-tabs">
+        <button class="vtab active" onclick="showVocab('all',this)">Alle</button>
+        <button class="vtab" onclick="showVocab('verb',this)">Verben</button>
+        <button class="vtab" onclick="showVocab('noun',this)">Nomen & Sonstiges</button>
+    </div>
+    <div class="vocab-grid" id="vocab-grid"></div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+const scores = {1:0,2:0,3:0,4:0,5:0,6:0};
+const totals  = {1:0,2:0,3:0,4:0,5:0,6:0};
+
+// ═══════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════
+
+/* STAGE 1 – Welche Endung gehört zum Pronomen? */
+const s1Data = [
+    { q:"Welche Endung hat <strong>je</strong>?",       options:["-e","-es","-ons","-ez","-ent"], answer:"-e" },
+    { q:"Welche Endung hat <strong>tu</strong>?",       options:["-e","-es","-ons","-ez","-ent"], answer:"-es" },
+    { q:"Welche Endung hat <strong>il</strong>?",       options:["-e","-es","-ons","-ez","-ent"], answer:"-e" },
+    { q:"Welche Endung hat <strong>nous</strong>?",     options:["-e","-es","-ons","-ez","-ent"], answer:"-ons" },
+    { q:"Welche Endung hat <strong>vous</strong>?",     options:["-e","-es","-ons","-ez","-ent"], answer:"-ez" },
+    { q:"Welche Endung hat <strong>ils</strong>?",      options:["-e","-es","-ons","-ez","-ent"], answer:"-ent" },
+    { q:"Welche Endung hat <strong>elle</strong>?",     options:["-e","-es","-ons","-ez","-ent"], answer:"-e" },
+    { q:"Welche Endung hat <strong>elles</strong>?",    options:["-e","-es","-ons","-ez","-ent"], answer:"-ent" },
+    { q:"Welche Endung hat <strong>on</strong>?",       options:["-e","-es","-ons","-ez","-ent"], answer:"-e" },
+];
+
+/* STAGE 2 – Pronomen zur Form */
+const s2Data = [
+    { form:"<strong>chante</strong>", context:"___ chante. (ich singe)",   options:["je","tu","il","nous","vous","ils"], answer:"je" },
+    { form:"<strong>chantes</strong>",context:"___ chantes. (tu singst)",        options:["je","tu","il","nous","vous","ils"], answer:"tu" },
+    { form:"<strong>chante</strong>", context:"___ chante. (er singt)",       options:["je","tu","il","nous","vous","ils"], answer:"il" },
+    { form:"<strong>chantons</strong>",context:"___ chantons. (wir singen)", options:["je","tu","il","nous","vous","ils"], answer:"nous" },
+    { form:"<strong>chantez</strong>", context:"___ chantez. (ihr singt)",   options:["je","tu","il","nous","vous","ils"], answer:"vous" },
+    { form:"<strong>chantent</strong>",context:"___ chantent. (sie singen)", options:["je","tu","il","nous","vous","ils"], answer:"ils" },
+    { form:"<strong>regarde</strong>", context:"___ regarde. (ich schaue)",  options:["je","tu","elle","nous","vous","elles"], answer:"je" },
+    { form:"<strong>regardez</strong>",context:"___ regardez. (ihr schaut)",options:["je","tu","elle","nous","vous","elles"], answer:"vous" },
+    { form:"<strong>écoutent</strong>",context:"___ écoutent. (sie hören zu)",options:["je","tu","elle","nous","vous","elles"], answer:"elles" },
+    { form:"<strong>écoutons</strong>",context:"___ écoutons. (wir hören zu)",options:["je","tu","elle","nous","vous","elles"], answer:"nous" },
+];
+
+/* STAGE 3 – Gleicher Klang? */
+const s3Data = [
+    { a:"je parle",   b:"tu parles",    answer:"gleich",     reason:"Beide Endungen sind stumm → [paʁl]" },
+    { a:"il parle",   b:"ils parlent",  answer:"gleich",     reason:"-e und -ent sind beide stumm → [paʁl]" },
+    { a:"nous parlons",b:"vous parlez", answer:"verschieden",reason:"-ons [ɔ̃] ≠ -ez [e]" },
+    { a:"tu chantes", b:"elle chante",  answer:"gleich",     reason:"-es und -e sind stumm → [ʃɑ̃t]" },
+    { a:"je chante",  b:"nous chantons",answer:"verschieden",reason:"-e stumm [ʃɑ̃t] ≠ -ons hörbar [ʃɑ̃tɔ̃]" },
+    { a:"vous regardez",b:"ils regardent",answer:"verschieden",reason:"-ez [ʁəgaʁde] ≠ -ent stumm [ʁəgaʁd]" },
+    { a:"tu écoutes", b:"elles écoutent",answer:"gleich",    reason:"-es und -ent sind stumm → [ekut]" },
+    { a:"il joue",    b:"je joue",       answer:"gleich",    reason:"Beide Endungen stumm → [ʒu]" },
+    { a:"nous jouons",b:"vous jouez",    answer:"verschieden",reason:"-ons [ʒuɔ̃] ≠ -ez [ʒue]" },
+];
+
+/* STAGE 4 – Fill-in the blank */
+const s4Data = [
+    { sentence:"Je ___",    verb:"travailler", pronoun:"je",     answer:"travaille",  stem:"travaill" },
+    { sentence:"Tu ___",    verb:"travailler", pronoun:"tu",     answer:"travailles", stem:"travaill" },
+    { sentence:"Il ___",    verb:"travailler", pronoun:"il",     answer:"travaille",  stem:"travaill" },
+    { sentence:"Nous ___",  verb:"travailler", pronoun:"nous",   answer:"travaillons",stem:"travaill" },
+    { sentence:"Vous ___",  verb:"travailler", pronoun:"vous",   answer:"travaillez", stem:"travaill" },
+    { sentence:"Elles ___", verb:"travailler", pronoun:"elles",  answer:"travaillent",stem:"travaill" },
+    { sentence:"J' ___",    verb:"écouter",    pronoun:"je",     answer:"écoute",     stem:"écout" },
+    { sentence:"Tu ___",    verb:"écouter",    pronoun:"tu",     answer:"écoutes",    stem:"écout" },
+    { sentence:"Nous ___",  verb:"écouter",    pronoun:"nous",   answer:"écoutons",   stem:"écout" },
+    { sentence:"Elles ___", verb:"écouter",    pronoun:"elles",  answer:"écoutent",   stem:"écout" },
+    { sentence:"Il ___",    verb:"jouer",      pronoun:"il",     answer:"joue",       stem:"jou" },
+    { sentence:"Vous ___",  verb:"jouer",      pronoun:"vous",   answer:"jouez",      stem:"jou" },
+];
+
+/* STAGE 5 – Drag & Drop sentence building */
+const s5Data = [
+    {
+        label:"1. Er singt ein Lied.",
+        words:["il","une","chanson","chante"],
+        answer:["il","chante","une","chanson"]
+    },
+    {
+        label:"2. Wir spielen Fußball.",
+        words:["football","nous","au","jouons"],
+        answer:["nous","jouons","au","football"]
+    },
+    {
+        label:"3. Du hörst Musik.",
+        words:["tu","de la","écoutes","musique"],
+        answer:["tu","écoutes","de la","musique"]
+    },
+    {
+        label:"4. Sie (Pl.) arbeiten viel.",
+        words:["elles","beaucoup","travaillent"],
+        answer:["elles","travaillent","beaucoup"]
+    },
+    {
+        label:"5. Ihr schaut ein Video.",
+        words:["vous","vidéo","regardez","une"],
+        answer:["vous","regardez","une","vidéo"]
+    },
+    {
+        label:"6. Ich mag Französisch.",
+        words:["le","j'","français","aime"],
+        answer:["j'","aime","le","français"]
+    },
+];
+
+/* STAGE 6 – Mix: MC + fill */
+const s6Data = [
+    { type:"mc", q:"Wie lautet <em>habiter</em> für <strong>nous</strong>?",
+      options:["habitons","habitez","habitent","habite"], answer:"habitons" },
+    { type:"mc", q:"Wie lautet <em>regarder</em> für <strong>elles</strong>?",
+      options:["regarde","regardes","regardez","regardent"], answer:"regardent" },
+    { type:"mc", q:"Welche Formen klingen <strong>gleich</strong>?",
+      options:["nous / vous","je / tu / il / ils","nous / ils","tu / vous"], answer:"je / tu / il / ils" },
+    { type:"mc", q:"Was ist der <strong>Stamm</strong> von <em>chanter</em>?",
+      options:["chant-","chante-","chantons-","chanter-"], answer:"chant-" },
+    { type:"mc", q:"Wie lautet <em>jouer</em> für <strong>tu</strong>?",
+      options:["jouons","joues","jouez","jouent"], answer:"joues" },
+    { type:"fill", q:"Ergänze: Vous ___ (habiter).",    answer:"habitez" },
+    { type:"fill", q:"Ergänze: Il ___ (chanter).",      answer:"chante" },
+    { type:"fill", q:"Ergänze: Ils ___ (écouter).",     answer:"écoutent" },
+    { type:"fill", q:"Ergänze: Je ___ (regarder).",     answer:"regarde" },
+    { type:"fill", q:"Ergänze: Nous ___ (travailler).", answer:"travaillons" },
+];
+
+// ═══════════════════════════════════════════════════════
+//  VOCABULARY
+// ═══════════════════════════════════════════════════════
+const vocab = [
+    // Verbs
+    { fr:"parler",      de:"sprechen",       type:"verb", extra:"je parle" },
+    { fr:"chanter",     de:"singen",         type:"verb", extra:"je chante" },
+    { fr:"écouter",     de:"zuhören/hören",  type:"verb", extra:"j'écoute" },
+    { fr:"regarder",    de:"anschauen",      type:"verb", extra:"je regarde" },
+    { fr:"jouer",       de:"spielen",        type:"verb", extra:"je joue" },
+    { fr:"travailler",  de:"arbeiten",       type:"verb", extra:"je travaille" },
+    { fr:"habiter",     de:"wohnen",         type:"verb", extra:"j'habite" },
+    { fr:"aimer",   de:"mögen",         type:"verb", extra:"j'aime" },
+    // Nouns & other
+    { fr:"la chanson",  de:"das Lied",       type:"noun", extra:"" },
+    { fr:"la musique",  de:"die Musik",      type:"noun", extra:"" },
+    { fr:"le football", de:"der Fußball",    type:"noun", extra:"jouer au foot" },
+    { fr:"la vidéo",    de:"das Video",      type:"noun", extra:"" },
+    { fr:"le français", de:"das Französisch",type:"noun", extra:"" },
+    { fr:"beaucoup",    de:"viel/viele",     type:"noun", extra:"adverbe" },
+    { fr:"une chanson", de:"ein Lied",       type:"noun", extra:"" },
+    { fr:"la classe",   de:"die Klasse",     type:"noun", extra:"" },
+];
+
+// ═══════════════════════════════════════════════════════
+//  BUILD STAGE 1 – MC Endungen
+// ═══════════════════════════════════════════════════════
+function buildStage1() {
+    const c = document.getElementById('s1-questions');
+    totals[1] = s1Data.length;
+    s1Data.forEach((item,i) => {
+        const d = document.createElement('div');
+        d.className = 'question-block';
+        d.innerHTML = `<p>${i+1}. ${item.q}</p>
+        <div class="options" id="s1-opts-${i}">
+            ${item.options.map(o=>`<button class="option-btn" data-q="${i}" data-v="${o}" onclick="pickMC(this,1)">${o}</button>`).join('')}
+        </div>`;
+        c.appendChild(d);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  BUILD STAGE 2 – Pronomen MC
+// ═══════════════════════════════════════════════════════
+function buildStage2() {
+    const c = document.getElementById('s2-questions');
+    totals[2] = s2Data.length;
+    s2Data.forEach((item,i) => {
+        const d = document.createElement('div');
+        d.className = 'question-block';
+        d.innerHTML = `<p>${i+1}. ${item.context.replace('___','<span style="color:#ED2939">___</span>')}</p>
+        <div class="options" id="s2-opts-${i}">
+            ${item.options.map(o=>`<button class="option-btn" data-q="${i}" data-v="${o}" onclick="pickMC(this,2)">${o}</button>`).join('')}
+        </div>`;
+        c.appendChild(d);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  BUILD STAGE 3 – Aussprache
+// ═══════════════════════════════════════════════════════
+function buildStage3() {
+    const c = document.getElementById('s3-questions');
+    totals[3] = s3Data.length;
+    s3Data.forEach((item,i) => {
+        const d = document.createElement('div');
+        d.className = 'question-block';
+        d.innerHTML = `<p>${i+1}. Klingen <strong>${item.a}</strong> und <strong>${item.b}</strong> gleich?</p>
+        <div class="options" id="s3-opts-${i}">
+            <button class="option-btn" data-q="${i}" data-v="gleich" onclick="pickMC(this,3)">🔊 Gleich</button>
+            <button class="option-btn" data-q="${i}" data-v="verschieden" onclick="pickMC(this,3)">🎵 Verschieden</button>
+        </div>
+        <p class="hint" id="s3-reason-${i}" style="display:none">💡 ${item.reason}</p>`;
+        c.appendChild(d);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  BUILD STAGE 4 – Fill-in
+// ═══════════════════════════════════════════════════════
+function buildStage4() {
+    const c = document.getElementById('s4-questions');
+    totals[4] = s4Data.length;
+
+    // Group by verb for clarity
+    let currentVerb = '';
+    s4Data.forEach((item,i) => {
+        if (item.verb !== currentVerb) {
+            currentVerb = item.verb;
+            const h = document.createElement('p');
+            h.style.cssText = 'font-weight:bold;color:#002395;margin:16px 0 6px;font-size:1em';
+            h.textContent = `Infinitif : ${item.verb} → Stamm: ${item.stem}-`;
+            c.appendChild(h);
+        }
+        const row = document.createElement('div');
+        row.className = 'sentence-row';
+        row.innerHTML = `
+            <span>${item.sentence.replace('___','')}</span>
+            <input type="text" class="fill-input" id="s4-inp-${i}" placeholder="…" autocomplete="off" spellcheck="false">
+            <span class="correction" id="s4-cor-${i}"></span>`;
+        c.appendChild(row);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  BUILD STAGE 5 – Drag & Drop
+// ═══════════════════════════════════════════════════════
+let dragSrc = null;
+
+function buildStage5() {
+    const c = document.getElementById('s5-questions');
+    totals[5] = s5Data.length;
+
+    s5Data.forEach((item,i) => {
+        const block = document.createElement('div');
+        block.className = 'question-block';
+
+        // Shuffle words
+        const shuffled = [...item.words].sort(()=>Math.random()-.5);
+
+        block.innerHTML = `
+        <p>${item.label}</p>
+        <div class="drag-pool" id="s5-pool-${i}">
+            ${shuffled.map(w=>`<div class="drag-item" draggable="true" data-word="${w}">${w}</div>`).join('')}
+        </div>
+        <p class="drop-label">Dein Satz:</p>
+        <div class="drop-zone" id="s5-zone-${i}"></div>
+        <p class="hint" id="s5-hint-${i}" style="display:none"></p>`;
+        c.appendChild(block);
+    });
+
+    // Attach drag events
+    document.querySelectorAll('#s5-questions .drag-item').forEach(el => {
+        el.addEventListener('dragstart', e => {
+            dragSrc = el;
+            el.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        el.addEventListener('dragend', () => {
+            el.classList.remove('dragging');
+        });
+    });
+
+    document.querySelectorAll('#s5-questions .drop-zone, #s5-questions .drag-pool').forEach(zone => {
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            if (dragSrc && dragSrc !== zone) {
+                dragSrc.classList.toggle('in-zone', zone.classList.contains('drop-zone'));
+                zone.appendChild(dragSrc);
+            }
+        });
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  BUILD STAGE 6 – Mix
+// ═══════════════════════════════════════════════════════
+function buildStage6() {
+    const c = document.getElementById('s6-questions');
+    totals[6] = s6Data.length;
+    s6Data.forEach((item,i) => {
+        const d = document.createElement('div');
+        d.className = 'question-block';
+        if (item.type === 'mc') {
+            d.innerHTML = `<p>${i+1}. ${item.q}</p>
+            <div class="options" id="s6-opts-${i}">
+                ${item.options.map(o=>`<button class="option-btn" data-q="${i}" data-v="${o}" onclick="pickMC(this,6)">${o}</button>`).join('')}
+            </div>`;
+        } else {
+            d.innerHTML = `<p>${i+1}. ${item.q}</p>
+            <input type="text" class="fill-input" id="s6-inp-${i}" placeholder="…" autocomplete="off" spellcheck="false" style="width:140px">
+            <span class="correction" id="s6-cor-${i}" style="margin-left:8px"></span>`;
+        }
+        c.appendChild(d);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  GENERIC MC PICKER
+// ═══════════════════════════════════════════════════════
+function pickMC(btn, stage) {
+    const q = btn.dataset.q;
+    document.querySelectorAll(`#s${stage}-opts-${q} .option-btn`).forEach(b => {
+        b.classList.remove('selected');
+        b.style.cssText = '';
+    });
+    btn.classList.add('selected');
+    btn.style.background = '#002395';
+    btn.style.color = 'white';
+    btn.style.borderColor = '#002395';
+}
+
+// ═══════════════════════════════════════════════════════
+//  CHECK HELPERS
+// ═══════════════════════════════════════════════════════
+function checkMCBlock(stageNum, data) {
+    let correct = 0;
+    data.forEach((item,i) => {
+        const opts = document.querySelectorAll(`#s${stageNum}-opts-${i} .option-btn`);
+        let sel = null;
+        opts.forEach(b => { if (b.classList.contains('selected')) sel = b; });
+        opts.forEach(b => {
+            b.disabled = true;
+            b.classList.remove('selected');
+            b.style.cssText = '';
+            if (b.dataset.v === item.answer) b.classList.add('correct');
+        });
+        if (sel) {
+            if (sel.dataset.v === item.answer) { correct++; sel.classList.add('correct'); }
+            else sel.classList.add('wrong');
+        }
+        // Show pronunciation reason for stage 3
+        const reason = document.getElementById(`s3-reason-${i}`);
+        if (reason) reason.style.display = 'block';
+    });
+    return correct;
+}
+
+function checkFillBlock(stageNum, data) {
+    let correct = 0;
+    data.forEach((item,i) => {
+        const inp = document.getElementById(`s${stageNum}-inp-${i}`);
+        const cor = document.getElementById(`s${stageNum}-cor-${i}`);
+        if (!inp) return;
+        const val = inp.value.trim().toLowerCase();
+        inp.disabled = true;
+        if (val === item.answer.toLowerCase()) {
+            inp.classList.add('correct');
+            cor.textContent = '✓';
+            cor.className = 'correction';
+            correct++;
+        } else {
+            inp.classList.add('wrong');
+            cor.textContent = `→ ${item.answer}`;
+            cor.className = 'correction err';
+        }
+    });
+    return correct;
+}
+
+function showFeedback(n, correct, total) {
+    scores[n] = correct;
+    const pct = Math.round((correct/total)*100);
+    const fb = document.getElementById(`s${n}-feedback`);
+    const sc = document.getElementById(`s${n}-score`);
+    sc.textContent = `Ergebnis: ${correct} / ${total} (${pct}%)`;
+    fb.style.display = 'block';
+    const nb = document.getElementById(`s${n}-next`);
+    if (pct >= 60) {
+        fb.className='feedback success';
+        fb.textContent=`✅ Très bien ! ${correct}/${total} richtig (${pct}%). Weiter!`;
+        nb.style.display='inline-block';
+    } else if (pct >= 40) {
+        fb.className='feedback warning';
+        fb.textContent=`⚠️ Pas mal ! ${correct}/${total} richtig (${pct}%). Schau nochmal in den Merkkasten – du kannst weitermachen.`;
+        nb.style.display='inline-block';
+    } else {
+        fb.className='feedback error';
+        fb.textContent=`❌ Encore ! Nur ${correct}/${total} richtig (${pct}%). Lies die Regeln nochmal – du kannst trotzdem weitermachen.`;
+        nb.style.display='inline-block';
+    }
+    document.querySelector(`#stage${n} .check-btn`).disabled = true;
+    updateProgress();
+}
+
+// ═══════════════════════════════════════════════════════
+//  CHECK FUNCTIONS per stage
+// ═══════════════════════════════════════════════════════
+function checkStage1() { showFeedback(1, checkMCBlock(1,s1Data), s1Data.length); }
+function checkStage2() { showFeedback(2, checkMCBlock(2,s2Data), s2Data.length); }
+function checkStage3() { showFeedback(3, checkMCBlock(3,s3Data), s3Data.length); }
+
+function checkStage4() {
+    showFeedback(4, checkFillBlock(4,s4Data), s4Data.length);
+}
+
+function checkStage5() {
+    let correct = 0;
+    s5Data.forEach((item,i) => {
+        const zone = document.getElementById(`s5-zone-${i}`);
+        const hint = document.getElementById(`s5-hint-${i}`);
+        const placed = [...zone.querySelectorAll('.drag-item')].map(d=>d.dataset.word);
+        const ok = JSON.stringify(placed) === JSON.stringify(item.answer);
+        if (ok) {
+            correct++;
+            zone.style.background = '#eafaf1';
+            zone.style.borderColor = '#27ae60';
+            hint.textContent = '✅ Richtig!';
+            hint.style.color = '#27ae60';
+        } else {
+            zone.style.background = '#fff0f0';
+            zone.style.borderColor = '#ED2939';
+            hint.textContent = `❌ Lösung: ${item.answer.join(' ')}`;
+            hint.style.color = '#ED2939';
+        }
+        hint.style.display = 'block';
+    });
+    showFeedback(5, correct, s5Data.length);
+}
+
+function checkStage6() {
+    let correct = 0;
+    s6Data.forEach((item,i) => {
+        if (item.type === 'mc') {
+            const opts = document.querySelectorAll(`#s6-opts-${i} .option-btn`);
+            let sel = null;
+            opts.forEach(b=>{ if(b.classList.contains('selected')) sel=b; });
+            opts.forEach(b=>{
+                b.disabled=true; b.classList.remove('selected'); b.style.cssText='';
+                if(b.dataset.v===item.answer) b.classList.add('correct');
+            });
+            if(sel){
+                if(sel.dataset.v===item.answer){correct++;sel.classList.add('correct');}
+                else sel.classList.add('wrong');
+            }
+        } else {
+            const inp = document.getElementById(`s6-inp-${i}`);
+            const cor = document.getElementById(`s6-cor-${i}`);
+            const val = inp.value.trim().toLowerCase();
+            inp.disabled=true;
+            if(val===item.answer.toLowerCase()){
+                inp.classList.add('correct'); cor.textContent='✓'; cor.className='correction'; correct++;
+            } else {
+                inp.classList.add('wrong'); cor.text
+                inp.classList.add('wrong'); cor.textContent=`→ ${item.answer}`; cor.className='correction err';
+            }
+        }
+    });
+    showFeedback(6, correct, s6Data.length);
+    setTimeout(showFinalResult, 800);
+}
+
+// ═══════════════════════════════════════════════════════
+//  UNLOCK NEXT STAGE
+// ═══════════════════════════════════════════════════════
+function unlockStage(n) {
+    const el = document.getElementById(`stage${n}`);
+    el.classList.remove('locked');
+    document.getElementById(`lock${n}`).textContent = '';
+    el.scrollIntoView({ behavior:'smooth', block:'start' });
+
+    if (n===2 && !document.getElementById('s2-questions').hasChildNodes()) buildStage2();
+    if (n===3 && !document.getElementById('s3-questions').hasChildNodes()) buildStage3();
+    if (n===4 && !document.getElementById('s4-questions').hasChildNodes()) buildStage4();
+    if (n===5 && !document.getElementById('s5-questions').hasChildNodes()) buildStage5();
+    if (n===6 && !document.getElementById('s6-questions').hasChildNodes()) buildStage6();
+}
+
+// ═══════════════════════════════════════════════════════
+//  PROGRESS BAR
+// ═══════════════════════════════════════════════════════
+function updateProgress() {
+    const done = Object.keys(scores).length;
+    const pct  = Math.round((done / 6) * 100);
+    document.getElementById('global-progress').style.width = pct + '%';
+    document.getElementById('progress-label').textContent =
+        `Stufe ${done} von 6 abgeschlossen`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  FINAL RESULT
+// ═══════════════════════════════════════════════════════
+function showFinalResult() {
+    const fr   = document.getElementById('final-result');
+    fr.style.display = 'block';
+
+    let totalCorrect = 0, totalQ = 0;
+    Object.keys(scores).forEach(k => {
+        totalCorrect += scores[k];
+        totalQ       += totals[k];
+    });
+
+    const pct = Math.round((totalCorrect / totalQ) * 100);
+    document.getElementById('final-score').textContent =
+        `${totalCorrect} / ${totalQ} (${pct}%)`;
+
+    const trophy = document.getElementById('trophy-icon');
+    const text   = document.getElementById('final-feedback-text');
+
+    if (pct >= 85) {
+        trophy.textContent = '🥇';
+        text.innerHTML = '<strong>Excellent !</strong> Du hast die <em>-er</em>-Verben perfekt gemeistert! Fantastisch! 🌟';
+    } else if (pct >= 65) {
+        trophy.textContent = '🥈';
+        text.innerHTML = '<strong>Très bien !</strong> Du hast schon viel verstanden. Übe die Lücken nochmal!';
+    } else if (pct >= 45) {
+        trophy.textContent = '🥉';
+        text.innerHTML = '<strong>Pas mal !</strong> Du bist auf dem richtigen Weg. Schau die Merkkästen nochmal an!';
+    } else {
+        trophy.textContent = '💪';
+        text.innerHTML = '<strong>Continue !</strong> Konjugation braucht Übung – du schaffst das!';
+    }
+
+    fr.scrollIntoView({ behavior:'smooth' });
+    updateProgress();
+}
+
+// ═══════════════════════════════════════════════════════
+//  VOCABULARY TABS
+// ═══════════════════════════════════════════════════════
+function buildVocab() {
+    showVocabTab('all');
+}
+
+function showVocabTab(type) {
+    document.querySelectorAll('.vtab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === type);
+    });
+    const grid = document.getElementById('vocab-grid');
+    grid.innerHTML = '';
+    const filtered = type === 'all' ? vocab : vocab.filter(v => v.type === type);
+    filtered.forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'vocab-card' + (v.type === 'verb' ? ' verb' : '');
+        card.innerHTML = `
+            <div class="fr">${v.fr}</div>
+            <div class="de">${v.de}</div>
+            ${v.extra ? `<div class="extra">${v.extra}</div>` : ''}`;
+        grid.appendChild(card);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+buildStage1();
+buildVocab();
+</script>
+</body>
+</html>
