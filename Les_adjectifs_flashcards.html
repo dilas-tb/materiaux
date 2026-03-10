@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les adjectifs – Karteikarten</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px;
+  }
+  h1 {
+    font-size: 2rem;
+    color: #a78bfa;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    color: #888;
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+  }
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  .mode-btn {
+    padding: 10px 22px;
+    border-radius: 25px;
+    border: 2px solid #a78bfa;
+    background: transparent;
+    color: #a78bfa;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mode-btn.active, .mode-btn:hover {
+    background: #a78bfa;
+    color: #1a1a2e;
+    font-weight: bold;
+  }
+  .progress {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 18px;
+  }
+  .progress span {
+    color: #a78bfa;
+    font-weight: bold;
+  }
+  /* Card */
+  .card-container {
+    perspective: 1200px;
+    width: 380px;
+    max-width: 95vw;
+    height: 230px;
+    margin-bottom: 36px;
+    cursor: pointer;
+  }
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(.4,2,.55,.9);
+  }
+  .card-container.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+  .card-front {
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+    border: 2px solid #a78bfa44;
+  }
+  .card-back {
+    background: linear-gradient(135deg, #0d2137 0%, #1a1a2e 100%);
+    border: 2px solid #6ee7b744;
+    transform: rotateY(180deg);
+  }
+  .card-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 12px;
+  }
+  .card-word {
+    font-size: 2.1rem;
+    font-weight: bold;
+    color: #e0e0e0;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .card-word-de {
+    color: #6ee7b7;
+  }
+  .card-tip {
+    margin-top: 14px;
+    font-size: 0.78rem;
+    color: #666;
+    font-style: italic;
+    text-align: center;
+  }
+  .card-tip span {
+    color: #a78bfa99;
+  }
+  .card-hint {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: #555;
+  }
+  /* Gender badges */
+  .gender-row {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .gender-badge {
+    background: #ffffff11;
+    border-radius: 10px;
+    padding: 4px 12px;
+    font-size: 0.82rem;
+    color: #c4b5fd;
+  }
+  .gender-badge small {
+    color: #888;
+    font-size: 0.72rem;
+  }
+  /* Nav buttons */
+  .nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #a78bfa;
+    background: transparent;
+    color: #a78bfa;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-btn:hover {
+    background: #a78bfa;
+    color: #1a1a2e;
+  }
+  .shuffle-btn {
+    padding: 10px 22px;
+    border-radius: 25px;
+    border: 2px solid #6ee7b7;
+    background: transparent;
+    color: #6ee7b7;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .shuffle-btn:hover {
+    background: #6ee7b7;
+    color: #1a1a2e;
+    font-weight: bold;
+  }
+  .flip-hint {
+    color: #555;
+    font-size: 0.8rem;
+    margin-top: -10px;
+    margin-bottom: 20px;
+  }
+  /* Progress bar */
+  .progress-bar-wrap {
+    width: 380px;
+    max-width: 95vw;
+    height: 6px;
+    background: #ffffff11;
+    border-radius: 10px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a78bfa, #6ee7b7);
+    border-radius: 10px;
+    transition: width 0.4s;
+  }
+</style>
+</head>
+<body>
+<h1>Les adjectifs 🇫🇷</h1>
+<p class="subtitle">Klicke auf die Karte, um sie umzudrehen</p>
+
+<div class="controls">
+  <button class="mode-btn active" id="btn-fr-de" onclick="setMode('fr-de')">🇫🇷 Französisch → Deutsch</button>
+  <button class="mode-btn" id="btn-de-fr" onclick="setMode('de-fr')">🇩🇪 Deutsch → Französisch</button>
+</div>
+
+<div class="progress">Karte <span id="cur">1</span> von <span id="tot">1</span></div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
+</div>
+
+<div class="card-container" id="card" onclick="flipCard()">
+  <div class="card-inner" id="card-inner">
+    <div class="card-face card-front" id="front-face">
+      <div class="card-label" id="front-label">Français</div>
+      <div class="card-word" id="front-word"></div>
+      <div class="card-tip" id="front-tip"></div>
+    </div>
+    <div class="card-face card-back" id="back-face">
+      <div class="card-label" id="back-label">Deutsch</div>
+      <div class="card-word card-word-de" id="back-word"></div>
+      <div class="gender-row" id="back-gender"></div>
+    </div>
+  </div>
+</div>
+
+<p class="flip-hint">👆 Karte anklicken zum Umdrehen</p>
+
+<div class="nav">
+  <button class="nav-btn" onclick="prevCard()" title="Zurück">&#8592;</button>
+  <button class="shuffle-btn" onclick="shuffleCards()">🔀 Mischen</button>
+  <button class="nav-btn" onclick="nextCard()" title="Weiter">&#8594;</button>
+</div>
+
+<script>
+const rawData = [
+  { masc: "bon", fem: "bonne", de: "gut", tip: "unregelmäßig" },
+  { masc: "mauvais", fem: "mauvaise", de: "schlecht", tip: "" },
+  { masc: "grand", fem: "grande", de: "groß", tip: "" },
+  { masc: "petit", fem: "petite", de: "klein", tip: "" },
+  { masc: "beau", fem: "belle", de: "schön", tip: "unregelmäßig" },
+  { masc: "nouveau", fem: "nouvelle", de: "neu", tip: "unregelmäßig" },
+  { masc: "vieux", fem: "vieille", de: "alt", tip: "unregelmäßig" },
+  { masc: "jeune", fem: "jeune", de: "jung", tip: "m = f" },
+  { masc: "gentil", fem: "gentille", de: "freundlich", tip: "unregelmäßig" },
+  { masc: "méchant", fem: "méchante", de: "böse", tip: "" },
+  { masc: "sympa", fem: "sympa", de: "nett, sympathisch", tip: "m = f, unregelmäßig" },
+  { masc: "content", fem: "contente", de: "fröhlich", tip: "" },
+  { masc: "triste", fem: "triste", de: "traurig", tip: "m = f" },
+  { masc: "heureux", fem: "heureuse", de: "glücklich", tip: "-eux (m) / -euse (f)" },
+  { masc: "fatigué", fem: "fatiguée", de: "müde", tip: "-é (m) / -ée (f)" },
+  { masc: "malade", fem: "malade", de: "krank", tip: "m = f" },
+  { masc: "facile", fem: "facile", de: "leicht", tip: "m = f" },
+  { masc: "difficile", fem: "difficile", de: "schwierig", tip: "m = f" },
+  { masc: "rapide", fem: "rapide", de: "schnell", tip: "m = f" },
+  { masc: "lent", fem: "lente", de: "langsam", tip: "" },
+  { masc: "chaud", fem: "chaude", de: "warm, heiß", tip: "" },
+  { masc: "froid", fem: "froide", de: "kalt", tip: "" },
+  { masc: "cher", fem: "chère", de: "teuer", tip: "unregelmäßig" },
+  { masc: "important", fem: "importante", de: "wichtig", tip: "" },
+  { masc: "intelligent", fem: "intelligente", de: "intelligent", tip: "" },
+  { masc: "intéressant", fem: "intéressante", de: "interessant", tip: "" },
+  { masc: "vrai", fem: "vraie", de: "richtig", tip: "" },
+  { masc: "faux", fem: "fausse", de: "falsch", tip: "unregelmäßig" },
+  { masc: "seul", fem: "seule", de: "allein, einsam", tip: "" },
+  { masc: "propre", fem: "propre", de: "sauber", tip: "m = f" },
+  { masc: "nul", fem: "nulle", de: "doof", tip: "unregelmäßig" },
+  { masc: "bête", fem: "bête", de: "dumm", tip: "m = f" },
+  { masc: "sale", fem: "sale", de: "dreckig", tip: "m = f" },
+  { masc: "fort", fem: "forte", de: "stark", tip: "" },
+  { masc: "faible", fem: "faible", de: "schwach", tip: "m = f" },
+  { masc: "rouge", fem: "rouge", de: "rot", tip: "m = f" },
+  { masc: "vert", fem: "verte", de: "grün", tip: "" },
+  { masc: "jaune", fem: "jaune", de: "gelb", tip: "m = f" },
+  { masc: "noir", fem: "noire", de: "schwarz", tip: "" },
+  { masc: "blanc", fem: "blanche", de: "weiß", tip: "unregelmäßig" },
+  { masc: "bleu", fem: "bleue", de: "blau", tip: "" },
+  { masc: "marron", fem: "marron", de: "braun", tip: "m = f, unregelmäßig" },
+  { masc: "gris", fem: "grise", de: "grau", tip: "" },
+  { masc: "orange", fem: "orange", de: "orange", tip: "m = f" },
+  { masc: "violet", fem: "violette", de: "violett", tip: "unregelmäßig" },
+];
+
+let cards = [...rawData];
+let current = 0;
+let mode = 'fr-de'; // 'fr-de' or 'de-fr'
+let isFlipped = false;
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-fr-de').classList.toggle('active', m === 'fr-de');
+  document.getElementById('btn-de-fr').classList.toggle('active', m === 'de-fr');
+  current = 0;
+  isFlipped = false;
+  document.getElementById('card').classList.remove('flipped');
+  renderCard();
+}
+
+function renderCard() {
+  const c = cards[current];
+  isFlipped = false;
+  document.getElementById('card').classList.remove('flipped');
+
+  const sameForm = c.masc === c.fem;
+
+  if (mode === 'fr-de') {
+    // Front: French, Back: German
+    document.getElementById('front-label').textContent = 'Français';
+    if (sameForm) {
+      document.getElementById('front-word').textContent = c.masc;
+    } else {
+      document.getElementById('front-word').textContent = c.masc + ' / ' + c.fem;
+    }
+    let tipHTML = '';
+    if (c.tip) tipHTML = '<span>💡 ' + c.tip + '</span>';
+    document.getElementById('front-tip').innerHTML = tipHTML;
+
+    document.getElementById('back-label').textContent = 'Deutsch';
+    document.getElementById('back-word').textContent = c.de;
+    document.getElementById('back-gender').innerHTML = sameForm
+      ? '<span class="gender-badge"><small>m = f</small> ' + c.masc + '</span>'
+      : '<span class="gender-badge"><small>maskulin</small> ' + c.masc + '</span><span class="gender-badge"><small>feminin</small> ' + c.fem + '</span>';
+  } else {
+    // Front: German, Back: French
+    document.getElementById('front-label').textContent = 'Deutsch';
+    document.getElementById('front-word').innerHTML = '<span style="color:#6ee7b7">' + c.de + '</span>';
+    document.getElementById('front-tip').innerHTML = '';
+
+    document.getElementById('back-label').textContent = 'Français';
+    if (sameForm) {
+      document.getElementById('back-word').textContent = c.masc;
+    } else {
+      document.getElementById('back-word').textContent = c.masc + ' / ' + c.fem;
+    }
+    let tipHTML = '';
+    if (c.tip) tipHTML = '<span style="color:#a78bfa99;font-style:italic;font-size:0.78rem">💡 ' + c.tip + '</span>';
+    document.getElementById('back-gender').innerHTML = tipHTML;
+  }
+
+  document.getElementById('cur').textContent = current + 1;
+  document.getElementById('tot').textContent = cards.length;
+  const pct = ((current + 1) / cards.length * 100).toFixed(1);
+  document.getElementById('prog-bar').style.width = pct + '%';
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('card').classList.toggle('flipped', isFlipped);
+}
+
+function nextCard() {
+  current = (current + 1) % cards.length;
+  renderCard();
+}
+
+function prevCard() {
+  current = (current - 1 + cards.length) % cards.length;
+  renderCard();
+}
+
+function shuffleCards() {
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  current = 0;
+  renderCard();
+}
+
+// Keyboard support
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') nextCard();
+  else if (e.key === 'ArrowLeft') prevCard();
+  else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+});
+
+renderCard();
+</script>
+</body>
+</html>
