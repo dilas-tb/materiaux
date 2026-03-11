@@ -563,7 +563,7 @@
                     <td>das Mädchen</td>
                 </tr>
             </table>
-            <p class="hint">💡 Tipp: Im Französischen hat jedes Nomen ein Genus (Geschlecht). Das musst du einfach mitlernen!</p>
+            <p class="hint">💡 Tipp: Im Französischen ist jedes Nomen entweder männlich, weiblich oder im Plural. Das grammatische Geschlecht musst du einfach mitlernen!</p>
         </div>
 
         <div id="s1-questions"></div>
@@ -604,10 +604,10 @@
                     <td>Unbestimmt</td>
                     <td><strong>un</strong></td>
                     <td><strong>une</strong></td>
-                    <td>ein / eine (unbekannt)</td>
+                    <td>ein / eine</td>
                 </tr>
             </table>
-            <p class="hint">💡 Tipp: <em>Le chat</em> = die Katze (eine bestimmte, bekannte). <em>Un chat</em> = eine Katze (irgendeine).</p>
+            <p class="hint">💡 Tipp: <em>Le chat</em> = die Katze (eine bestimmte, bekannte). <em>Un chat</em> = eine Katze (irgendeine Katze).</p>
         </div>
 
         <div id="s2-questions"></div>
@@ -657,7 +657,7 @@
                     <td>der Baum, das Hotel</td>
                 </tr>
             </table>
-            <p class="hint">💡 Vokale: a, e, i, o, u – Vor diesen Buchstaben und vor stummem H wird le/la zu l'.</p>
+            <p class="hint">💡 Vokale: a, e, i, o, u – Vor diesen Buchstaben und vor stummem H wird le/la zu l'. Man kann das Geschlecht also nicht erkennen.</p>
         </div>
 
         <div id="s3-questions"></div>
@@ -825,14 +825,14 @@ const totals = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 // STAGE 1 DATA – le / la
 // =============================================
 const s1Data = [
-    { sentence: "___ garçon (m.) est grand.", options: ["le", "la", "un", "une"], answer: "le", hint: "garçon = Junge → maskulin" },
-    { sentence: "___ fille (f.) chante.", options: ["le", "la", "un", "une"], answer: "la", hint: "fille = Mädchen → feminin" },
-    { sentence: "___ chat (m.) dort.", options: ["le", "la", "un", "une"], answer: "le", hint: "chat = Katze → maskulin" },
-    { sentence: "___ maison (f.) est belle.", options: ["le", "la", "un", "une"], answer: "la", hint: "maison = Haus → feminin" },
-    { sentence: "___ chien (m.) court vite.", options: ["le", "la", "un", "une"], answer: "le", hint: "chien = Hund → maskulin" },
-    { sentence: "___ voiture (f.) est rouge.", options: ["le", "la", "un", "une"], answer: "la", hint: "voiture = Auto → feminin" },
-    { sentence: "___ livre (m.) est intéressant.", options: ["le", "la", "un", "une"], answer: "le", hint: "livre = Buch → maskulin" },
-    { sentence: "___ porte (f.) est ouverte.", options: ["le", "la", "un", "une"], answer: "la", hint: "porte = Tür → feminin" },
+    { sentence: "___ garçon (m.) est grand.", options: ["le", "la", "l'", "les"], answer: "le", hint: "garçon = Junge → maskulin" },
+    { sentence: "___ fille (f.) chante.", options: ["le", "la", "l'", "les"], answer: "la", hint: "fille = Mädchen → feminin" },
+    { sentence: "___ chat (m.) dort.", options: ["le", "la", "l'", "les"], answer: "le", hint: "chat = Katze → maskulin" },
+    { sentence: "___ maison (f.) est belle.", options: ["le", "la", "l'", "les"], answer: "la", hint: "maison = Haus → feminin" },
+    { sentence: "___ chien (m.) court vite.", options: ["le", "la", "l'", "les"], answer: "le", hint: "chien = Hund → maskulin" },
+    { sentence: "___ voiture (f.) est rouge.", options: ["le", "la", "l'", "les"], answer: "la", hint: "voiture = Auto → feminin" },
+    { sentence: "___ livre (m.) est intéressant.", options: ["le", "la", "l'", "les"], answer: "le", hint: "livre = Buch → maskulin" },
+    { sentence: "___ porte (f.) est ouverte.", options: ["le", "la", "l'", "les"], answer: "la", hint: "porte = Tür → feminin" },
 ];
 
 // =============================================
@@ -1261,3 +1261,4 @@ buildVocab();
 </script>
 </body>
 </html>
+
