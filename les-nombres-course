@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Nombres – Zahlenspiel</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #0d1117;
+            --surface: #161b22;
+            --surface2: #21262d;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --border: #30363d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #game-container {
+            background-color: var(--surface);
+            width: 92%;
+            max-width: 520px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .flag-strip {
+            height: 4px;
+            width: 100%;
+            background: linear-gradient(to right, #002395 33%, #ffffff 33%, #ffffff 66%, #ed2939 66%);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 6px;
+            font-size: 1.8rem;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            font-weight: 400;
+        }
+
+        .screen { display: none; }
+        .active { display: block; }
+
+        /* Mode Toggle */
+        .mode-toggle {
+            display: flex;
+            background: var(--surface2);
+            border-radius: 10px;
+            margin: 20px 0 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px 10px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            border-radius: 0;
+        }
+
+        .mode-btn:hover {
+            background: transparent;
+            color: var(--text);
+            transform: none;
+        }
+
+        .mode-btn.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Question Box */
+        .question-box {
+            background-color: var(--surface2);
+            padding: 28px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+            border: 1px solid var(--border);
+            color: var(--text);
+            min-height: 95px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question-box .number-display {
+            color: #f1c40f;
+            font-size: 3rem;
+        }
+
+        .question-box .word-display {
+            color: #f1c40f;
+            font-size: 1.5rem;
+            line-height: 1.4;
+        }
+
+        /* Options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .options-grid.number-options {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .opt-btn {
+            background-color: var(--surface2);
+            color: var(--text);
+            border: 2px solid var(--border);
+            padding: 16px 12px;
+            font-size: 1.05rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.2s, background-color 0.2s;
+        }
+
+        .opt-btn:hover {
+            border-color: var(--primary);
+            background-color: rgba(108, 92, 231, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .opt-btn:active { transform: translateY(0); }
+
+        .opt-btn.correct {
+            background-color: var(--success) !important;
+            border-color: var(--success) !important;
+            color: white !important;
+        }
+
+        .opt-btn.wrong {
+            background-color: var(--accent) !important;
+            border-color: var(--accent) !important;
+            color: white !important;
+        }
+
+        .opt-btn.number-choice {
+            font-size: 1.6rem;
+            font-weight: 700;
+            padding: 20px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .timer { color: var(--accent); }
+        .score { color: var(--success); }
+
+        /* Progress Bar */
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: var(--surface2);
+            border-radius: 3px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--accent), #f39c12);
+            border-radius: 3px;
+            transition: width 1s linear;
+            width: 100%;
+        }
+
+        /* Start Button */
+        .start-btn {
+            background: linear-gradient(135deg, var(--primary), #a855f7);
+            font-size: 1.25rem;
+            padding: 18px 40px;
+            margin-top: 20px;
+            width: 100%;
+            border-radius: 12px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        .start-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* End Screen */
+        .result-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .result-detail {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 5px 0;
+        }
+
+        .emoji-feedback {
+            font-size: 2.5rem;
+            margin: 10px 0;
+        }
+
+        p { line-height: 1.6; }
+
+        .info-text {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-top: 8px;
+        }
+
+        /* Shake Animation */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake { animation: shake 0.3s; }
+
+        /* Streak indicator */
+        .streak-display {
+            color: #f39c12;
+            font-size: 0.95rem;
+            min-height: 1.4em;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="flag-strip"></div>
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen active">
+        <h1>🔢 Les Nombres</h1>
+        <h2>Französische Zahlen 0–99</h2>
+        <p style="margin-top:15px;">Du hast <strong>60 Sekunden</strong>.<br>Finde so viele richtige Zuordnungen wie möglich!</p>
+
+        <div class="mode-toggle">
+            <button class="mode-btn selected" onclick="selectMode('standard', this)">
+                🔢 → Zahlwort
+            </button>
+            <button class="mode-btn" onclick="selectMode('reverse', this)">
+                🇫🇷 → Ziffer
+            </button>
+        </div>
+        <p class="info-text">
+            <strong>Standard:</strong> Ziffer sehen → Zahlwort wählen<br>
+            <strong>Umgekehrt:</strong> Zahlwort sehen → Ziffer wählen
+        </p>
+
+        <button class="start-btn" onclick="startGame()">Commencer !</button>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen">
+        <div class="stats">
+            <div class="timer">⏱ <span id="time-display">60</span>s</div>
+            <div class="score">⭐ <span id="score-display">0</span></div>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <div class="streak-display" id="streak-display"></div>
+
+        <div class="question-box" id="question-box"></div>
+
+        <div class="options-grid" id="options-container"></div>
+    </div>
+
+    <!-- END SCREEN -->
+    <div id="end-screen" class="screen">
+        <h1>Temps écoulé !</h1>
+        <div class="emoji-feedback" id="emoji-feedback">👏</div>
+        <div class="result-number" id="final-score">0</div>
+        <p style="font-size:1.1rem;">Punkte erreicht</p>
+        <p class="result-detail" id="result-detail"></p>
+        <p id="feedback-text" style="margin-top:10px; font-size:1.1rem;"></p>
+        <button class="start-btn" onclick="showStartScreen()">Nochmal spielen</button>
+    </div>
+</div>
+
+<script>
+// ============ ZAHLWÖRTER 0–99 ============
+const NOMBRES = {
+    0: 'zéro', 1: 'un', 2: 'deux', 3: 'trois', 4: 'quatre',
+    5: 'cinq', 6: 'six', 7: 'sept', 8: 'huit', 9: 'neuf',
+    10: 'dix', 11: 'onze', 12: 'douze', 13: 'treize', 14: 'quatorze',
+    15: 'quinze', 16: 'seize', 17: 'dix-sept', 18: 'dix-huit', 19: 'dix-neuf',
+    20: 'vingt', 21: 'vingt et un', 22: 'vingt-deux', 23: 'vingt-trois',
+    24: 'vingt-quatre', 25: 'vingt-cinq', 26: 'vingt-six', 27: 'vingt-sept',
+    28: 'vingt-huit', 29: 'vingt-neuf',
+    30: 'trente', 31: 'trente et un', 32: 'trente-deux', 33: 'trente-trois',
+    34: 'trente-quatre', 35: 'trente-cinq', 36: 'trente-six', 37: 'trente-sept',
+    38: 'trente-huit', 39: 'trente-neuf',
+    40: 'quarante', 41: 'quarante et un', 42: 'quarante-deux', 43: 'quarante-trois',
+    44: 'quarante-quatre', 45: 'quarante-cinq', 46: 'quarante-six', 47: 'quarante-sept',
+    48: 'quarante-huit', 49: 'quarante-neuf',
+    50: 'cinquante', 51: 'cinquante et un', 52: 'cinquante-deux', 53: 'cinquante-trois',
+    54: 'cinquante-quatre', 55: 'cinquante-cinq', 56: 'cinquante-six', 57: 'cinquante-sept',
+    58: 'cinquante-huit', 59: 'cinquante-neuf',
+    60: 'soixante', 61: 'soixante et un', 62: 'soixante-deux', 63: 'soixante-trois',
+    64: 'soixante-quatre', 65: 'soixante-cinq', 66: 'soixante-six', 67: 'soixante-sept',
+    68: 'soixante-huit', 69: 'soixante-neuf',
+    70: 'soixante-dix', 71: 'soixante et onze', 72: 'soixante-douze', 73: 'soixante-treize',
+    74: 'soixante-quatorze', 75: 'soixante-quinze', 76: 'soixante-seize',
+    77: 'soixante-dix-sept', 78: 'soixante-dix-huit', 79: 'soixante-dix-neuf',
+    80: 'quatre-vingts', 81: 'quatre-vingt-un', 82: 'quatre-vingt-deux',
+    83: 'quatre-vingt-trois', 84: 'quatre-vingt-quatre', 85: 'quatre-vingt-cinq',
+    86: 'quatre-vingt-six', 87: 'quatre-vingt-sept', 88: 'quatre-vingt-huit',
+    89: 'quatre-vingt-neuf',
+    90: 'quatre-vingt-dix', 91: 'quatre-vingt-onze', 92: 'quatre-vingt-douze',
+    93: 'quatre-vingt-treize', 94: 'quatre-vingt-quatorze', 95: 'quatre-vingt-quinze',
+    96: 'quatre-vingt-seize', 97: 'quatre-vingt-dix-sept', 98: 'quatre-vingt-dix-huit',
+    99: 'quatre-vingt-dix-neuf'
+};
+
+const ALL_NUMBERS = Object.keys(NOMBRES).map(Number);
+const GAME_DURATION = 60;
+
+let mode = 'standard';
+let score = 0;
+let timer = GAME_DURATION;
+let timerInterval;
+let isClickable = true;
+let streak = 0;
+let bestStreak = 0;
+let totalAnswered = 0;
+let correctCount = 0;
+
+// DOM
+const startScreen = document.getElementById('start-screen');
+const gameScreen = document.getElementById('game-screen');
+const endScreen = document.getElementById('end-screen');
+const scoreDisplay = document.getElementById('score-display');
+const timeDisplay = document.getElementById('time-display');
+const questionBox = document.getElementById('question-box');
+const optionsContainer = document.getElementById('options-container');
+const finalScore = document.getElementById('final-score');
+const feedbackText = document.getElementById('feedback-text');
+const progressBar = document.getElementById('progress-bar');
+const streakDisplay = document.getElementById('streak-display');
+
+function selectMode(m, btnEl) {
+    mode = m;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+    btnEl.classList.add('selected');
+}
+
+function showStartScreen() {
+    startScreen.classList.add('active');
+    gameScreen.classList.remove('active');
+    endScreen.classList.remove('active');
+}
+
+function startGame() {
+    score = 0; timer = GAME_DURATION; streak = 0; bestStreak = 0;
+    totalAnswered = 0; correctCount = 0;
+    scoreDisplay.textContent = score;
+    timeDisplay.textContent = timer;
+    progressBar.style.width = '100%';
+    streakDisplay.textContent = '';
+
+    startScreen.classList.remove('active');
+    endScreen.classList.remove('active');
+    gameScreen.classList.add('active');
+
+    nextQuestion();
+
+    timerInterval = setInterval(() => {
+        timer--;
+        timeDisplay.textContent = timer;
+        progressBar.style.width = ((timer / GAME_DURATION) * 100) + '%';
+        if (timer <= 0) endGame();
+    }, 1000);
+}
+
+function endGame() {
+    clearInterval(timerInterval);
+    gameScreen.classList.remove('active');
+    endScreen.classList.add('active');
+    finalScore.textContent = score;
+
+    const pct = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+    document.getElementById('result-detail').textContent =
+        `${correctCount}/${totalAnswered} richtig (${pct}%) · Beste Serie: ${bestStreak}`;
+
+    const ef = document.getElementById('emoji-feedback');
+    if (score < 5)       { feedbackText.textContent = 'Weiter üben – du schaffst das!'; ef.textContent = '💪'; }
+    else if (score < 15) { feedbackText.textContent = 'Pas mal ! (Nicht schlecht!)'; ef.textContent = '👏'; }
+    else if (score < 25) { feedbackText.textContent = 'Très bien ! (Sehr gut!)'; ef.textContent = '🎉'; }
+    else if (score < 35) { feedbackText.textContent = 'Excellent ! Du bist ein Profi!'; ef.textContent = '🏆'; }
+    else                 { feedbackText.textContent = 'Incroyable ! Absolut meisterhaft!'; ef.textContent = '🌟'; }
+}
+
+function getDistractors(correctNum, count) {
+    // Generate plausible wrong answers close to the correct number
+    let pool = new Set();
+
+    // Add nearby numbers
+    for (let d = -10; d <= 10; d++) {
+        const n = correctNum + d;
+        if (n >= 0 && n <= 99 && n !== correctNum) pool.add(n);
+    }
+    // Add numbers in same decade
+    const decade = Math.floor(correctNum / 10) * 10;
+    for (let i = decade; i < decade + 10; i++) {
+        if (i >= 0 && i <= 99 && i !== correctNum) pool.add(i);
+    }
+    // Fill rest randomly
+    while (pool.size < count + 10) {
+        pool.add(Math.floor(Math.random() * 100));
+        pool.delete(correctNum);
+    }
+
+    let arr = [...pool];
+    // Shuffle and pick
+    arr.sort(() => Math.random() - 0.5);
+    return arr.slice(0, count);
+}
+
+function nextQuestion() {
+    isClickable = true;
+    optionsContainer.innerHTML = '';
+
+    const correctNum = ALL_NUMBERS[Math.floor(Math.random() * ALL_NUMBERS.length)];
+    const correctWord = NOMBRES[correctNum];
+    const distractorNums = getDistractors(correctNum, 3);
+
+    if (mode === 'standard') {
+        // Show number, choose word
+        questionBox.innerHTML = `<span class="number-display">${correctNum}</span>`;
+        optionsContainer.classList.remove('number-options');
+
+        let options = [
+            { num: correctNum, word: correctWord },
+            ...distractorNums.map(n => ({ num: n, word: NOMBRES[n] }))
+        ];
+        options.sort(() => Math.random() - 0.5);
+
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.textContent = opt.word;
+            btn.onclick = () => checkAnswer(opt.num === correctNum, btn);
+            optionsContainer.appendChild(btn);
+        });
+
+    } else {
+        // Show word, choose number
+        questionBox.innerHTML = `<span class="word-display">${correctWord}</span>`;
+        optionsContainer.classList.add('number-options');
+
+        let options = [correctNum, ...distractorNums];
+        options.sort(() => Math.random() - 0.5);
+
+        options.forEach(num => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn number-choice';
+            btn.textContent = num;
+            btn.onclick = () => checkAnswer(num === correctNum, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+}
+
+function checkAnswer(isCorrect, btnElement) {
+    if (!isClickable) return;
+    isClickable = false;
+    totalAnswered++;
+
+    if (isCorrect) {
+        btnElement.classList.add('correct');
+        streak++;
+        if (streak > bestStreak) bestStreak = streak;
+        correctCount++;
+        // Bonus for streaks
+        let points = 1;
+        if (streak >= 5) points = 2;
+        if (streak >= 10) points = 3;
+        score += points;
+        scoreDisplay.textContent = score;
+
+        if (streak >= 3) {
+            streakDisplay.textContent = `🔥 Serie: ${streak}` + (points > 1 ? ` (×${points})` : '');
+        } else {
+            streakDisplay.textContent = '';
+        }
+
+        setTimeout(nextQuestion, 400);
+    } else {
+        btnElement.classList.add('wrong');
+        streak = 0;
+        streakDisplay.textContent = '';
+        questionBox.classList.add('shake');
+
+        // Show correct answer
+        const allBtns = optionsContainer.querySelectorAll('.opt-btn');
+        if (mode === 'standard') {
+            const correctWord = NOMBRES[getCurrentCorrectNum(allBtns)];
+            allBtns.forEach(b => {
+                if (b.textContent === correctWord) b.classList.add('correct');
+            });
+        } else {
+            // In reverse mode, find correct number button
+            allBtns.forEach(b => {
+                // We need to identify the correct one — mark all non-wrong that match
+                // Simple approach: re-check
+            });
+            // Simpler: just highlight correct
+            markCorrectButton(allBtns);
+        }
+
+        setTimeout(() => {
+            questionBox.classList.remove('shake');
+            nextQuestion();
+        }, 900);
+    }
+}
+
+function getCurrentCorrectNum(allBtns) {
+    // Reconstruct from question box
+    if (mode === 'standard') {
+        const numText = questionBox.querySelector('.number-display').textContent;
+        return parseInt(numText);
+    }
+    return null;
+}
+
+function markCorrectButton(allBtns) {
+    if (mode === 'standard') {
+        const num = parseInt(questionBox.querySelector('.number-display').textContent);
+        const word = NOMBRES[num];
+        allBtns.forEach(b => { if (b.textContent === word) b.classList.add('correct'); });
+    } else {
+        const word = questionBox.querySelector('.word-display').textContent;
+        // Find number for this word
+        let correctNum = null;
+        for (const [k, v] of Object.entries(NOMBRES)) {
+            if (v === word) { correctNum = k; break; }
+        }
+        if (correctNum !== null) {
+            allBtns.forEach(b => { if (b.textContent == correctNum) b.classList.add('correct'); });
+        }
+    }
+}
+
+// Override for both modes
+const origCheck = checkAnswer;
+// Actually let's fix the correct-marking to use markCorrectButton for both modes
+// Re-patch checkAnswer:
+(function() {
+    const oldNext = nextQuestion;
+    // Already handled inline, just ensure markCorrectButton is called properly
+})();
+
+// Fix: use markCorrectButton in wrong-answer path
+const _origCheckAnswer = checkAnswer;
+checkAnswer = function(isCorrect, btnElement) {
+    if (!isClickable) return;
+    isClickable = false;
+    totalAnswered++;
+
+    if (isCorrect) {
+        btnElement.classList.add('correct');
+        streak++;
+        if (streak > bestStreak) bestStreak = streak;
+        correctCount++;
+        let points = 1;
+        if (streak >= 5) points = 2;
+        if (streak >= 10) points = 3;
+        score += points;
+        scoreDisplay.textContent = score;
+        if (streak >= 3) {
+            streakDisplay.textContent = `🔥 Serie: ${streak}` + (points > 1 ? ` (×${points})` : '');
+        } else {
+            streakDisplay.textContent = '';
+        }
+        setTimeout(nextQuestion, 400);
+    } else {
+        btnElement.classList.add('wrong');
+        streak = 0;
+        streakDisplay.textContent = '';
+        questionBox.classList.add('shake');
+        const allBtns = optionsContainer.querySelectorAll('.opt-btn');
+        markCorrectButton(allBtns);
+        setTimeout(() => {
+            questionBox.classList.remove('shake');
+            nextQuestion();
+        }, 900);
+    }
+};
+</script>
+
+</body>
+</html>
