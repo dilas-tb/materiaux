@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri Rapide – Schnell-Sortieren</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-glow: rgba(108, 92, 231, 0.3);
+            --secondary: #0d1117;
+            --surface: #161b22;
+            --surface2: #21262d;
+            --surface3: #2a313a;
+            --accent: #e74c3c;
+            --accent-soft: rgba(231, 76, 60, 0.15);
+            --success: #2ecc71;
+            --success-soft: rgba(46, 204, 113, 0.15);
+            --gold: #f1c40f;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --border: #30363d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        #game-container {
+            background-color: var(--surface);
+            width: 92%;
+            max-width: 560px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .flag-strip {
+            height: 4px;
+            width: 100%;
+            background: linear-gradient(to right, #002395 33%, #fff 33%, #fff 66%, #ed2939 66%);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        h1 {
+            font-size: 1.6em;
+            margin: 15px 0 5px;
+        }
+
+        h1 .emoji { font-size: 1.1em; }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        /* ==================== SCREENS ==================== */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ==================== START ==================== */
+        .mode-section {
+            margin: 20px 0;
+        }
+
+        .mode-section h3 {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .mode-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            color: var(--text);
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+
+        .mode-btn:hover {
+            border-color: var(--primary);
+            background: var(--surface3);
+        }
+
+        .mode-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            color: #fff;
+        }
+
+        .start-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 12px;
+            font-size: 1.15em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        /* ==================== GAME ==================== */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 14px;
+            background: var(--surface2);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 0.9em;
+        }
+
+        .stats-bar .stat { display: flex; align-items: center; gap: 5px; }
+        .stats-bar .stat-val { font-weight: bold; color: var(--primary); }
+
+        .instruction {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+
+        .instruction .arrow { color: var(--primary); font-weight: bold; }
+
+        /* Sortier-Bereich */
+        .sort-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0 20px;
+            min-height: 200px;
+        }
+
+        .sort-item {
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 1.1em;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .sort-item:active { cursor: grabbing; }
+
+        .sort-item:hover {
+            border-color: var(--primary);
+            background: var(--surface3);
+        }
+
+        .sort-item .rank {
+            background: var(--surface3);
+            color: var(--text-muted);
+            font-size: 0.75em;
+            font-weight: bold;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .sort-item .word {
+            flex: 1;
+            text-align: left;
+        }
+
+        .sort-item .handle {
+            color: var(--text-muted);
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .sort-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.97);
+            border-color: var(--primary);
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .sort-item.drag-over {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+        }
+
+        .sort-item.correct-item {
+            border-color: var(--success);
+            background: var(--success-soft);
+        }
+
+        .sort-item.wrong-item {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .check-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 13px 30px;
+            border-radius: 12px;
+            font-size: 1.05em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 5px;
+        }
+
+        .check-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.show { display: block; }
+
+        .feedback.correct-fb {
+            background: var(--success-soft);
+            color: var(--success);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .feedback.wrong-fb {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .solution-list {
+            margin-top: 8px;
+            text-align: left;
+            font-weight: normal;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        /* ==================== END ==================== */
+        .result-box {
+            background: var(--surface2);
+            border-radius: 14px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid var(--border);
+        }
+
+        .result-box .big-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .result-box .label {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .result-details {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 18px;
+        }
+
+        .result-details .detail {
+            text-align: center;
+        }
+
+        .result-details .detail .val {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .result-details .detail .lbl {
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        .star-row {
+            margin: 15px 0;
+            font-size: 1.8em;
+        }
+
+        .restart-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 13px 35px;
+            border-radius: 12px;
+            font-size: 1.05em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
+        }
+
+        .confetti-piece {
+            position: absolute;
+            top: 0;
+            border-radius: 2px;
+            animation: confetti-fall ease-out forwards;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sort-item {
+            animation: slideIn 0.3s ease-out both;
+        }
+
+        /* Touch-Friendly */
+        @media (max-width: 500px) {
+            #game-container { padding: 20px 15px; }
+            h1 { font-size: 1.3em; }
+            .sort-item { padding: 12px 14px; font-size: 1em; }
+            .mode-btn { padding: 8px 13px; font-size: 0.85em; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="flag-strip"></div>
+
+    <!-- ============ START SCREEN ============ -->
+    <div id="start-screen" class="screen active">
+        <h1><span class="emoji">🔀</span> Tri Rapide</h1>
+        <p class="subtitle">Sortiere die Zahlwörter – so schnell wie möglich!</p>
+
+        <div class="mode-section">
+            <h3>Anzahl Wörter</h3>
+            <div class="mode-buttons" id="count-buttons">
+                <button class="mode-btn" data-count="4">4</button>
+                <button class="mode-btn selected" data-count="5">5</button>
+                <button class="mode-btn" data-count="6">6</button>
+            </div>
+        </div>
+
+        <div class="mode-section">
+            <h3>Sortierung</h3>
+            <div class="mode-buttons" id="order-buttons">
+                <button class="mode-btn selected" data-order="asc">↑ Aufsteigend</button>
+                <button class="mode-btn" data-order="desc">↓ Absteigend</button>
+                <button class="mode-btn" data-order="random">🎲 Zufall</button>
+            </div>
+        </div>
+
+        <div class="mode-section">
+            <h3>Runden</h3>
+            <div class="mode-buttons" id="round-buttons">
+                <button class="mode-btn" data-rounds="5">5</button>
+                <button class="mode-btn selected" data-rounds="10">10</button>
+                <button class="mode-btn" data-rounds="15">15</button>
+            </div>
+        </div>
+
+        <button class="start-btn" onclick="startGame()">C'est parti ! 🚀</button>
+    </div>
+
+    <!-- ============ GAME SCREEN ============ -->
+    <div id="game-screen" class="screen">
+        <div class="stats-bar">
+            <div class="stat">📋 Runde: <span class="stat-val" id="round-display">1/10</span></div>
+            <div class="stat">✅ <span class="stat-val" id="correct-display">0</span></div>
+            <div class="stat">⏱ <span class="stat-val" id="time-display">0:00</span></div>
+        </div>
+
+        <div class="instruction">
+            <span class="arrow" id="order-arrow">↑</span> <span id="order-text">Ordne vom kleinsten zum größten Wert</span>
+        </div>
+
+        <div class="sort-area" id="sort-area"></div>
+
+        <button class="check-btn" id="check-btn" onclick="checkOrder()">Vérifier ✓</button>
+
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <!-- ============ END SCREEN ============ -->
+    <div id="end-screen" class="screen">
+        <h1><span class="emoji">🏁</span> Résultat</h1>
+
+        <div class="result-box">
+            <div class="big-number" id="final-correct">0</div>
+            <div class="label" id="final-label">Richtig sortiert</div>
+            <div class="result-details">
+                <div class="detail">
+                    <div class="val" id="final-time">0:00</div>
+                    <div class="lbl">Gesamtzeit</div>
+                </div>
+                <div class="detail">
+                    <div class="val" id="final-avg">0s</div>
+                    <div class="lbl">Ø pro Runde</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="star-row" id="star-row"></div>
+
+        <button class="restart-btn" onclick="resetToStart()">Encore une fois 🔄</button>
+    </div>
+</div>
+
+<script>
+// ===================== NOMBRES FRANÇAIS =====================
+const NOMBRES = {
+    0: "zéro", 1: "un", 2: "deux", 3: "trois", 4: "quatre", 5: "cinq",
+    6: "six", 7: "sept", 8: "huit", 9: "neuf", 10: "dix",
+    11: "onze", 12: "douze", 13: "treize", 14: "quatorze", 15: "quinze",
+    16: "seize", 17: "dix-sept", 18: "dix-huit", 19: "dix-neuf",
+    20: "vingt", 21: "vingt et un", 22: "vingt-deux", 23: "vingt-trois",
+    24: "vingt-quatre", 25: "vingt-cinq", 26: "vingt-six", 27: "vingt-sept",
+    28: "vingt-huit", 29: "vingt-neuf", 30: "trente", 31: "trente et un",
+    32: "trente-deux", 33: "trente-trois", 34: "trente-quatre", 35: "trente-cinq",
+    36: "trente-six", 37: "trente-sept", 38: "trente-huit", 39: "trente-neuf",
+    40: "quarante", 41: "quarante et un", 42: "quarante-deux", 43: "quarante-trois",
+    44: "quarante-quatre", 45: "quarante-cinq", 46: "quarante-six",
+    47: "quarante-sept", 48: "quarante-huit", 49: "quarante-neuf",
+    50: "cinquante", 51: "cinquante et un", 52: "cinquante-deux",
+    53: "cinquante-trois", 54: "cinquante-quatre", 55: "cinquante-cinq",
+    56: "cinquante-six", 57: "cinquante-sept", 58: "cinquante-huit",
+    59: "cinquante-neuf", 60: "soixante", 61: "soixante et un",
+    62: "soixante-deux", 63: "soixante-trois", 64: "soixante-quatre",
+    65: "soixante-cinq", 66: "soixante-six", 67: "soixante-sept",
+    68: "soixante-huit", 69: "soixante-neuf", 70: "soixante-dix",
+    71: "soixante et onze", 72: "soixante-douze", 73: "soixante-treize",
+    74: "soixante-quatorze", 75: "soixante-quinze", 76: "soixante-seize",
+    77: "soixante-dix-sept", 78: "soixante-dix-huit", 79: "soixante-dix-neuf",
+    80: "quatre-vingts", 81: "quatre-vingt-un", 82: "quatre-vingt-deux",
+    83: "quatre-vingt-trois", 84: "quatre-vingt-quatre", 85: "quatre-vingt-cinq",
+    86: "quatre-vingt-six", 87: "quatre-vingt-sept", 88: "quatre-vingt-huit",
+    89: "quatre-vingt-neuf", 90: "quatre-vingt-dix", 91: "quatre-vingt-onze",
+    92: "quatre-vingt-douze", 93: "quatre-vingt-treize",
+    94: "quatre-vingt-quatorze", 95: "quatre-vingt-quinze",
+    96: "quatre-vingt-seize", 97: "quatre-vingt-dix-sept",
+    98: "quatre-vingt-dix-huit", 99: "quatre-vingt-dix-neuf"
+};
+
+// ===================== GAME STATE =====================
+let itemCount = 5;
+let sortOrder = "asc";
+let totalRounds = 10;
+let currentRound = 0;
+let correctCount = 0;
+let currentNumbers = [];
+let gameStartTime = 0;
+let timerInterval = null;
+let roundLocked = false;
+
+// ===================== DOM =====================
+const startScreen = document.getElementById('start-screen');
+const gameScreen = document.getElementById('game-screen');
+const endScreen = document.getElementById('end-screen');
+const sortArea = document.getElementById('sort-area');
+const feedbackEl = document.getElementById('feedback');
+const checkBtn = document.getElementById('check-btn');
+
+// Mode button logic
+function setupModeButtons(containerId, callback) {
+    const container = document.getElementById(containerId);
+    container.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            container.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            callback(btn);
+        });
+    });
+}
+
+setupModeButtons('count-buttons', btn => { itemCount = parseInt(btn.dataset.count); });
+setupModeButtons('order-buttons', btn => { sortOrder = btn.dataset.order; });
+setupModeButtons('round-buttons', btn => { totalRounds = parseInt(btn.dataset.rounds); });
+
+// ===================== SCREEN SWITCHING =====================
+function showScreen(screen) {
+    [startScreen, gameScreen, endScreen].forEach(s => s.classList.remove('active'));
+    screen.classList.add('active');
+}
+
+// ===================== START GAME =====================
+function startGame() {
+    currentRound = 0;
+    correctCount = 0;
+    gameStartTime = Date.now();
+    showScreen(gameScreen);
+    startTimer();
+    nextRound();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+        const m = Math.floor(elapsed / 60);
+        const s = elapsed % 60;
+        document.getElementById('time-display').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+    }, 500);
+}
+
+// ===================== GENERATE ROUND =====================
+function nextRound() {
+    currentRound++;
+    roundLocked = false;
+    feedbackEl.classList.remove('show');
+    feedbackEl.className = 'feedback';
+    checkBtn.disabled = false;
+
+    const effectiveOrder = sortOrder === 'random' ? (Math.random() < 0.5 ? 'asc' : 'desc') : sortOrder;
+    const orderArrow = document.getElementById('order-arrow');
+    const orderText = document.getElementById('order-text');
+
+    if (effectiveOrder === 'asc') {
+        orderArrow.textContent = '↑';
+        orderText.textContent = 'Ordne vom kleinsten zum größten Wert';
+    } else {
+        orderArrow.textContent = '↓';
+        orderText.textContent = 'Ordne vom größten zum kleinsten Wert';
+    }
+
+    // Store current order direction for checking
+    sortArea.dataset.direction = effectiveOrder;
+
+    document.getElementById('round-display').textContent = `${currentRound}/${totalRounds}`;
+    document.getElementById('correct-display').textContent = correctCount;
+
+    // Pick unique random numbers
+    const nums = new Set();
+    while (nums.size < itemCount) {
+        nums.add(Math.floor(Math.random() * 100));
+    }
+    currentNumbers = Array.from(nums);
+
+    // Shuffle for display
+    const shuffled = [...currentNumbers].sort(() => Math.random() - 0.5);
+
+    renderItems(shuffled);
+}
+
+// ===================== RENDER ITEMS =====================
+function renderItems(numbers) {
+    sortArea.innerHTML = '';
+    numbers.forEach((num, i) => {
+        const item = document.createElement('div');
+        item.classList.add('sort-item');
+        item.setAttribute('draggable', 'true');
+        item.dataset.value = num;
+        item.style.animationDelay = `${i * 0.06}s`;
+
+        item.innerHTML = `
+            <span class="rank">${i + 1}</span>
+            <span class="word">${NOMBRES[num]}</span>
+            <span class="handle">⠿</span>
+        `;
+
+        // Drag events
+        item.addEventListener('dragstart', onDragStart);
+        item.addEventListener('dragend', onDragEnd);
+        item.addEventListener('dragover', onDragOver);
+        item.addEventListener('dragenter', onDragEnter);
+        item.addEventListener('dragleave', onDragLeave);
+        item.addEventListener('drop', onDrop);
+
+        // Touch events
+        item.addEventListener('touchstart', onTouchStart, { passive: false });
+        item.addEventListener('touchmove', onTouchMove, { passive: false });
+        item.addEventListener('touchend', onTouchEnd);
+
+        sortArea.appendChild(item);
+    });
+}
+
+function updateRanks() {
+    sortArea.querySelectorAll('.sort-item').forEach((item, i) => {
+        item.querySelector('.rank').textContent = i + 1;
+    });
+}
+
+// ===================== DRAG & DROP (Desktop) =====================
+let draggedItem = null;
+
+function onDragStart(e) {
+    if (roundLocked) return;
+    draggedItem = this;
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function onDragEnd() {
+    this.classList.remove('dragging');
+    sortArea.querySelectorAll('.sort-item').forEach(item => item.classList.remove('drag-over'));
+    draggedItem = null;
+}
+
+function onDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+}
+
+function onDragEnter(e) {
+    e.preventDefault();
+    if (this !== draggedItem) this.classList.add('drag-over');
+}
+
+function onDragLeave() {
+    this.classList.remove('drag-over');
+}
+
+function onDrop(e) {
+    e.preventDefault();
+    if (roundLocked) return;
+    this.classList.remove('drag-over');
+    if (draggedItem && draggedItem !== this) {
+        const items = Array.from(sortArea.children);
+        const fromIndex = items.indexOf(draggedItem);
+        const toIndex = items.indexOf(this);
+        if (fromIndex < toIndex) {
+            sortArea.insertBefore(draggedItem, this.nextSibling);
+        } else {
+            sortArea.insertBefore(draggedItem, this);
+        }
+        updateRanks();
+    }
+}
+
+// ===================== TOUCH DRAG (Mobile) =====================
+let touchItem = null;
+let touchClone = null;
+let touchStartY = 0;
+let touchOffsetY = 0;
+
+function onTouchStart(e) {
+    if (roundLocked) return;
+    touchItem = this;
+    const touch = e.touches[0];
+    const rect = this.getBoundingClientRect();
+    touchOffsetY = touch.clientY - rect.top;
+    touchStartY = touch.clientY;
+
+    // Create ghost clone
+    touchClone = this.cloneNode(true);
+    touchClone.style.position = 'fixed';
+    touchClone.style.width = rect.width + 'px';
+    touchClone.style.left = rect.left + 'px';
+    touchClone.style.top = (touch.clientY - touchOffsetY) + 'px';
+    touchClone.style.opacity = '0.85';
+    touchClone.style.zIndex = '1000';
+    touchClone.style.pointerEvents = 'none';
+    touchClone.style.boxShadow = '0 8px 25px rgba(108,92,231,0.4)';
+    touchClone.style.transform = 'scale(1.03)';
+    document.body.appendChild(touchClone);
+
+    this.classList.add('dragging');
+}
+
+function onTouchMove(e) {
+    if (!touchItem || roundLocked) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+
+    if (touchClone) {
+        touchClone.style.top = (touch.clientY - touchOffsetY) + 'px';
+    }
+
+    // Find item under touch
+    const items = Array.from(sortArea.children);
+    items.forEach(item => item.classList.remove('drag-over'));
+
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (target) {
+        const sortItem = target.closest('.sort-item');
+        if (sortItem && sortItem !== touchItem && sortArea.contains(sortItem)) {
+            sortItem.classList.add('drag-over');
+        }
+    }
+}
+
+function onTouchEnd(e) {
+    if (!touchItem || roundLocked) return;
+
+    const touch = e.changedTouches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+
+    if (target) {
+        const sortItem = target.closest('.sort-item');
+        if (sortItem && sortItem !== touchItem && sortArea.contains(sortItem)) {
+            const items = Array.from(sortArea.children);
+            const fromIndex = items.indexOf(touchItem);
+            const toIndex = items.indexOf(sortItem);
+            if (fromIndex < toIndex) {
+                sortArea.insertBefore(touchItem, sortItem.nextSibling);
+            } else {
+                sortArea.insertBefore(touchItem, sortItem);
+            }
+            updateRanks();
+        }
+    }
+
+    // Cleanup
+    touchItem.classList.remove('dragging');
+    sortArea.querySelectorAll('.sort-item').forEach(item => item.classList.remove('drag-over'));
+    if (touchClone) {
+        touchClone.remove();
+        touchClone = null;
+    }
+    touchItem = null;
+}
+
+// ===================== CHECK ORDER =====================
+function checkOrder() {
+    if (roundLocked) return;
+    roundLocked = true;
+    checkBtn.disabled = true;
+
+    const direction = sortArea.dataset.direction;
+    const items = Array.from(sortArea.children);
+    const userOrder = items.map(item => parseInt(item.dataset.value));
+
+    const correctOrder = [...currentNumbers].sort((a, b) => direction === 'asc' ? a - b : b - a);
+
+    let allCorrect = true;
+    items.forEach((item, i) => {
+        if (userOrder[i] === correctOrder[i]) {
+            item.classList.add('correct-item');
+        } else {
+            item.classList.add('wrong-item');
+            allCorrect = false;
+        }
+    });
+
+    if (allCorrect) {
+        correctCount++;
+        document.getElementById('correct-display').textContent = correctCount;
+        feedbackEl.innerHTML = '🎉 Parfait !';
+        feedbackEl.className = 'feedback correct-fb show';
+    } else {
+        const solutionHTML = correctOrder.map((n, i) =>
+            `${i + 1}. ${NOMBRES[n]} <span style="color:var(--text-muted)">(${n})</span>`
+        ).join('<br>');
+        feedbackEl.innerHTML = `❌ Pas tout à fait…<div class="solution-list">${solutionHTML}</div>`;
+        feedbackEl.className = 'feedback wrong-fb show';
+    }
+
+    // Next round or end
+    setTimeout(() => {
+        if (currentRound >= totalRounds) {
+            endGame();
+        } else {
+            nextRound();
+        }
+    }, allCorrect ? 1200 : 2500);
+}
+
+// ===================== END GAME =====================
+function endGame() {
+    clearInterval(timerInterval);
+    showScreen(endScreen);
+
+    const totalTime = Math.floor((Date.now() - gameStartTime) / 1000);
+    const m = Math.floor(totalTime / 60);
+    const s = totalTime % 60;
+    const avg = (totalTime / totalRounds).toFixed(1);
+
+    document.getElementById('final-correct').textContent = `${correctCount}/${totalRounds}`;
+    document.getElementById('final-time').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+    document.getElementById('final-avg').textContent = `${avg}s`;
+
+    // Stars
+    const pct = correctCount / totalRounds;
+    let stars = pct >= 0.9 ? 3 : pct >= 0.6 ? 2 : pct >= 0.3 ? 1 : 0;
+    const starRow = document.getElementById('star-row');
+    starRow.textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+
+    if (pct >= 0.8) spawnConfetti();
+}
+
+// ===================== RESET =====================
+function resetToStart() {
+    clearInterval(timerInterval);
+    showScreen(startScreen);
+}
+
+// ===================== CONFETTI =====================
+function spawnConfetti() {
+    const container = document.getElementById('game-container');
+    const colors = ['#6c5ce7', '#e74c3c', '#2ecc71', '#f1c40f', '#3498db', '#e67e22', '#fd79a8'];
+    for (let i = 0; i < 60; i++) {
+        const piece = document.createElement('div');
+        piece.classList.add('confetti-piece');
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+        piece.style.animationDelay = (Math.random() * 0.8) + 's';
+        piece.style.width = (5 + Math.random() * 6) + 'px';
+        piece.style.height = (5 + Math.random() * 6) + 'px';
+        container.appendChild(piece);
+        setTimeout(() => piece.remove(), 4000);
+    }
+}
+</script>
+
+</body>
+</html>
