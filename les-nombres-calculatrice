@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths en français</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-glow: rgba(108, 92, 231, 0.3);
+            --secondary: #0d1117;
+            --surface: #161b22;
+            --surface2: #21262d;
+            --surface3: #2a313a;
+            --accent: #e74c3c;
+            --accent-soft: rgba(231, 76, 60, 0.15);
+            --success: #2ecc71;
+            --success-soft: rgba(46, 204, 113, 0.15);
+            --gold: #f1c40f;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --border: #30363d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #game-container {
+            background-color: var(--surface);
+            width: 92%;
+            max-width: 520px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .flag-strip {
+            height: 4px;
+            width: 100%;
+            background: linear-gradient(to right, #002395 33%, #fff 33%, #fff 66%, #ed2939 66%);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        h1 { color: var(--primary); margin-bottom: 6px; font-size: 1.8rem; }
+        h2 { font-size: 1.1rem; color: var(--text-muted); font-weight: 400; }
+
+        .screen { display: none; }
+        .active { display: block; }
+
+        .description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 18px 0 10px;
+        }
+
+        .description strong { color: var(--text); }
+
+        /* Difficulty Toggle */
+        .difficulty-section { margin: 22px 0 8px; }
+        .difficulty-section label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .diff-toggle {
+            display: flex;
+            background: var(--surface2);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .diff-btn {
+            flex: 1;
+            padding: 12px 8px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .diff-btn:hover { background: var(--surface3); color: var(--text); }
+        .diff-btn.selected { background: var(--primary); color: white; }
+
+        /* Start Button */
+        .start-btn {
+            background: linear-gradient(135deg, var(--primary), #a29bfe);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.25rem;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 22px;
+            transition: transform 0.15s, box-shadow 0.25s;
+            font-weight: 600;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--primary-glow);
+        }
+
+        /* Stats Bar */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .streak-label { color: var(--gold); }
+        .errors-label { color: var(--accent); }
+
+        /* Streak Progress */
+        .streak-bar-container {
+            width: 100%;
+            height: 10px;
+            background: var(--surface2);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .streak-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--gold));
+            border-radius: 5px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* Question Box */
+        .question-box {
+            background: var(--surface2);
+            padding: 24px 20px;
+            border-radius: 12px;
+            margin: 0 0 22px;
+            border: 1px solid var(--border);
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .equation {
+            font-size: 1.35rem;
+            line-height: 1.7;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .equation .op-word {
+            color: var(--primary);
+            font-style: italic;
+        }
+
+        .equation .eq-sign {
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+
+        /* Input Area */
+        .input-area {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .answer-input {
+            flex: 1;
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 1.4rem;
+            color: var(--text);
+            text-align: center;
+            outline: none;
+            transition: border-color 0.25s;
+            -moz-appearance: textfield;
+        }
+
+        .answer-input::-webkit-outer-spin-button,
+        .answer-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .answer-input:focus { border-color: var(--primary); }
+        .answer-input.input-correct { border-color: var(--success); background: var(--success-soft); }
+        .answer-input.input-wrong { border-color: var(--accent); background: var(--accent-soft); }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 28px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover { background: #5b4bd5; transform: translateY(-1px); }
+
+        /* Feedback */
+        .feedback {
+            min-height: 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            transition: opacity 0.3s;
+        }
+
+        .feedback.correct-fb { color: var(--success); }
+        .feedback.wrong-fb { color: var(--accent); }
+
+        /* Shake */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+            100% { transform: translateX(0); }
+        }
+        .shake { animation: shake 0.35s; }
+
+        /* Pulse */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .pulse { animation: pulse 0.3s; }
+
+        /* End Screen */
+        .result-big {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin: 15px 0 5px;
+        }
+
+        .result-sub {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .end-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .end-stat {
+            text-align: center;
+        }
+
+        .end-stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .end-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .end-stat.correct-stat .end-stat-value { color: var(--success); }
+        .end-stat.wrong-stat .end-stat-value { color: var(--accent); }
+        .end-stat.time-stat .end-stat-value { color: var(--primary); }
+
+        /* Trophy Animation */
+        .trophy { font-size: 4rem; margin-bottom: 5px; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .trophy { animation: float 2s ease-in-out infinite; }
+
+        /* Confetti */
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(400px) rotate(720deg); opacity: 0; }
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            top: 0;
+            animation: confetti-fall linear forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="flag-strip"></div>
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen active">
+        <h1>🧮 Maths en français</h1>
+        <h2>Rechnen auf Französisch</h2>
+
+        <p class="description">
+            Löse Rechenaufgaben, die auf Französisch gestellt werden!<br>
+            Gib das Ergebnis als <strong>Zahl (0–99)</strong> ein.<br>
+            Erreiche einen <strong>Streak von 10</strong>, um zu gewinnen!
+        </p>
+
+        <div class="difficulty-section">
+            <label>Schwierigkeitsgrad</label>
+            <div class="diff-toggle">
+                <button class="diff-btn selected" data-diff="easy" onclick="selectDifficulty('easy', this)">
+                    Leicht<br><span style="font-size:0.75rem; color:var(--text-muted)">+ und −</span>
+                </button>
+                <button class="diff-btn" data-diff="medium" onclick="selectDifficulty('medium', this)">
+                    Mittel<br><span style="font-size:0.75rem; color:var(--text-muted)">+ − ×</span>
+                </button>
+                <button class="diff-btn" data-diff="hard" onclick="selectDifficulty('hard', this)">
+                    Schwer<br><span style="font-size:0.75rem; color:var(--text-muted)">+ − × größere Zahlen</span>
+                </button>
+            </div>
+        </div>
+
+        <button class="start-btn" onclick="startGame()">C'est parti !</button>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="screen">
+        <div class="stats">
+            <div class="streak-label">🔥 Streak: <span id="streak-display">0</span> / 10</div>
+            <div class="errors-label">❌ Fehler: <span id="errors-display">0</span></div>
+        </div>
+
+        <div class="streak-bar-container">
+            <div class="streak-bar" id="streak-bar"></div>
+        </div>
+
+        <div class="question-box" id="question-box">
+            <div class="equation" id="equation"></div>
+        </div>
+
+        <div class="input-area">
+            <input type="number" class="answer-input" id="answer-input" min="0" max="99" placeholder="?" autocomplete="off">
+            <button class="submit-btn" id="submit-btn" onclick="submitAnswer()">OK</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <!-- END SCREEN -->
+    <div id="end-screen" class="screen">
+        <div class="trophy">🏆</div>
+        <h1>Bravo !</h1>
+        <h2>Du hast den 10er-Streak geschafft!</h2>
+
+        <div class="end-stats">
+            <div class="end-stat correct-stat">
+                <div class="end-stat-value" id="end-correct">0</div>
+                <div class="end-stat-label">Richtig</div>
+            </div>
+            <div class="end-stat wrong-stat">
+                <div class="end-stat-value" id="end-wrong">0</div>
+                <div class="end-stat-label">Fehler</div>
+            </div>
+            <div class="end-stat time-stat">
+                <div class="end-stat-value" id="end-time">0s</div>
+                <div class="end-stat-label">Zeit</div>
+            </div>
+        </div>
+
+        <p id="end-feedback" class="description"></p>
+
+        <button class="start-btn" onclick="showStartScreen()">Nochmal spielen</button>
+    </div>
+</div>
+
+<script>
+// ===================== ZAHLEN-WÖRTERBUCH =====================
+const NOMBRES = {
+    0: 'zéro', 1: 'un', 2: 'deux', 3: 'trois', 4: 'quatre',
+    5: 'cinq', 6: 'six', 7: 'sept', 8: 'huit', 9: 'neuf',
+    10: 'dix', 11: 'onze', 12: 'douze', 13: 'treize', 14: 'quatorze',
+    15: 'quinze', 16: 'seize', 17: 'dix-sept', 18: 'dix-huit', 19: 'dix-neuf',
+    20: 'vingt', 21: 'vingt-et-un', 22: 'vingt-deux', 23: 'vingt-trois',
+    24: 'vingt-quatre', 25: 'vingt-cinq', 26: 'vingt-six', 27: 'vingt-sept',
+    28: 'vingt-huit', 29: 'vingt-neuf',
+    30: 'trente', 31: 'trente-et-un', 32: 'trente-deux', 33: 'trente-trois',
+    34: 'trente-quatre', 35: 'trente-cinq', 36: 'trente-six', 37: 'trente-sept',
+    38: 'trente-huit', 39: 'trente-neuf',
+    40: 'quarante', 41: 'quarante-et-un', 42: 'quarante-deux', 43: 'quarante-trois',
+    44: 'quarante-quatre', 45: 'quarante-cinq', 46: 'quarante-six', 47: 'quarante-sept',
+    48: 'quarante-huit', 49: 'quarante-neuf',
+    50: 'cinquante', 51: 'cinquante-et-un', 52: 'cinquante-deux', 53: 'cinquante-trois',
+    54: 'cinquante-quatre', 55: 'cinquante-cinq', 56: 'cinquante-six', 57: 'cinquante-sept',
+    58: 'cinquante-huit', 59: 'cinquante-neuf',
+    60: 'soixante', 61: 'soixante-et-un', 62: 'soixante-deux', 63: 'soixante-trois',
+    64: 'soixante-quatre', 65: 'soixante-cinq', 66: 'soixante-six', 67: 'soixante-sept',
+    68: 'soixante-huit', 69: 'soixante-neuf',
+    70: 'soixante-dix', 71: 'soixante-et-onze', 72: 'soixante-douze', 73: 'soixante-treize',
+    74: 'soixante-quatorze', 75: 'soixante-quinze', 76: 'soixante-seize',
+    77: 'soixante-dix-sept', 78: 'soixante-dix-huit', 79: 'soixante-dix-neuf',
+    80: 'quatre-vingts', 81: 'quatre-vingt-un', 82: 'quatre-vingt-deux',
+    83: 'quatre-vingt-trois', 84: 'quatre-vingt-quatre', 85: 'quatre-vingt-cinq',
+    86: 'quatre-vingt-six', 87: 'quatre-vingt-sept', 88: 'quatre-vingt-huit',
+    89: 'quatre-vingt-neuf',
+    90: 'quatre-vingt-dix', 91: 'quatre-vingt-onze', 92: 'quatre-vingt-douze',
+    93: 'quatre-vingt-treize', 94: 'quatre-vingt-quatorze', 95: 'quatre-vingt-quinze',
+    96: 'quatre-vingt-seize', 97: 'quatre-vingt-dix-sept', 98: 'quatre-vingt-dix-huit',
+    99: 'quatre-vingt-dix-neuf'
+};
+
+const OPS_FR = {
+    '+': 'plus',
+    '−': 'moins',
+    '×': 'fois'
+};
+
+// ===================== GAME STATE =====================
+let difficulty = 'easy';
+let streak = 0;
+let totalCorrect = 0;
+let totalErrors = 0;
+let currentAnswer = 0;
+let startTime = 0;
+let locked = false;
+
+// DOM
+const startScreen = document.getElementById('start-screen');
+const gameScreen = document.getElementById('game-screen');
+const endScreen = document.getElementById('end-screen');
+const equation = document.getElementById('equation');
+const questionBox = document.getElementById('question-box');
+const answerInput = document.getElementById('answer-input');
+const feedback = document.getElementById('feedback');
+const streakDisplay = document.getElementById('streak-display');
+const errorsDisplay = document.getElementById('errors-display');
+const streakBar = document.getElementById('streak-bar');
+
+// ===================== NAVIGATION =====================
+function showStartScreen() {
+    startScreen.classList.add('active');
+    gameScreen.classList.remove('active');
+    endScreen.classList.remove('active');
+}
+
+function selectDifficulty(diff, btn) {
+    difficulty = diff;
+    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+
+function startGame() {
+    streak = 0;
+    totalCorrect = 0;
+    totalErrors = 0;
+    locked = false;
+    startTime = Date.now();
+
+    updateStats();
+
+    startScreen.classList.remove('active');
+    endScreen.classList.remove('active');
+    gameScreen.classList.add('active');
+
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+    answerInput.className = 'answer-input';
+
+    nextQuestion();
+}
+
+function endGame() {
+    gameScreen.classList.remove('active');
+    endScreen.classList.add('active');
+
+    const elapsed = Math.round((Date.now() - startTime) / 1000);
+    document.getElementById('end-correct').textContent = totalCorrect;
+    document.getElementById('end-wrong').textContent = totalErrors;
+    document.getElementById('end-time').textContent = elapsed + 's';
+
+    const endFb = document.getElementById('end-feedback');
+    if (totalErrors === 0) {
+        endFb.textContent = '🌟 Perfekt! Kein einziger Fehler – Chapeau !';
+    } else if (totalErrors <= 3) {
+        endFb.textContent = '💪 Très bien ! Nur wenige Fehler – weiter so!';
+    } else {
+        endFb.textContent = '👍 Geschafft! Übung macht den Meister.';
+    }
+
+    spawnConfetti();
+}
+
+// ===================== UPDATE UI =====================
+function updateStats() {
+    streakDisplay.textContent = streak;
+    errorsDisplay.textContent = totalErrors;
+    streakBar.style.width = (streak / 10 * 100) + '%';
+}
+
+// ===================== GENERATE QUESTION =====================
+function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function generateQuestion() {
+    let a, b, op, result;
+
+    if (difficulty === 'easy') {
+        // Addition & Subtraction, small numbers
+        op = Math.random() < 0.5 ? '+' : '−';
+        if (op === '+') {
+            result = randInt(2, 99);
+            a = randInt(1, result - 1);
+            b = result - a;
+        } else {
+            a = randInt(2, 99);
+            b = randInt(1, a);
+            result = a - b;
+        }
+    } else if (difficulty === 'medium') {
+        const r = Math.random();
+        if (r < 0.4) op = '+';
+        else if (r < 0.8) op = '−';
+        else op = '×';
+
+        if (op === '+') {
+            result = randInt(5, 99);
+            a = randInt(1, result - 1);
+            b = result - a;
+        } else if (op === '−') {
+            a = randInt(5, 99);
+            b = randInt(1, a);
+            result = a - b;
+        } else {
+            // Multiplication, keep result <= 99
+            a = randInt(2, 9);
+            const maxB = Math.floor(99 / a);
+            b = randInt(2, maxB);
+            result = a * b;
+        }
+    } else {
+        // Hard: larger numbers, all operations
+        const r = Math.random();
+        if (r < 0.35) op = '+';
+        else if (r < 0.7) op = '−';
+        else op = '×';
+
+        if (op === '+') {
+            result = randInt(20, 99);
+            a = randInt(10, result - 1);
+            b = result - a;
+        } else if (op === '−') {
+            a = randInt(20, 99);
+            b = randInt(10, a);
+            result = a - b;
+        } else {
+            a = randInt(2, 12);
+            const maxB = Math.floor(99 / a);
+            b = randInt(2, Math.min(maxB, 12));
+            result = a * b;
+        }
+    }
+
+    return { a, b, op, result };
+}
+
+function nextQuestion() {
+    locked = false;
+    answerInput.value = '';
+    answerInput.className = 'answer-input';
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+
+    const q = generateQuestion();
+    currentAnswer = q.result;
+
+    const aWord = NOMBRES[q.a];
+    const bWord = NOMBRES[q.b];
+    const opWord = OPS_FR[q.op];
+
+    equation.innerHTML = `
+        ${capitalize(aWord)} <span class="op-word">${opWord}</span> ${bWord} <span class="eq-sign">=</span> <strong>?</strong>
+    `;
+
+    answerInput.focus();
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// ===================== ANSWER HANDLING =====================
+function submitAnswer() {
+    if (locked) return;
+
+    const val = answerInput.value.trim();
+    if (val === '') return;
+
+    const userAnswer = parseInt(val, 10);
+    if (isNaN(userAnswer)) return;
+
+    locked = true;
+
+    if (userAnswer === currentAnswer) {
+        // Correct
+        streak++;
+        totalCorrect++;
+        answerInput.classList.add('input-correct');
+        questionBox.classList.add('pulse');
+        feedback.textContent = `✅ Correct ! (${NOMBRES[currentAnswer]})`;
+        feedback.className = 'feedback correct-fb';
+
+        updateStats();
+
+        setTimeout(() => {
+            questionBox.classList.remove('pulse');
+            if (streak >= 10) {
+                endGame();
+            } else {
+                nextQuestion();
+            }
+        }, 700);
+    } else {
+        // Wrong
+        streak = 0;
+        totalErrors++;
+        answerInput.classList.add('input-wrong');
+        questionBox.classList.add('shake');
+        feedback.innerHTML = `❌ Non ! La réponse est <strong>${currentAnswer}</strong> (${NOMBRES[currentAnswer]})`;
+        feedback.className = 'feedback wrong-fb';
+
+        updateStats();
+
+        setTimeout(() => {
+            questionBox.classList.remove('shake');
+            nextQuestion();
+        }, 1500);
+    }
+}
+
+// Enter key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && gameScreen.classList.contains('active')) {
+        submitAnswer();
+    }
+});
+
+// ===================== CONFETTI =====================
+function spawnConfetti() {
+    const container = document.getElementById('game-container');
+    const colors = ['#6c5ce7', '#e74c3c', '#2ecc71', '#f1c40f', '#3498db', '#e67e22', '#fd79a8'];
+
+    for (let i = 0; i < 60; i++) {
+        const piece = document.createElement('div');
+        piece.classList.add('confetti-piece');
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+        piece.style.animationDelay = (Math.random() * 0.8) + 's';
+        piece.style.width = (5 + Math.random() * 6) + 'px';
+        piece.style.height = (5 + Math.random() * 6) + 'px';
+        container.appendChild(piece);
+
+        setTimeout(() => piece.remove(), 4000);
+    }
+}
+</script>
+
+</body>
+</html>
