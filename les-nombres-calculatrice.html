@@ -617,7 +617,7 @@ function nextQuestion() {
     const opWord = OPS_FR[q.op];
 
     equation.innerHTML = `
-        aWord <span class="op-word">${opWord}</span> ${bWord} <span class="eq-sign">=</span> <strong>?</strong>
+        (aWord) <span class="op-word">${opWord}</span> ${bWord} <span class="eq-sign">=</span> <strong>?</strong>
     `;
 
     answerInput.focus();
