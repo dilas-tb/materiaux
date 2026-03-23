@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le verbe « avoir » au présent de l'indicatif</title>
+    <title>Le verbe « avoir »</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
@@ -997,27 +997,27 @@
     // DATA
     // ============================================
     const conjugations = [
-        { pronoun: "j'", form: "ai", full: "j'ai", translation: "ich habe", displayPronoun: "j' (= ich)" },
-        { pronoun: "tu", form: "as", full: "tu as", translation: "du hast", displayPronoun: "tu (= du)" },
-        { pronoun: "il/elle/on", form: "a", full: "il a / elle a / on a", translation: "er/sie/man hat", displayPronoun: "il / elle / on (= er/sie/man)" },
-        { pronoun: "nous", form: "avons", full: "nous avons", translation: "wir haben", displayPronoun: "nous (= wir)" },
-        { pronoun: "vous", form: "avez", full: "vous avez", translation: "ihr habt / Sie haben", displayPronoun: "vous (= ihr/Sie)" },
-        { pronoun: "ils/elles", form: "ont", full: "ils ont / elles ont", translation: "sie haben (Pl.)", displayPronoun: "ils / elles (= sie Pl.)" }
+        { pronoun: "j'", form: "ai", full: "j'ai", translation: "ich habe", displayPronoun: "ich habe" },
+        { pronoun: "tu", form: "as", full: "tu as", translation: "du hast", displayPronoun: "du hast" },
+        { pronoun: "il/elle/on", form: "a", full: "il a / elle a", translation: "er hat / sie hat", displayPronoun: "er hat / sie hat" },
+        { pronoun: "nous", form: "avons", full: "nous avons", translation: "wir haben", displayPronoun: "wir haben" },
+        { pronoun: "vous", form: "avez", full: "vous avez", translation: "ihr habt", displayPronoun: "ihr habt" },
+        { pronoun: "ils/elles", form: "ont", full: "ils ont / elles ont", translation: "sie haben (Pl.)", displayPronoun: "sie haben" }
     ];
 
     const mcQuestions = [
         { sentence: "J' ___ un frère.", answer: "ai", options: ["ai", "as", "a", "ont"], germanHint: "(Ich habe einen Bruder.)" },
-        { sentence: "Tu ___ 14 ans.", answer: "as", options: ["ai", "as", "avez", "a"], germanHint: "(Du bist 14 Jahre alt.)" },
+        { sentence: "Tu ___ 14 ans.", answer: "as", options: ["ai", "as", "avez", "a"], germanHint: "(Du bist 14 Jahre alt. Wörtlich übersetzt: Du hast 14 Jahre.)" },
         { sentence: "Elle ___ un chat.", answer: "a", options: ["as", "ont", "a", "avons"], germanHint: "(Sie hat eine Katze.)" },
         { sentence: "Nous ___ trois cours aujourd'hui.", answer: "avons", options: ["avons", "avez", "ont", "ai"], germanHint: "(Wir haben heute drei Stunden.)" },
-        { sentence: "Vous ___ une question ?", answer: "avez", options: ["as", "avons", "avez", "a"], germanHint: "(Haben Sie eine Frage?)" },
+        { sentence: "Vous ___ une question ?", answer: "avez", options: ["as", "avons", "avez", "a"], germanHint: "(Habt ihr eine Frage?)" },
         { sentence: "Ils ___ faim.", answer: "ont", options: ["a", "as", "avons", "ont"], germanHint: "(Sie haben Hunger.)" }
     ];
 
     const fillSentences = [
         { before: "J'", after: "deux sœurs.", answer: "ai", german: "(Ich habe zwei Schwestern.)" },
         { before: "Tu", after: "un vélo bleu.", answer: "as", german: "(Du hast ein blaues Fahrrad.)" },
-        { before: "On", after: "un examen demain.", answer: "a", german: "(Man hat morgen eine Prüfung.)" },
+        { before: "Elle", after: "un examen demain.", answer: "a", german: "(Sie hat morgen eine Prüfung.)" },
         { before: "Nous", after: "un bon professeur.", answer: "avons", german: "(Wir haben einen guten Lehrer.)" },
         { before: "Vous", after: "de la chance !", answer: "avez", german: "(Ihr habt Glück!)" },
         { before: "Elles", after: "les yeux bleus.", answer: "ont", german: "(Sie haben blaue Augen.)" },
@@ -1026,12 +1026,12 @@
     ];
 
     const translationExercises = [
-        { german: "Ich habe einen Hund.", answers: ["j'ai un chien"], display: "J'ai un chien." },
-        { german: "Du hast eine Schwester.", answers: ["tu as une soeur", "tu as une sœur"], display: "Tu as une sœur." },
-        { german: "Er ist 12 Jahre alt.", answers: ["il a 12 ans", "il a douze ans"], display: "Il a 12 ans." },
-        { german: "Wir haben Hunger.", answers: ["nous avons faim"], display: "Nous avons faim." },
-        { german: "Ihr habt ein Problem.", answers: ["vous avez un problème", "vous avez un probleme"], display: "Vous avez un problème." },
-        { german: "Sie (Pl.) haben Angst.", answers: ["ils ont peur", "elles ont peur"], display: "Ils ont peur. / Elles ont peur." }
+        { german: "Ich habe einen Hund (un chien).", answers: ["j'ai un chien"], display: "J'ai un chien." },
+        { german: "Du hast eine Schwester (une sœur).", answers: ["tu as une soeur", "tu as une sœur"], display: "Tu as une sœur." },
+        { german: "Er ist 12 Jahre (ans) alt (wörtlich: Er hat 12 Jahre).", answers: ["il a 12 ans", "il a douze ans"], display: "Il a 12 ans." },
+        { german: "Wir haben Hunger (faim).", answers: ["nous avons faim"], display: "Nous avons faim." },
+        { german: "Ihr habt ein Problem (un problème).", answers: ["vous avez un problème", "vous avez un probleme"], display: "Vous avez un problème." },
+        { german: "Sie (Pl.) haben Angst (peur).", answers: ["ils ont peur", "elles ont peur"], display: "Ils ont peur. / Elles ont peur." }
     ];
 
     // ============================================
@@ -1650,7 +1650,7 @@
         if (avg >= 80) {
             tipContent.innerHTML = '<h4>Nächster Schritt 🚀</h4><p>Du kannst jetzt versuchen, eigene Sätze mit « avoir » zu schreiben! Denke an Ausdrücke wie: <strong>avoir faim</strong> (Hunger haben), <strong>avoir soif</strong> (Durst haben), <strong>avoir peur</strong> (Angst haben), <strong>avoir ... ans</strong> (... Jahre alt sein).</p>';
         } else if (avg >= 50) {
-            tipContent.innerHTML = '<h4>Tipp zum Weiterlernen 📝</h4><p>Schreibe die 6 Formen <strong>5-mal</strong> ab und sage sie dabei <strong>laut</strong> vor. So merkst du sie dir besser: <em>j\'ai, tu as, il a, nous avons, vous avez, ils ont</em>.</p>';
+            tipContent.innerHTML = '<h4>Tipp zum Weiterlernen 📝</h4><p>Schreibe die 6 Formen <strong>einmal</strong> ab und sage sie dabei <strong>laut</strong> vor. So merkst du sie dir besser: <em>j\'ai, tu as, il a, nous avons, vous avez, ils ont</em>.</p>';
         } else {
             tipContent.innerHTML = '<h4>Nicht aufgeben! 💪</h4><p>Fange nochmal bei den <strong>Karteikarten</strong> an und lerne erst die 6 Formen auswendig. Dann versuche die Übungen erneut. Du schaffst das!</p>';
         }
