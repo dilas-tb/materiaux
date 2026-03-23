@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le verbe « faire » au présent</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px;color:#333}
+        .container{max-width:900px;margin:0 auto}
+        header{text-align:center;padding:30px 20px;background:rgba(255,255,255,0.95);border-radius:20px;margin-bottom:25px;box-shadow:0 10px 40px rgba(0,0,0,0.15)}
+        header h1{font-size:2.2em;color:#4a3f8a;margin-bottom:5px}
+        header h1 .verb{color:#e74c3c;font-style:italic}
+        header p.subtitle{font-size:1.1em;color:#777}
+        .flag-bar{height:6px;background:linear-gradient(90deg,#002395 33%,#fff 33%,#fff 66%,#ED2939 66%);border-radius:3px;margin-top:15px}
+        .nav-tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:25px}
+        .nav-tab{padding:12px 20px;background:rgba(255,255,255,0.85);border:none;border-radius:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95em;color:#555;transition:all 0.3s;box-shadow:0 3px 10px rgba(0,0,0,0.1)}
+        .nav-tab:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(0,0,0,0.15)}
+        .nav-tab.active{background:#4a3f8a;color:#fff}
+        .nav-tab.completed{background:#27ae60;color:#fff}
+        .step-num{display:inline-block;background:rgba(0,0,0,0.1);border-radius:50%;width:24px;height:24px;line-height:24px;text-align:center;font-size:0.8em;margin-right:5px}
+        .nav-tab.active .step-num,.nav-tab.completed .step-num{background:rgba(255,255,255,0.25)}
+        .section{display:none;background:rgba(255,255,255,0.95);border-radius:20px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,0.15);animation:fadeIn 0.4s ease}
+        .section.active{display:block}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+        .section-title{font-size:1.5em;color:#4a3f8a;margin-bottom:8px}
+        .section-title .icon{margin-right:8px}
+        .section-desc{color:#666;margin-bottom:20px;line-height:1.6}
+        .conj-card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}
+        .conj-card{background:linear-gradient(135deg,#f0f0ff,#e8e6ff);border:2px solid #d0cdff;border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .conj-card:hover{transform:translateY(-3px);box-shadow:0 5px 20px rgba(74,63,138,0.2)}
+        .conj-card.revealed{background:linear-gradient(135deg,#e8ffe8,#d4edda);border-color:#a3d9a5;cursor:default}
+        .conj-card .pronoun{font-size:1em;color:#777;font-weight:600;margin-bottom:5px}
+        .conj-card .form{font-size:1.6em;font-weight:800;color:#4a3f8a}
+        .conj-card .form .stem{color:#4a3f8a}
+        .conj-card .form .ending{color:#e74c3c}
+        .conj-card .click-hint{font-size:0.75em;color:#aaa;margin-top:5px}
+        .conj-card.revealed .click-hint{display:none}
+        .conj-card .audio-btn{position:absolute;top:8px;right:8px;background:none;border:none;font-size:1.2em;cursor:pointer;opacity:0;transition:0.3s}
+        .conj-card.revealed .audio-btn{opacity:1}
+        .reveal-all-btn{display:block;margin:15px auto;padding:10px 25px;background:#4a3f8a;color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;font-size:1em;transition:0.3s}
+        .reveal-all-btn:hover{background:#3a2f7a}
+        .pattern-box{background:#fff8e1;border:2px solid #ffc107;border-radius:12px;padding:20px;margin-top:20px}
+        .pattern-box h3{color:#856404;margin-bottom:10px}
+        .pattern-box ul{list-style:none;padding:0}
+        .pattern-box li{padding:6px 0;font-size:0.95em;border-bottom:1px dashed #ffe082}
+        .pattern-box li:last-child{border:none}
+        .pattern-box .irregular-note{color:#e74c3c;font-weight:700}
+        .score-display{text-align:center;font-size:1.2em;font-weight:700;color:#4a3f8a;margin-bottom:10px}
+        .score-display .star{margin-right:5px}
+        .progress-bar-wrapper{background:#eee;border-radius:10px;height:12px;margin-bottom:20px;overflow:hidden}
+        .progress-bar{height:100%;background:linear-gradient(90deg,#27ae60,#2ecc71);border-radius:10px;transition:width 0.5s ease;width:0%}
+        .exercise-card{background:#f8f9ff;border:2px solid #e0e4ff;border-radius:15px;padding:30px;text-align:center;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px}
+        .exercise-sentence{font-size:1.5em;color:#333;line-height:1.6}
+        .blank{display:inline-block;min-width:120px;border-bottom:3px solid #4a3f8a;color:#4a3f8a;font-weight:800;padding:0 5px}
+        .mc-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%;max-width:500px}
+        .mc-option{padding:14px;border:2px solid #d0cdff;border-radius:12px;background:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:1.1em;cursor:pointer;transition:0.3s;color:#4a3f8a}
+        .mc-option:hover:not(:disabled){background:#f0f0ff;transform:scale(1.03)}
+        .mc-option.correct{background:#d4edda;border-color:#27ae60;color:#27ae60}
+        .mc-option.wrong{background:#f8d7da;border-color:#e74c3c;color:#e74c3c}
+        .mc-option:disabled{cursor:default;opacity:0.7}
+        .feedback{padding:12px 20px;border-radius:10px;margin-top:15px;font-weight:600;display:none;text-align:center}
+        .feedback.show{display:block}
+        .feedback.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+        .feedback.error{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+        .feedback.info{background:#d1ecf1;color:#0c5460;border:1px solid #bee5eb}
+        .text-input-group{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+        .text-input{padding:12px 20px;border:2px solid #ddd;border-radius:12px;font-family:'Nunito',sans-serif;font-size:1.2em;font-weight:700;text-align:center;width:200px;color:#4a3f8a;outline:none;transition:0.3s}
+        .text-input:focus{border-color:#4a3f8a;box-shadow:0 0 0 3px rgba(74,63,138,0.15)}
+        .text-input.correct{border-color:#27ae60;background:#d4edda}
+        .text-input.wrong{border-color:#e74c3c;background:#f8d7da}
+        .check-btn,.next-btn,.retry-btn{padding:12px 25px;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1em;cursor:pointer;transition:0.3s}
+        .check-btn{background:#4a3f8a;color:#fff}
+        .check-btn:hover{background:#3a2f7a}
+        .next-btn{background:#27ae60;color:#fff}
+        .next-btn:hover{background:#219a52}
+        .retry-btn{background:#e74c3c;color:#fff}
+        .retry-btn:hover{background:#c0392b}
+        .btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:15px}
+        .hint-btn{padding:8px 16px;background:#ffc107;color:#333;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9em;cursor:pointer;transition:0.3s}
+        .hint-btn:hover{background:#e0a800}
+        .hint-text{background:#fff8e1;border:1px solid #ffc107;border-radius:8px;padding:10px 15px;color:#856404;font-size:0.95em;display:none;margin-top:10px}
+        .hint-text.show{display:block}
+        .context-label{font-size:0.85em;color:#999;font-style:italic;margin-bottom:5px}
+        /* Drag & Drop */
+        .drag-items{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:25px;min-height:50px;padding:10px;background:#f0f0ff;border-radius:12px}
+        .drag-item{padding:10px 20px;background:#4a3f8a;color:#fff;border-radius:10px;font-weight:700;font-size:1.1em;cursor:grab;transition:0.3s;user-select:none}
+        .drag-item:hover{transform:scale(1.05);background:#3a2f7a}
+        .drag-item.selected{outline:3px solid #ffc107;background:#3a2f7a}
+        .drag-item.placed{opacity:0.3;cursor:default}
+        .drop-zones{display:flex;flex-direction:column;gap:10px}
+        .drop-row{display:flex;align-items:center;gap:15px}
+        .drop-label{font-weight:700;color:#4a3f8a;min-width:130px;text-align:right;font-size:1.1em}
+        .drop-zone{flex:1;min-height:50px;border:2px dashed #d0cdff;border-radius:12px;display:flex;align-items:center;justify-content:center;transition:0.3s;font-weight:700;font-size:1.1em;color:#4a3f8a;background:#fafafe;padding:5px}
+        .drop-zone.over{background:#e8e6ff;border-color:#4a3f8a}
+        .drop-zone.correct{background:#d4edda;border-color:#27ae60;color:#27ae60;border-style:solid}
+        .drop-zone.wrong{background:#f8d7da;border-color:#e74c3c;color:#e74c3c;border-style:solid}
+        .drop-zone .placed-item{padding:8px 16px;background:#4a3f8a;color:#fff;border-radius:8px;cursor:pointer;font-weight:700}
+        /* Translation */
+        .translation-grid{display:flex;flex-direction:column;gap:12px}
+        .translation-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .de-text{font-weight:600;min-width:250px;color:#555}
+        .fr-input{padding:10px 15px;border:2px solid #ddd;border-radius:10px;font-family:'Nunito',sans-serif;font-size:1em;font-weight:600;color:#4a3f8a;outline:none;flex:1;min-width:200px;transition:0.3s}
+        .fr-input:focus{border-color:#4a3f8a;box-shadow:0 0 0 3px rgba(74,63,138,0.15)}
+        .fr-input.correct{border-color:#27ae60;background:#d4edda}
+        .fr-input.wrong{border-color:#e74c3c;background:#f8d7da}
+        .correction{color:#e74c3c;font-weight:700;font-size:0.9em;display:none}
+        /* Final score */
+        .final-section{text-align:center}
+        .big-emoji{font-size:4em;margin-bottom:10px}
+        .score-text{font-size:1.5em;font-weight:800;color:#4a3f8a;margin:10px 0}
+        .score-bar{background:#eee;border-radius:12px;height:25px;overflow:hidden;margin:15px auto;max-width:400px}
+        .score-bar-fill{height:100%;border-radius:12px;transition:width 1s ease}
+        @keyframes bounceIn{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+        .bounce-in{animation:bounceIn 0.5s ease}
+        @media(max-width:600px){
+            header h1{font-size:1.5em}.section{padding:20px}.mc-options{grid-template-columns:1fr}.conj-card-grid{grid-template-columns:1fr}.nav-tab{padding:10px 14px;font-size:0.85em}.exercise-sentence{font-size:1.2em}.drop-row{flex-direction:column}.drop-label{text-align:center;min-width:auto}.translation-row{flex-direction:column}.fr-input{width:100%}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🇫🇷 Le verbe «&nbsp;<span class="verb">faire</span>&nbsp;» au présent</h1>
+        <p class="subtitle">Das unregelmäßige Verb «&nbsp;faire&nbsp;» (machen / tun) im Präsens</p>
+        <div class="flag-bar"></div>
+    </header>
+
+    <div class="nav-tabs" id="navTabs">
+        <button class="nav-tab active" onclick="showSection(0)"><span class="step-num">1</span> Entdecken</button>
+        <button class="nav-tab" onclick="showSection(1)"><span class="step-num">2</span> Erkennen</button>
+        <button class="nav-tab" onclick="showSection(2)"><span class="step-num">3</span> Zuordnen</button>
+        <button class="nav-tab" onclick="showSection(3)"><span class="step-num">4</span> Einsetzen</button>
+        <button class="nav-tab" onclick="showSection(4)"><span class="step-num">5</span> Übersetzen</button>
+        <button class="nav-tab" onclick="showSection(5)"><span class="step-num">6</span> Ergebnis</button>
+    </div>
+
+    <!-- SECTION 0 -->
+    <div class="section active" id="section0">
+        <h2 class="section-title"><span class="icon">📖</span> Entdecke die Formen</h2>
+        <p class="section-desc">Klicke auf jede Karte, um die Konjugation zu entdecken. Achte auf die <span style="color:#e74c3c;font-weight:700">roten Endungen</span>!</p>
+        <div class="conj-card-grid" id="conjCards"></div>
+        <button class="reveal-all-btn" id="revealAllBtn" onclick="revealAllCards()">🔓 Alle aufdecken</button>
+        <div class="pattern-box" id="patternBox" style="display:none">
+            <h3>💡 Hast du das Muster erkannt?</h3>
+            <ul>
+                <li><strong>je / tu</strong> → Stamm <strong>fai</strong> + <strong style="color:#e74c3c">-s</strong></li>
+                <li><strong>il / elle / on</strong> → Stamm <strong>fai</strong> + <strong style="color:#e74c3c">-t</strong></li>
+                <li><strong>nous</strong> → <span class="irregular-note">⚠</span> <strong>fais<span style="color:#e74c3c">ons</span></strong> (/fə.zɔ̃/)</li>
+                <li><strong>vous</strong> → <span class="irregular-note">⚠</span> <strong>fai<span style="color:#e74c3c">tes</span></strong> (nicht *faisez!)</li>
+                <li><strong>ils / elles</strong> → <span class="irregular-note">⚠ Ganz anders!</span> <strong style="color:#e74c3c">font</strong></li>
+            </ul>
+        </div>
+        <div class="btn-row"><button class="next-btn" onclick="showSection(1)">Weiter zu Übung 1 →</button></div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section" id="section1">
+        <h2 class="section-title"><span class="icon">🎯</span> Übung 1 – Die richtige Form erkennen</h2>
+        <p class="section-desc">Wähle die richtige Form von «&nbsp;faire&nbsp;».</p>
+        <div class="score-display"><span class="star">⭐</span> <span id="score1">0</span> / <span id="total1">0</span> Punkte</div>
+        <div class="progress-bar-wrapper"><div class="progress-bar" id="progress1"></div></div>
+        <div class="exercise-card" id="exerciseArea1"></div>
+        <div class="feedback" id="feedback1"></div>
+        <div class="hint-text" id="hint1"></div>
+        <div class="btn-row" id="btnRow1"><button class="hint-btn" id="hintBtn1" onclick="showHint(1)">💡 Tipp</button></div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section" id="section2">
+        <h2 class="section-title"><span class="icon">🔗</span> Übung 2 – Formen zuordnen</h2>
+        <p class="section-desc">Klicke eine Form an und dann auf das passende Feld – oder ziehe sie per Drag&amp;Drop.</p>
+        <div class="score-display"><span class="star">⭐</span> <span id="score2">0</span> / 6 Punkte</div>
+        <div class="drag-items" id="dragItems"></div>
+        <div class="drop-zones" id="dropZones"></div>
+        <div class="feedback" id="feedback2"></div>
+        <div class="btn-row" id="btnRow2"><button class="check-btn" onclick="checkDragDrop()">✔ Überprüfen</button></div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section" id="section3">
+        <h2 class="section-title"><span class="icon">✏️</span> Übung 3 – Formen einsetzen</h2>
+        <p class="section-desc">Schreibe die richtige Form von «&nbsp;faire&nbsp;» in die Lücke.</p>
+        <div class="score-display"><span class="star">⭐</span> <span id="score3">0</span> / <span id="total3">0</span> Punkte</div>
+        <div class="progress-bar-wrapper"><div class="progress-bar" id="progress3"></div></div>
+        <div class="exercise-card" id="exerciseArea3"></div>
+        <div class="feedback" id="feedback3"></div>
+        <div class="hint-text" id="hint3"></div>
+        <div class="btn-row" id="btnRow3"><button class="hint-btn" id="hintBtn3" onclick="showHint(3)">💡 Tipp</button></div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section" id="section4">
+        <h2 class="section-title"><span class="icon">📝</span> Übung 4 – Sätze übersetzen</h2>
+        <p class="section-desc">Übersetze die Sätze ins Französische.</p>
+        <div class="score-display"><span class="star">⭐</span> <span id="score4">0</span> / <span id="total4">0</span> Punkte</div>
+        <div class="translation-grid" id="translationGrid"></div>
+        <div class="feedback" id="feedback4"></div>
+        <div class="hint-text" id="hint4"></div>
+        <div class="btn-row" id="btnRow4">
+            <button class="hint-btn" id="hintBtn4" onclick="showTranslationHints()">💡 Tipps</button>
+            <button class="check-btn" onclick="checkTranslations()">✔ Überprüfen</button>
+        </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section final-section" id="section5">
+        <h2 class="section-title"><span class="icon">🏅</span> Dein Ergebnis</h2>
+        <div id="finalScore"></div>
+    </div>
+</div>
+
+<script>
+// ========== DATA ==========
+const conjugations = [
+    {pronoun:"je", form:"fais", stem:"fai", ending:"s", phonetic:"/ʒə fɛ/"},
+    {pronoun:"tu", form:"fais", stem:"fai", ending:"s", phonetic:"/ty fɛ/"},
+    {pronoun:"il / elle / on", form:"fait", stem:"fai", ending:"t", phonetic:"/il fɛ/"},
+    {pronoun:"nous", form:"faisons", stem:"fais", ending:"ons", phonetic:"/nu fə.zɔ̃/"},
+    {pronoun:"vous", form:"faites", stem:"fai", ending:"tes", phonetic:"/vu fɛt/"},
+    {pronoun:"ils / elles", form:"font", stem:"", ending:"font", phonetic:"/il fɔ̃/"}
+];
+
+const mcQuestions = [
+    {sentence:"Je ___ mes devoirs.", answer:"fais", hint:"Je → fai + s"},
+    {sentence:"Tu ___ du sport.", answer:"fais", hint:"Tu → fai + s"},
+    {sentence:"Elle ___ un gâteau.", answer:"fait", hint:"Elle → fai + t"},
+    {sentence:"Nous ___ la cuisine.", answer:"faisons", hint:"Nous → faisons!"},
+    {sentence:"Vous ___ du vélo.", answer:"faites", hint:"Vous → faites (nicht *faisez!)"},
+    {sentence:"Ils ___ du bruit.", answer:"font", hint:"Ils → font"},
+    {sentence:"On ___ une promenade.", answer:"fait", hint:"On → wie il/elle: fai + t"},
+    {sentence:"Elles ___ la fête.", answer:"font", hint:"Elles → font"}
+];
+
+const uniqueForms = ["fais","fait","faisons","faites","font"];
+
+const fillQuestions = [
+    {before:"Je", after:"la vaisselle.", answer:"fais", german:"Ich spüle ab.", hint:"je → fais"},
+    {before:"Tu", after:"tes devoirs.", answer:"fais", german:"Du machst deine Hausaufgaben.", hint:"tu → fais"},
+    {before:"Mon père", after:"le ménage.", answer:"fait", german:"Mein Vater macht den Haushalt.", hint:"Mon père = il → fait"},
+    {before:"Nous", after:"du shopping.", answer:"faisons", german:"Wir gehen einkaufen.", hint:"nous → faisons"},
+    {before:"Vous", after:"attention.", answer:"faites", german:"Ihr passt auf.", hint:"vous → faites"},
+    {before:"Les enfants", after:"du bruit.", answer:"font", german:"Die Kinder machen Lärm.", hint:"Les enfants = ils → font"},
+    {before:"On", after:"du camping.", answer:"fait", german:"Man zeltet.", hint:"on → fait"},
+    {before:"Ma sœur et moi, nous", after:"un gâteau.", answer:"faisons", german:"Meine Schwester und ich machen einen Kuchen.", hint:"nous → faisons"}
+];
+
+const translations = [
+    {german:"Ich mache Sport.", answer:["je fais du sport"], hint:"je + fais"},
+    {german:"Du machst Musik.", answer:["tu fais de la musique"], hint:"tu + fais"},
+    {german:"Er macht die Hausaufgaben.", answer:["il fait les devoirs","il fait ses devoirs"], hint:"il + fait"},
+    {german:"Wir machen einen Kuchen.", answer:["nous faisons un gâteau"], hint:"nous + faisons"},
+    {german:"Ihr macht eine Reise.", answer:["vous faites un voyage"], hint:"vous + faites"},
+    {german:"Sie (Pl.) machen Lärm.", answer:["ils font du bruit","elles font du bruit"], hint:"ils/elles + font"}
+];
+
+// ========== STATE ==========
+let currentSection=0, revealedCount=0;
+let mc_index=0, mc_score=0;
+let dd_score=0, selectedDrag=null;
+let fill_index=0, fill_score=0;
+let trans_score=0;
+
+// ========== HELPERS ==========
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+
+function speak(text){if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(text);u.lang='fr-FR';u.rate=0.8;speechSynthesis.speak(u)}}
+
+function showHint(n){
+    const hints={1:mcQuestions[mc_index]?.hint, 3:fillQuestions[fill_index]?.hint};
+    const el=document.getElementById('hint'+n);
+    if(hints[n]){el.textContent='💡 '+hints[n];el.classList.add('show')}
+}
+
+// ========== NAVIGATION ==========
+function showSection(idx){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('section'+idx).classList.add('active');
+    document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+    currentSection=idx;
+    if(idx===5) buildFinalScore();
+}
+function markCompleted(idx){document.querySelectorAll('.nav-tab')[idx].classList.add('completed')}
+
+// ========== SECTION 0: CARDS ==========
+function buildConjCards(){
+    const grid=document.getElementById('conjCards');
+    grid.innerHTML='';
+    revealedCount=0;
+    conjugations.forEach((c,i)=>{
+        const card=document.createElement('div');
+        card.className='conj-card';card.id='conjCard'+i;
+        card.onclick=()=>revealCard(i);
+        card.innerHTML=`<div class="pronoun">${c.pronoun}</div><div class="form" id="conjForm${i}"><span style="font-size:1.5em;color:#bbb">?</span></div><div class="click-hint">Klicke zum Aufdecken</div><button class="audio-btn" onclick="event.stopPropagation();speak('${c.pronoun.split(' /')[0]} ${c.form}')" title="Anhören">🔊</button>`;
+        grid.appendChild(card);
+    });
+}
+
+function revealCard(i){
+    const card=document.getElementById('conjCard'+i);
+    if(card.classList.contains('revealed')) return;
+    const c=conjugations[i];
+    card.classList.add('revealed');
+    const f=document.getElementById('conjForm'+i);
+    f.innerHTML=c.stem?`<span class="stem">${c.stem}</span><span class="ending">${c.ending}</span>`:`<span class="ending">${c.ending}</span>`;
+    revealedCount++;
+    if(revealedCount===6){document.getElementById('patternBox').style.display='block';document.getElementById('revealAllBtn').style.display='none'}
+}
+
+function revealAllCards(){conjugations.forEach((_,i)=>revealCard(i))}
+
+// ========== SECTION 1: MC ==========
+function buildMC(){
+    mc_index=0;mc_score=0;
+    document.getElementById('total1').textContent=mcQuestions.length;
+    document.getElementById('score1').textContent='0';
+    showMCQuestion();
+}
+
+function showMCQuestion(){
+    if(mc_index>=mcQuestions.length){finishExercise1();return}
+    const q=mcQuestions[mc_index];
+    const area=document.getElementById('exerciseArea1');
+    document.getElementById('feedback1').className='feedback';
+    document.getElementById('hint1').className='hint-text';
+    document.getElementById('hintBtn1').style.display='inline-block';
+    document.getElementById('progress1').style.width=(mc_index/mcQuestions.length*100)+'%';
+
+    let opts=shuffle([...uniqueForms]);
+    if(!opts.includes(q.answer)){opts.pop();opts.push(q.answer);shuffle(opts)}
+
+    area.innerHTML=`<p class="context-label">Frage ${mc_index+1} / ${mcQuestions.length}</p><p class="exercise-sentence">${q.sentence.replace('___','<span class="blank">___</span>')}</p><div class="mc-options">${opts.map(o=>`<button class="mc-option" onclick="checkMC(this,'${o}','${q.answer}')">${o}</button>`).join('')}</div>`;
+}
+
+function checkMC(btn,selected,correct){
+    document.querySelectorAll('.mc-option').forEach(b=>{b.disabled=true});
+    const fb=document.getElementById('feedback1');
+    if(selected===correct){
+        btn.classList.add('correct');mc_score++;
+        document.getElementById('score1').textContent=mc_score;
+        fb.className='feedback success show';fb.innerHTML='✅ Richtig!';
+    } else {
+        btn.classList.add('wrong');
+        document.querySelectorAll('.mc-option').forEach(b=>{if(b.textContent===correct)b.classList.add('correct')});
+        fb.className='feedback error show';fb.innerHTML='❌ Richtig wäre: <strong>'+correct+'</strong>';
+    }
+    document.getElementById('hintBtn1').style.display='none';
+    setTimeout(()=>{mc_index++;showMCQuestion()},1600);
+}
+
+function finishExercise1(){
+    document.getElementById('progress1').style.width='100%';
+    document.getElementById('feedback1').className='feedback';
+    const pct=Math.round(mc_score/mcQuestions.length*100);
+    const emoji=pct>=80?'🎉':pct>=50?'👍':'💪';
+    document.getElementById('exerciseArea1').innerHTML=`<p style="font-size:2em">${emoji}</p><p style="font-size:1.3em;font-weight:700;color:#4a3f8a">Übung 1 abgeschlossen!</p><p>${mc_score} von ${mcQuestions.length} richtig (${pct}%)</p>`;
+    document.getElementById('btnRow1').innerHTML='<button class="next-btn" onclick="showSection(2)">Weiter zu Übung 2 →</button>';
+    markCompleted(1);
+}
+
+// ========== SECTION 2: DRAG & DROP ==========
+function buildDragDrop(){
+    dd_score=0;selectedDrag=null;
+    document.getElementById('score2').textContent='0';
+    const ic=document.getElementById('dragItems');
+    const zc=document.getElementById('dropZones');
+    const forms=conjugations.map(c=>c.form);
+    const shuffled=shuffle([...forms]);
+
+    ic.innerHTML='';
+    shuffled.forEach((f,i)=>{
+        const d=document.createElement('div');
+        d.className='drag-item';d.draggable=true;d.dataset.form=f;d.textContent=f;
+        d.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',f);d.classList.add('selected')});
+        d.addEventListener('dragend',()=>d.classList.remove('selected'));
+        d.addEventListener('click',()=>{
+            if(d.classList.contains('placed'))return;
+            document.querySelectorAll('.drag-item').forEach(x=>x.classList.remove('selected'));
+            d.classList.add('selected');selectedDrag=d;
+        });
+        ic.appendChild(d);
+    });
+
+    zc.innerHTML='';
+    conjugations.forEach((c,i)=>{
+        const row=document.createElement('div');row.className='drop-row';
+        row.innerHTML=`<div class="drop-label">${c.pronoun}</div><div class="drop-zone" id="dropZone${i}" data-answer="${c.form}"></div>`;
+        zc.appendChild(row);
+
+        const zone=row.querySelector('.drop-zone');
+        zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over')});
+        zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+        zone.addEventListener('drop',e=>{
+            e.preventDefault();zone.classList.remove('over');
+            const form=e.dataTransfer.getData('text/plain');
+            placeInZone(zone,form);
+        });
+        zone.addEventListener('click',()=>{
+            if(selectedDrag&&!selectedDrag.classList.contains('placed')){
+                placeInZone(zone,selectedDrag.dataset.form);
+            }
+        });
+    });
+}
+
+function placeInZone(zone,form){
+    // Remove previous occupant
+    if(zone.dataset.placed){
+        const prev=zone.dataset.placed;
+        document.querySelectorAll('.drag-item').forEach(d=>{if(d.dataset.form===prev&&d.classList.contains('placed')){d.classList.remove('placed');return}});
+    }
+    zone.innerHTML=`<span class="placed-item">${form}</span>`;
+    zone.dataset.placed=form;
+    // Mark drag item
+    const items=document.querySelectorAll('.drag-item');
+    items.forEach(d=>d.classList.remove('selected'));
+    // Find first unused item with this form
+    for(const d of items){
+        if(d.dataset.form===form&&!d.classList.contains('placed')){d.classList.add('placed');break}
+    }
+    selectedDrag=null;
+    // Click on placed item to remove
+    zone.querySelector('.placed-item').addEventListener('click',()=>{
+        const f=zone.dataset.placed;
+        zone.innerHTML='';zone.dataset.placed='';
+        for(const d of document.querySelectorAll('.drag-item')){
+            if(d.dataset.form===f&&d.classList.contains('placed')){d.classList.remove('placed');break}
+        }
+    });
+}
+
+function checkDragDrop(){
+    dd_score=0;
+    conjugations.forEach((c,i)=>{
+        const zone=document.getElementById('dropZone'+i);
+        zone.classList.remove('correct','wrong');
+        if(zone.dataset.placed===c.form){zone.classList.add('correct');dd_score++}
+        else{zone.classList.add('wrong');if(!zone.dataset.placed)zone.innerHTML=`<span style="color:#e74c3c;font-weight:700">${c.form}</span>`}
+    });
+    document.getElementById('score2').textContent=dd_score;
+    const fb=document.getElementById('feedback2');
+    if(dd_score===6){fb.className='feedback success show';fb.innerHTML='🎉 Perfekt! Alle richtig!'}
+    else{fb.className='feedback info show';fb.innerHTML=`${dd_score}/6 richtig. Korrekturen sind markiert.`}
+    document.getElementById('btnRow2').innerHTML='<button class="next-btn" onclick="showSection(3)">Weiter zu Übung 3 →</button>';
+    markCompleted(2);
+}
+
+// ========== SECTION 3: FILL IN ==========
+function buildFill(){
+    fill_index=0;fill_score=0;
+    document.getElementById('total3').textContent=fillQuestions.length;
+    document.getElementById('score3').textContent='0';
+    showFillQuestion();
+}
+
+function showFillQuestion(){
+    if(fill_index>=fillQuestions.length){finishExercise3();return}
+    const q=fillQuestions[fill_index];
+    const area=document.getElementById('exerciseArea3');
+    document.getElementById('feedback3').className='feedback';
+    document.getElementById('hint3').className='hint-text';
+    document.getElementById('hintBtn3').style.display='inline-block';
+    document.getElementById('progress3').style.width=(fill_index/fillQuestions.length*100)+'%';
+
+    area.innerHTML=`<p class="context-label">Satz ${fill_index+1}/${fillQuestions.length} — <em>${q.german}</em></p><p class="exercise-sentence">${q.before} <span class="blank">___</span> ${q.after}</p><div class="text-input-group"><input type="text" class="text-input" id="fillInput" placeholder="forme de faire" onkeydown="if(event.key==='Enter')checkFill()" autocomplete="off" autocapitalize="none" spellcheck="false"><button class="check-btn" onclick="checkFill()">✔</button></div>`;
+    document.getElementById('fillInput').focus();
+}
+
+function checkFill(){
+    const input=document.getElementById('fillInput');
+    const val=input.value.trim().toLowerCase();
+    const q=fillQuestions[fill_index];
+    const fb=document.getElementById('feedback3');
+
+    if(!val){input.style.borderColor='#e74c3c';return}
+    input.disabled=true;
+
+    if(val===q.answer){
+        input.classList.add('correct');fill_score++;
+        document.getElementById('score3').textContent=fill_score;
+        fb.className='feedback success show';fb.innerHTML='✅ Richtig!';
+    } else {
+        input.classList.add('wrong');
+        fb.className='feedback error show';fb.innerHTML='❌ Richtig wäre: <strong>'+q.answer+'</strong>';
+    }
+    document.getElementById('hintBtn3').style.display='none';
+    setTimeout(()=>{fill_index++;showFillQuestion()},1600);
+}
+
+function finishExercise3(){
+    document.getElementById('progress3').style.width='100%';
+    document.getElementById('feedback3').className='feedback';
+    const pct=Math.round(fill_score/fillQuestions.length*100);
+    const emoji=pct>=80?'🎉':pct>=50?'👍':'💪';
+    document.getElementById('exerciseArea3').innerHTML=`<p style="font-size:2em">${emoji}</p><p style="font-size:1.3em;font-weight:700;color:#4a3f8a">Übung 3 abgeschlossen!</p><p>${fill_score} von ${fillQuestions.length} richtig (${pct}%)</p>`;
+    document.getElementById('btnRow3').innerHTML='<button class="next-btn" onclick="showSection(4)">Weiter zu Übung 4 →</button>';
+    markCompleted(3);
+}
+
+// ========== SECTION 4: TRANSLATION ==========
+function buildTranslation(){
+    trans_score=0;
+    document.getElementById('total4').textContent=translations.length;
+    document.getElementById('score4').textContent='0';
+    const grid=document.getElementById('translationGrid');
+    grid.innerHTML='';
+    translations.forEach((t,i)=>{
+        const row=document.createElement('div');row.className='translation-row';
+        row.innerHTML=`<span class="de-text">🇩🇪 ${t.german}</span><input type="text" class="fr-input" id="transInput${i}" placeholder="🇫🇷 …" autocomplete="off" autocapitalize="none" spellcheck="false"><span class="correction" id="transCorr${i}"></span>`;
+        grid.appendChild(row);
+    });
+}
+
+function showTranslationHints(){
+    const el=document.getElementById('hint4');
+    el.innerHTML='💡 '+translations.map(t=>t.hint).join(' &nbsp;|&nbsp; ');
+    el.classList.add('show');
+}
+
+function checkTranslations(){
+    trans_score=0;
+    translations.forEach((t,i)=>{
+        const input=document.getElementById('transInput'+i);
+        const corr=document.getElementById('transCorr'+i);
+        const val=input.value.trim().toLowerCase().replace(/\s+/g,' ').replace(/['ʼ']/g,"'").replace(/[.!?]+$/,'').trim();
+        input.classList.remove('correct','wrong');corr.style.display='none';
+        const match=t.answer.some(a=>val===a.toLowerCase().replace(/[.!?]+$/,'').trim());
+        if(match){input.classList.add('correct');trans_score++;input.disabled=true}
+        else{input.classList.add('wrong');corr.style.display='inline';corr.textContent='→ '+t.answer[0]}
+    });
+    document.getElementById('score4').textContent=trans_score;
+    const fb=document.getElementById('feedback4');
+    if(trans_score===translations.length){fb.className='feedback success show';fb.innerHTML='🎉 Alles richtig!'}
+    else{fb.className='feedback info show';fb.innerHTML=trans_score+' von '+translations.length+' richtig.'}
+    document.getElementById('hintBtn4').style.display='none';
+    document.getElementById('btnRow4').innerHTML='<button class="next-btn" onclick="showSection(5)">Zum Ergebnis →</button>';
+    markCompleted(4);
+}
+
+// ========== SECTION 5: FINAL SCORE ==========
+function buildFinalScore(){
+    const maxMC=mcQuestions.length, maxDD=6, maxFill=fillQuestions.length, maxTrans=translations.length;
+    const total=maxMC+maxDD+maxFill+maxTrans;
+    const earned=mc_score+dd_score+fill_score+trans_score;
+    const pct=Math.round(earned/total*100);
+
+    let emoji,msg,barColor;
+    if(pct>=90){emoji='🏆';msg='Félicitations ! Ausgezeichnet!';barColor='#27ae60'}
+    else if(pct>=75){emoji='🎉';msg='Très bien ! Sehr gut!';barColor='#2ecc71'}
+    else if(pct>=50){emoji='👍';msg='Pas mal ! Weiter üben!';barColor='#f39c12'}
+    else{emoji='💪';msg='Courage ! Übung macht den Meister!';barColor='#e74c3c'}
+
+    document.getElementById('finalScore').innerHTML=`
+        <div class="big-emoji bounce-in">${emoji}</div>
+        <h2>${msg}</h2>
+        <p class="score-text">${earned} von ${total} Punkten (${pct}%)</p>
+        <div class="score-bar"><div class="score-bar-fill" id="finalBar" style="width:0%;background:${barColor}"></div></div>
+        <div style="text-align:left;max-width:400px;margin:20px auto">
+            <p style="margin:8px 0;color:#555">🎯 Übung 1 – Erkennen: <strong>${mc_score}/${maxMC}</strong></p>
+            <p style="margin:8px 0;color:#555">🔗 Übung 2 – Zuordnen: <strong>${dd_score}/${maxDD}</strong></p>
+            <p style="margin:8px 0;color:#555">✏️ Übung 3 – Einsetzen: <strong>${fill_score}/${maxFill}</strong></p>
+            <p style="margin:8px 0;color:#555">📝 Übung 4 – Übersetzen: <strong>${trans_score}/${maxTrans}</strong></p>
+        </div>
+        <div class="btn-row" style="margin-top:25px">
+            <button class="retry-btn" onclick="restartAll()">🔄 Alles wiederholen</button>
+            <button class="next-btn" onclick="showSection(0)">📖 Zurück zur Übersicht</button>
+        </div>`;
+    setTimeout(()=>{document.getElementById('finalBar').style.width=pct+'%'},200);
+}
+
+function restartAll(){
+    mc_index=0;mc_score=0;dd_score=0;fill_index=0;fill_score=0;trans_score=0;selectedDrag=null;revealedCount=0;
+    document.getElementById('score1').textContent='0';
+    document.getElementById('score2').textContent='0';
+    document.getElementById('score3').textContent='0';
+    document.getElementById('score4').textContent='0';
+    document.getElementById('progress1').style.width='0%';
+    document.getElementById('progress3').style.width='0%';
+    ['feedback1','feedback2','feedback3','feedback4'].forEach(id=>document.getElementById(id).className='feedback');
+    ['hint1','hint3','hint4'].forEach(id=>document.getElementById(id).className='hint-text');
+    document.getElementById('btnRow1').innerHTML='<button class="hint-btn" id="hintBtn1" onclick="showHint(1)">💡 Tipp</button>';
+    document.getElementById('btnRow2').innerHTML='<button class="check-btn" onclick="checkDragDrop()">✔ Überprüfen</button>';
+    document.getElementById('btnRow3').innerHTML='<button class="hint-btn" id="hintBtn3" onclick="showHint(3)">💡 Tipp</button>';
+    document.getElementById('btnRow4').innerHTML='<button class="hint-btn" id="hintBtn4" onclick="showTranslationHints()">💡 Tipps</button><button class="check-btn" onclick="checkTranslations()">✔ Überprüfen</button>';
+    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('completed'));
+    document.getElementById('patternBox').style.display='none';
+    document.getElementById('revealAllBtn').style.display='block';
+    buildConjCards();buildMC();buildDragDrop();buildFill();buildTranslation();
+    showSection(0);
+}
+
+// ========== INIT ==========
+buildConjCards();buildMC();buildDragDrop();buildFill();buildTranslation();
+</script>
+</body>
+</html>
