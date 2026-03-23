@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les verbes d'or – faire, aller, avoir, être</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px;color:#333}
+.container{max-width:1000px;margin:0 auto}
+header{text-align:center;padding:30px 20px;background:rgba(255,255,255,0.97);border-radius:20px;margin-bottom:25px;box-shadow:0 10px 40px rgba(0,0,0,0.15)}
+header h1{font-size:2em;color:#4a3f8a;margin-bottom:6px}
+header p{color:#777;font-size:1.05em}
+.flag-bar{height:6px;background:linear-gradient(90deg,#002395 33%,#fff 33%,#fff 66%,#ED2939 66%);border-radius:3px;margin-top:15px}
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:25px}
+.filter-btn{padding:10px 22px;border:none;border-radius:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95em;color:#fff;transition:all 0.3s;box-shadow:0 3px 10px rgba(0,0,0,0.15)}
+.filter-btn:hover{transform:translateY(-2px)}
+.filter-btn.all{background:#4a3f8a}
+.filter-btn.aller{background:#e74c3c}
+.filter-btn.avoir{background:#e67e22}
+.filter-btn.etre{background:#27ae60}
+.filter-btn.faire{background:#2980b9}
+.filter-btn.inactive{opacity:0.45}
+.mode-bar{display:flex;gap:10px;justify-content:center;margin-bottom:25px;flex-wrap:wrap}
+.mode-btn{padding:10px 22px;border:none;border-radius:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95em;background:rgba(255,255,255,0.85);color:#555;transition:all 0.3s;box-shadow:0 3px 10px rgba(0,0,0,0.1)}
+.mode-btn.active{background:#fff;color:#4a3f8a;border-bottom:3px solid #4a3f8a}
+.search-wrap{text-align:center;margin-bottom:25px}
+.search-wrap input{padding:12px 20px;border:2px solid rgba(255,255,255,0.5);border-radius:12px;font-family:'Nunito',sans-serif;font-size:1em;width:100%;max-width:500px;outline:none;background:rgba(255,255,255,0.95)}
+.search-wrap input:focus{border-color:#4a3f8a}
+.counter{text-align:center;margin-bottom:15px;color:rgba(255,255,255,0.9);font-weight:700;font-size:0.95em}
+#cardMode,#tableMode,#quizMode{display:none}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.vocab-card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 5px 20px rgba(0,0,0,0.1);transition:transform 0.2s;position:relative;overflow:hidden}
+.vocab-card:hover{transform:translateY(-3px)}
+.verb-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.75em;font-weight:800;color:#fff;margin-bottom:10px;text-transform:uppercase}
+.tag-aller{background:#e74c3c}.tag-avoir{background:#e67e22}.tag-etre{background:#27ae60}.tag-faire{background:#2980b9}
+.french-phrase{font-size:1.2em;font-weight:800;color:#333;margin-bottom:4px}
+.german-phrase{font-size:0.95em;color:#777;margin-bottom:14px}
+.speak-btn{background:none;border:2px solid #ddd;border-radius:10px;padding:6px 12px;cursor:pointer;font-size:0.85em;font-family:'Nunito',sans-serif;font-weight:700;color:#555;transition:all 0.2s;margin-right:6px;margin-bottom:8px}
+.speak-btn:hover{border-color:#4a3f8a;color:#4a3f8a;background:#f0eeff}
+.examples-toggle{background:none;border:none;font-family:'Nunito',sans-serif;font-size:0.82em;font-weight:700;color:#aaa;cursor:pointer;padding:4px 0;text-decoration:underline}
+.examples-box{display:none;margin-top:10px;padding:12px;background:#f8f7ff;border-radius:10px;border-left:3px solid #4a3f8a}
+.examples-box.open{display:block}
+.example-fr{font-weight:700;color:#333;font-size:0.9em}
+.example-de{color:#777;font-size:0.87em;margin-top:2px;margin-bottom:6px}
+.card-accent{position:absolute;top:0;right:0;width:60px;height:60px;border-radius:0 18px 0 60px;opacity:0.12}
+.acc-aller{background:#e74c3c}.acc-avoir{background:#e67e22}.acc-etre{background:#27ae60}.acc-faire{background:#2980b9}
+.vocab-table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+.vocab-table th{padding:14px 16px;text-align:left;font-weight:800;font-size:0.9em;color:#fff;background:#4a3f8a}
+.vocab-table td{padding:12px 16px;border-bottom:1px solid #f0f0f0;font-size:0.92em;vertical-align:top}
+.vocab-table tr:hover td{background:#faf9ff}
+.tbl-tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:0.75em;font-weight:800;color:#fff}
+.tbl-speak{background:none;border:1px solid #ddd;border-radius:7px;padding:3px 9px;cursor:pointer;font-size:0.8em;font-family:'Nunito',sans-serif;color:#666;transition:all 0.2s}
+.tbl-speak:hover{border-color:#4a3f8a;color:#4a3f8a}
+.quiz-box{background:#fff;border-radius:20px;padding:30px;box-shadow:0 5px 20px rgba(0,0,0,0.1)}
+.quiz-progress-bar-wrap{background:#eee;border-radius:10px;height:8px;margin-bottom:20px}
+.quiz-progress-bar{background:linear-gradient(90deg,#667eea,#764ba2);height:8px;border-radius:10px;transition:width 0.4s}
+.quiz-score-row{display:flex;justify-content:space-between;margin-bottom:15px;font-size:0.9em;color:#777}
+.quiz-type-toggle{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.quiz-type-btn{padding:7px 16px;border:2px solid #ddd;border-radius:10px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85em;background:#fff;color:#777;transition:all 0.2s}
+.quiz-type-btn.active{border-color:#4a3f8a;color:#4a3f8a;background:#f0eeff}
+.quiz-tag{display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.8em;font-weight:800;color:#fff;margin-bottom:12px}
+.quiz-question{font-size:1.5em;font-weight:800;color:#333;margin-bottom:8px}
+.quiz-sub{font-size:0.9em;color:#999;margin-bottom:20px}
+.quiz-speak-btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1em;cursor:pointer;margin-bottom:20px}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.quiz-opt{padding:14px;border:2px solid #eee;border-radius:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95em;background:#fff;transition:all 0.2s;text-align:left}
+.quiz-opt:hover:not(:disabled){border-color:#4a3f8a;background:#f0eeff}
+.quiz-opt.correct{background:#d4edda;border-color:#27ae60;color:#155724}
+.quiz-opt.wrong{background:#f8d7da;border-color:#e74c3c;color:#721c24}
+.quiz-feedback{font-size:1em;font-weight:700;margin-bottom:15px;min-height:24px}
+.quiz-next-btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;padding:12px 28px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1em;cursor:pointer}
+.quiz-next-btn:disabled{opacity:0.4;cursor:default}
+.quiz-end{text-align:center;padding:20px}
+.big-emoji{font-size:4em;margin-bottom:15px}
+.quiz-end h2{font-size:2em;color:#4a3f8a;margin-bottom:8px}
+.quiz-end p{color:#777;margin-bottom:8px}
+.quiz-restart-btn{background:#e74c3c;color:#fff;border:none;border-radius:12px;padding:12px 24px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1em;cursor:pointer;margin:5px}
+.empty-msg{text-align:center;padding:50px;color:rgba(255,255,255,0.85);font-size:1.1em;font-weight:700}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.speaking{animation:pulse 0.7s infinite}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+    <h1>🇫🇷 Les verbes d'or</h1>
+    <p>aller &bull; avoir &bull; être &bull; faire – Vokabeltrainer</p>
+    <div class="flag-bar"></div>
+</header>
+
+<div class="mode-bar">
+    <button class="mode-btn active" id="modeCard" onclick="setMode('card')">🃏 Karten</button>
+    <button class="mode-btn" id="modeTable" onclick="setMode('table')">📋 Tabelle</button>
+    <button class="mode-btn" id="modeQuiz" onclick="setMode('quiz')">🧠 Quiz</button>
+</div>
+
+<div class="filter-bar">
+    <button class="filter-btn all" id="fAll" onclick="setFilter('all')">📚 Alle</button>
+    <button class="filter-btn aller" id="fAller" onclick="setFilter('aller')">aller</button>
+    <button class="filter-btn avoir" id="fAvoir" onclick="setFilter('avoir')">avoir</button>
+    <button class="filter-btn etre" id="fEtre" onclick="setFilter('etre')">être</button>
+    <button class="filter-btn faire" id="fFaire" onclick="setFilter('faire')">faire</button>
+</div>
+
+<div class="search-wrap" id="searchWrap">
+    <input type="text" id="searchInput" placeholder="🔍 Suchen auf Deutsch oder Französisch…" oninput="render()">
+</div>
+
+<div class="counter" id="counter"></div>
+
+<div id="cardMode">
+    <div class="card-grid" id="cardGrid"></div>
+    <div class="empty-msg" id="cardEmpty" style="display:none">Keine Vokabeln gefunden.</div>
+</div>
+
+<div id="tableMode">
+    <table class="vocab-table">
+        <thead><tr><th>Verbe</th><th>Français</th><th>Deutsch</th><th>Beispiele</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+    <div class="empty-msg" id="tableEmpty" style="display:none">Keine Vokabeln gefunden.</div>
+</div>
+
+<div id="quizMode">
+    <div class="quiz-box" id="quizBox"></div>
+</div>
+
+<script>
+// ── DATEN ──────────────────────────────────────────────────────────────────
+const vocab = [
+  {verb:'aller', fr:'aller',                      de:'gehen',
+   ex_fr:'Paul va au cinéma.',                     ex_de:'Paul geht ins Kino.'},
+  {verb:'aller', fr:'aller à pied',               de:'zu Fuß gehen',
+   ex_fr:"Je vais à l'école à pied.",              ex_de:'Ich gehe zu Fuß zur Schule.'},
+  {verb:'aller', fr:'aller au lit',               de:'ins Bett gehen',
+   ex_fr:'Pauline va au lit à 21 heures.',         ex_de:'Pauline geht um 21 Uhr ins Bett.'},
+  {verb:'aller', fr:'aller aux toilettes',        de:'auf Toilette gehen',
+   ex_fr:'Nous allons aux toilettes.',             ex_de:'Wir gehen auf die Toilette.'},
+  {verb:'aller', fr:'aller bien',                 de:'gut gehen',
+   ex_fr:'Ça va ? Oui, je vais bien !',           ex_de:'Wie geht es? Mir geht es gut!'},
+  {verb:'aller', fr:'aller chercher quelque chose', de:'etwas holen',
+   ex_fr:'Je vais chercher mon sac.',              ex_de:'Ich hole meine Tasche.'},
+  {verb:'aller', fr:"s'en aller",                 de:'aufbrechen, losgehen',
+   ex_fr:"Il s'en va très tôt ce matin.",         ex_de:'Er bricht heute Morgen sehr früh auf.'},
+  {verb:'avoir', fr:'avoir',                      de:'haben',
+   ex_fr:'Elle a un nouveau livre.',              ex_de:'Sie hat ein neues Buch.'},
+  {verb:'avoir', fr:'avoir … ans',               de:'… Jahre alt sein',
+   ex_fr:"J'ai treize ans.",                      ex_de:'Ich bin dreizehn Jahre alt.'},
+  {verb:'avoir', fr:'avoir quelque chose sur soi', de:'etwas dabei haben',
+   ex_fr:'Nous avons nos devoirs sur nous.',      ex_de:'Wir haben unsere Hausaufgaben dabei.'},
+  {verb:'avoir', fr:'avoir besoin de quelque chose', de:'etwas brauchen',
+   ex_fr:"Vous avez besoin d'une clé.",           ex_de:'Ihr braucht einen Schlüssel.'},
+  {verb:'avoir', fr:'avoir de la chance',         de:'Glück haben',
+   ex_fr:"J'ai de la chance aujourd'hui.",        ex_de:'Ich habe heute Glück.'},
+  {verb:'avoir', fr:'avoir envie de quelque chose', de:'Lust auf etwas haben',
+   ex_fr:"J'ai envie d'une pizza.",               ex_de:'Ich habe Lust auf eine Pizza.'},
+  {verb:'avoir', fr:'avoir faim',                 de:'hungrig sein',
+   ex_fr:"J'ai faim après le sport.",             ex_de:'Ich bin nach dem Sport hungrig.'},
+  {verb:'avoir', fr:'avoir froid',                de:'frieren, kalt sein',
+   ex_fr:"Tu as froid en hiver ?",                ex_de:'Frierst du im Winter?'},
+  {verb:'avoir', fr:'avoir honte',                de:'sich schämen',
+   ex_fr:'Il a honte de sa réponse.',             ex_de:'Er schämt sich für seine Antwort.'},
+  {verb:'avoir', fr:'avoir lieu',                 de:'stattfinden',
+   ex_fr:'La fête a lieu samedi.',                ex_de:'Die Party findet am Samstag statt.'},
+  {verb:'avoir', fr:'avoir mal',                  de:'Schmerzen haben',
+   ex_fr:"J'ai mal à la tête.",                   ex_de:'Ich habe Kopfschmerzen.'},
+  {verb:'avoir', fr:'avoir peur',                 de:'Angst haben',
+   ex_fr:'Elle a peur des araignées.',            ex_de:'Sie hat Angst vor Spinnen.'},
+  {verb:'avoir', fr:'avoir raison',               de:'Recht haben',
+   ex_fr:'Tu as raison, il fait froid.',          ex_de:'Du hast Recht, es ist kalt.'},
+  {verb:'avoir', fr:'avoir soif',                 de:'Durst haben',
+   ex_fr:"J'ai soif après la course.",            ex_de:'Ich habe nach dem Laufen Durst.'},
+  {verb:'avoir', fr:'avoir tort',                 de:'Unrecht haben',
+   ex_fr:"Non, tu as tort !",                     ex_de:'Nein, du hast Unrecht!'},
+  {verb:'etre',  fr:'être',                       de:'sein',
+   ex_fr:'Je suis français.',                     ex_de:'Ich bin Franzose.'},
+  {verb:'etre',  fr:'être à',                     de:'gehören',
+   ex_fr:"Ce livre est à Marie.",                 ex_de:'Dieses Buch gehört Marie.'},
+  {verb:'etre',  fr:'être amoureux de quelqu\'un', de:'jemanden lieben',
+   ex_fr:'Il est amoureux de sa voisine.',        ex_de:'Er ist in seine Nachbarin verliebt.'},
+  {verb:'etre',  fr:'être content',               de:'zufrieden sein',
+   ex_fr:'Nous sommes contents des résultats.',   ex_de:'Wir sind mit den Ergebnissen zufrieden.'},
+  {verb:'etre',  fr:'être d\'accord',             de:'einverstanden sein',
+   ex_fr:"Je suis d'accord avec toi.",            ex_de:'Ich bin mit dir einverstanden.'},
+  {verb:'etre',  fr:'être de retour',             de:'zurück sein',
+   ex_fr:'Elle est de retour demain.',            ex_de:'Sie ist morgen zurück.'},
+  {verb:'etre',  fr:'être en retard',             de:'zu spät sein',
+   ex_fr:'Le train est en retard.',               ex_de:'Der Zug ist zu spät.'},
+  {verb:'etre',  fr:'être en train de faire quelque chose', de:'gerade etwas tun',
+   ex_fr:"Je suis en train de lire.",             ex_de:'Ich bin gerade am Lesen.'},
+  {verb:'etre',  fr:'être fatigué',               de:'müde sein',
+   ex_fr:'Il est fatigué après le match.',        ex_de:'Er ist nach dem Spiel müde.'},
+  {verb:'etre',  fr:'être prêt',                  de:'bereit sein',
+   ex_fr:'Nous sommes prêts à partir.',           ex_de:'Wir sind bereit loszugehen.'},
+  {verb:'faire', fr:'faire',                      de:'machen, tun',
+   ex_fr:'Que fais-tu ce soir ?',                 ex_de:'Was machst du heute Abend?'},
+  {verb:'faire', fr:'faire attention',            de:'aufpassen',
+   ex_fr:'Il fait attention en classe.',          ex_de:'Er passt im Unterricht auf.'},
+  {verb:'faire', fr:'faire beau',                 de:'schönes Wetter sein',
+   ex_fr:"Il fait beau aujourd'hui.",             ex_de:'Heute ist schönes Wetter.'},
+  {verb:'faire', fr:'faire chaud',                de:'warm sein',
+   ex_fr:"Il fait chaud en été.",                 ex_de:'Im Sommer ist es warm.'},
+  {verb:'faire', fr:'faire froid',                de:'kalt sein',
+   ex_fr:"Il fait froid en janvier.",             ex_de:'Im Januar ist es kalt.'},
+  {verb:'faire', fr:'faire de la musique',        de:'Musik machen',
+   ex_fr:'Nous faisons de la musique ensemble.',  ex_de:'Wir machen zusammen Musik.'},
+  {verb:'faire', fr:'faire du soleil',            de:'sonnig sein',
+   ex_fr:'Il fait du soleil cet après-midi.',     ex_de:'Heute Nachmittag scheint die Sonne.'},
+  {verb:'faire', fr:'faire du sport',             de:'Sport machen',
+   ex_fr:'Ils font du sport le mercredi.',        ex_de:'Sie machen mittwochs Sport.'},
+  {verb:'faire', fr:'faire du vélo',              de:'Fahrrad fahren',
+   ex_fr:'Elles font du vélo le dimanche.',       ex_de:'Sie fahren sonntags Fahrrad.'},
+  {verb:'faire', fr:'faire du vent',              de:'windig sein',
+   ex_fr:'Il fait du vent aujourd\'hui.',         ex_de:'Heute ist es windig.'},
+  {verb:'faire', fr:'faire la connaissance de quelqu\'un', de:'jemanden kennenlernen',
+   ex_fr:'Marie fait la connaissance de Paul.',   ex_de:'Marie lernt Paul kennen.'},
+  {verb:'faire', fr:'faire la cuisine',           de:'kochen',
+   ex_fr:'Paul fait la cuisine pour ses amis.',   ex_de:'Paul kocht für seine Freunde.'},
+  {verb:'faire', fr:'faire la fête',              de:'feiern',
+   ex_fr:'Laura fait la fête avec sa famille.',   ex_de:'Laura feiert mit ihrer Familie.'},
+  {verb:'faire', fr:'faire la vaisselle',         de:'Geschirr spülen',
+   ex_fr:'Je fais la vaisselle après le dîner.',  ex_de:'Ich spüle das Geschirr nach dem Abendessen.'},
+  {verb:'faire', fr:'faire les courses',          de:'einkaufen gehen',
+   ex_fr:'Maman fait les courses au marché.',     ex_de:'Mama kauft auf dem Markt ein.'},
+  {verb:'faire', fr:'faire les devoirs',          de:'Hausaufgaben machen',
+   ex_fr:'Il fait ses devoirs après le collège.', ex_de:'Er macht seine Hausaufgaben nach der Schule.'},
+  {verb:'faire', fr:'faire une promenade',        de:'spazieren gehen',
+   ex_fr:'Nous faisons une promenade le soir.',   ex_de:'Wir gehen abends spazieren.'},
+  {verb:'faire', fr:'faire un voyage',            de:'eine Reise machen',
+   ex_fr:'Ils font un voyage en France.',         ex_de:'Sie machen eine Reise nach Frankreich.'},
+];
+
+const verbColors = {aller:'#e74c3c', avoir:'#e67e22', etre:'#27ae60', faire:'#2980b9'};
+const verbLabels = {aller:'aller', avoir:'avoir', etre:'être', faire:'faire'};
+
+// ── ZUSTAND ────────────────────────────────────────────────────────────────
+let currentFilter = 'all';
+let currentMode   = 'card';
+let quizType      = 'fr2de';
+let quizState     = {};
+
+// ── SPRACHE ────────────────────────────────────────────────────────────────
+function speak(text, btn) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang  = 'fr-FR';
+    u.rate  = 0.82;
+    u.pitch = 1.05;
+    if (btn) { btn.classList.add('speaking'); u.onend = () => btn.classList.remove('speaking'); }
+    window.speechSynthesis.speak(u);
+}
+
+// ── FILTER ─────────────────────────────────────────────────────────────────
+function setFilter(f) {
+    currentFilter = f;
+    ['all','aller','avoir','etre','faire'].forEach(v => {
+        const id = 'f' + v.charAt(0).toUpperCase() + v.slice(1);
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('inactive', f !== 'all' && f !== v);
+    });
+    render();
+    if (currentMode === 'quiz') startQuiz();
+}
+
+function getFiltered() {
+    const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+    return vocab.filter(v => {
+        const verbOk = currentFilter === 'all' || v.verb === currentFilter;
+        const searchOk = !q || v.fr.toLowerCase().includes(q) || v.de.toLowerCase().includes(q);
+        return verbOk && searchOk;
+    });
+}
+
+// ── MODUS ──────────────────────────────────────────────────────────────────
+function setMode(m) {
+    currentMode = m;
+    ['card','table','quiz'].forEach(x => {
+        document.getElementById(x + 'Mode').style.display = 'none';
+        document.getElementById('mode' + x.charAt(0).toUpperCase() + x.slice(1)).classList.remove('active');
+    });
+    document.getElementById(m + 'Mode').style.display = 'block';
+    document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1)).classList.add('active');
+    document.getElementById('searchWrap').style.display = m === 'quiz' ? 'none' : 'block';
+    if (m === 'quiz') { startQuiz(); }
+    else { render(); }
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function render() {
+    if (currentMode === 'card')  renderCards();
+    if (currentMode === 'table') renderTable();
+}
+
+// Hilfsfunktion: Text sicher für data-Attribut kodieren
+function enc(str) {
+    return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+}
+
+function renderCards() {
+    const data  = getFiltered();
+    const grid  = document.getElementById('cardGrid');
+    const empty = document.getElementById('cardEmpty');
+    document.getElementById('counter').textContent = data.length + ' Einträge';
+    if (!data.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    grid.innerHTML = data.map((v, i) => `
+      <div class="vocab-card">
+        <div class="card-accent acc-${v.verb}"></div>
+        <span class="verb-tag tag-${v.verb}">${verbLabels[v.verb]}</span>
+        <div class="french-phrase">${v.fr}</div>
+        <div class="german-phrase">${v.de}</div>
+        <button class="speak-btn" data-speak="${enc(v.fr)}">🔊 Français</button>
+        <button class="speak-btn" data-speak="${enc(v.ex_fr)}">🔊 Exemple</button><br>
+        <button class="examples-toggle" onclick="toggleEx(this)">📖 Beispiele zeigen</button>
+        <div class="examples-box">
+          <div class="example-fr">${v.ex_fr}</div>
+          <div class="example-de">${v.ex_de}</div>
+          <button class="speak-btn" data-speak="${enc(v.ex_fr)}">🔊</button>
+        </div>
+      </div>`).join('');
+}
+
+function renderTable() {
+    const data  = getFiltered();
+    const body  = document.getElementById('tableBody');
+    const empty = document.getElementById('tableEmpty');
+    document.getElementById('counter').textContent = data.length + ' Einträge';
+    if (!data.length) { body.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    body.innerHTML = data.map(v => `
+      <tr>
+        <td><span class="tbl-tag tag-${v.verb}">${verbLabels[v.verb]}</span></td>
+        <td><strong>${v.fr}</strong><br>
+            <button class="tbl-speak" data-speak="${enc(v.fr)}">🔊</button></td>
+        <td>${v.de}</td>
+        <td><em style="color:#444">${v.ex_fr}</em><br>
+            <span style="color:#888;font-size:0.9em">${v.ex_de}</span><br>
+            <button class="tbl-speak" data-speak="${enc(v.ex_fr)}" style="margin-top:4px">🔊</button></td>
+      </tr>`).join('');
+}
+
+// Globaler Click-Handler für alle Speak-Buttons (löst das Apostrophen-Problem!)
+document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-speak]');
+    if (btn) { speak(btn.dataset.speak, btn); }
+});
+
+function toggleEx(btn) {
+    const box = btn.nextElementSibling;
+    const open = box.classList.toggle('open');
+    btn.textContent = open ? '📖 Beispiele verbergen' : '📖 Beispiele zeigen';
+}
+
+// ── QUIZ ───────────────────────────────────────────────────────────────────
+function startQuiz() {
+    const data = getFiltered();
+    if (data.length < 4) {
+        document.getElementById('quizBox').innerHTML = `
+          <div style="text-align:center;padding:40px">
+            <div style="font-size:3em">🤔</div>
+            <h3 style="color:#4a3f8a;margin:10px 0">Zu wenige Vokabeln</h3>
+            <p style="color:#777">Bitte wähle einen Filter mit mindestens 4 Einträgen.</p>
+          </div>`;
+        return;
+    }
+    quizState = { data: shuffle([...data]), index: 0, score: 0, wrong: 0, answered: false };
+    renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+    const { data, index, score, wrong } = quizState;
+    const total   = data.length;
+    if (index >= total) { renderQuizEnd(); return; }
+
+    const current    = data[index];
+    const distractors = shuffle(data.filter((_,i) => i !== index)).slice(0, 3);
+    const options    = shuffle([current, ...distractors]);
+    const pct        = Math.round((index / total) * 100);
+    const color      = verbColors[current.verb];
+
+    let questionHTML, subText, speakText;
+    const optLabel = v => quizType === 'de2fr' ? v.fr : v.de;
+    const correct  = optLabel(current);
+
+    if (quizType === 'fr2de') {
+        questionHTML = `<div class="quiz-question">${current.fr}</div>`;
+        subText      = 'Was bedeutet das auf Deutsch?';
+        speakText    = current.fr;
+    } else if (quizType === 'de2fr') {
+        questionHTML = `<div class="quiz-question">${current.de}</div>`;
+        subText      = 'Wie heißt das auf Französisch?';
+        speakText    = null;
+    } else {
+        questionHTML = `<div class="quiz-question">🔊 Hör zu …</div>`;
+        subText      = 'Klicke auf den Lautsprecher und wähle die Bedeutung!';
+        speakText    = current.fr;
+    }
+
+    document.getElementById('quizBox').innerHTML = `
+      <div class="quiz-progress-bar-wrap">
+        <div class="quiz-progress-bar" style="width:${pct}%"></div>
+      </div>
+      <div class="quiz-score-row">
+        <span>Frage <b>${index+1}</b> / ${total}</span>
+        <span>✅ <b>${score}</b></span>
+        <span>❌ <b>${wrong}</b></span>
+      </div>
+      <div class="quiz-type-toggle">
+        <button class="quiz-type-btn ${quizType==='fr2de'?'active':''}" onclick="setQuizType('fr2de')">🇫🇷→🇩🇪</button>
+        <button class="quiz-type-btn ${quizType==='de2fr'?'active':''}" onclick="setQuizType('de2fr')">🇩🇪→🇫🇷</button>
+        <button class="quiz-type-btn ${quizType==='listen'?'active':''}" onclick="setQuizType('listen')">🔊 Hören</button>
+      </div>
+      <span class="quiz-tag" style="background:${color}">${verbLabels[current.verb]}</span>
+      ${questionHTML}
+      <div class="quiz-sub">${subText}</div>
+      ${speakText ? `<button class="quiz-speak-btn" data-speak="${enc(speakText)}">🔊 Aussprechen</button>` : ''}
+      <div class="quiz-options" id="quizOptions">
+        ${options.map(opt => `
+          <button class="quiz-opt" data-answer="${enc(optLabel(opt))}" data-correct="${enc(correct)}" data-fr="${enc(current.fr)}">
+            ${optLabel(opt)}
+          </button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuizQuestion()" disabled>Weiter →</button>
+    `;
+
+    if (quizType === 'listen') setTimeout(() => speak(current.fr), 400);
+}
+
+// Quiz-Antwort-Handler über Event Delegation
+document.addEventListener('click', e => {
+    const opt = e.target.closest('.quiz-opt');
+    if (!opt || quizState.answered) return;
+    quizState.answered = true;
+
+    const chosen  = opt.dataset.answer;
+    const correct = opt.dataset.correct;
+    const fr      = opt.dataset.fr;
+
+    document.querySelectorAll('.quiz-opt').forEach(o => {
+        o.disabled = true;
+        if (o.dataset.answer === correct) o.classList.add('correct');
+    });
+
+    const fb = document.getElementById('quizFeedback');
+    if (chosen === correct) {
+        opt.classList.add('correct');
+        quizState.score++;
+        fb.innerHTML   = '✅ Richtig! Super! 🎉';
+        fb.style.color = '#27ae60';
+        speak(fr);
+    } else {
+        opt.classList.add('wrong');
+        quizState.wrong++;
+        fb.innerHTML   = '❌ Leider falsch. Die richtige Antwort ist grün markiert.';
+        fb.style.color = '#e74c3c';
+    }
+    document.getElementById('quizNextBtn').disabled = false;
+});
+
+function setQuizType(t) { quizType = t; startQuiz(); }
+function nextQuizQuestion() { quizState.index++; quizState.answered = false; renderQuizQuestion(); }
+
+function renderQuizEnd() {
+    const { score, wrong, data } = quizState;
+    const total = data.length;
+    const pct   = Math.round((score / total) * 100);
+    const [emoji, msg] =
+        pct >= 90 ? ['🏆','Fantastisch! Ausgezeichnete Leistung!'] :
+        pct >= 70 ? ['😊','Gut gemacht! Du hast die meisten richtig!'] :
+        pct >= 50 ? ['💪','Nicht schlecht! Noch etwas üben!'] :
+                    ['📚','Übe noch ein bisschen – du schaffst das!'];
+    document.getElementById('quizBox').innerHTML = `
+      <div class="quiz-end">
+        <div class="big-emoji">${emoji}</div>
+        <h2>${pct}% richtig</h2>
+        <p>${score} von ${total} Fragen korrekt beantwortet</p>
+        <p style="color:#aaa;margin-bottom:20px">${msg}</p>
+        <button class="quiz-restart-btn" onclick="startQuiz()">🔄 Nochmal versuchen</button>
+        <button class="quiz-restart-btn" style="background:#4a3f8a" onclick="setMode('card')">🃏 Karten ansehen</button>
+      </div>`;
+}
+
+// ── HILFSFUNKTIONEN ────────────────────────────────────────────────────────
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+// ── START ──────────────────────────────────────────────────────────────────
+setMode('card');
+</script>
+</body>
+</html>
