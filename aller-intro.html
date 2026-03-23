@@ -1591,4 +1591,462 @@
                 <div class="exercise-item" id="fillItem${i}">
                     <p class="exercise-sentence">
                         ${s.before} 
-                        <input type="text" class="form-input" id="fillInput${i}" placeholder
+                        <input type="text" class="form-input" id="fillInput${i}" placeholder="..." autocomplete="off" spellcheck="false">
+                        ${s.after}
+                    </p>
+                    <p style="color:#999; font-size:0.9em; margin-top:5px;">💬 ${s.hint}</p>
+                </div>
+            `).join('');
+        }
+
+        function checkFillBlanks() {
+            if (completed.ex4) return;
+            let correct = 0;
+
+            fillSentences.forEach((s, i) => {
+                const input = document.getElementById(`fillInput${i}`);
+                const item = document.getElementById(`fillItem${i}`);
+                const val = input.value.trim().toLowerCase();
+
+                input.classList.remove('correct', 'incorrect');
+                item.classList.remove('correct', 'incorrect');
+
+                if (val === s.correct) {
+                    input.classList.add('correct');
+                    item.classList.add('correct');
+                    correct++;
+                } else {
+                    input.classList.add('incorrect');
+                    item.classList.add('incorrect');
+                    input.value = input.value + '  ➜ ' + s.correct;
+                }
+                input.disabled = true;
+            });
+
+            scores.ex4 = correct;
+            document.getElementById('score4').textContent = `${correct} / ${maxScores.ex4}`;
+            document.getElementById('progress4').style.width = `${correct / maxScores.ex4 * 100}%`;
+
+            completed.ex4 = true;
+            updateTabCheck(4);
+
+            if (correct === maxScores.ex4) {
+                showFeedback('feedback4', 'success', '🎉 Magnifique ! Alles richtig geschrieben!');
+            } else {
+                showFeedback('feedback4', 'info', `${correct} / ${maxScores.ex4} richtig. Die Korrekturen stehen in den Feldern.`);
+            }
+            document.getElementById('checkBtn4').disabled = true;
+            document.getElementById('continueBtn4').style.display = 'inline-flex';
+        }
+
+        // ====== EXERCISE 5: Übersetzen ======
+        const translateSentences = [
+            { german: 'Ich gehe ins Kino.', correct: ['je vais au cinéma'] },
+            { german: 'Du gehst nach Hause.', correct: ['tu vas à la maison'] },
+            { german: 'Er geht in die Schule.', correct: ['il va à l\'école', 'il va a l\'ecole', 'il va à l\'ecole', 'il va a l\'école'] },
+            { german: 'Wir gehen in den Park.', correct: ['nous allons au parc'] },
+            { german: 'Ihr geht ins Restaurant.', correct: ['vous allez au restaurant'] },
+            { german: 'Sie (Pl.) gehen an den Strand.', correct: ['ils vont à la plage', 'elles vont à la plage', 'ils vont a la plage', 'elles vont a la plage'] }
+        ];
+
+        function initTranslations() {
+            const container = document.getElementById('translateExercises');
+            container.innerHTML = translateSentences.map((s, i) => `
+                <div class="exercise-item" id="transItem${i}">
+                    <div class="translation-pair">
+                        <span class="german">🇩🇪 ${s.german}</span>
+                        <span class="arrow">➜</span>
+                        <div>
+                            <span>🇫🇷</span>
+                            <input type="text" class="form-input" id="transInput${i}" 
+                                   style="width:100%; min-width:200px; text-align:left;" 
+                                   placeholder="..." autocomplete="off" spellcheck="false">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function normalizeStr(str) {
+            return str.trim().toLowerCase()
+                .replace(/[\.\!\?]/g, '')
+                .replace(/\s+/g, ' ')
+                .replace(/'/g, "'")
+                .replace(/'/g, "'")
+                .trim();
+        }
+
+        function checkTranslations() {
+            if (completed.ex5) return;
+            let correct = 0;
+
+            translateSentences.forEach((s, i) => {
+                const input = document.getElementById(`transInput${i}`);
+                const item = document.getElementById(`transItem${i}`);
+                const val = normalizeStr(input.value);
+
+                input.classList.remove('correct', 'incorrect');
+                item.classList.remove('correct', 'incorrect');
+
+                const isCorrect = s.correct.some(c => normalizeStr(c) === val);
+
+                if (isCorrect) {
+                    input.classList.add('correct');
+                    item.classList.add('correct');
+                    correct++;
+                } else {
+                    input.classList.add('incorrect');
+                    item.classList.add('incorrect');
+                    input.value = input.value + '  ➜ ' + s.correct[0];
+                }
+                input.disabled = true;
+            });
+
+            scores.ex5 = correct;
+            document.getElementById('score5').textContent = `${correct} / ${maxScores.ex5}`;
+            document.getElementById('progress5').style.width = `${correct / maxScores.ex5 * 100}%`;
+
+            completed.ex5 = true;
+            updateTabCheck(5);
+
+            if (correct === maxScores.ex5) {
+                showFeedback('feedback5', 'success', '🎉 Formidable ! Perfekte Übersetzungen!');
+            } else {
+                showFeedback('feedback5', 'info', `${correct} / ${maxScores.ex5} richtig. Die Korrekturen stehen in den Feldern.`);
+            }
+            document.getElementById('checkBtn5').disabled = true;
+            document.getElementById('continueBtn5').style.display = 'inline-flex';
+        }
+
+        // ====== EXERCISE 6: Sätze bauen ======
+        const sentenceBuildData = [
+            { words: ['Je', 'vais', 'au', 'cinéma'], correct: 'Je vais au cinéma', hint: 'Ich gehe ins Kino.' },
+            { words: ['Tu', 'vas', 'à', 'la', 'plage'], correct: 'Tu vas à la plage', hint: 'Du gehst an den Strand.' },
+            { words: ['Nous', 'allons', 'en', 'France'], correct: 'Nous allons en France', hint: 'Wir fahren nach Frankreich.' },
+            { words: ['Vous', 'allez', 'au', 'supermarché'], correct: 'Vous allez au supermarché', hint: 'Ihr geht in den Supermarkt.' },
+            { words: ['Ils', 'vont', 'à', 'l\'école'], correct: 'Ils vont à l\'école', hint: 'Sie gehen in die Schule.' }
+        ];
+
+        let sentenceState = [];
+
+        function initSentences() {
+            sentenceState = sentenceBuildData.map(() => []);
+            const container = document.getElementById('sentenceExercises');
+
+            container.innerHTML = sentenceBuildData.map((s, i) => {
+                const shuffled = shuffle(s.words);
+                return `
+                    <div class="exercise-item" id="sentItem${i}">
+                        <p style="color:#999; font-size:0.9em; margin-bottom:8px;">💬 ${s.hint}</p>
+                        <div class="sentence-builder-target" id="sentTarget${i}" onclick="handleTargetClick(event, ${i})">
+                            <span style="color:#bbb; font-style:italic;" id="sentPlaceholder${i}">Klicke auf die Wörter...</span>
+                        </div>
+                        <div class="sentence-builder-words" id="sentWords${i}">
+                            ${shuffled.map((w, wi) => `<span class="word-chip" data-word="${w}" data-sent="${i}" onclick="addWord(this, ${i})">${w}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addWord(chip, sentIndex) {
+            if (chip.classList.contains('placed')) return;
+            chip.classList.add('placed');
+
+            const target = document.getElementById(`sentTarget${sentIndex}`);
+            const placeholder = document.getElementById(`sentPlaceholder${sentIndex}`);
+            if (placeholder) placeholder.style.display = 'none';
+
+            const wordEl = document.createElement('span');
+            wordEl.className = 'word-chip';
+            wordEl.textContent = chip.dataset.word;
+            wordEl.dataset.word = chip.dataset.word;
+            wordEl.dataset.sourceId = chip.dataset.word + '_' + sentIndex;
+            wordEl.onclick = function () { removeWord(this, sentIndex, chip); };
+            target.appendChild(wordEl);
+
+            sentenceState[sentIndex].push(chip.dataset.word);
+        }
+
+        function removeWord(el, sentIndex, originalChip) {
+            el.remove();
+            if (originalChip) {
+                originalChip.classList.remove('placed');
+            } else {
+                // Find the original chip
+                const wordsContainer = document.getElementById(`sentWords${sentIndex}`);
+                const chips = wordsContainer.querySelectorAll('.word-chip');
+                for (const c of chips) {
+                    if (c.dataset.word === el.dataset.word && c.classList.contains('placed')) {
+                        c.classList.remove('placed');
+                        break;
+                    }
+                }
+            }
+
+            const idx = sentenceState[sentIndex].indexOf(el.dataset.word);
+            if (idx > -1) sentenceState[sentIndex].splice(idx, 1);
+
+            const target = document.getElementById(`sentTarget${sentIndex}`);
+            const placeholder = document.getElementById(`sentPlaceholder${sentIndex}`);
+            if (target.querySelectorAll('.word-chip').length === 0 && placeholder) {
+                placeholder.style.display = '';
+            }
+        }
+
+        function handleTargetClick(event, sentIndex) {
+            // Only handle clicks on the target itself, not on word chips inside
+            if (event.target.classList.contains('word-chip')) return;
+        }
+
+        function checkSentences() {
+            if (completed.ex6) return;
+            let correct = 0;
+
+            sentenceBuildData.forEach((s, i) => {
+                const target = document.getElementById(`sentTarget${i}`);
+                const item = document.getElementById(`sentItem${i}`);
+                const chips = target.querySelectorAll('.word-chip');
+                const built = Array.from(chips).map(c => c.dataset.word).join(' ');
+
+                item.classList.remove('correct', 'incorrect');
+
+                if (normalizeStr(built) === normalizeStr(s.correct)) {
+                    item.classList.add('correct');
+                    correct++;
+                } else {
+                    item.classList.add('incorrect');
+                    // Show correct answer
+                    const correction = document.createElement('p');
+                    correction.style.cssText = 'color:#e74c3c; font-weight:700; margin-top:8px;';
+                    correction.textContent = '➜ ' + s.correct;
+                    item.appendChild(correction);
+                }
+            });
+
+            scores.ex6 = correct;
+            document.getElementById('score6').textContent = `${correct} / ${maxScores.ex6}`;
+            document.getElementById('progress6').style.width = `${correct / maxScores.ex6 * 100}%`;
+
+            completed.ex6 = true;
+            updateTabCheck(6);
+
+            if (correct === maxScores.ex6) {
+                showFeedback('feedback6', 'success', '🎉 Bravo ! Alle Sätze sind perfekt!');
+            } else {
+                showFeedback('feedback6', 'info', `${correct} / ${maxScores.ex6} richtig.`);
+            }
+
+            document.getElementById('checkBtn6').disabled = true;
+            document.getElementById('resetBtn6').disabled = true;
+            document.getElementById('continueBtn6').style.display = 'inline-flex';
+        }
+
+        function resetSentences() {
+            if (completed.ex6) return;
+            initSentences();
+            document.getElementById('feedback6').className = 'feedback';
+        }
+
+        // ====== SECTION 7: Final Score ======
+        function calculateFinalScore() {
+            const total = Object.values(scores).reduce((a, b) => a + b, 0);
+            const max = Object.values(maxScores).reduce((a, b) => a + b, 0);
+            const pct = total / max;
+
+            document.getElementById('finalScore').innerHTML = `${total} <span class="max">/ ${max}</span>`;
+
+            // Stars
+            let stars = 0;
+            if (pct >= 0.95) stars = 5;
+            else if (pct >= 0.8) stars = 4;
+            else if (pct >= 0.65) stars = 3;
+            else if (pct >= 0.5) stars = 2;
+            else if (pct >= 0.3) stars = 1;
+
+            const starContainer = document.getElementById('starRating');
+            starContainer.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const star = document.createElement('span');
+                star.className = 'star';
+                star.textContent = i < stars ? '⭐' : '☆';
+                star.style.fontSize = '2em';
+                star.style.margin = '0 3px';
+                starContainer.appendChild(star);
+            }
+
+            // Message
+            let msg = '';
+            if (pct >= 0.95) msg = '🏆 Exceptionnel ! Du beherrschst « aller » perfekt!';
+            else if (pct >= 0.8) msg = '🌟 Très bien ! Du kannst « aller » sehr gut konjugieren!';
+            else if (pct >= 0.65) msg = '👍 Bien ! Du bist auf dem richtigen Weg!';
+            else if (pct >= 0.5) msg = '📚 Pas mal ! Übe noch ein bisschen weiter!';
+            else msg = '💪 Courage ! Schau dir die Konjugationstabelle nochmal an und versuche es erneut!';
+            document.getElementById('finalMessage').textContent = msg;
+
+            // Details
+            const details = document.getElementById('finalDetails');
+            const exNames = [
+                '① Multiple Choice',
+                '② Zuordnen',
+                '③ Dropdown',
+                '④ Lückentext',
+                '⑤ Übersetzen',
+                '⑥ Sätze bauen'
+            ];
+            const scoreKeys = ['ex1', 'ex2', 'ex3', 'ex4', 'ex5', 'ex6'];
+
+            details.innerHTML = '<h3 style="margin-bottom:12px; color:#4a3f8a;">📊 Übersicht:</h3>' +
+                scoreKeys.map((key, i) => {
+                    const s = scores[key];
+                    const m = maxScores[key];
+                    const p = s / m * 100;
+                    const color = p >= 80 ? '#27ae60' : p >= 50 ? '#f39c12' : '#e74c3c';
+                    return `
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                            <span style="min-width:180px; font-weight:600;">${exNames[i]}</span>
+                            <div style="flex:1; height:12px; background:#eee; border-radius:6px; overflow:hidden;">
+                                <div style="height:100%; width:${p}%; background:${color}; border-radius:6px; transition: width 1s;"></div>
+                            </div>
+                            <span style="font-weight:700; color:${color}; min-width:50px; text-align:right;">${s}/${m}</span>
+                        </div>
+                    `;
+                }).join('');
+
+            // Confetti if good result
+            if (pct >= 0.65) {
+                launchConfetti();
+            }
+        }
+
+        function launchConfetti() {
+            const container = document.getElementById('confettiContainer');
+            container.innerHTML = '';
+            const colors = ['#6c5ce7', '#e74c3c', '#f1c40f', '#27ae60', '#3498db', '#e91e63', '#ff9800'];
+
+            for (let i = 0; i < 80; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                confetti.style.width = (6 + Math.random() * 8) + 'px';
+                confetti.style.height = (6 + Math.random() * 8) + 'px';
+                container.appendChild(confetti);
+            }
+
+            setTimeout(() => { container.innerHTML = ''; }, 5000);
+        }
+
+        // ====== RESET ALL ======
+        function resetAll() {
+            Object.keys(scores).forEach(k => scores[k] = 0);
+            Object.keys(completed).forEach(k => completed[k] = false);
+
+            // Remove all tab checks
+            document.querySelectorAll('.tab-check').forEach(c => c.remove());
+
+            // Reset buttons
+            ['checkBtn3', 'checkBtn4', 'checkBtn5', 'checkBtn6'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.disabled = false;
+            });
+            ['continueBtn1', 'continueBtn2', 'continueBtn3', 'continueBtn4', 'continueBtn5', 'continueBtn6'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.style.display = 'none';
+            });
+            document.getElementById('resetBtn6').disabled = false;
+
+            // Reset feedbacks
+            for (let i = 1; i <= 6; i++) {
+                const fb = document.getElementById('feedback' + i);
+                if (fb) fb.className = 'feedback';
+            }
+
+            // Reset scores display
+            for (let i = 1; i <= 6; i++) {
+                const sc = document.getElementById('score' + i);
+                const pr = document.getElementById('progress' + i);
+                if (sc) sc.textContent = `0 / ${Object.values(maxScores)[i - 1]}`;
+                if (pr) pr.style.width = '0%';
+            }
+
+            // Reinitialize exercises
+            mcIndex = 0;
+            renderMC();
+            initDragDrop();
+            initDropdowns();
+            initFillBlanks();
+            initTranslations();
+            initSentences();
+
+            showSection(0);
+        }
+
+        // ====== AUDIO for conjugation table ======
+        function speakForm(pronoun, form) {
+            speak(pronoun + ' ' + form);
+        }
+
+        // ====== INIT ======
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add audio buttons to conjugation table
+            document.querySelectorAll('.conj-table .form').forEach(cell => {
+                // Already handled in HTML
+            });
+
+            renderMC();
+            initDragDrop();
+            initDropdowns();
+            initFillBlanks();
+            initTranslations();
+            initSentences();
+            showSection(0);
+        });
+    </script>
+
+    <style>
+        /* Final score styles */
+        .final-score {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .big-score {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: #4a3f8a;
+            margin: 20px 0 10px;
+        }
+
+        .big-score .max {
+            font-size: 0.5em;
+            color: #aaa;
+            font-weight: 600;
+        }
+
+        .star-rating {
+            margin: 10px 0 15px;
+        }
+
+        .word-chip.placed {
+            opacity: 0.3;
+            cursor: default;
+            transform: none !important;
+        }
+
+        /* Fix for sentence builder target word chips */
+        .sentence-builder-target .word-chip {
+            opacity: 1;
+            cursor: pointer;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .sentence-builder-target .word-chip:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+        }
+    </style>
+</body>
+</html>
