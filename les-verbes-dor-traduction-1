@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les verbes irréguliers – FR → DE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            color: #003F8A;
+            text-align: center;
+        }
+        h2 {
+            color: #003F8A;
+            margin-top: 40px;
+        }
+        .sentence-item {
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .sentence-item b {
+            font-size: 1.05em;
+        }
+        .sentence-item b:hover {
+            color: #003F8A;
+            text-decoration: underline;
+        }
+        .translation {
+            display: none;
+            font-style: italic;
+            color: #555;
+            margin: 4px 0 8px 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+        th {
+            background-color: #003F8A;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background-color: #eef2f7;
+        }
+        .hint {
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Les verbes irréguliers</h1>
+<h2 style="text-align:center; margin-top: 0;">être – avoir – aller – faire</h2>
+<h2 style="text-align:center; margin-top: 5px; color: #555; font-size: 1em;">Version A : Français → Deutsch</h2>
+
+<p class="hint">Übersetze die folgenden Sätze ins Deutsche. Unten findest du eine Vokabelliste zur Hilfe. 👆 Klicke anschließend auf den französischen Satz, um die deutsche Übersetzung zu sehen.</p>
+
+<ol>
+    <li class="sentence-item" onclick="toggle('s1')">
+        <b>J'ai un chat.</b>
+        <div class="translation" id="s1"><i>Ich habe eine Katze.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s2')">
+        <b>Nous allons au parc.</b>
+        <div class="translation" id="s2"><i>Wir gehen in den Park.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s3')">
+        <b>Elle est française.</b>
+        <div class="translation" id="s3"><i>Sie ist Französin.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s4')">
+        <b>Tu fais du sport.</b>
+        <div class="translation" id="s4"><i>Du machst Sport.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s5')">
+        <b>Les enfants sont contents.</b>
+        <div class="translation" id="s5"><i>Die Kinder sind zufrieden.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s6')">
+        <b>Il va à Paris.</b>
+        <div class="translation" id="s6"><i>Er geht nach Paris.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s7')">
+        <b>Vous avez un livre.</b>
+        <div class="translation" id="s7"><i>Ihr habt ein Buch.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s8')">
+        <b>Je fais mes devoirs.</b>
+        <div class="translation" id="s8"><i>Ich mache meine Hausaufgaben.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s9')">
+        <b>Tu es mon ami.</b>
+        <div class="translation" id="s9"><i>Du bist mein Freund.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s10')">
+        <b>Elle a une sœur.</b>
+        <div class="translation" id="s10"><i>Sie hat eine Schwester.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s11')">
+        <b>Les filles vont au magasin.</b>
+        <div class="translation" id="s11"><i>Die Mädchen gehen ins Geschäft.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s12')">
+        <b>Nous faisons un gâteau.</b>
+        <div class="translation" id="s12"><i>Wir machen einen Kuchen.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s13')">
+        <b>Je suis fatigué.</b>
+        <div class="translation" id="s13"><i>Ich bin müde.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s14')">
+        <b>Nous avons faim.</b>
+        <div class="translation" id="s14"><i>Wir haben Hunger.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s15')">
+        <b>Tu vas au cinéma.</b>
+        <div class="translation" id="s15"><i>Du gehst ins Kino.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s16')">
+        <b>Elle fait la cuisine.</b>
+        <div class="translation" id="s16"><i>Sie kocht.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s17')">
+        <b>Nous sommes dans la classe.</b>
+        <div class="translation" id="s17"><i>Wir sind im Klassenzimmer.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s18')">
+        <b>Il a douze ans.</b>
+        <div class="translation" id="s18"><i>Er ist zwölf Jahre alt.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s19')">
+        <b>Vous allez à la maison.</b>
+        <div class="translation" id="s19"><i>Ihr geht nach Hause.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s20')">
+        <b>Les garçons font du football.</b>
+        <div class="translation" id="s20"><i>Die Jungen spielen Fußball.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s21')">
+        <b>Vous êtes gentils.</b>
+        <div class="translation" id="s21"><i>Ihr seid nett.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s22')">
+        <b>Tu as un frère.</b>
+        <div class="translation" id="s22"><i>Du hast einen Bruder.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s23')">
+        <b>Je vais à l'école.</b>
+        <div class="translation" id="s23"><i>Ich gehe in die Schule.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s24')">
+        <b>Vous faites du vélo.</b>
+        <div class="translation" id="s24"><i>Ihr fahrt Fahrrad.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s25')">
+        <b>Marie est triste.</b>
+        <div class="translation" id="s25"><i>Marie ist traurig.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s26')">
+        <b>J'ai soif.</b>
+        <div class="translation" id="s26"><i>Ich habe Durst.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s27')">
+        <b>Comment vas-tu ?</b>
+        <div class="translation" id="s27"><i>Wie geht es dir?</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s28')">
+        <b>Il fait beau aujourd'hui.</b>
+        <div class="translation" id="s28"><i>Es ist schönes Wetter heute.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s29')">
+        <b>Il est à la maison.</b>
+        <div class="translation" id="s29"><i>Er ist zu Hause.</i></div>
+    </li>
+    <li class="sentence-item" onclick="toggle('s30')">
+        <b>Les élèves ont un stylo.</b>
+        <div class="translation" id="s30"><i>Die Schüler haben einen Stift.</i></div>
+    </li>
+</ol>
+
+<h2>📚 Vokabelliste</h2>
+<table>
+    <tr>
+        <th>Français</th>
+        <th>Deutsch</th>
+    </tr>
+    <tr><td>être</td><td>sein</td></tr>
+    <tr><td>avoir</td><td>haben</td></tr>
+    <tr><td>aller</td><td>gehen</td></tr>
+    <tr><td>faire</td><td>machen, tun</td></tr>
+    <tr><td>fatigué(e)</td><td>müde</td></tr>
+    <tr><td>un ami / une amie</td><td>ein Freund / eine Freundin</td></tr>
+    <tr><td>français(e)</td><td>französisch / Franzose, Französin</td></tr>
+    <tr><td>la classe</td><td>das Klassenzimmer</td></tr>
+    <tr><td>gentil(le)</td><td>nett</td></tr>
+    <tr><td>l'enfant (m./f.)</td><td>das Kind</td></tr>
+    <tr><td>content(e)</td><td>zufrieden, froh</td></tr>
+    <tr><td>la maison</td><td>das Haus / zu Hause</td></tr>
+    <tr><td>triste</td><td>traurig</td></tr>
+    <tr><td>un chat</td><td>eine Katze</td></tr>
+    <tr><td>un frère</td><td>ein Bruder</td></tr>
+    <tr><td>une sœur</td><td>eine Schwester</td></tr>
+    <tr><td>douze ans</td><td>zwölf Jahre</td></tr>
+    <tr><td>avoir faim</td><td>Hunger haben</td></tr>
+    <tr><td>avoir soif</td><td>Durst haben</td></tr>
+    <tr><td>le livre</td><td>das Buch</td></tr>
+    <tr><td>l'élève (m./f.)</td><td>der Schüler / die Schülerin</td></tr>
+    <tr><td>le stylo</td><td>der Stift</td></tr>
+    <tr><td>l'école (f.)</td><td>die Schule</td></tr>
+    <tr><td>le cinéma</td><td>das Kino</td></tr>
+    <tr><td>le parc</td><td>der Park</td></tr>
+    <tr><td>la fille</td><td>das Mädchen</td></tr>
+    <tr><td>le magasin</td><td>das Geschäft</td></tr>
+    <tr><td>comment</td><td>wie</td></tr>
+    <tr><td>les devoirs (m. pl.)</td><td>die Hausaufgaben</td></tr>
+    <tr><td>le sport</td><td>der Sport</td></tr>
+    <tr><td>faire la cuisine</td><td>kochen</td></tr>
+    <tr><td>le gâteau</td><td>der Kuchen</td></tr>
+    <tr><td>le vélo</td><td>das Fahrrad</td></tr>
+    <tr><td>faire du vélo</td><td>Fahrrad fahren</td></tr>
+    <tr><td>le garçon</td><td>der Junge</td></tr>
+    <tr><td>le football</td><td>der Fußball</td></tr>
+    <tr><td>il fait beau</td><td>es ist schönes Wetter</td></tr>
+    <tr><td>aujourd'hui</td><td>heute</td></tr>
+    <tr><td>dans</td><td>in (Raum)</td></tr>
+    <tr><td>à</td><td>in / nach (Stadt, Ort)</td></tr>
+    <tr><td>au (= à + le)</td><td>in den / ins</td></tr>
+</table>
+
+<script>
+    function toggle(id) {
+        const el = document.getElementById(id);
+        if (el.style.display === "block") {
+            el.style.display = "none";
+        } else {
+            el.style.display = "block";
+        }
+    }
+</script>
+
+</body>
+</html>
