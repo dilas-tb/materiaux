@@ -153,15 +153,31 @@ const verbs = {
 function speak(text, btn) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang  = 'fr-FR';
-  u.rate  = 0.80;
-  u.pitch = 1.05;
-  if (btn) {
-    btn.classList.add('speaking');
-    u.onend = () => btn.classList.remove('speaking');
+
+  function doSpeak() {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang  = 'fr-FR';
+    u.rate  = 0.80;
+    u.pitch = 1.05;
+
+    // Explizit eine französische Stimme suchen und zuweisen
+    const voices = window.speechSynthesis.getVoices();
+    const frVoice = voices.find(v => v.lang.startsWith('fr'));
+    if (frVoice) u.voice = frVoice;
+
+    if (btn) {
+      btn.classList.add('speaking');
+      u.onend = () => btn.classList.remove('speaking');
+    }
+    window.speechSynthesis.speak(u);
   }
-  window.speechSynthesis.speak(u);
+
+  // Stimmen schon geladen? Dann direkt sprechen, sonst warten
+  if (window.speechSynthesis.getVoices().length > 0) {
+    doSpeak();
+  } else {
+    window.speechSynthesis.addEventListener('voiceschanged', doSpeak, { once: true });
+  }
 }
 
 Object.entries(verbs).forEach(([key, data]) => {
