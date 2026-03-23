@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le verbe « aller » au présent</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            color: #4a3f8a;
+            margin-bottom: 5px;
+        }
+
+        header h1 .verb {
+            color: #e74c3c;
+            font-style: italic;
+        }
+
+        header p.subtitle {
+            font-size: 1.1em;
+            color: #777;
+        }
+
+        .flag-bar {
+            height: 6px;
+            background: linear-gradient(90deg, #002395 33%, #fff 33%, #fff 66%, #ed2939 66%);
+            border-radius: 3px;
+            margin-top: 15px;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.3);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: #fff;
+            color: #4a3f8a;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-tab .tab-icon {
+            font-size: 1.2em;
+        }
+
+        .nav-tab .tab-check {
+            background: #27ae60;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.6em;
+            color: #4a3f8a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-description {
+            color: #888;
+            margin-bottom: 25px;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        /* Conjugation Table */
+        .conj-table-wrapper {
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .conj-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .conj-table thead th {
+            background: linear-gradient(135deg, #4a3f8a, #6c5ce7);
+            color: #fff;
+            padding: 15px 20px;
+            font-size: 1.05em;
+            text-align: left;
+        }
+
+        .conj-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .conj-table tbody tr:nth-child(even) {
+            background: #f8f7ff;
+        }
+
+        .conj-table tbody tr:hover {
+            background: #eee8ff;
+        }
+
+        .conj-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 1.05em;
+        }
+
+        .conj-table .pronoun {
+            font-weight: 700;
+            color: #4a3f8a;
+        }
+
+        .conj-table .form {
+            font-weight: 800;
+            color: #e74c3c;
+            font-size: 1.15em;
+        }
+
+        .conj-table .stem {
+            color: #e74c3c;
+        }
+
+        .conj-table .ending {
+            color: #27ae60;
+            font-weight: 800;
+            text-decoration: underline;
+        }
+
+        .conj-table .phonetic {
+            color: #999;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, #fff9e6, #fff3cd);
+            border-left: 5px solid #f1c40f;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box.tip {
+            background: linear-gradient(135deg, #e8f8f5, #d1f2eb);
+            border-left-color: #27ae60;
+        }
+
+        .info-box.warning {
+            background: linear-gradient(135deg, #fef0f0, #fde2e2);
+            border-left-color: #e74c3c;
+        }
+
+        .info-box h4 {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Memory Cards */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .memory-card {
+            perspective: 800px;
+            height: 100px;
+            cursor: pointer;
+        }
+
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card.matched .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card-front, .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1em;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .memory-card-front {
+            background: linear-gradient(135deg, #6c5ce7, #4a3f8a);
+            color: #fff;
+            font-size: 1.8em;
+        }
+
+        .memory-card-back {
+            background: #fff;
+            border: 3px solid #6c5ce7;
+            color: #4a3f8a;
+            transform: rotateY(180deg);
+        }
+
+        .memory-card.matched .memory-card-back {
+            background: #d5f5e3;
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+
+        /* Exercise styles */
+        .exercise-item {
+            background: #f8f7ff;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .exercise-item.correct {
+            border-color: #27ae60;
+            background: #eafaf1;
+        }
+
+        .exercise-item.incorrect {
+            border-color: #e74c3c;
+            background: #fef0f0;
+        }
+
+        .exercise-sentence {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .exercise-sentence .blank {
+            display: inline-block;
+            min-width: 120px;
+            border-bottom: 3px solid #6c5ce7;
+            text-align: center;
+            margin: 0 5px;
+            font-weight: 700;
+            color: #6c5ce7;
+        }
+
+        /* Dropdown select */
+        .form-select {
+            padding: 8px 16px;
+            border: 2px solid #6c5ce7;
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            color: #4a3f8a;
+            background: #fff;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s;
+            appearance: auto;
+        }
+
+        .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(108,92,231,0.2);
+        }
+
+        .form-select.correct {
+            border-color: #27ae60;
+            background: #eafaf1;
+            color: #27ae60;
+        }
+
+        .form-select.incorrect {
+            border-color: #e74c3c;
+            background: #fef0f0;
+            color: #e74c3c;
+        }
+
+        /* Text input */
+        .form-input {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            color: #4a3f8a;
+            width: 140px;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(108,92,231,0.2);
+        }
+
+        .form-input.correct {
+            border-color: #27ae60;
+            background: #eafaf1;
+            color: #27ae60;
+        }
+
+        .form-input.incorrect {
+            border-color: #e74c3c;
+            background: #fef0f0;
+            color: #e74c3c;
+        }
+
+        /* Drag and Drop */
+        .drag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            min-height: 50px;
+            padding: 10px;
+            background: #f0eeff;
+            border-radius: 12px;
+            justify-content: center;
+        }
+
+        .drag-item {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #6c5ce7, #4a3f8a);
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: grab;
+            transition: all 0.2s;
+            user-select: none;
+            font-size: 1em;
+        }
+
+        .drag-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+        }
+
+        .drag-item.dragging {
+            opacity: 0.4;
+        }
+
+        .drop-zone {
+            display: inline-flex;
+            min-width: 120px;
+            min-height: 40px;
+            border: 3px dashed #bbb;
+            border-radius: 10px;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            padding: 5px 10px;
+            transition: all 0.2s;
+            vertical-align: middle;
+        }
+
+        .drop-zone.hover {
+            border-color: #6c5ce7;
+            background: #f0eeff;
+        }
+
+        .drop-zone.filled {
+            border-style: solid;
+            border-color: #6c5ce7;
+            background: #f0eeff;
+        }
+
+        .drop-zone.correct {
+            border-color: #27ae60;
+            background: #eafaf1;
+        }
+
+        .drop-zone.incorrect {
+            border-color: #e74c3c;
+            background: #fef0f0;
+        }
+
+        .drop-zone .drag-item {
+            margin: 0;
+            cursor: grab;
+        }
+
+        /* Multiple Choice */
+        .mc-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .mc-option {
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05em;
+            text-align: center;
+            transition: all 0.2s;
+            background: #fff;
+        }
+
+        .mc-option:hover {
+            border-color: #6c5ce7;
+            background: #f8f7ff;
+        }
+
+        .mc-option.selected {
+            border-color: #6c5ce7;
+            background: #f0eeff;
+            color: #4a3f8a;
+        }
+
+        .mc-option.correct {
+            border-color: #27ae60;
+            background: #eafaf1;
+            color: #27ae60;
+        }
+
+        .mc-option.incorrect {
+            border-color: #e74c3c;
+            background: #fef0f0;
+            color: #e74c3c;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c5ce7, #4a3f8a);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108,92,231,0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39,174,96,0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #6c5ce7;
+            color: #6c5ce7;
+        }
+
+        .btn-outline:hover {
+            background: #6c5ce7;
+            color: #fff;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Feedback */
+        .feedback {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.success {
+            background: #eafaf1;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .feedback.error {
+            background: #fef0f0;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .feedback.info {
+            background: #eaf0fe;
+            color: #2c6dd4;
+            border: 2px solid #2c6dd4;
+        }
+
+        /* Score */
+        .score-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8f7ff;
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+        }
+
+        .score-bar .score-label {
+            font-weight: 700;
+            color: #4a3f8a;
+        }
+
+        .score-bar .score-value {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #6c5ce7;
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            height: 10px;
+            background: #e0ddf5;
+            border-radius: 5px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6c5ce7, #27ae60);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        /* Audio button */
+        .audio-btn {
+            background: none;
+            border: 2px solid #6c5ce7;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            transition: all 0.2s;
+            color: #6c5ce7;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        .audio-btn:hover {
+            background: #6c5ce7;
+            color: #fff;
+        }
+
+        /* Translation exercise */
+        .translation-pair {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .translation-pair .german {
+            text-align: right;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .translation-pair .arrow {
+            color: #bbb;
+            font-size: 1.2em;
+        }
+
+        /* Conjugation grid exercise */
+        .conj-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px 20px;
+            align-items: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .conj-grid .pronoun-label {
+            font-weight: 700;
+            color: #4a3f8a;
+            font-size: 1.1em;
+            text-align: right;
+        }
+
+        /* Celebration animation */
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .celebrate {
+            animation: celebrate 0.5s ease;
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confettiFall 3s ease-in forwards;
+        }
+
+        @keyframes confettiFall {
+            to {
+                top: 110%;
+                transform: rotate(720deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.5em; }
+            .section { padding: 20px; }
+            .mc-options { grid-template-columns: 1fr; }
+            .translation-pair { grid-template-columns: 1fr; gap: 5px; }
+            .translation-pair .german { text-align: left; }
+            .translation-pair .arrow { display: none; }
+            .memory-grid { grid-template-columns: repeat(3, 1fr); }
+            .nav-tab { padding: 10px 14px; font-size: 0.85em; }
+        }
+
+        /* Sentence builder */
+        .sentence-builder-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+            justify-content: center;
+        }
+
+        .sentence-builder-target {
+            min-height: 50px;
+            border: 3px dashed #ccc;
+            border-radius: 12px;
+            padding: 10px;
+            margin: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .sentence-builder-target.hover {
+            border-color: #6c5ce7;
+            background: #f8f7ff;
+        }
+
+        .word-chip {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #6c5ce7, #4a3f8a);
+            color: #fff;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .word-chip:hover {
+            transform: scale(1.05);
+        }
+
+        .word-chip.placed {
+            background: #27ae60;
+        }
+
+        .word-chip.in-target {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        /* Steps indicator */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+
+        .step-dot.active {
+            background: #6c5ce7;
+        }
+
+        .step-dot.completed {
+            background: #27ae60;
+        }
+
+        .example-sentence {
+            background: #f8f7ff;
+            border-left: 4px solid #6c5ce7;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 8px 0;
+            font-size: 1.05em;
+        }
+
+        .example-sentence .fr {
+            font-weight: 700;
+            color: #4a3f8a;
+        }
+
+        .example-sentence .de {
+            color: #888;
+            font-style: italic;
+        }
+
+        .highlight-red {
+            color: #e74c3c;
+            font-weight: 800;
+        }
+
+        .highlight-green {
+            color: #27ae60;
+            font-weight: 800;
+        }
+
+        .highlight-purple {
+            color: #6c5ce7;
+            font-weight: 800;
+        }
+
+        /* Final score screen */
+        .final-score {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .final-score .big-score {
+            font-size: 4em;
+            font-weight: 800;
+            color: #6c5ce7;
+        }
+
+        .final-score .big-score .max {
+            color: #ccc;
+            font-size: 0.5em;
+        }
+
+        .star-rating {
+            font-size: 2.5em;
+            margin: 15px 0;
+        }
+
+        .star-rating .star {
+            color: #ddd;
+            transition: color 0.3s;
+        }
+
+        .star-rating .star.filled {
+            color: #f1c40f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇫🇷 Le verbe <span class="verb">« aller »</span> au présent</h1>
+            <p class="subtitle">Das unregelmäßige Verb « aller » (gehen) im Präsens</p>
+            <div class="flag-bar"></div>
+        </header>
+
+        <nav class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" onclick="showSection(0)">
+                <span class="tab-icon">📖</span> Lernen
+            </button>
+            <button class="nav-tab" onclick="showSection(1)">
+                <span class="tab-icon">①</span> Erkennen
+            </button>
+            <button class="nav-tab" onclick="showSection(2)">
+                <span class="tab-icon">②</span> Zuordnen
+            </button>
+            <button class="nav-tab" onclick="showSection(3)">
+                <span class="tab-icon">③</span> Auswählen
+            </button>
+            <button class="nav-tab" onclick="showSection(4)">
+                <span class="tab-icon">④</span> Einsetzen
+            </button>
+            <button class="nav-tab" onclick="showSection(5)">
+                <span class="tab-icon">⑤</span> Übersetzen
+            </button>
+            <button class="nav-tab" onclick="showSection(6)">
+                <span class="tab-icon">⑥</span> Sätze bauen
+            </button>
+            <button class="nav-tab" onclick="showSection(7)">
+                <span class="tab-icon">🏆</span> Ergebnis
+            </button>
+        </nav>
+
+        <!-- SECTION 0: Lernen -->
+        <div class="section active" id="section0">
+            <h2 class="section-title">📖 Die Konjugation von « aller »</h2>
+            <p class="section-description">
+                « Aller » bedeutet <strong>« gehen »</strong>. Es ist ein <strong>unregelmäßiges Verb</strong> – 
+                die Formen muss man auswendig lernen! Schau dir die Tabelle genau an.
+            </p>
+
+            <div class="conj-table-wrapper">
+                <table class="conj-table">
+                    <thead>
+                        <tr>
+                            <th>Pronomen</th>
+                            <th>Form</th>
+                            <th>Aussprache</th>
+                            <th>Deutsch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="pronoun">je</td>
+                            <td class="form"><span class="stem">v</span><span class="ending">ais</span></td>
+                            <td class="phonetic">[ʒə vɛ]</td>
+                            <td>ich gehe</td>
+                        </tr>
+                        <tr>
+                            <td class="pronoun">tu</td>
+                            <td class="form"><span class="stem">v</span><span class="ending">as</span></td>
+                            <td class="phonetic">[ty va]</td>
+                            <td>du gehst</td>
+                        </tr>
+                        <tr>
+                            <td class="pronoun">il / elle</td>
+                            <td class="form"><span class="stem">v</span><span class="ending">a</span></td>
+                            <td class="phonetic">[il / ɛl va]</td>
+                            <td>er / sie geht</td>
+                        </tr>
+                        <tr>
+                            <td class="pronoun">nous</td>
+                            <td class="form"><span class="stem">all</span><span class="ending">ons</span></td>
+                            <td class="phonetic">[nu.z‿alɔ̃]</td>
+                            <td>wir gehen</td>
+                        </tr>
+                        <tr>
+                            <td class="pronoun">vous</td>
+                            <td class="form"><span class="stem">all</span><span class="ending">ez</span></td>
+                            <td class="phonetic">[vu.z‿ale]</td>
+                            <td>ihr geht / Sie gehen</td>
+                        </tr>
+                        <tr>
+                            <td class="pronoun">ils / elles</td>
+                            <td class="form"><span class="stem">v</span><span class="ending">ont</span></td>
+                            <td class="phonetic">[il / ɛl vɔ̃]</td>
+                            <td>sie gehen</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box warning">
+                <h4>⚠️ Achtung – Besonderheit!</h4>
+                <p>
+                    « Aller » hat <strong>zwei verschiedene Stämme</strong>:
+                    <br>• Singular + 3. Plural: <span class="highlight-red">v-</span> (vais, vas, va, vont)
+                    <br>• 1. + 2. Plural: <span class="highlight-red">all-</span> (allons, allez)
+                    <br><br>Das ist ganz besonders – kein anderes französisches Verb verhält sich so!
+                </p>
+            </div>
+
+            <div class="info-box tip">
+                <h4>💡 Merktipp</h4>
+                <p>
+                    Denk an einen Merksatz: <strong>« Je <span class="highlight-red">vais</span> à Paris, 
+                    nous <span class="highlight-red">allons</span> à Paris ! »</strong>
+                    <br>(Ich gehe nach Paris, wir gehen nach Paris!)
+                    <br><br>
+                    Auch hilfreich: « <strong>Aller</strong> » wird oft mit <strong>« à »</strong> (nach, zu, in) benutzt:
+                </p>
+            </div>
+
+            <h3 style="margin: 20px 0 10px; color: #4a3f8a;">📌 Beispielsätze:</h3>
+
+            <div class="example-sentence">
+                <span class="fr">Je <span class="highlight-red">vais</span> à l'école.</span>
+                <br><span class="de">→ Ich gehe in die Schule.</span>
+            </div>
+            <div class="example-sentence">
+                <span class="fr">Tu <span class="highlight-red">vas</span> au cinéma ?</span>
+                <br><span class="de">→ Gehst du ins Kino?</span>
+            </div>
+            <div class="example-sentence">
+                <span class="fr">Elle <span class="highlight-red">va</span> à la plage.</span>
+                <br><span class="de">→ Sie geht zum Strand.</span>
+            </div>
+            <div class="example-sentence">
+                <span class="fr">Nous <span class="highlight-red">allons</span> au parc.</span>
+                <br><span class="de">→ Wir gehen in den Park.</span>
+            </div>
+            <div class="example-sentence">
+                <span class="fr">Vous <span class="highlight-red">allez</span> en France.</span>
+                <br><span class="de">→ Ihr fahrt / Sie fahren nach Frankreich.</span>
+            </div>
+            <div class="example-sentence">
+                <span class="fr">Ils <span class="highlight-red">vont</span> au restaurant.</span>
+                <br><span class="de">→ Sie gehen ins Restaurant.</span>
+            </div>
+
+            <div class="btn-group" style="justify-content: center;">
+                <button class="btn btn-primary" onclick="showSection(1)">
+                    Zur ersten Übung ➜
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 1: Multiple Choice – Formenerkennung -->
+        <div class="section" id="section1">
+            <h2 class="section-title">① Formen erkennen</h2>
+            <p class="section-description">
+                Welche Form von « aller » passt zum Pronomen? Klicke auf die richtige Antwort.
+            </p>
+            <div class="score-bar">
+                <span class="score-label">Punkte:</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress1" style="width:0%"></div>
+                </div>
+                <span class="score-value" id="score1">0 / 6</span>
+            </div>
+            <div id="mc-exercises"></div>
+            <div class="feedback" id="feedback1"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="nextBtn1" onclick="nextMC()" style="display:none;">
+                    Nächste Frage ➜
+                </button>
+                <button class="btn btn-success" id="continueBtn1" onclick="showSection(2)" style="display:none;">
+                    Weiter zu Übung ② ➜
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Drag & Drop – Zuordnen -->
+        <div class="section" id="section2">
+            <h2 class="section-title">② Formen zuordnen</h2>
+            <p class="section-description">
+                Ziehe die richtige Verbform zum passenden Pronomen (oder klicke zum Auswählen und Platzieren).
+            </p>
+            <div class="score-bar">
+                <span class="score-label">Punkte:</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress2" style="width:0%"></div>
+                </div>
+                <span class="score-value" id="score2">0 / 6</span>
+            </div>
+
+            <div class="drag-container" id="dragSource2">
+                <!-- Drag items will be generated -->
+            </div>
+
+            <div id="dropExercises2" style="margin-top:20px;"></div>
+
+            <div class="feedback" id="feedback2"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="checkBtn2" onclick="checkDragDrop()">
+                    ✔ Überprüfen
+                </button>
+                <button class="btn btn-outline" id="resetBtn2" onclick="resetDragDrop()">
+                    ↻ Zurücksetzen
+                </button>
+                <button class="btn btn-success" id="continueBtn2" onclick="showSection(3)" style="display:none;">
+                    Weiter zu Übung ③ ➜
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Dropdown – Auswählen im Satz -->
+        <div class="section" id="section3">
+            <h2 class="section-title">③ Die richtige Form auswählen</h2>
+            <p class="section-description">
+                Wähle die passende Form von « aller » aus dem Dropdown-Menü.
+            </p>
+            <div class="score-bar">
+                <span class="score-label">Punkte:</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress3" style="width:0%"></div>
+                </div>
+                <span class="score-value" id="score3">0 / 6</span>
+            </div>
+
+            <div id="dropdownExercises"></div>
+
+            <div class="feedback" id="feedback3"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="checkBtn3" onclick="checkDropdowns()">
+                    ✔ Überprüfen
+                </button>
+                <button class="btn btn-success" id="continueBtn3" onclick="showSection(4)" style="display:none;">
+                    Weiter zu Übung ④ ➜
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 4: Lückentext – Frei eintippen -->
+        <div class="section" id="section4">
+            <h2 class="section-title">④ Formen einsetzen</h2>
+            <p class="section-description">
+                Schreibe die richtige Form von « aller » in die Lücke. Achte auf die Schreibweise!
+            </p>
+            <div class="score-bar">
+                <span class="score-label">Punkte:</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress4" style="width:0%"></div>
+                </div>
+                <span class="score-value" id="score4">0 / 6</span>
+            </div>
+
+            <div id="fillExercises"></div>
+
+            <div class="feedback" id="feedback4"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="checkBtn4" onclick="checkFillBlanks()">
+                    ✔ Überprüfen
+                </button>
+                <button class="btn btn-success" id="continueBtn4" onclick="showSection(5)" style="display:none;">
+                    Weiter zu Übung ⑤ ➜
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 5: Übersetzung -->
+        <div class="section" id="section5">
+            <h2 class="section-title">⑤ Übersetzen</h2>
+            <p class="section-description">
+                Übersetze die deutschen Sätze ins Französische. Schreibe den ganzen Satzteil (Pronomen + Verbform).
+            </p>
+            <div class="score-bar">
+                <span class="score-label">Punkte:</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress5" style="width:0%"></div>
+                </div>
+                <span class="score-value" id="score5">0 / 6</span>
+            </div>
+
+            <div id="translateExercises"></div>
+
+            <div class="feedback" id="feedback5"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="checkBtn5" onclick="checkTranslations()">
+                    ✔ Überprüfen
+                </button>
+                <button class="btn btn-success" id="continueBtn5" onclick="showSection(6)" style="display:none;">
+                    Weiter zu Übung ⑥ ➜
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 6: Sätze bauen -->
+        <div class="section" id="section6">
+            <h2 class="section-title">⑥ Sätze bauen</h2>
+            <p class="section-description">
+                Bringe die Wörter in die richtige Reihenfolge, um einen französischen Satz zu bilden. 
+                Klicke auf die Wörter, um sie in die Zeile einzufügen.
+            </p>
+            <div class="score-bar">
+                <span class="score-label">Punkte:</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress6" style="width:0%"></div>
+                </div>
+                <span class="score-value" id="score6">0 / 5</span>
+            </div>
+
+            <div id="sentenceExercises"></div>
+
+            <div class="feedback" id="feedback6"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" id="checkBtn6" onclick="checkSentences()">
+                    ✔ Überprüfen
+                </button>
+                <button class="btn btn-outline" id="resetBtn6" onclick="resetSentences()">
+                    ↻ Zurücksetzen
+                </button>
+                <button class="btn btn-success" id="continueBtn6" onclick="showSection(7)" style="display:none;">
+                    Zum Ergebnis 🏆
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 7: Ergebnis -->
+        <div class="section" id="section7">
+            <div class="final-score">
+                <h2 class="section-title" style="justify-content: center;">🏆 Dein Ergebnis</h2>
+                <div class="big-score" id="finalScore">0 <span class="max">/ 35</span></div>
+                <div class="star-rating" id="starRating">
+                    <span class="star">⭐</span>
+                    <span class="star">⭐</span>
+                    <span class="star">⭐</span>
+                    <span class="star">⭐</span>
+                    <span class="star">⭐</span>
+                </div>
+                <p id="finalMessage" style="font-size:1.2em; color:#555; margin: 15px 0;"></p>
+
+                <div id="finalDetails" style="text-align:left; max-width: 400px; margin: 20px auto;">
+                </div>
+
+                <div class="btn-group" style="justify-content:center; margin-top:30px;">
+                    <button class="btn btn-primary" onclick="resetAll()">
+                        ↻ Alles wiederholen
+                    </button>
+                    <button class="btn btn-outline" onclick="showSection(0)">
+                        📖 Nochmal lernen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script>
+        // ====== GLOBAL STATE ======
+        const scores = { ex1: 0, ex2: 0, ex3: 0, ex4: 0, ex5: 0, ex6: 0 };
+        const maxScores = { ex1: 6, ex2: 6, ex3: 6, ex4: 6, ex5: 6, ex6: 5 };
+        const completed = { ex1: false, ex2: false, ex3: false, ex4: false, ex5: false, ex6: false };
+
+        const conjugations = {
+            'je': 'vais',
+            'tu': 'vas',
+            'il': 'va',
+            'elle': 'va',
+            'nous': 'allons',
+            'vous': 'allez',
+            'ils': 'vont',
+            'elles': 'vont'
+        };
+
+        // ====== NAVIGATION ======
+        function showSection(index) {
+            document.querySelectorAll('.section').forEach((s, i) => {
+                s.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.nav-tab').forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (index === 7) calculateFinalScore();
+        }
+
+        function updateTabCheck(exNum) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const tab = tabs[exNum];
+            if (!tab.querySelector('.tab-check')) {
+                const check = document.createElement('span');
+                check.className = 'tab-check';
+                check.textContent = '✓';
+                tab.appendChild(check);
+            }
+        }
+
+        // ====== UTILITY ======
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function showFeedback(id, type, text) {
+            const fb = document.getElementById(id);
+            fb.className = 'feedback show ' + type;
+            fb.innerHTML = text;
+        }
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = 'fr-FR';
+                u.rate = 0.85;
+                speechSynthesis.speak(u);
+            }
+        }
+
+        // ====== EXERCISE 1: Multiple Choice ======
+        const mcQuestions = [
+            { pronoun: 'je', correct: 'vais', options: ['vais', 'vas', 'va', 'allons'] },
+            { pronoun: 'tu', correct: 'vas', options: ['vais', 'vas', 'allez', 'vont'] },
+            { pronoun: 'il', correct: 'va', options: ['vas', 'va', 'allons', 'vont'] },
+            { pronoun: 'nous', correct: 'allons', options: ['allez', 'allons', 'vont', 'vais'] },
+            { pronoun: 'vous', correct: 'allez', options: ['allons', 'va', 'allez', 'vas'] },
+            { pronoun: 'elles', correct: 'vont', options: ['va', 'allez', 'allons', 'vont'] }
+        ];
+        let mcIndex = 0;
+        let mcAnswered = false;
+
+        function renderMC() {
+            const container = document.getElementById('mc-exercises');
+            if (mcIndex >= mcQuestions.length) {
+                completed.ex1 = true;
+                updateTabCheck(1);
+                showFeedback('feedback1', 'success', `🎉 Super! Übung ① abgeschlossen! ${scores.ex1} / ${maxScores.ex1} Punkte!`);
+                document.getElementById('nextBtn1').style.display = 'none';
+                document.getElementById('continueBtn1').style.display = 'inline-flex';
+                return;
+            }
+            const q = mcQuestions[mcIndex];
+            mcAnswered = false;
+            const opts = shuffle(q.options);
+
+            container.innerHTML = `
+                <div class="exercise-item" id="mcItem${mcIndex}">
+                    <p class="exercise-sentence" style="font-size:1.3em; margin-bottom:12px;">
+                        <strong>${q.pronoun}</strong> ________
+                    </p>
+                    <p style="color:#888; margin-bottom:10px;">Welche Form passt?</p>
+                    <div class="mc-options">
+                        ${opts.map(o => `<div class="mc-option" onclick="selectMC(this, '${o}', '${q.correct}')">${o}</div>`).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('nextBtn1').style.display = 'none';
+            document.getElementById('feedback1').className = 'feedback';
+        }
+
+        function selectMC(el, selected, correct) {
+            if (mcAnswered) return;
+            mcAnswered = true;
+
+            const options = el.parentElement.querySelectorAll('.mc-option');
+            options.forEach(o => {
+                if (o.textContent === correct) o.classList.add('correct');
+                if (o === el && selected !== correct) o.classList.add('incorrect');
+            });
+
+            if (selected === correct) {
+                scores.ex1++;
+                showFeedback('feedback1', 'success', '✅ Richtig! Très bien !');
+                speak(mcQuestions[mcIndex].pronoun + ' ' + correct);
+            } else {
+                showFeedback('feedback1', 'error', `❌ Leider falsch. Die richtige Antwort ist: <strong>${correct}</strong>`);
+            }
+
+            document.getElementById('score1').textContent = `${scores.ex1} / ${maxScores.ex1}`;
+            document.getElementById('progress1').style.width = `${(mcIndex + 1) / mcQuestions.length * 100}%`;
+
+            mcIndex++;
+            document.getElementById('nextBtn1').style.display = 'inline-flex';
+        }
+
+        function nextMC() {
+            renderMC();
+        }
+
+        // ====== EXERCISE 2: Drag & Drop ======
+        const ddPairs = [
+            { pronoun: 'je', form: 'vais' },
+            { pronoun: 'tu', form: 'vas' },
+            { pronoun: 'elle', form: 'va' },
+            { pronoun: 'nous', form: 'allons' },
+            { pronoun: 'vous', form: 'allez' },
+            { pronoun: 'ils', form: 'vont' }
+        ];
+        let selectedDragItem = null;
+
+        function initDragDrop() {
+            const source = document.getElementById('dragSource2');
+            const exercises = document.getElementById('dropExercises2');
+
+            const shuffledForms = shuffle(ddPairs.map(p => p.form));
+
+            source.innerHTML = shuffledForms.map(f =>
+                `<div class="drag-item" draggable="true" data-form="${f}" onclick="selectDragItem(this)">${f}</div>`
+            ).join('');
+
+            exercises.innerHTML = ddPairs.map((p, i) =>
+                `<div class="exercise-item" style="display:flex; align-items:center; gap:15px;">
+                    <span style="font-weight:700; color:#4a3f8a; font-size:1.2em; min-width:80px;">${p.pronoun}</span>
+                    <div class="drop-zone" data-correct="${p.form}" data-index="${i}" 
+                         onclick="dropInZone(this)"
+                         ondragover="event.preventDefault(); this.classList.add('hover')" 
+                         ondragleave="this.classList.remove('hover')"
+                         ondrop="handleDrop(event, this)"></div>
+                </div>`
+            ).join('');
+
+            // Add drag events
+            source.querySelectorAll('.drag-item').forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', item.dataset.form);
+                    item.classList.add('dragging');
+                });
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                });
+            });
+        }
+
+        function selectDragItem(el) {
+            if (selectedDragItem) {
+                selectedDragItem.style.outline = '';
+            }
+            selectedDragItem = el;
+            el.style.outline = '3px solid #f1c40f';
+        }
+
+        function dropInZone(zone) {
+            if (!selectedDragItem) return;
+            if (zone.children.length > 0) {
+                // Return existing item to source
+                const existing = zone.children[0];
+                document.getElementById('dragSource2').appendChild(existing);
+            }
+            zone.appendChild(selectedDragItem);
+            zone.classList.add('filled');
+            selectedDragItem.style.outline = '';
+            selectedDragItem = null;
+        }
+
+        function handleDrop(e, zone) {
+            e.preventDefault();
+            zone.classList.remove('hover');
+            const form = e.dataTransfer.getData('text/plain');
+            const item = document.querySelector(`#dragSource2 .drag-item[data-form="${form}"], .drop-zone .drag-item[data-form="${form}"]`);
+
+            if (!item) return;
+
+            if (zone.children.length > 0) {
+                const existing = zone.children[0];
+                document.getElementById('dragSource2').appendChild(existing);
+            }
+
+            zone.appendChild(item);
+            zone.classList.add('filled');
+        }
+
+        function checkDragDrop() {
+            if (completed.ex2) return;
+
+            const zones = document.querySelectorAll('#dropExercises2 .drop-zone');
+            let correct = 0;
+
+            zones.forEach(zone => {
+                const expected = zone.dataset.correct;
+                const item = zone.querySelector('.drag-item');
+                const given = item ? item.dataset.form : '';
+
+                zone.classList.remove('correct', 'incorrect');
+                if (given === expected) {
+                    zone.classList.add('correct');
+                    correct++;
+                } else {
+                    zone.classList.add('incorrect');
+                }
+            });
+
+            scores.ex2 = correct;
+            document.getElementById('score2').textContent = `${correct} / ${maxScores.ex2}`;
+            document.getElementById('progress2').style.width = `${correct / maxScores.ex2 * 100}%`;
+
+            if (correct === maxScores.ex2) {
+                completed.ex2 = true;
+                updateTabCheck(2);
+                showFeedback('feedback2', 'success', '🎉 Parfait ! Alles richtig!');
+                document.getElementById('continueBtn2').style.display = 'inline-flex';
+            } else {
+                showFeedback('feedback2', 'error', `${correct} von ${maxScores.ex2} richtig. Versuche es nochmal!`);
+            }
+        }
+
+        function resetDragDrop() {
+            if (completed.ex2) return;
+            selectedDragItem = null;
+            initDragDrop();
+            document.getElementById('feedback2').className = 'feedback';
+        }
+
+        // ====== EXERCISE 3: Dropdown ======
+        const dropdownSentences = [
+            { before: 'Je', after: 'au supermarché.', correct: 'vais', hint: 'Ich gehe in den Supermarkt.' },
+            { before: 'Tu', after: 'à la piscine.', correct: 'vas', hint: 'Du gehst ins Schwimmbad.' },
+            { before: 'Mon frère', after: 'à l\'école.', correct: 'va', hint: 'Mein Bruder geht in die Schule.' },
+            { before: 'Nous', after: 'en vacances.', correct: 'allons', hint: 'Wir fahren in den Urlaub.' },
+            { before: 'Vous', after: 'au musée ?', correct: 'allez', hint: 'Geht ihr ins Museum?' },
+            { before: 'Les filles', after: 'au parc.', correct: 'vont', hint: 'Die Mädchen gehen in den Park.' }
+        ];
+        const allForms = ['vais', 'vas', 'va', 'allons', 'allez', 'vont'];
+
+        function initDropdowns() {
+            const container = document.getElementById('dropdownExercises');
+            container.innerHTML = dropdownSentences.map((s, i) => `
+                <div class="exercise-item" id="ddItem${i}">
+                    <p class="exercise-sentence">
+                        ${s.before} 
+                        <select class="form-select" id="ddSelect${i}">
+                            <option value="">– choisir –</option>
+                            ${allForms.map(f => `<option value="${f}">${f}</option>`).join('')}
+                        </select>
+                        ${s.after}
+                    </p>
+                    <p style="color:#999; font-size:0.9em; margin-top:5px;">💬 ${s.hint}</p>
+                </div>
+            `).join('');
+        }
+
+        function checkDropdowns() {
+            if (completed.ex3) return;
+            let correct = 0;
+
+            dropdownSentences.forEach((s, i) => {
+                const select = document.getElementById(`ddSelect${i}`);
+                const item = document.getElementById(`ddItem${i}`);
+                select.classList.remove('correct', 'incorrect');
+                item.classList.remove('correct', 'incorrect');
+
+                if (select.value === s.correct) {
+                    select.classList.add('correct');
+                    item.classList.add('correct');
+                    correct++;
+                } else {
+                    select.classList.add('incorrect');
+                    item.classList.add('incorrect');
+                }
+                select.disabled = true;
+            });
+
+            scores.ex3 = correct;
+            document.getElementById('score3').textContent = `${correct} / ${maxScores.ex3}`;
+            document.getElementById('progress3').style.width = `${correct / maxScores.ex3 * 100}%`;
+
+            completed.ex3 = true;
+            updateTabCheck(3);
+
+            if (correct === maxScores.ex3) {
+                showFeedback('feedback3', 'success', '🎉 Excellent ! Alles richtig!');
+            } else {
+                const corrections = dropdownSentences.map((s, i) => {
+                    const sel = document.getElementById(`ddSelect${i}`);
+                    return sel.value !== s.correct ? `• ${s.before} <strong>${s.correct}</strong> ${s.after}` : '';
+                }).filter(x => x).join('<br>');
+                showFeedback('feedback3', 'info', `${correct} / ${maxScores.ex3} richtig.<br>Lösungen:<br>${corrections}`);
+            }
+            document.getElementById('continueBtn3').style.display = 'inline-flex';
+            document.getElementById('checkBtn3').disabled = true;
+        }
+
+        // ====== EXERCISE 4: Fill in the blanks ======
+        const fillSentences = [
+            { before: 'Je', after: 'chez le médecin.', correct: 'vais', hint: 'Ich gehe zum Arzt.' },
+            { before: 'Tu', after: 'bien ?', correct: 'vas', hint: 'Geht es dir gut?' },
+            { before: 'Ma mère', after: 'au travail.', correct: 'va', hint: 'Meine Mutter geht zur Arbeit.' },
+            { before: 'Nous', after: 'à la cantine.', correct: 'allons', hint: 'Wir gehen in die Mensa.' },
+            { before: 'Vous', after: 'où ?', correct: 'allez', hint: 'Wohin geht ihr?' },
+            { before: 'Mes amis', after: 'au stade.', correct: 'vont', hint: 'Meine Freunde gehen ins Stadion.' }
+        ];
+
+        function initFillBlanks() {
+            const container = document.getElementById('fillExercises');
+            container.innerHTML = fillSentences.map((s, i) => `
+                <div class="exercise-item" id="fillItem${i}">
+                    <p class="exercise-sentence">
+                        ${s.before} 
+                        <input type="text" class="form-input" id="fillInput${i}" placeholder
