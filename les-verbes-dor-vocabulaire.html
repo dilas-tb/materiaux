@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les verbes irréguliers – Karteikarten</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    color: #a78bfa;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 20px;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-direction {
+    background: #2d2d4e;
+    color: #a78bfa;
+    border: 2px solid #a78bfa;
+  }
+  .btn-direction.active {
+    background: #a78bfa;
+    color: #1a1a2e;
+  }
+  .btn-shuffle {
+    background: #2d2d4e;
+    color: #60a5fa;
+    border: 2px solid #60a5fa;
+  }
+  .btn-shuffle:hover { background: #3b3b6e; }
+
+  /* Progress */
+  .progress-wrap {
+    width: 100%;
+    max-width: 520px;
+    margin-bottom: 8px;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 4px;
+  }
+  .progress-bar-bg {
+    background: #2d2d4e;
+    border-radius: 6px;
+    height: 8px;
+    width: 100%;
+  }
+  .progress-bar-fill {
+    background: linear-gradient(90deg, #a78bfa, #60a5fa);
+    height: 8px;
+    border-radius: 6px;
+    transition: width 0.4s ease;
+  }
+
+  /* Round badge */
+  .round-badge {
+    font-size: 0.78rem;
+    color: #f59e0b;
+    margin-bottom: 14px;
+    min-height: 18px;
+  }
+
+  /* Card */
+  .card-scene {
+    width: 100%;
+    max-width: 520px;
+    height: 260px;
+    perspective: 1000px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+  }
+  .card-inner.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 30px;
+    text-align: center;
+    user-select: none;
+  }
+
+  .card-front {
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+    border: 1.5px solid #a78bfa44;
+    box-shadow: 0 8px 32px #0008;
+  }
+
+  .card-back {
+    background: linear-gradient(135deg, #1a2a1a 0%, #0d3320 100%);
+    border: 1.5px solid #34d39944;
+    box-shadow: 0 8px 32px #0008;
+    transform: rotateY(180deg);
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 10px;
+  }
+
+  .card-main {
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .card-example {
+    font-size: 0.82rem;
+    color: #9ca3af;
+    font-style: italic;
+    line-height: 1.5;
+    max-width: 420px;
+  }
+
+  .card-example .ex-translation {
+    color: #6b7280;
+    font-size: 0.78rem;
+  }
+
+  .card-hint {
+    font-size: 0.75rem;
+    color: #555;
+    margin-top: 12px;
+  }
+
+  /* Action row */
+  .action-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+    min-height: 46px;
+  }
+
+  .btn-correct {
+    background: #065f46;
+    color: #6ee7b7;
+    border: 2px solid #34d399;
+    padding: 10px 28px;
+    font-size: 1rem;
+  }
+  .btn-correct:hover { background: #047857; }
+
+  .btn-wrong {
+    background: #7f1d1d;
+    color: #fca5a5;
+    border: 2px solid #f87171;
+    padding: 10px 28px;
+    font-size: 1rem;
+  }
+  .btn-wrong:hover { background: #991b1b; }
+
+  .btn-back {
+    background: #2d2d4e;
+    color: #a78bfa;
+    border: 2px solid #a78bfa55;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+  .btn-back:hover { background: #3b3b6e; }
+
+  /* Stats */
+  .stats {
+    display: flex;
+    gap: 20px;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  .stat-correct { color: #34d399; font-weight: 700; }
+  .stat-wrong   { color: #f87171; font-weight: 700; }
+  .stat-open    { color: #a78bfa; font-weight: 700; }
+
+  /* Finish screen */
+  .finish-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    max-width: 480px;
+  }
+  .finish-screen.visible { display: flex; }
+
+  .finish-title {
+    font-size: 2rem;
+    color: #a78bfa;
+  }
+  .finish-msg {
+    font-size: 1rem;
+    color: #ccc;
+    line-height: 1.6;
+  }
+  .finish-stats {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+  }
+
+  .main-area { width: 100%; max-width: 520px; }
+</style>
+</head>
+<body>
+
+<h1>Les verbes irréguliers</h1>
+<p class="subtitle">Karteikarten-Trainer · 48 Wendungen</p>
+
+<div class="controls">
+  <button class="btn btn-direction active" id="btnFR">🇫🇷 Französisch → Deutsch</button>
+  <button class="btn btn-direction" id="btnDE">🇩🇪 Deutsch → Französisch</button>
+  <button class="btn btn-shuffle" id="btnShuffle">🔀 Mischen</button>
+</div>
+
+<div class="main-area" id="mainArea">
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="progressText">Karte 1 / 48</span>
+      <span id="progressPct">0 %</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="round-badge" id="roundBadge"></div>
+
+  <div class="card-scene" id="cardScene">
+    <div class="card-inner" id="cardInner">
+      <div class="card-face card-front" id="cardFront">
+        <div class="card-label" id="frontLabel">Französisch</div>
+        <div class="card-main" id="frontMain"></div>
+        <div class="card-example" id="frontExample"></div>
+        <div class="card-hint">👆 Karte umdrehen</div>
+      </div>
+      <div class="card-face card-back" id="cardBack">
+        <div class="card-label" id="backLabel">Deutsch</div>
+        <div class="card-main" id="backMain"></div>
+        <div class="card-example" id="backExample"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-row" id="actionRow">
+    <!-- filled dynamically -->
+  </div>
+
+  <div class="stats">
+    <span>✅ Richtig: <span class="stat-correct" id="statCorrect">0</span></span>
+    <span>❌ Falsch: <span class="stat-wrong" id="statWrong">0</span></span>
+    <span>🃏 Offen: <span class="stat-open" id="statOpen">0</span></span>
+  </div>
+</div>
+
+<!-- Finish screen -->
+<div class="finish-screen" id="finishScreen">
+  <div class="finish-title">🎉 Runde abgeschlossen!</div>
+  <div class="finish-stats" id="finishStats"></div>
+  <div class="finish-msg" id="finishMsg"></div>
+  <button class="btn btn-shuffle" id="btnReplay" style="margin-top:8px">🔁 Alle nochmal</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA  (48 entries)
+// ─────────────────────────────────────────────
+const ALL_CARDS = [
+  // aller (7)
+  { fr:"aller", de:"gehen", exFR:"Paul va au cinéma.", exDE:"Paul geht ins Kino." },
+  { fr:"aller à pied", de:"zu Fuß gehen", exFR:"Je vais à l'école à pied.", exDE:"Ich gehe zu Fuß zur Schule." },
+  { fr:"aller au lit", de:"ins Bett gehen", exFR:"Pauline va au lit à 21 heures.", exDE:"Pauline geht um 21 Uhr ins Bett." },
+  { fr:"aller aux toilettes", de:"auf Toilette gehen", exFR:"Nous allons aux toilettes.", exDE:"Wir gehen auf die Toilette." },
+  { fr:"aller bien", de:"gut gehen", exFR:"Ça va ? Oui, je vais bien !", exDE:"Wie geht's? Ja, mir geht es gut!" },
+  { fr:"aller chercher qc.", de:"etw. holen", exFR:"Je vais chercher mon sac.", exDE:"Ich gehe meine Tasche holen." },
+  { fr:"s'en aller", de:"aufbrechen, losgehen", exFR:"Il s'en va très tôt ce matin.", exDE:"Er bricht heute Morgen sehr früh auf." },
+  // avoir (11)
+  { fr:"avoir", de:"haben", exFR:"Elle a un nouveau livre.", exDE:"Sie hat ein neues Buch." },
+  { fr:"avoir … ans", de:"… alt sein", exFR:"J'ai treize ans.", exDE:"Ich bin dreizehn Jahre alt." },
+  { fr:"avoir qc. sur soi", de:"etw. dabei haben", exFR:"Nous avons nos devoirs sur nous.", exDE:"Wir haben unsere Hausaufgaben dabei." },
+  { fr:"avoir besoin de qc.", de:"etw. brauchen", exFR:"Vous avez besoin d'une clé.", exDE:"Ihr braucht einen Schlüssel." },
+  { fr:"avoir faim", de:"Hunger haben", exFR:"Ils ont faim après la classe.", exDE:"Sie haben nach dem Unterricht Hunger." },
+  { fr:"avoir foi dans qn.", de:"jmd. vertrauen", exFR:"Elles ont foi dans leur équipe.", exDE:"Sie vertrauen ihrem Team." },
+  { fr:"avoir froid", de:"einem kalt sein", exFR:"Paul a froid sans sa veste.", exDE:"Paul ist ohne seine Jacke kalt." },
+  { fr:"avoir lieu", de:"stattfinden", exFR:"Le match a lieu ce soir.", exDE:"Das Spiel findet heute Abend statt." },
+  { fr:"avoir mal", de:"Schmerzen haben", exFR:"Laura a mal à la tête.", exDE:"Laura hat Kopfschmerzen." },
+  { fr:"avoir peur", de:"Angst haben", exFR:"Je n'ai pas peur.", exDE:"Ich habe keine Angst." },
+  { fr:"avoir raison", de:"Recht haben", exFR:"Tu as raison, c'est vrai.", exDE:"Du hast recht, das stimmt." },
+  { fr:"avoir soif", de:"Durst haben", exFR:"J'ai soif.", exDE:"Ich habe Durst." },
+  // être (12)
+  { fr:"être", de:"sein", exFR:"Elle est très intelligente.", exDE:"Sie ist sehr intelligent." },
+  { fr:"être à l'heure", de:"pünktlich sein", exFR:"On est toujours à l'heure.", exDE:"Wir sind immer pünktlich." },
+  { fr:"être d'accord", de:"einverstanden sein", exFR:"Nous sommes d'accord avec le projet.", exDE:"Wir sind mit dem Projekt einverstanden." },
+  { fr:"être de l'avis de qn.", de:"jmds. Meinung sein", exFR:"Je suis de l'avis de Laura.", exDE:"Ich bin Lauras Meinung." },
+  { fr:"être en colère", de:"wütend sein", exFR:"Ils sont en colère contre le voisin.", exDE:"Sie sind wütend auf den Nachbarn." },
+  { fr:"être en retard", de:"zu spät sein", exFR:"Elles sont en retard pour le bus.", exDE:"Sie sind zu spät für den Bus." },
+  { fr:"être en train de faire qc.", de:"dabei sein, etw. zu tun", exFR:"Paul est en train de dessiner.", exDE:"Paul ist gerade dabei zu zeichnen." },
+  { fr:"être fatigué(e)", de:"müde sein", exFR:"Marie est fatiguée après son voyage.", exDE:"Marie ist nach ihrer Reise müde." },
+  { fr:"être fier de qc.", de:"stolz auf etw. sein", exFR:"Pauline est fière de son travail.", exDE:"Pauline ist stolz auf ihre Arbeit." },
+  { fr:"être prêt à faire qc.", de:"bereit sein, etw. zu tun", exFR:"Laura est prête à sortir.", exDE:"Laura ist bereit auszugehen." },
+  { fr:"être sûr", de:"sicher sein", exFR:"Je suis sûr que c'est ici.", exDE:"Ich bin sicher, dass es hier ist." },
+  // faire (18)
+  { fr:"faire", de:"machen", exFR:"Tu fais un beau dessin.", exDE:"Du machst eine schöne Zeichnung." },
+  { fr:"faire attention", de:"aufpassen", exFR:"Il fait attention.", exDE:"Er passt auf." },
+  { fr:"faire beau / mauvais", de:"schönes / schlechtes Wetter sein", exFR:"Il fait beau aujourd'hui.", exDE:"Heute ist schönes Wetter." },
+  { fr:"faire chaud / froid", de:"warm / kalt sein", exFR:"Il fait chaud en été.", exDE:"Im Sommer ist es warm." },
+  { fr:"faire de la musique", de:"Musik machen", exFR:"Nous faisons de la musique ensemble.", exDE:"Wir machen zusammen Musik." },
+  { fr:"faire du soleil", de:"sonnig sein", exFR:"Il fait du soleil.", exDE:"Die Sonne scheint." },
+  { fr:"faire du sport", de:"Sport machen", exFR:"Ils font du sport le mercredi.", exDE:"Sie treiben mittwochs Sport." },
+  { fr:"faire du vélo", de:"Fahrrad fahren", exFR:"Elles font du vélo le dimanche.", exDE:"Sie fahren sonntags Fahrrad." },
+  { fr:"faire du vent", de:"windig sein", exFR:"Il fait du vent.", exDE:"Es ist windig." },
+  { fr:"faire la connaissance de qn.", de:"jmd. kennenlernen", exFR:"Marie fait la connaissance de Paul.", exDE:"Marie lernt Paul kennen." },
+  { fr:"faire la cuisine", de:"kochen", exFR:"Paul fait la cuisine pour ses amis.", exDE:"Paul kocht für seine Freunde." },
+  { fr:"faire la fête", de:"feiern", exFR:"Laura fait la fête avec sa famille.", exDE:"Laura feiert mit ihrer Familie." },
+  { fr:"faire la vaisselle", de:"Geschirr abwaschen", exFR:"Je fais la vaisselle maintenant.", exDE:"Ich wasche jetzt ab." },
+  { fr:"faire le ménage", de:"aufräumen / den Haushalt machen", exFR:"Tu fais le ménage le samedi.", exDE:"Du machst samstags den Haushalt." },
+  { fr:"faire les courses", de:"einkaufen", exFR:"Il fait les courses au marché.", exDE:"Er geht auf dem Markt einkaufen." },
+  { fr:"faire semblant de qc.", de:"so tun, als ob man etw. täte", exFR:"Elle fait semblant d'être malade.", exDE:"Sie tut so, als ob sie krank wäre." },
+  { fr:"faire ses devoirs", de:"Hausaufgaben machen", exFR:"Je fais mes devoirs.", exDE:"Ich mache meine Hausaufgaben." },
+  { fr:"faire un stage", de:"ein Praktikum machen", exFR:"Nous faisons un stage.", exDE:"Wir machen ein Praktikum." },
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let direction = 'FR'; // 'FR' or 'DE'
+let deck      = [];   // current round queue
+let wrongIds  = [];   // indices into ALL_CARDS for wrong answers
+let current   = 0;
+let isFlipped = false;
+let isAnimating = false;
+let roundNum  = 1;
+
+let totalCorrect = 0;
+let totalWrong   = 0;
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildDeck(cardList) {
+  return cardList.map((c, i) => ({ ...c, origIdx: i }));
+}
+
+// ─────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────
+function renderCard() {
+  if (current >= deck.length) { showFinish(); return; }
+
+  const card = deck[current];
+  const inner = document.getElementById('cardInner');
+
+  // Reset flip state WITHOUT animation (instant)
+  inner.style.transition = 'none';
+  inner.classList.remove('flipped');
+  isFlipped = false;
+
+  // Force reflow so the transition removal takes effect
+  void inner.offsetWidth;
+
+  // Re-enable transitions for future flips
+  inner.style.transition = '';
+
+  // Populate content
+  if (direction === 'FR') {
+    document.getElementById('frontLabel').textContent  = 'Französisch';
+    document.getElementById('frontMain').textContent   = card.fr;
+    document.getElementById('frontExample').innerHTML  = card.exFR
+      ? `<em>${card.exFR}</em>` : '';
+    document.getElementById('backLabel').textContent   = 'Deutsch';
+    document.getElementById('backMain').textContent    = card.de;
+    document.getElementById('backExample').innerHTML   = '';
+  } else {
+    document.getElementById('frontLabel').textContent  = 'Deutsch';
+    document.getElementById('frontMain').textContent   = card.de;
+    document.getElementById('frontExample').innerHTML  = '';
+    document.getElementById('backLabel').textContent   = 'Französisch';
+    document.getElementById('backMain').textContent    = card.fr;
+    document.getElementById('backExample').innerHTML   = card.exFR
+      ? `<em>${card.exFR}</em><br><span class="ex-translation">${card.exDE}</span>`
+      : '';
+  }
+
+  updateProgress();
+  renderActionRow(false);
+}
+
+function renderActionRow(showJudgement) {
+  const row = document.getElementById('actionRow');
+  row.innerHTML = '';
+
+  if (showJudgement) {
+    // Back button
+    if (current > 0) {
+      const bBack = makeBtn('◀ Zurück', 'btn btn-back', goBack);
+      row.appendChild(bBack);
+    }
+    const bOk  = makeBtn('✅ Richtig', 'btn btn-correct', () => judge(true));
+    const bBad = makeBtn('❌ Falsch',  'btn btn-wrong',   () => judge(false));
+    row.appendChild(bOk);
+    row.appendChild(bBad);
+  } else {
+    if (current > 0) {
+      const bBack = makeBtn('◀ Zurück', 'btn btn-back', goBack);
+      row.appendChild(bBack);
+    }
+  }
+}
+
+function makeBtn(text, cls, fn) {
+  const b = document.createElement('button');
+  b.className = cls;
+  b.textContent = text;
+  b.addEventListener('click', fn);
+  return b;
+}
+
+function updateProgress() {
+  const total = deck.length;
+  const done  = current;
+  const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('progressText').textContent = `Karte ${done + 1} / ${total}`;
+  document.getElementById('progressPct').textContent  = `${pct} %`;
+  document.getElementById('progressFill').style.width = `${pct}%`;
+  document.getElementById('statOpen').textContent     = total - done;
+  document.getElementById('statCorrect').textContent  = totalCorrect;
+  document.getElementById('statWrong').textContent    = totalWrong;
+
+  const badge = document.getElementById('roundBadge');
+  badge.textContent = roundNum > 1 ? `🔄 Wiederholungsrunde ${roundNum} (${total} Karten)` : '';
+}
+
+// ─────────────────────────────────────────────
+// FLIP
+// ─────────────────────────────────────────────
+document.getElementById('cardScene').addEventListener('click', () => {
+  if (isAnimating) return;
+  const inner = document.getElementById('cardInner');
+  if (!isFlipped) {
+    isFlipped = true;
+    inner.classList.add('flipped');
+    renderActionRow(true);
+  }
+});
+
+// ─────────────────────────────────────────────
+// JUDGE
+// ─────────────────────────────────────────────
+function judge(correct) {
+  if (isAnimating) return;
+  isAnimating = true;
+
+  const card  = deck[current];
+  const inner = document.getElementById('cardInner');
+
+  if (correct) {
+    totalCorrect++;
+  } else {
+    totalWrong++;
+    // record for retry (avoid duplicates)
+    if (!wrongIds.includes(card.origIdx)) {
+      wrongIds.push(card.origIdx);
+    }
+  }
+
+  // Animate: flip back → then advance
+  inner.classList.remove('flipped');
+
+  // Wait for flip-back animation (550 ms) before loading next card
+  setTimeout(() => {
+    current++;
+    isAnimating = false;
+    renderCard();
+  }, 560);
+}
+
+// ─────────────────────────────────────────────
+// BACK
+// ─────────────────────────────────────────────
+function goBack() {
+  if (current === 0 || isAnimating) return;
+  current--;
+  // Undo stat adjustment is complex – we just re-render; stats stay as-is
+  // (simple approach: no undo of stats)
+  isFlipped = false;
+  renderCard();
+}
+
+// ─────────────────────────────────────────────
+// FINISH / RETRY WRONG
+// ─────────────────────────────────────────────
+function showFinish() {
+  document.getElementById('mainArea').style.display = 'none';
+  const fs = document.getElementById('finishScreen');
+  fs.classList.add('visible');
+
+  const total = totalCorrect + totalWrong;
+  const pct   = total > 0 ? Math.round((totalCorrect / total) * 100) : 0;
+
+  document.getElementById('finishStats').innerHTML =
+    `✅ <strong>${totalCorrect}</strong> richtig &nbsp;|&nbsp; ❌ <strong>${totalWrong}</strong> falsch &nbsp;|&nbsp; ${pct} %`;
+
+  let msg = '';
+  if (wrongIds.length > 0) {
+    msg = `Du hast <strong>${wrongIds.length}</strong> Wendung${wrongIds.length > 1 ? 'en' : ''} falsch beantwortet. Diese werden jetzt nochmal abgefragt!`;
+    document.getElementById('btnReplay').textContent = `🔁 Alle nochmal`;
+  } else {
+    msg = pct === 100
+      ? '🏆 Perfekt! Alle Antworten richtig!'
+      : pct >= 80
+        ? '💪 Sehr gut! Fast alles richtig.'
+        : '📚 Gute Arbeit! Übung macht den Meister.';
+    document.getElementById('btnReplay').textContent = '🔁 Alle nochmal';
+  }
+  document.getElementById('finishMsg').innerHTML = msg;
+
+  // Auto-start retry round if there are wrong cards
+  if (wrongIds.length > 0) {
+    setTimeout(() => startRetryRound(), 2200);
+  }
+}
+
+function startRetryRound() {
+  roundNum++;
+  deck     = shuffle(buildDeck(wrongIds.map(i => ALL_CARDS[i])));
+  wrongIds = [];
+  current  = 0;
+  isFlipped   = false;
+  isAnimating = false;
+
+  document.getElementById('finishScreen').classList.remove('visible');
+  document.getElementById('mainArea').style.display = '';
+  renderCard();
+}
+
+// ─────────────────────────────────────────────
+// INIT / CONTROLS
+// ─────────────────────────────────────────────
+function startFresh() {
+  deck         = shuffle(buildDeck(ALL_CARDS));
+  wrongIds     = [];
+  current      = 0;
+  roundNum     = 1;
+  totalCorrect = 0;
+  totalWrong   = 0;
+  isFlipped    = false;
+  isAnimating  = false;
+
+  document.getElementById('finishScreen').classList.remove('visible');
+  document.getElementById('mainArea').style.display = '';
+  renderCard();
+}
+
+document.getElementById('btnFR').addEventListener('click', () => {
+  direction = 'FR';
+  document.getElementById('btnFR').classList.add('active');
+  document.getElementById('btnDE').classList.remove('active');
+  startFresh();
+});
+document.getElementById('btnDE').addEventListener('click', () => {
+  direction = 'DE';
+  document.getElementById('btnDE').classList.add('active');
+  document.getElementById('btnFR').classList.remove('active');
+  startFresh();
+});
+document.getElementById('btnShuffle').addEventListener('click', startFresh);
+document.getElementById('btnReplay').addEventListener('click', startFresh);
+
+// Start
+startFresh();
+</script>
+</body>
+</html>
