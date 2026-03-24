@@ -1641,12 +1641,12 @@
 
         // ====== EXERCISE 5: Übersetzen ======
         const translateSentences = [
-            { german: 'Ich gehe ins Kino.', correct: ['je vais au cinéma'] },
-            { german: 'Du gehst nach Hause.', correct: ['tu vas à la maison'] },
-            { german: 'Er geht in die Schule.', correct: ['il va à l\'école', 'il va a l\'ecole', 'il va à l\'ecole', 'il va a l\'école'] },
-            { german: 'Wir gehen in den Park.', correct: ['nous allons au parc'] },
-            { german: 'Ihr geht ins Restaurant.', correct: ['vous allez au restaurant'] },
-            { german: 'Sie (Pl.) gehen an den Strand.', correct: ['ils vont à la plage', 'elles vont à la plage', 'ils vont a la plage', 'elles vont a la plage'] }
+            { german: 'Ich gehe ins Kino (au cinéma).', correct: ['je vais au cinéma'] },
+            { german: 'Du gehst nach Hause (à la maison).', correct: ['tu vas à la maison'] },
+            { german: 'Er geht in die Schule (à l\'école).', correct: ['il va à l\'école', 'il va a l\'ecole', 'il va à l\'ecole', 'il va a l\'école'] },
+            { german: 'Wir gehen in den Park (au parc).', correct: ['nous allons au parc'] },
+            { german: 'Ihr geht ins Restaurant (au restaurant).', correct: ['vous allez au restaurant'] },
+            { german: 'Sie (Pl.) gehen an den Strand (à la plage).', correct: ['ils vont à la plage', 'elles vont à la plage', 'ils vont a la plage', 'elles vont a la plage'] }
         ];
 
         function initTranslations() {
@@ -1858,11 +1858,11 @@
 
             // Stars
             let stars = 0;
-            if (pct >= 0.95) stars = 5;
+            if (pct >= 0.94) stars = 5;
             else if (pct >= 0.8) stars = 4;
-            else if (pct >= 0.65) stars = 3;
-            else if (pct >= 0.5) stars = 2;
-            else if (pct >= 0.3) stars = 1;
+            else if (pct >= 0.60) stars = 3;
+            else if (pct >= 0.4) stars = 2;
+            else if (pct >= 0.2) stars = 1;
 
             const starContainer = document.getElementById('starRating');
             starContainer.innerHTML = '';
