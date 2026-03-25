@@ -585,11 +585,11 @@ function nextRound() {
     const orderText = document.getElementById('order-text');
 
     if (effectiveOrder === 'asc') {
-        orderArrow.textContent = '↑';
-        orderText.textContent = 'Ordne vom kleinsten zum größten Wert';
+        orderArrow.textContent = '↓';
+        orderText.textContent = 'Ordne vom kleinsten (oben) zum größten (unten) Wert';
     } else {
         orderArrow.textContent = '↓';
-        orderText.textContent = 'Ordne vom größten zum kleinsten Wert';
+        orderText.textContent = 'Ordne vom größten (oben) zum kleinsten (unten) Wert';
     }
 
     // Store current order direction for checking
