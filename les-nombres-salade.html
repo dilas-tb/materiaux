@@ -106,6 +106,13 @@
             box-shadow: 0 2px 8px rgba(46,204,113,0.4);
         }
 
+        .cell.solution {
+            background: #3498db;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(52,152,219,0.4);
+        }
+
         .cell.wrong {
             background: #e74c3c;
             color: white;
@@ -218,11 +225,33 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(252,163,17,0.3);
+            width: 100%;
         }
 
         .btn-new:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(252,163,17,0.4);
+        }
+
+        .btn-solution {
+            display: block;
+            margin: 10px auto 0;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(52,152,219,0.3);
+            width: 100%;
+        }
+
+        .btn-solution:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52,152,219,0.4);
         }
 
         .instructions {
@@ -273,7 +302,7 @@
     <div class="container">
         <h1>🇫🇷 Les nombres jusqu'à 16</h1>
         <p class="subtitle">Trouve tous les nombres cachés dans la grille !</p>
-        <p class="instructions">Klicke auf den ersten und dann auf den letzten Buchstaben eines Wortes, um es zu markieren. Wörter können horizontal, vertikal und diagonal vorwärts und rückwärts gefunden werden.</p>
+        <p class="instructions">Klicke auf den ersten und dann auf den letzten Buchstaben eines Wortes, um es zu markieren. Es gibt nur horizontale und vertikale Lösungen.</p>
 
         <div class="main-content">
             <div class="grid-container">
@@ -290,6 +319,7 @@
                 <div class="progress-text" id="progressText">0 / 17 gefunden</div>
                 <div class="celebration" id="celebration">🎉 Bravo ! Très bien ! 🎉</div>
                 <button class="btn-new" onclick="initGame()">🔄 Neues Suchsel</button>
+                <button class="btn-solution" onclick="showSolution()">💡 Lösung anzeigen</button>
             </div>
         </div>
     </div>
@@ -316,25 +346,19 @@
         ];
 
         const GRID_SIZE = 14;
+        // Nur rechts und unten – keine Diagonalen, kein Rückwärts
         const DIRECTIONS = [
             [0, 1],   // rechts
-            [1, 0],   // unten
-            [1, 1],   // diagonal runter-rechts
-            [-1, 1],  // diagonal hoch-rechts
-            [0, -1],  // links
-            [-1, 0],  // hoch
-            [-1, -1], // diagonal hoch-links
-            [1, -1]   // diagonal runter-links
+            [1, 0]    // unten
         ];
 
-        // Use only letters that appear in French number words + common French letters
         const FILL_LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
         let grid = [];
-        let placedWords = []; // {word, display, num, cells: [{r,c}]}
+        let placedWords = [];
         let foundWords = new Set();
         let firstClick = null;
-        let selecting = false;
+        let solutionShown = false;
 
         function normalize(str) {
             return str.replace('é', 'e');
@@ -380,7 +404,6 @@
         }
 
         function placeAllWords() {
-            // Sort by length descending for better placement
             const sorted = [...WORDS_DATA].sort((a, b) => b.word.length - a.word.length);
             placedWords = [];
 
@@ -407,7 +430,6 @@
                 }
 
                 if (!placed) {
-                    // Restart if a word couldn't be placed
                     return false;
                 }
             }
@@ -427,7 +449,7 @@
         function generatePuzzle() {
             let success = false;
             let tries = 0;
-            while (!success && tries < 50) {
+            while (!success && tries < 100) {
                 initGrid();
                 success = placeAllWords();
                 tries++;
@@ -444,8 +466,8 @@
             const distR = Math.abs(r2 - r1);
             const distC = Math.abs(c2 - c1);
 
-            // Must be in a straight line
-            if (distR !== 0 && distC !== 0 && distR !== distC) return null;
+            // Nur gerade Linien (horizontal oder vertikal)
+            if (distR !== 0 && distC !== 0) return null;
 
             const steps = Math.max(distR, distC);
             const cells = [];
@@ -489,7 +511,6 @@
             const listEl = document.getElementById('wordList');
             listEl.innerHTML = '';
 
-            // Sort by number
             const sorted = [...WORDS_DATA].sort((a, b) => a.num - b.num);
 
             for (const data of sorted) {
@@ -541,6 +562,8 @@
         }
 
         function onCellClick(r, c) {
+            if (solutionShown) return;
+
             if (!firstClick) {
                 firstClick = { r, c };
                 const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
@@ -551,14 +574,10 @@
 
                 if (!cells) return;
 
-                const selectedWord = getWordFromCells(cells);
-                const reverseCells = [...cells].reverse();
-                const reverseWord = getWordFromCells(reverseCells);
-
                 let matched = null;
                 for (const pw of placedWords) {
                     if (foundWords.has(pw.word)) continue;
-                    if (cellsMatch(cells, pw.cells) || cellsMatch(reverseCells, pw.cells)) {
+                    if (cellsMatch(cells, pw.cells)) {
                         matched = pw;
                         break;
                     }
@@ -578,9 +597,27 @@
             }
         }
 
+        function showSolution() {
+            solutionShown = true;
+            clearSelection();
+
+            for (const pw of placedWords) {
+                if (!foundWords.has(pw.word)) {
+                    highlightCells(pw.cells, 'solution');
+
+                    const wordItem = document.getElementById(`word-${pw.word}`);
+                    if (wordItem) wordItem.classList.add('found');
+                }
+            }
+
+            foundWords = new Set(placedWords.map(pw => pw.word));
+            updateProgress();
+        }
+
         function initGame() {
             foundWords.clear();
             firstClick = null;
+            solutionShown = false;
             document.getElementById('celebration').classList.remove('show');
 
             generatePuzzle();
