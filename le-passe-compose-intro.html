@@ -1460,19 +1460,6 @@
             `;
         }
 
-            if (score === ex1Data.length) {
-                fb.className = 'feedback correct show';
-                fb.textContent = `✅ Perfekt! Alle ${score} richtig!`;
-            } else {
-                fb.className = 'feedback wrong show';
-                fb.textContent = `❌ ${score} von ${ex1Data.length} richtig. Die korrekten Formen stehen jetzt in den Feldern.`;
-            }
-
-            setTimeout(() => {
-                showEx1Results(score);
-            }, 2500);
-        }
-
         function showEx1Results(score) {
             const stars = state.stars.ex1;
             document.getElementById('ex1-check').style.display = 'none';
