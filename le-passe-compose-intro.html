@@ -69,8 +69,6 @@
             font-size: 0.85rem;
             font-weight: 600;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
         .tab-btn:hover {
@@ -90,56 +88,55 @@
             margin-right: 6px;
         }
 
-        /* Progress Bar */
+        /* Progress */
         .progress-section {
             margin-bottom: 25px;
-            padding: 0 10px;
         }
 
         .progress-bar-container {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 15px 20px;
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
         }
 
         .progress-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 0.85rem;
             color: #a0a0c0;
         }
 
         .progress-bar {
-            height: 8px;
+            height: 10px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            border-radius: 5px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-            border-radius: 4px;
+            border-radius: 5px;
             transition: width 0.5s ease;
             width: 0%;
         }
 
         .stars-display {
-            margin-top: 8px;
+            margin-top: 10px;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
         }
 
-        /* Content Sections */
+        /* Tab Content */
         .tab-content {
             display: none;
-            animation: fadeIn 0.4s ease;
         }
 
         .tab-content.active {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
@@ -206,59 +203,33 @@
 
         .conj-table td {
             padding: 10px 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
         }
 
         .conj-table tr:nth-child(even) {
             background: rgba(255, 255, 255, 0.03);
         }
 
-        .conj-table tr:hover {
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .highlight-verb {
-            color: #f093fb;
-            font-weight: 700;
-        }
-
-        .highlight-aux {
+        .conj-table .highlight-aux {
             color: #667eea;
             font-weight: 700;
         }
 
-        .highlight-pp {
-            color: #7bed9f;
+        .conj-table .highlight-pp {
+            color: #f093fb;
             font-weight: 700;
         }
 
-        .highlight-neg {
-            color: #ff6b6b;
+        .conj-table .highlight-verb {
+            color: #ffa502;
             font-weight: 700;
         }
 
-        /* Example Sentences */
-        .example-box {
-            background: rgba(102, 126, 234, 0.1);
-            border-left: 4px solid #667eea;
-            padding: 15px 20px;
-            margin: 12px 0;
-            border-radius: 0 12px 12px 0;
-            font-size: 0.95rem;
-        }
-
-        .example-box .fr {
-            font-weight: 600;
-            color: #c0c0ff;
-            margin-bottom: 4px;
-        }
-
-        .example-box .de {
-            color: #909090;
-            font-size: 0.85rem;
-            font-style: italic;
-        }
+        .highlight-aux { color: #667eea; font-weight: 700; }
+        .highlight-pp { color: #f093fb; font-weight: 700; }
+        .highlight-verb { color: #ffa502; font-weight: 700; }
+        .highlight-neg { color: #ff6b6b; font-weight: 700; }
 
         /* Formula Box */
         .formula-box {
@@ -266,41 +237,57 @@
             border: 2px solid rgba(102, 126, 234, 0.3);
             border-radius: 16px;
             padding: 20px;
-            text-align: center;
             margin: 20px 0;
+            text-align: center;
         }
 
         .formula-box .formula {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            color: #e0e0ff;
         }
 
-        .formula-box .formula-neg {
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-top: 8px;
+        /* Example Box */
+        .example-box {
+            background: rgba(46, 204, 113, 0.08);
+            border-left: 4px solid rgba(46, 204, 113, 0.5);
+            border-radius: 0 12px 12px 0;
+            padding: 12px 18px;
+            margin: 10px 0;
         }
 
-        /* Exercise Section */
+        .example-box .fr {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #e0e0ff;
+            margin-bottom: 4px;
+        }
+
+        .example-box .de {
+            font-size: 0.85rem;
+            color: #a0a0b0;
+            font-style: italic;
+        }
+
+        /* Exercise Containers */
         .exercise-container {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             padding: 25px;
-            margin-bottom: 20px;
         }
 
         .exercise-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .exercise-header h2 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: #c0c0ff;
         }
 
@@ -310,100 +297,179 @@
             border-radius: 20px;
             font-size: 0.85rem;
             color: #a0a0ff;
+            font-weight: 600;
         }
 
+        /* Question Card */
         .question-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
             padding: 20px;
-            margin-bottom: 15px;
+            margin: 10px 0;
             transition: all 0.3s ease;
         }
 
         .question-card.correct {
-            border-color: rgba(123, 237, 159, 0.5);
-            background: rgba(123, 237, 159, 0.08);
+            border-color: rgba(46, 204, 113, 0.5);
+            background: rgba(46, 204, 113, 0.08);
         }
 
         .question-card.wrong {
-            border-color: rgba(255, 107, 107, 0.5);
-            background: rgba(255, 107, 107, 0.08);
+            border-color: rgba(231, 76, 60, 0.5);
+            background: rgba(231, 76, 60, 0.08);
         }
 
         .question-text {
-            font-size: 1.05rem;
-            margin-bottom: 12px;
-            line-height: 1.6;
-            color: #d0d0e0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #e0e0ff;
+            margin-bottom: 15px;
+            text-align: center;
         }
 
         .question-hint {
-            font-size: 0.82rem;
-            color: #808090;
+            font-size: 0.85rem;
+            color: #a0a0b0;
             margin-bottom: 12px;
+            text-align: center;
             font-style: italic;
         }
 
+        .question-german {
+            font-size: 1rem;
+            color: #f0c040;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* MC Options */
+        .mc-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .mc-option {
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            color: #d0d0e0;
+        }
+
+        .mc-option:hover {
+            background: rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .mc-option.correct-answer {
+            background: rgba(46, 204, 113, 0.2);
+            border-color: rgba(46, 204, 113, 0.6);
+            color: #7bed9f;
+        }
+
+        .mc-option.wrong-answer {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: rgba(231, 76, 60, 0.6);
+            color: #ff6b6b;
+        }
+
+        .mc-option.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Input */
         .input-row {
             display: flex;
             gap: 10px;
             align-items: center;
+            justify-content: center;
             flex-wrap: wrap;
+            margin: 10px 0;
         }
 
         .answer-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 16px;
+            padding: 12px 18px;
             background: rgba(255, 255, 255, 0.08);
             border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 10px;
-            color: #e0e0e0;
+            color: #e0e0ff;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            width: 140px;
             outline: none;
+            transition: all 0.3s ease;
         }
 
         .answer-input:focus {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
+            border-color: rgba(102, 126, 234, 0.6);
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
         }
 
         .answer-input.correct {
-            border-color: #7bed9f;
-            background: rgba(123, 237, 159, 0.1);
+            border-color: rgba(46, 204, 113, 0.6);
+            background: rgba(46, 204, 113, 0.1);
+            color: #7bed9f;
         }
 
         .answer-input.wrong {
-            border-color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
+            border-color: rgba(231, 76, 60, 0.6);
+            background: rgba(231, 76, 60, 0.1);
+            color: #ff6b6b;
         }
 
-        .answer-input:disabled {
-            opacity: 0.7;
-        }
-
-        .check-btn, .next-btn, .restart-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 10px;
+        /* Accent Button */
+        .accent-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(240,147,251,0.25), rgba(118,75,162,0.25));
+            border: 2px solid rgba(240,147,251,0.4);
+            border-radius: 8px;
+            color: #f093fb;
             font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .accent-btn:hover {
+            background: linear-gradient(135deg, rgba(240,147,251,0.4), rgba(118,75,162,0.4));
+            transform: scale(1.05);
+        }
+
+        .accent-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Buttons */
+        .check-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .check-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-
         .check-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
         .check-btn:disabled {
@@ -413,146 +479,214 @@
         }
 
         .next-btn {
+            padding: 12px 30px;
             background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border: none;
+            border-radius: 12px;
             color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .next-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
         }
 
         .restart-btn {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-            margin-top: 15px;
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #c0c0e0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .restart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         /* Feedback */
         .feedback {
-            margin-top: 10px;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
             display: none;
+            transition: all 0.3s ease;
         }
 
         .feedback.show {
             display: block;
-            animation: fadeIn 0.3s ease;
         }
 
         .feedback.correct {
-            background: rgba(123, 237, 159, 0.15);
+            background: rgba(46, 204, 113, 0.15);
+            border: 1px solid rgba(46, 204, 113, 0.3);
             color: #7bed9f;
-            border: 1px solid rgba(123, 237, 159, 0.3);
         }
 
         .feedback.wrong {
-            background: rgba(255, 107, 107, 0.15);
+            background: rgba(231, 76, 60, 0.15);
+            border: 1px solid rgba(231, 76, 60, 0.3);
             color: #ff6b6b;
-            border: 1px solid rgba(255, 107, 107, 0.3);
-        }
-
-        /* Multiple Choice */
-        .mc-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .mc-option {
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 2px solid rgba(255, 255, 255, 0.12);
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            color: #c0c0d0;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .mc-option:hover:not(.disabled) {
-            background: rgba(102, 126, 234, 0.15);
-            border-color: rgba(102, 126, 234, 0.4);
-        }
-
-        .mc-option.selected {
-            background: rgba(102, 126, 234, 0.2);
-            border-color: #667eea;
-            color: white;
-        }
-
-        .mc-option.correct-answer {
-            background: rgba(123, 237, 159, 0.2);
-            border-color: #7bed9f;
-            color: #7bed9f;
-        }
-
-        .mc-option.wrong-answer {
-            background: rgba(255, 107, 107, 0.2);
-            border-color: #ff6b6b;
-            color: #ff6b6b;
-        }
-
-        .mc-option.disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
         }
 
         /* Results */
         .results-card {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
         }
 
-        .results-card .score-big {
+        .results-emoji {
             font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .score-big {
+            font-size: 2rem;
             font-weight: 800;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            background: linear-gradient(90deg, #667eea, #f093fb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 5px;
         }
 
-        .results-card .score-label {
-            font-size: 1.1rem;
+        .score-label {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .results-msg {
             color: #a0a0c0;
-            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
         }
 
-        .results-card .results-emoji {
-            font-size: 3rem;
+        /* Drag and Drop */
+        .drag-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             margin: 15px 0;
         }
 
-        .results-card .results-msg {
-            font-size: 1rem;
-            color: #c0c0d0;
-            margin-bottom: 20px;
+        .drag-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        /* Drag and Drop Sorting */
-        .sort-container {
+        .drag-pronoun {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #e0e0ff;
+            min-width: 70px;
+            text-align: right;
+        }
+
+        .drop-zone {
+            min-width: 120px;
+            min-height: 44px;
+            padding: 8px 16px;
+            background: rgba(102, 126, 234, 0.08);
+            border: 2px dashed rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #a0a0c0;
+            transition: all 0.2s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: rgba(102, 126, 234, 0.7);
+            background: rgba(102, 126, 234, 0.15);
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .drop-zone.filled {
+            border-style: solid;
+            border-color: rgba(102, 126, 234, 0.5);
+            color: #c0c0ff;
+            background: rgba(102, 126, 234, 0.12);
+        }
+
+        .drop-zone.correct {
+            border-color: rgba(46, 204, 113, 0.6);
+            background: rgba(46, 204, 113, 0.12);
+            color: #7bed9f;
+        }
+
+        .drop-zone.wrong {
+            border-color: rgba(231, 76, 60, 0.6);
+            background: rgba(231, 76, 60, 0.12);
+            color: #ff6b6b;
+        }
+
+        .drag-items {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            min-height: 60px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 2px dashed rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            margin: 10px 0;
             justify-content: center;
-            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            min-height: 60px;
+        }
+
+        .drag-item {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(102,126,234,0.25), rgba(118,75,162,0.25));
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            border-radius: 10px;
+            cursor: grab;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #d0d0ff;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .drag-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        .drag-item.placed {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Sort Container / Answer Zone (for Ex4) */
+        .sort-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 10px 0;
         }
 
         .sort-word {
@@ -571,10 +705,6 @@
         .sort-word:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-        }
-
-        .sort-word:active {
-            cursor: grabbing;
         }
 
         .sort-word.placed {
@@ -601,6 +731,35 @@
             cursor: pointer;
         }
 
+        /* Ex4 all-at-once layout */
+        .ex4-all-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .ex4-sentence-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .ex4-sentence-card.correct {
+            border-color: rgba(46, 204, 113, 0.5);
+            background: rgba(46, 204, 113, 0.08);
+        }
+
+        .ex4-sentence-card.wrong {
+            border-color: rgba(231, 76, 60, 0.5);
+            background: rgba(231, 76, 60, 0.08);
+        }
+
+        .ex4-sentence-card .question-hint {
+            margin-bottom: 8px;
+        }
+
         /* Tip Box */
         .tip-box {
             background: rgba(241, 196, 15, 0.1);
@@ -615,6 +774,47 @@
         .tip-box .tip-icon {
             margin-right: 6px;
         }
+
+        /* Translation input */
+        .translation-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #e0e0ff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .translation-input:focus {
+            border-color: rgba(102, 126, 234, 0.6);
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .translation-input.correct {
+            border-color: rgba(46, 204, 113, 0.6);
+            background: rgba(46, 204, 113, 0.1);
+            color: #7bed9f;
+        }
+
+        .translation-input.wrong {
+            border-color: rgba(231, 76, 60, 0.6);
+            background: rgba(231, 76, 60, 0.1);
+            color: #ff6b6b;
+        }
+
+        .correction-text {
+            font-size: 0.85rem;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .correction-text.correct { color: #7bed9f; }
+        .correction-text.wrong { color: #ff6b6b; }
 
         /* Responsive */
         @media (max-width: 600px) {
@@ -641,6 +841,15 @@
 
             .answer-input {
                 width: 100%;
+            }
+
+            .drag-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .drag-pronoun {
+                text-align: left;
             }
         }
 
@@ -671,7 +880,6 @@
             flex-wrap: wrap;
         }
 
-        /* Section intro */
         .section-intro {
             text-align: center;
             padding: 15px;
@@ -739,32 +947,36 @@
             </button>
         </nav>
 
-        <!-- LEARN 1: Avoir Konjugation -->
+        <!-- ==================== LEARN 1: avoir ==================== -->
         <div class="tab-content active" id="content-learn1">
             <div class="info-card">
-                <h2>📖 Das Hilfsverb « avoir » im Präsens</h2>
-                <p>Um über die Vergangenheit zu sprechen, brauchst du das <strong>passé composé</strong>. Dafür musst du zuerst das Hilfsverb <strong class="highlight-aux">avoir</strong> (haben) im Präsens können:</p>
+                <h2>📖 Das Hilfsverb « avoir »</h2>
+                <p>Um über die <strong>Vergangenheit</strong> zu sprechen, brauchst du im Französischen das <strong>passé composé</strong>. Es besteht aus <strong>zwei Teilen</strong>:</p>
+
+                <div class="formula-box">
+                    <div class="formula">
+                        <span class="highlight-aux">avoir (konjugiert)</span> + <span class="highlight-pp">participe passé</span>
+                    </div>
+                </div>
+
+                <p>Zuerst lernst du die Konjugation von <strong>avoir</strong> im Präsens:</p>
 
                 <table class="conj-table">
                     <thead>
-                        <tr>
-                            <th>Person</th>
-                            <th>avoir</th>
-                            <th>Deutsch</th>
-                        </tr>
+                        <tr><th>Person</th><th>avoir</th><th>Deutsch</th></tr>
                     </thead>
                     <tbody>
                         <tr><td>je / j'</td><td class="highlight-aux">ai</td><td>ich habe</td></tr>
                         <tr><td>tu</td><td class="highlight-aux">as</td><td>du hast</td></tr>
-                        <tr><td>il / elle / on</td><td class="highlight-aux">a</td><td>er / sie / man hat</td></tr>
+                        <tr><td>il / elle / on</td><td class="highlight-aux">a</td><td>er/sie/man hat</td></tr>
                         <tr><td>nous</td><td class="highlight-aux">avons</td><td>wir haben</td></tr>
-                        <tr><td>vous</td><td class="highlight-aux">avez</td><td>ihr habt / Sie haben</td></tr>
+                        <tr><td>vous</td><td class="highlight-aux">avez</td><td>ihr habt</td></tr>
                         <tr><td>ils / elles</td><td class="highlight-aux">ont</td><td>sie haben</td></tr>
                     </tbody>
                 </table>
 
                 <div class="tip-box">
-                    <span class="tip-icon">💡</span> <strong>Tipp:</strong> Lerne diese 6 Formen auswendig! Ohne <em>avoir</em> kein passé composé.
+                    <span class="tip-icon">💡</span> <strong>Tipp:</strong> Lerne diese 6 Formen auswendig! Ohne <em>avoir</em> kannst du kein passé composé bilden.
                 </div>
             </div>
 
@@ -773,16 +985,15 @@
             </div>
         </div>
 
-        <!-- EXERCISE 1: Avoir Konjugation -->
+        <!-- ==================== EXERCISE 1: avoir – Drag & Drop ==================== -->
         <div class="tab-content" id="content-ex1">
             <div class="exercise-container">
                 <div class="exercise-header">
                     <h2>✏️ Übung 1: avoir konjugieren</h2>
-                    <span class="exercise-counter" id="ex1-counter">1 / 6</span>
                 </div>
                 <div class="section-intro">
-                    <span class="emoji-big">🧠</span>
-                    Ergänze die richtige Form von « avoir ».
+                    <span class="emoji-big">🎯</span>
+                    Ziehe die richtige Form von <em>avoir</em> zum passenden Pronomen!
                 </div>
                 <div id="ex1-area"></div>
                 <div class="btn-row">
@@ -793,7 +1004,7 @@
             </div>
         </div>
 
-        <!-- LEARN 2: Participe passé -->
+        <!-- ==================== LEARN 2: Participe passé ==================== -->
         <div class="tab-content" id="content-learn2">
             <div class="info-card">
                 <h2>📖 Das participe passé</h2>
@@ -805,11 +1016,7 @@
 
                 <table class="conj-table">
                     <thead>
-                        <tr>
-                            <th>Infinitiv</th>
-                            <th>Participe passé</th>
-                            <th>Deutsch</th>
-                        </tr>
+                        <tr><th>Infinitiv</th><th>Participe passé</th><th>Deutsch</th></tr>
                     </thead>
                     <tbody>
                         <tr><td>parl<span class="highlight-verb">er</span></td><td>parl<span class="highlight-pp">é</span></td><td>gesprochen</td></tr>
@@ -821,26 +1028,21 @@
                 </table>
 
                 <h3>⚠️ Wichtige unregelmäßige Formen</h3>
-                <p>Diese vier Verben musst du dir merken:</p>
+                <p>Diese drei Verben musst du dir merken:</p>
 
                 <table class="conj-table">
                     <thead>
-                        <tr>
-                            <th>Infinitiv</th>
-                            <th>Participe passé</th>
-                            <th>Deutsch</th>
-                        </tr>
+                        <tr><th>Infinitiv</th><th>Participe passé</th><th>Deutsch</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><span class="highlight-verb">être</span></td><td><span class="highlight-pp">été</span></td><td>gewesen</td></tr>
-                        <tr><td><span class="highlight-verb">avoir</span></td><td><span class="highlight-pp">eu</span></td><td>gehabt</td></tr>
-                        <tr><td><span class="highlight-verb">faire</span></td><td><span class="highlight-pp">fait</span></td><td>gemacht</td></tr>
-                        <tr><td><span class="highlight-verb">aller</span></td><td><span class="highlight-pp">allé</span></td><td>gegangen</td></tr>
+                        <tr><td>être</td><td class="highlight-pp">été</td><td>gewesen</td></tr>
+                        <tr><td>avoir</td><td class="highlight-pp">eu</td><td>gehabt</td></tr>
+                        <tr><td>faire</td><td class="highlight-pp">fait</td><td>gemacht</td></tr>
                     </tbody>
                 </table>
 
                 <div class="tip-box">
-                    <span class="tip-icon">💡</span> <strong>Achtung:</strong> « aller » hat zwar ein regelmäßiges participe passé (allé), aber hier in der Stunde üben wir nur die Bildung mit <em>avoir</em>. « Aller » bildet das passé composé normalerweise mit <em>être</em> – aber das participe passé zu kennen ist trotzdem wichtig!
+                    <span class="tip-icon">💡</span> <strong>Eselsbrücke:</strong> Bei Verben auf <em>-er</em> einfach das <em>-er</em> wegstreichen und <em>-é</em> dransetzen. Bei <em>être</em>, <em>avoir</em> und <em>faire</em> musst du die Formen auswendig lernen!
                 </div>
             </div>
 
@@ -849,31 +1051,32 @@
             </div>
         </div>
 
-        <!-- EXERCISE 2: Participe passé -->
+        <!-- ==================== EXERCISE 2: Participe passé (MC) ==================== -->
         <div class="tab-content" id="content-ex2">
             <div class="exercise-container">
                 <div class="exercise-header">
-                    <h2>✏️ Übung 2: Participe passé bilden</h2>
-                    <span class="exercise-counter" id="ex2-counter">1 / 8</span>
+                    <h2>✏️ Übung 2: Participe passé erkennen</h2>
+                    <span class="exercise-counter" id="ex2-counter">1 / 7</span>
                 </div>
                 <div class="section-intro">
-                    <span class="emoji-big">🎯</span>
-                    Wähle das richtige participe passé.
+                    <span class="emoji-big">🧠</span>
+                    Wähle das richtige participe passé!
                 </div>
                 <div id="ex2-area"></div>
+                <div class="feedback" id="ex2-feedback"></div>
                 <div id="ex2-results" style="display:none;"></div>
             </div>
         </div>
 
-        <!-- LEARN 3: Bildung & présent vs passé composé -->
+        <!-- ==================== LEARN 3: Bildung & Kontrast ==================== -->
         <div class="tab-content" id="content-learn3">
             <div class="info-card">
                 <h2>📖 Bildung des passé composé</h2>
-                <p>Jetzt setzen wir alles zusammen:</p>
+                <p>So setzt du alles zusammen:</p>
 
                 <div class="formula-box">
                     <div class="formula">
-                        <span class="highlight-aux">avoir (konjugiert)</span> + <span class="highlight-pp">participe passé</span>
+                        Subjekt + <span class="highlight-aux">avoir (konjugiert)</span> + <span class="highlight-pp">participe passé</span>
                     </div>
                 </div>
 
@@ -890,38 +1093,16 @@
                     <div class="fr">Nous <span class="highlight-aux">avons</span> <span class="highlight-pp">joué</span> au foot.</div>
                     <div class="de">Wir haben Fußball gespielt.</div>
                 </div>
-                <div class="example-box">
-                    <div class="fr">Ils <span class="highlight-aux">ont</span> <span class="highlight-pp">fait</span> leurs devoirs.</div>
-                    <div class="de">Sie haben ihre Hausaufgaben gemacht.</div>
-                </div>
 
-                <h3>🔄 Présent vs. Passé composé</h3>
-                <p>Vergleiche die Gegenwart und die Vergangenheit:</p>
-
+                <h3>🔄 Vergleich: Présent vs. Passé composé</h3>
                 <table class="conj-table">
                     <thead>
-                        <tr>
-                            <th>Présent (Gegenwart)</th>
-                            <th>Passé composé (Vergangenheit)</th>
-                        </tr>
+                        <tr><th>Présent (Gegenwart)</th><th>Passé composé (Vergangenheit)</th></tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Je <span class="highlight-verb">mange</span> une pizza.</td>
-                            <td>J'<span class="highlight-aux">ai</span> <span class="highlight-pp">mangé</span> une pizza.</td>
-                        </tr>
-                        <tr>
-                            <td>Il <span class="highlight-verb">parle</span> français.</td>
-                            <td>Il <span class="highlight-aux">a</span> <span class="highlight-pp">parlé</span> français.</td>
-                        </tr>
-                        <tr>
-                            <td>Nous <span class="highlight-verb">jouons</span> au tennis.</td>
-                            <td>Nous <span class="highlight-aux">avons</span> <span class="highlight-pp">joué</span> au tennis.</td>
-                        </tr>
-                        <tr>
-                            <td>Elles <span class="highlight-verb">travaillent</span>.</td>
-                            <td>Elles <span class="highlight-aux">ont</span> <span class="highlight-pp">travaillé</span>.</td>
-                        </tr>
+                        <tr><td>Je <strong>mange</strong> une pizza.</td><td>J'<span class="highlight-aux">ai</span> <span class="highlight-pp">mangé</span> une pizza.</td></tr>
+                        <tr><td>Tu <strong>regardes</strong> un film.</td><td>Tu <span class="highlight-aux">as</span> <span class="highlight-pp">regardé</span> un film.</td></tr>
+                        <tr><td>Il <strong>fait</strong> ses devoirs.</td><td>Il <span class="highlight-aux">a</span> <span class="highlight-pp">fait</span> ses devoirs.</td></tr>
                     </tbody>
                 </table>
 
@@ -935,7 +1116,7 @@
             </div>
         </div>
 
-        <!-- EXERCISE 3: Bildung & Kontrast -->
+        <!-- ==================== EXERCISE 3: Sätze bilden ==================== -->
         <div class="tab-content" id="content-ex3">
             <div class="exercise-container">
                 <div class="exercise-header">
@@ -947,7 +1128,8 @@
                     Bilde die Sätze im passé composé. Schreibe die beiden fehlenden Wörter (avoir + participe passé).
                 </div>
                 <div id="ex3-area"></div>
-                <div class="btn-row">
+                <div class="btn-row" style="align-items:center;">
+                    <button class="accent-btn" id="ex3-accent" onclick="insertAccent('ex3')">é</button>
                     <button class="check-btn" id="ex3-check" onclick="checkExercise3()">Prüfen ✓</button>
                 </div>
                 <div class="feedback" id="ex3-feedback"></div>
@@ -955,14 +1137,14 @@
             </div>
         </div>
 
-        <!-- LEARN 4: Verneinung -->
+        <!-- ==================== LEARN 4: Verneinung ==================== -->
         <div class="tab-content" id="content-learn4">
             <div class="info-card">
                 <h2>📖 Die Verneinung im passé composé</h2>
-                <p>Die Verneinung (<strong>ne ... pas</strong>) umklammert im passé composé nur das <strong>Hilfsverb</strong>:</p>
+                <p>Um einen Satz im passé composé zu <strong>verneinen</strong>, verwendest du <strong>ne … pas</strong>. Die Verneinung steht <strong>um das Hilfsverb <em>avoir</em></strong> herum:</p>
 
                 <div class="formula-box">
-                    <div class="formula-neg">
+                    <div class="formula">
                         Subjekt + <span class="highlight-neg">ne / n'</span> + <span class="highlight-aux">avoir</span> + <span class="highlight-neg">pas</span> + <span class="highlight-pp">participe passé</span>
                     </div>
                 </div>
@@ -986,7 +1168,7 @@
                 </div>
 
                 <div class="tip-box">
-                    <span class="tip-icon">💡</span> <strong>Wichtig:</strong> <em>ne ... pas</em> steht <strong>um das Hilfsverb avoir herum</strong>, nicht um das participe passé! Vor einem Vokal wird <em>ne</em> zu <em>n'</em> (z. B. <em>n'ai pas</em>, <em>n'a pas</em>, <em>n'ont pas</em>).
+                    <span class="tip-icon">💡</span> <strong>Wichtig:</strong> <em>ne ... pas</em> steht <strong>um das Hilfsverb avoir herum</strong>, nicht um das participe passé! Vor einem Vokal wird <em>ne</em> zu <em>n'</em> (z.B. <em>n'ai pas</em>, <em>n'a pas</em>, <em>n'ont pas</em>).
                 </div>
             </div>
 
@@ -995,39 +1177,39 @@
             </div>
         </div>
 
-        <!-- EXERCISE 4: Verneinung -->
+        <!-- ==================== EXERCISE 4: Verneinung – alle Sätze untereinander ==================== -->
         <div class="tab-content" id="content-ex4">
             <div class="exercise-container">
                 <div class="exercise-header">
-                    <h2>✏️ Übung 4: Verneinung</h2>
-                    <span class="exercise-counter" id="ex4-counter">1 / 6</span>
+                    <h2>✏️ Übung 4: Verneinung – Wörter ordnen</h2>
                 </div>
                 <div class="section-intro">
                     <span class="emoji-big">🚫</span>
-                    Bringe die Wörter in die richtige Reihenfolge. Klicke auf die Wörter, um sie in die Antwortzeile zu setzen.
+                    Klicke auf die Wörter in der richtigen Reihenfolge, um verneinte Sätze zu bilden!
                 </div>
                 <div id="ex4-area"></div>
                 <div class="btn-row">
-                    <button class="check-btn" id="ex4-check" onclick="checkExercise4()">Prüfen ✓</button>
+                    <button class="check-btn" id="ex4-check" onclick="checkExercise4()">Alle prüfen ✓</button>
                 </div>
                 <div class="feedback" id="ex4-feedback"></div>
                 <div id="ex4-results" style="display:none;"></div>
             </div>
         </div>
 
-        <!-- EXERCISE 5: Finale -->
+        <!-- ==================== EXERCISE 5: Finale – Übersetzung ==================== -->
         <div class="tab-content" id="content-ex5">
             <div class="exercise-container">
                 <div class="exercise-header">
-                    <h2>🏆 Finale: Alles zusammen!</h2>
+                    <h2>🏆 Finale: Übersetze die Sätze!</h2>
                     <span class="exercise-counter" id="ex5-counter">1 / 8</span>
                 </div>
                 <div class="section-intro">
-                    <span class="emoji-big">🎉</span>
-                    Présent oder passé composé? Bejahung oder Verneinung? Zeige, was du gelernt hast!
+                    <span class="emoji-big">🇩🇪 → 🇫🇷</span>
+                    Übersetze die kurzen Sätze ins Französische. Kleine Tippfehler sind kein Problem!
                 </div>
                 <div id="ex5-area"></div>
-                <div class="btn-row">
+                <div class="btn-row" style="align-items:center;">
+                    <button class="accent-btn" id="ex5-accent" onclick="insertAccent('ex5')">é</button>
                     <button class="check-btn" id="ex5-check" onclick="checkExercise5()">Prüfen ✓</button>
                 </div>
                 <div class="feedback" id="ex5-feedback"></div>
@@ -1045,31 +1227,35 @@
             currentTab: 'learn1'
         };
 
+        // Track last focused input per exercise (for accent button)
+        let lastFocused = { ex3: null, ex5: null };
+
         // =========== TAB SWITCHING ===========
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            state.currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('content-' + tabId).classList.add('active');
             document.getElementById('tab-' + tabId).classList.add('active');
-            state.currentTab = tabId;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // =========== PROGRESS ===========
         function updateProgress() {
             let total = 0, max = 0;
             for (let k in state.stars) { total += state.stars[k]; max += state.maxStars[k]; }
-            const pct = max > 0 ? (total / max * 100) : 0;
+            const pct = max > 0 ? (total / max) * 100 : 0;
             document.getElementById('progress-fill').style.width = pct + '%';
             document.getElementById('progress-text').textContent = total + ' / ' + max + ' Sterne';
+
             let starsHtml = '';
+            const exerciseNames = { ex1: 'avoir', ex2: 'Part. passé', ex3: 'Bildung', ex4: 'Verneinung', ex5: 'Finale' };
             for (let k in state.stars) {
-                const label = k.replace('ex', 'Ü');
-                for (let i = 0; i < state.maxStars[k]; i++) {
-                    starsHtml += i < state.stars[k] ? '⭐' : '☆';
-                }
-                starsHtml += '  ';
+                const s = state.stars[k];
+                const m = state.maxStars[k];
+                starsHtml += `<span style="margin:0 8px;font-size:0.8rem;color:#a0a0c0;">${exerciseNames[k]}: ${'⭐'.repeat(s)}${'☆'.repeat(m - s)}</span>`;
             }
-            document.getElementById('stars-display').textContent = starsHtml;
+            document.getElementById('stars-display').innerHTML = starsHtml;
         }
 
         function calcStars(correct, total) {
@@ -1080,90 +1266,225 @@
             return 0;
         }
 
-        // =========== EXERCISE 1: Avoir Konjugation ===========
+        // =========== ACCENT BUTTON ===========
+        function insertAccent(exercisePrefix) {
+            const inp = lastFocused[exercisePrefix];
+            if (!inp || inp.disabled) return;
+
+            const start = inp.selectionStart;
+            const end = inp.selectionEnd;
+            const val = inp.value;
+            inp.value = val.substring(0, start) + 'é' + val.substring(end);
+            inp.selectionStart = inp.selectionEnd = start + 1;
+            inp.focus();
+        }
+
+        function trackFocus(exercisePrefix, inputEl) {
+            inputEl.addEventListener('focus', () => {
+                lastFocused[exercisePrefix] = inputEl;
+            });
+        }
+
+        // =========== EXERCISE 1: avoir – Drag & Drop ===========
         const ex1Data = [
             { pronoun: "j'", answer: "ai" },
             { pronoun: "tu", answer: "as" },
-            { pronoun: "il", answer: "a" },
+            { pronoun: "il / elle / on", answer: "a" },
             { pronoun: "nous", answer: "avons" },
             { pronoun: "vous", answer: "avez" },
-            { pronoun: "ils", answer: "ont" }
+            { pronoun: "ils / elles", answer: "ont" }
         ];
-        let ex1Index = 0;
-        let ex1Score = 0;
-        let ex1Done = false;
+        let ex1Placements = {};
 
         function renderEx1() {
-            if (ex1Done) return;
-            if (ex1Index >= ex1Data.length) {
-                showEx1Results();
-                return;
-            }
-            const q = ex1Data[ex1Index];
-            document.getElementById('ex1-counter').textContent = (ex1Index + 1) + ' / ' + ex1Data.length;
-            document.getElementById('ex1-area').innerHTML = `
-                <div class="question-card" id="ex1-card">
-                    <div class="question-text">${q.pronoun} ________</div>
-                    <div class="question-hint">Schreibe die richtige Form von « avoir ».</div>
-                    <div class="input-row">
-                        <input type="text" class="answer-input" id="ex1-input" placeholder="..." autocomplete="off" onkeydown="if(event.key==='Enter')checkExercise1()">
+            ex1Placements = {};
+            const items = ["ai", "as", "a", "avons", "avez", "ont"];
+            const shuffled = [...items].sort(() => Math.random() - 0.5);
+
+            let rowsHtml = '';
+            ex1Data.forEach((item, i) => {
+                rowsHtml += `
+                    <div class="drag-row">
+                        <div class="drag-pronoun">${item.pronoun}</div>
+                        <div class="drop-zone" id="ex1-drop-${i}"
+                             data-index="${i}"
+                             ondragover="event.preventDefault(); this.classList.add('drag-over')"
+                             ondragleave="this.classList.remove('drag-over')"
+                             ondrop="dropEx1(event, ${i})">
+                            ...
+                        </div>
                     </div>
-                </div>
+                `;
+            });
+
+            let itemsHtml = '';
+            shuffled.forEach((item, i) => {
+                itemsHtml += `<div class="drag-item" id="ex1-item-${i}" draggable="true"
+                                   data-value="${item}"
+                                   ondragstart="dragStartEx1(event, ${i})">${item}</div>`;
+            });
+
+            document.getElementById('ex1-area').innerHTML = `
+                <div class="drag-container">${rowsHtml}</div>
+                <div class="drag-items" id="ex1-items">${itemsHtml}</div>
             `;
             document.getElementById('ex1-check').style.display = '';
             document.getElementById('ex1-check').disabled = false;
             document.getElementById('ex1-feedback').className = 'feedback';
             document.getElementById('ex1-feedback').style.display = 'none';
-            document.getElementById('ex1-input').focus();
+
+            // Also support click-to-place
+            setupClickToPlace();
+        }
+
+        let ex1SelectedItem = null;
+
+        function setupClickToPlace() {
+            // Click on drag item to select it
+            document.querySelectorAll('#ex1-items .drag-item').forEach(el => {
+                el.addEventListener('click', function() {
+                    if (this.classList.contains('placed')) return;
+                    document.querySelectorAll('#ex1-items .drag-item').forEach(e => e.style.outline = '');
+                    this.style.outline = '2px solid #667eea';
+                    ex1SelectedItem = this;
+                });
+            });
+
+            // Click on drop zone to place selected item
+            document.querySelectorAll('.drop-zone').forEach(el => {
+                el.addEventListener('click', function() {
+                    if (!ex1SelectedItem) return;
+                    const idx = parseInt(this.dataset.index);
+                    placeItem(idx, ex1SelectedItem.dataset.value, ex1SelectedItem);
+                    ex1SelectedItem = null;
+                });
+            });
+        }
+
+        function dragStartEx1(event, itemIdx) {
+            event.dataTransfer.setData('text/plain', itemIdx);
+        }
+
+        function dropEx1(event, dropIdx) {
+            event.preventDefault();
+            const zone = document.getElementById('ex1-drop-' + dropIdx);
+            zone.classList.remove('drag-over');
+
+            const itemIdx = event.dataTransfer.getData('text/plain');
+            const itemEl = document.getElementById('ex1-item-' + itemIdx);
+            if (!itemEl || itemEl.classList.contains('placed')) return;
+
+            placeItem(dropIdx, itemEl.dataset.value, itemEl);
+        }
+
+        function placeItem(dropIdx, value, itemEl) {
+            const zone = document.getElementById('ex1-drop-' + dropIdx);
+
+            // If zone already has something, return old item
+            if (ex1Placements[dropIdx]) {
+                const oldItem = ex1Placements[dropIdx].itemEl;
+                oldItem.classList.remove('placed');
+                oldItem.style.outline = '';
+            }
+
+            zone.textContent = value;
+            zone.classList.add('filled');
+            itemEl.classList.add('placed');
+            itemEl.style.outline = '';
+            ex1Placements[dropIdx] = { value, itemEl };
         }
 
         function checkExercise1() {
-            const input = document.getElementById('ex1-input');
-            const val = input.value.trim().toLowerCase();
-            const correct = ex1Data[ex1Index].answer;
+            let score = 0;
             const fb = document.getElementById('ex1-feedback');
-            const card = document.getElementById('ex1-card');
 
-            if (!val) return;
+            if (Object.keys(ex1Placements).length < ex1Data.length) {
+                fb.className = 'feedback wrong show';
+                fb.textContent = '⚠️ Bitte ordne alle Formen zu!';
+                return;
+            }
 
-            input.disabled = true;
             document.getElementById('ex1-check').disabled = true;
 
-            if (val === correct) {
-                ex1Score++;
-                input.classList.add('correct');
-                card.classList.add('correct');
+            ex1Data.forEach((item, i) => {
+                const zone = document.getElementById('ex1-drop-' + i);
+                if (ex1Placements[i] && ex1Placements[i].value === item.answer) {
+                    zone.classList.add('correct');
+                    score++;
+                } else {
+                    zone.classList.add('wrong');
+                    zone.textContent = ex1Placements[i] ? ex1Placements[i].value + ' → ' + item.answer : item.answer;
+                }
+            });
+
+            // Disable drag items
+            document.querySelectorAll('#ex1-items .drag-item').forEach(el => {
+                el.draggable = false;
+                el.onclick = null;
+            });
+
+            const stars = calcStars(score, ex1Data.length);
+            state.stars.ex1 = stars;
+            updateProgress();
+
+            if (score === ex1Data.length) {
                 fb.className = 'feedback correct show';
-                fb.textContent = '✅ Richtig!';
+                fb.textContent = `✅ Perfekt! Alle ${score} richtig!`;
             } else {
-                input.classList.add('wrong');
-                card.classList.add('wrong');
-                card.classList.add('shake');
                 fb.className = 'feedback wrong show';
-                fb.textContent = '❌ Die richtige Antwort ist: ' + correct;
+                fb.textContent = `❌ ${score} von ${ex1Data.length} richtig. Die korrekten Formen stehen jetzt in den Feldern.`;
             }
 
             setTimeout(() => {
-                ex1Index++;
-                renderEx1();
-            }, 1500);
+                showEx1Results(score);
+            }, 2500);
         }
 
-        function showEx1Results() {
-            ex1Done = true;
-            const stars = calcStars(ex1Score, ex1Data.length);
-            state.stars.ex1 = stars;
-            updateProgress();
+        function showEx1Results(score) {
+            const stars = state.stars.ex1;
             document.getElementById('ex1-check').style.display = 'none';
             document.getElementById('ex1-feedback').style.display = 'none';
             const emoji = stars >= 3 ? '🌟' : stars >= 2 ? '😊' : stars >= 1 ? '💪' : '📚';
-            const msg = stars >= 3 ? 'Perfekt! Du kannst avoir!' : stars >= 2 ? 'Gut gemacht!' : stars >= 1 ? 'Weiter üben, du schaffst das!' : 'Schau dir die Lernseite nochmal an.';
+            const msg = stars >= 3 ? 'Super! Du kannst avoir konjugieren!' : stars >= 2 ? 'Gut! Fast alle richtig!' : stars >= 1 ? 'Weiter üben – du schaffst das!' : 'Lies die Erklärung nochmal durch.';
             document.getElementById('ex1-area').innerHTML = '';
             document.getElementById('ex1-results').style.display = 'block';
             document.getElementById('ex1-results').innerHTML = `
                 <div class="results-card">
                     <div class="results-emoji">${emoji}</div>
-                    <div class="score-big">${ex1Score} / ${ex1Data.length}</div>
+                    <div class="score-big">${score} / ${ex1Data.length}</div>
+                    <div class="score-label">${'⭐'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
+                    <div class="results-msg">${msg}</div>
+                    <button class="restart-btn" onclick="restartEx1()">🔄 Nochmal</button>
+                    <button class="next-btn" style="margin-top:15px;" onclick="switchTab('learn2')">Weiter →</button>
+                </div>
+            `;
+        }
+
+            if (score === ex1Data.length) {
+                fb.className = 'feedback correct show';
+                fb.textContent = `✅ Perfekt! Alle ${score} richtig!`;
+            } else {
+                fb.className = 'feedback wrong show';
+                fb.textContent = `❌ ${score} von ${ex1Data.length} richtig. Die korrekten Formen stehen jetzt in den Feldern.`;
+            }
+
+            setTimeout(() => {
+                showEx1Results(score);
+            }, 2500);
+        }
+
+        function showEx1Results(score) {
+            const stars = state.stars.ex1;
+            document.getElementById('ex1-check').style.display = 'none';
+            document.getElementById('ex1-feedback').style.display = 'none';
+            const emoji = stars >= 3 ? '🌟' : stars >= 2 ? '😊' : stars >= 1 ? '💪' : '📚';
+            const msg = stars >= 3 ? 'Super! Du kannst avoir konjugieren!' : stars >= 2 ? 'Gut! Fast alle richtig!' : stars >= 1 ? 'Weiter üben!' : 'Lies die Erklärung nochmal.';
+            document.getElementById('ex1-area').innerHTML = '';
+            document.getElementById('ex1-results').style.display = 'block';
+            document.getElementById('ex1-results').innerHTML = `
+                <div class="results-card">
+                    <div class="results-emoji">${emoji}</div>
+                    <div class="score-big">${score} / ${ex1Data.length}</div>
                     <div class="score-label">${'⭐'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
                     <div class="results-msg">${msg}</div>
                     <button class="restart-btn" onclick="restartEx1()">🔄 Nochmal</button>
@@ -1173,21 +1494,22 @@
         }
 
         function restartEx1() {
-            ex1Index = 0; ex1Score = 0; ex1Done = false;
+            state.stars.ex1 = 0;
+            updateProgress();
             document.getElementById('ex1-results').style.display = 'none';
             renderEx1();
         }
 
-        // =========== EXERCISE 2: Participe passé (Multiple Choice) ===========
+        // =========== EXERCISE 2: Participe passé (MC) ===========
         const ex2Data = [
-            { verb: "parler", options: ["parlé", "parlè", "parlu", "parlait"], answer: "parlé" },
-            { verb: "manger", options: ["mangé", "mangè", "mangu", "mangait"], answer: "mangé" },
-            { verb: "jouer", options: ["joué", "jouè", "jou", "jouait"], answer: "joué" },
-            { verb: "travailler", options: ["travaillé", "travaillè", "travailli", "travaillait"], answer: "travaillé" },
-            { verb: "être", options: ["été", "êté", "étais", "eu"], answer: "été" },
-            { verb: "avoir", options: ["eu", "avé", "aité", "avait"], answer: "eu" },
-            { verb: "faire", options: ["fait", "faisé", "faité", "fais"], answer: "fait" },
-            { verb: "regarder", options: ["regardé", "regardè", "regardi", "regardait"], answer: "regardé" }
+            { verb: "parler", correct: "parlé", options: ["parlé", "parler", "parlè", "parlo"] },
+            { verb: "manger", correct: "mangé", options: ["mangé", "manger", "mangè", "mangée"] },
+            { verb: "jouer", correct: "joué", options: ["jouer", "joué", "jouè", "joue"] },
+            { verb: "regarder", correct: "regardé", options: ["regarder", "regardè", "regardé", "regarde"] },
+            { verb: "travailler", correct: "travaillé", options: ["travailler", "travaillé", "travaillè", "travaille"] },
+            { verb: "être", correct: "été", options: ["été", "êté", "etté", "être"] },
+            { verb: "avoir", correct: "eu", options: ["eu", "avé", "avoir", "avu"] },
+            { verb: "faire", correct: "fait", options: ["fais", "fait", "faire", "faité"] }
         ];
         let ex2Index = 0;
         let ex2Score = 0;
@@ -1201,44 +1523,53 @@
             }
             const q = ex2Data[ex2Index];
             document.getElementById('ex2-counter').textContent = (ex2Index + 1) + ' / ' + ex2Data.length;
-            // Shuffle options
+
             const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+
             let html = `
                 <div class="question-card" id="ex2-card">
-                    <div class="question-text">Wie lautet das participe passé von « <strong>${q.verb}</strong> »?</div>
-                    <div class="mc-options" id="ex2-options">
+                    <div class="question-text">Wie lautet das participe passé von <strong>${q.verb}</strong>?</div>
+                    <div class="mc-options">
             `;
             shuffled.forEach((opt, i) => {
-                html += `<div class="mc-option" id="ex2-opt-${i}" onclick="selectEx2(${i}, '${opt}')">${opt}</div>`;
+                html += `<div class="mc-option" onclick="answerEx2('${opt}', ${i})" id="ex2-opt-${i}">${opt}</div>`;
             });
             html += `</div></div>`;
             document.getElementById('ex2-area').innerHTML = html;
+            document.getElementById('ex2-feedback').className = 'feedback';
+            document.getElementById('ex2-feedback').style.display = 'none';
         }
 
-        function selectEx2(idx, value) {
-            if (ex2Done) return;
+        function answerEx2(chosen, idx) {
             const q = ex2Data[ex2Index];
-            // Disable all
-            document.querySelectorAll('#ex2-options .mc-option').forEach(el => el.classList.add('disabled'));
+            const card = document.getElementById('ex2-card');
+            const fb = document.getElementById('ex2-feedback');
 
-            if (value === q.answer) {
+            // Disable all options
+            document.querySelectorAll('.mc-option').forEach(el => el.classList.add('disabled'));
+
+            // Highlight correct/wrong
+            document.querySelectorAll('.mc-option').forEach((el, i) => {
+                if (el.textContent === q.correct) el.classList.add('correct-answer');
+            });
+
+            if (chosen === q.correct) {
                 ex2Score++;
                 document.getElementById('ex2-opt-' + idx).classList.add('correct-answer');
-                document.getElementById('ex2-card').classList.add('correct');
+                fb.className = 'feedback correct show';
+                fb.textContent = '✅ Richtig!';
+                card.classList.add('correct');
             } else {
                 document.getElementById('ex2-opt-' + idx).classList.add('wrong-answer');
-                document.getElementById('ex2-card').classList.add('wrong');
-                document.getElementById('ex2-card').classList.add('shake');
-                // Show correct
-                document.querySelectorAll('#ex2-options .mc-option').forEach(el => {
-                    if (el.textContent === q.answer) el.classList.add('correct-answer');
-                });
+                fb.className = 'feedback wrong show';
+                fb.textContent = '❌ Richtig wäre: ' + q.correct;
+                card.classList.add('wrong');
             }
 
             setTimeout(() => {
                 ex2Index++;
                 renderEx2();
-            }, 1300);
+            }, 1500);
         }
 
         function showEx2Results() {
@@ -1247,8 +1578,9 @@
             state.stars.ex2 = stars;
             updateProgress();
             const emoji = stars >= 3 ? '🌟' : stars >= 2 ? '😊' : stars >= 1 ? '💪' : '📚';
-            const msg = stars >= 3 ? 'Super! Die participes passés sitzen!' : stars >= 2 ? 'Gut! Fast alles richtig!' : stars >= 1 ? 'Weiter üben!' : 'Schau dir die Lernseite nochmal an.';
+            const msg = stars >= 3 ? 'Fantastisch!' : stars >= 2 ? 'Sehr gut!' : stars >= 1 ? 'Weiter üben!' : 'Lies die Erklärung nochmal.';
             document.getElementById('ex2-area').innerHTML = '';
+            document.getElementById('ex2-feedback').style.display = 'none';
             document.getElementById('ex2-results').style.display = 'block';
             document.getElementById('ex2-results').innerHTML = `
                 <div class="results-card">
@@ -1264,18 +1596,19 @@
 
         function restartEx2() {
             ex2Index = 0; ex2Score = 0; ex2Done = false;
+            state.stars.ex2 = 0; updateProgress();
             document.getElementById('ex2-results').style.display = 'none';
             renderEx2();
         }
 
-        // =========== EXERCISE 3: Sätze bilden (Lückentext mit 2 Eingaben) ===========
+        // =========== EXERCISE 3: Sätze im passé composé ===========
         const ex3Data = [
-            { before: "J'", after: "une pizza.", avoir: "ai", pp: "mangé", hint: "manger – ich" },
-            { before: "Tu ", after: "un film.", avoir: "as", pp: "regardé", hint: "regarder – du" },
-            { before: "Il ", after: "français.", avoir: "a", pp: "parlé", hint: "parler – er" },
-            { before: "Nous ", after: "au foot.", avoir: "avons", pp: "joué", hint: "jouer – wir" },
-            { before: "Vous ", after: "beaucoup.", avoir: "avez", pp: "travaillé", hint: "travailler – ihr" },
-            { before: "Elles ", after: "leurs devoirs.", avoir: "ont", pp: "fait", hint: "faire – sie (f. pl.)" }
+            { german: "Ich habe eine Pizza gegessen.", before: "J'", avoir: "ai", pp: "mangé", after: "une pizza." },
+            { german: "Du hast einen Film geschaut.", before: "Tu ", avoir: "as", pp: "regardé", after: "un film." },
+            { german: "Er hat Fußball gespielt.", before: "Il ", avoir: "a", pp: "joué", after: "au foot." },
+            { german: "Wir haben gearbeitet.", before: "Nous ", avoir: "avons", pp: "travaillé", after: "." },
+            { german: "Ihr habt gesprochen.", before: "Vous ", avoir: "avez", pp: "parlé", after: "." },
+            { german: "Sie (Pl.) haben die Hausaufgaben gemacht.", before: "Ils ", avoir: "ont", pp: "fait", after: "les devoirs." }
         ];
         let ex3Index = 0;
         let ex3Score = 0;
@@ -1289,52 +1622,66 @@
             }
             const q = ex3Data[ex3Index];
             document.getElementById('ex3-counter').textContent = (ex3Index + 1) + ' / ' + ex3Data.length;
-            document.getElementById('ex3-area').innerHTML = `
+
+            let html = `
                 <div class="question-card" id="ex3-card">
-                    <div class="question-text">
-                        ${q.before}<input type="text" class="answer-input" id="ex3-in1" placeholder="avoir" style="width:100px;display:inline;padding:8px 12px;font-size:0.95rem;" autocomplete="off"> 
-                        <input type="text" class="answer-input" id="ex3-in2" placeholder="p.p." style="width:120px;display:inline;padding:8px 12px;font-size:0.95rem;" autocomplete="off" onkeydown="if(event.key==='Enter')checkExercise3()"> ${q.after}
+                    <div class="question-german">🇩🇪 ${q.german}</div>
+                    <div class="question-text" style="font-size:1.1rem;">
+                        ${q.before}<input type="text" class="answer-input" id="ex3-input1" placeholder="avoir" autocomplete="off" autocorrect="off" spellcheck="false" style="width:110px;">
+                        <input type="text" class="answer-input" id="ex3-input2" placeholder="part. passé" autocomplete="off" autocorrect="off" spellcheck="false" style="width:130px;">
+                        ${q.after}
                     </div>
-                    <div class="question-hint">Verb: ${q.hint}</div>
                 </div>
             `;
+            document.getElementById('ex3-area').innerHTML = html;
             document.getElementById('ex3-check').style.display = '';
-            document.getElementById('ex3-check').disabled = false;
             document.getElementById('ex3-feedback').className = 'feedback';
             document.getElementById('ex3-feedback').style.display = 'none';
-            document.getElementById('ex3-in1').focus();
+            document.getElementById('ex3-accent').style.display = '';
+
+            // Track focus for accent button
+            trackFocus('ex3', document.getElementById('ex3-input1'));
+            trackFocus('ex3', document.getElementById('ex3-input2'));
+
+            // Enter key
+            document.querySelectorAll('#ex3-card .answer-input').forEach(inp => {
+                inp.addEventListener('keydown', e => { if (e.key === 'Enter') checkExercise3(); });
+            });
         }
 
         function checkExercise3() {
-            const in1 = document.getElementById('ex3-in1');
-            const in2 = document.getElementById('ex3-in2');
-            const v1 = in1.value.trim().toLowerCase();
-            const v2 = in2.value.trim().toLowerCase();
             const q = ex3Data[ex3Index];
+            const v1 = document.getElementById('ex3-input1').value.trim().toLowerCase();
+            const v2 = document.getElementById('ex3-input2').value.trim().toLowerCase();
             const fb = document.getElementById('ex3-feedback');
             const card = document.getElementById('ex3-card');
 
-            if (!v1 || !v2) return;
+            if (!v1 || !v2) {
+                fb.className = 'feedback wrong show';
+                fb.textContent = '⚠️ Bitte fülle beide Felder aus!';
+                return;
+            }
 
-            in1.disabled = true;
-            in2.disabled = true;
-            document.getElementById('ex3-check').disabled = true;
+            const inp1 = document.getElementById('ex3-input1');
+            const inp2 = document.getElementById('ex3-input2');
+            inp1.disabled = true;
+            inp2.disabled = true;
 
-            const correct = (v1 === q.avoir && v2 === q.pp);
-            if (correct) {
+            const c1 = v1 === q.avoir.toLowerCase();
+            const c2 = v2 === q.pp.toLowerCase();
+
+            inp1.classList.add(c1 ? 'correct' : 'wrong');
+            inp2.classList.add(c2 ? 'correct' : 'wrong');
+
+            if (c1 && c2) {
                 ex3Score++;
-                in1.classList.add('correct');
-                in2.classList.add('correct');
-                card.classList.add('correct');
                 fb.className = 'feedback correct show';
                 fb.textContent = '✅ Richtig! ' + q.before + q.avoir + ' ' + q.pp + ' ' + q.after;
+                card.classList.add('correct');
             } else {
-                in1.classList.add(v1 === q.avoir ? 'correct' : 'wrong');
-                in2.classList.add(v2 === q.pp ? 'correct' : 'wrong');
-                card.classList.add('wrong');
-                card.classList.add('shake');
                 fb.className = 'feedback wrong show';
                 fb.textContent = '❌ Richtig wäre: ' + q.before + q.avoir + ' ' + q.pp + ' ' + q.after;
+                card.classList.add('wrong');
             }
 
             setTimeout(() => {
@@ -1349,6 +1696,7 @@
             state.stars.ex3 = stars;
             updateProgress();
             document.getElementById('ex3-check').style.display = 'none';
+            document.getElementById('ex3-accent').style.display = 'none';
             document.getElementById('ex3-feedback').style.display = 'none';
             const emoji = stars >= 3 ? '🌟' : stars >= 2 ? '😊' : stars >= 1 ? '💪' : '📚';
             const msg = stars >= 3 ? 'Fantastisch! Du beherrschst die Bildung!' : stars >= 2 ? 'Sehr gut!' : stars >= 1 ? 'Weiter üben!' : 'Lies die Erklärung nochmal.';
@@ -1368,11 +1716,12 @@
 
         function restartEx3() {
             ex3Index = 0; ex3Score = 0; ex3Done = false;
+            state.stars.ex3 = 0; updateProgress();
             document.getElementById('ex3-results').style.display = 'none';
             renderEx3();
         }
 
-        // =========== EXERCISE 4: Verneinung (Wörter sortieren) ===========
+        // =========== EXERCISE 4: Verneinung – alle Sätze untereinander (Klick-Sortierung) ===========
         const ex4Data = [
             { words: ["Je", "n'", "ai", "pas", "mangé"], answer: "Je n' ai pas mangé", display: "Je n'ai pas mangé.", hint: "Ich habe nicht gegessen." },
             { words: ["Tu", "n'", "as", "pas", "parlé"], answer: "Tu n' as pas parlé", display: "Tu n'as pas parlé.", hint: "Du hast nicht gesprochen." },
@@ -1381,35 +1730,31 @@
             { words: ["Vous", "n'", "avez", "pas", "regardé"], answer: "Vous n' avez pas regardé", display: "Vous n'avez pas regardé.", hint: "Ihr habt nicht geschaut." },
             { words: ["Elles", "n'", "ont", "pas", "fait"], answer: "Elles n' ont pas fait", display: "Elles n'ont pas fait.", hint: "Sie haben nicht gemacht." }
         ];
-        let ex4Index = 0;
-        let ex4Score = 0;
-        let ex4Done = false;
-        let ex4Selected = [];
+
+        // State per sentence
+        let ex4Selections = []; // array of arrays
 
         function renderEx4() {
-            if (ex4Done) return;
-            if (ex4Index >= ex4Data.length) {
-                showEx4Results();
-                return;
-            }
-            const q = ex4Data[ex4Index];
-            ex4Selected = [];
-            document.getElementById('ex4-counter').textContent = (ex4Index + 1) + ' / ' + ex4Data.length;
+            ex4Selections = ex4Data.map(() => []);
+            let html = '<div class="ex4-all-container">';
 
-            const shuffled = [...q.words].sort(() => Math.random() - 0.5);
-
-            let html = `
-                <div class="question-card" id="ex4-card">
-                    <div class="question-hint">🇩🇪 ${q.hint}</div>
-                    <div class="answer-zone" id="ex4-answer-zone">
-                        <span style="color:#606080;font-size:0.85rem;" id="ex4-placeholder">← Klicke auf die Wörter</span>
-                    </div>
-                    <div class="sort-container" id="ex4-words">
-            `;
-            shuffled.forEach((word, i) => {
-                html += `<div class="sort-word" id="ex4-w-${i}" data-word="${word}" onclick="addWord4(${i})">${word}</div>`;
+            ex4Data.forEach((q, si) => {
+                const shuffled = [...q.words].sort(() => Math.random() - 0.5);
+                html += `
+                    <div class="ex4-sentence-card" id="ex4-card-${si}">
+                        <div class="question-hint">🇩🇪 ${q.hint}</div>
+                        <div class="answer-zone" id="ex4-answer-${si}">
+                            <span class="ex4-placeholder" id="ex4-ph-${si}" style="color:#606080;font-size:0.85rem;">← Klicke auf die Wörter</span>
+                        </div>
+                        <div class="sort-container" id="ex4-words-${si}">
+                `;
+                shuffled.forEach((word, wi) => {
+                    html += `<div class="sort-word" id="ex4-w-${si}-${wi}" data-word="${word}" data-si="${si}" data-wi="${wi}" onclick="addWordEx4(${si}, ${wi})">${word}</div>`;
+                });
+                html += `</div></div>`;
             });
-            html += `</div></div>`;
+
+            html += '</div>';
             document.getElementById('ex4-area').innerHTML = html;
             document.getElementById('ex4-check').style.display = '';
             document.getElementById('ex4-check').disabled = false;
@@ -1417,79 +1762,116 @@
             document.getElementById('ex4-feedback').style.display = 'none';
         }
 
-        function addWord4(idx) {
-            const wordEl = document.getElementById('ex4-w-' + idx);
+        function addWordEx4(si, wi) {
+            const wordEl = document.getElementById(`ex4-w-${si}-${wi}`);
             if (wordEl.classList.contains('placed')) return;
-            wordEl.classList.add('placed');
+
             const word = wordEl.dataset.word;
-            ex4Selected.push({ idx, word });
+            ex4Selections[si].push({ word, wi });
+            wordEl.classList.add('placed');
 
-            const placeholder = document.getElementById('ex4-placeholder');
-            if (placeholder) placeholder.remove();
+            // Update answer zone
+            const zone = document.getElementById(`ex4-answer-${si}`);
+            const ph = document.getElementById(`ex4-ph-${si}`);
+            if (ph) ph.remove();
 
-            const zone = document.getElementById('ex4-answer-zone');
-            const chip = document.createElement('div');
-            chip.className = 'sort-word';
-            chip.textContent = word;
-            chip.dataset.srcIdx = idx;
-            chip.onclick = function () {
-                // Remove from answer zone
-                ex4Selected = ex4Selected.filter(s => s.idx !== idx);
-                wordEl.classList.remove('placed');
-                chip.remove();
-                if (ex4Selected.length === 0) {
-                    zone.innerHTML = '<span style="color:#606080;font-size:0.85rem;" id="ex4-placeholder">← Klicke auf die Wörter</span>';
-                }
-            };
-            zone.appendChild(chip);
+            const tag = document.createElement('div');
+            tag.className = 'sort-word';
+            tag.textContent = word;
+            tag.dataset.idx = ex4Selections[si].length - 1;
+            tag.onclick = function () { removeWordEx4(si, parseInt(this.dataset.idx)); };
+            zone.appendChild(tag);
+        }
+
+        function removeWordEx4(si, idx) {
+            if (idx < 0 || idx >= ex4Selections[si].length) return;
+            const removed = ex4Selections[si].splice(idx, 1)[0];
+
+            // Un-place the original word
+            const origEl = document.getElementById(`ex4-w-${si}-${removed.wi}`);
+            if (origEl) origEl.classList.remove('placed');
+
+            // Re-render answer zone
+            const zone = document.getElementById(`ex4-answer-${si}`);
+            zone.innerHTML = '';
+            if (ex4Selections[si].length === 0) {
+                zone.innerHTML = `<span class="ex4-placeholder" id="ex4-ph-${si}" style="color:#606080;font-size:0.85rem;">← Klicke auf die Wörter</span>`;
+            } else {
+                ex4Selections[si].forEach((item, i) => {
+                    const tag = document.createElement('div');
+                    tag.className = 'sort-word';
+                    tag.textContent = item.word;
+                    tag.dataset.idx = i;
+                    tag.onclick = function () { removeWordEx4(si, parseInt(this.dataset.idx)); };
+                    zone.appendChild(tag);
+                });
+            }
         }
 
         function checkExercise4() {
-            const q = ex4Data[ex4Index];
-            const userAnswer = ex4Selected.map(s => s.word).join(' ');
+            let score = 0;
             const fb = document.getElementById('ex4-feedback');
-            const card = document.getElementById('ex4-card');
 
-            if (ex4Selected.length === 0) return;
+            // Check if all sentences have all words placed
+            let allComplete = true;
+            ex4Data.forEach((q, si) => {
+                if (ex4Selections[si].length < q.words.length) allComplete = false;
+            });
 
-            document.getElementById('ex4-check').disabled = true;
-            // Disable clicking
-            document.querySelectorAll('#ex4-words .sort-word').forEach(el => el.onclick = null);
-            document.querySelectorAll('#ex4-answer-zone .sort-word').forEach(el => el.onclick = null);
-
-            if (userAnswer === q.answer) {
-                ex4Score++;
-                card.classList.add('correct');
-                fb.className = 'feedback correct show';
-                fb.textContent = '✅ Richtig! ' + q.display;
-            } else {
-                card.classList.add('wrong');
-                card.classList.add('shake');
+            if (!allComplete) {
                 fb.className = 'feedback wrong show';
-                fb.textContent = '❌ Richtig wäre: ' + q.display;
+                fb.textContent = '⚠️ Bitte ordne bei jedem Satz alle Wörter!';
+                return;
             }
 
-            setTimeout(() => {
-                ex4Index++;
-                renderEx4();
-            }, 2000);
-        }
+            document.getElementById('ex4-check').disabled = true;
 
-        function showEx4Results() {
-            ex4Done = true;
-            const stars = calcStars(ex4Score, ex4Data.length);
+            ex4Data.forEach((q, si) => {
+                const userAnswer = ex4Selections[si].map(s => s.word).join(' ');
+                const card = document.getElementById(`ex4-card-${si}`);
+                const zone = document.getElementById(`ex4-answer-${si}`);
+
+                if (userAnswer === q.answer) {
+                    score++;
+                    card.style.borderColor = 'rgba(46, 204, 113, 0.5)';
+                    card.style.background = 'rgba(46, 204, 113, 0.08)';
+                    zone.innerHTML = `<span style="color:#7bed9f;font-weight:600;">✅ ${q.display}</span>`;
+                } else {
+                    card.style.borderColor = 'rgba(231, 76, 60, 0.5)';
+                    card.style.background = 'rgba(231, 76, 60, 0.08)';
+                    zone.innerHTML = `<span style="color:#ff6b6b;font-weight:600;">❌ Richtig: ${q.display}</span>`;
+                }
+
+                // Hide word bank
+                const wordBank = document.getElementById(`ex4-words-${si}`);
+                if (wordBank) wordBank.style.display = 'none';
+            });
+
+            const stars = calcStars(score, ex4Data.length);
             state.stars.ex4 = stars;
             updateProgress();
+
+            fb.className = score === ex4Data.length ? 'feedback correct show' : 'feedback wrong show';
+            fb.textContent = score === ex4Data.length
+                ? `✅ Perfekt! Alle ${score} Sätze richtig!`
+                : `${score} von ${ex4Data.length} richtig.`;
+
+            setTimeout(() => {
+                showEx4Results(score);
+            }, 2500);
+        }
+
+        function showEx4Results(score) {
+            const stars = state.stars.ex4;
             document.getElementById('ex4-check').style.display = 'none';
             document.getElementById('ex4-feedback').style.display = 'none';
             const emoji = stars >= 3 ? '🌟' : stars >= 2 ? '😊' : stars >= 1 ? '💪' : '📚';
-            const msg = stars >= 3 ? 'Perfekt! Die Verneinung sitzt!' : stars >= 2 ? 'Gut gemacht!' : stars >= 1 ? 'Weiter üben!' : 'Schau dir die Erklärung nochmal an.';
-            document.getElementById('ex4-area').innerHTML = '';
+            const msg = stars >= 3 ? 'Super! Verneinung sitzt!' : stars >= 2 ? 'Gut gemacht!' : stars >= 1 ? 'Weiter üben!' : 'Lies die Erklärung nochmal.';
             document.getElementById('ex4-results').style.display = 'block';
             document.getElementById('ex4-results').innerHTML = `
                 <div class="results-card">
                     <div class="results-emoji">${emoji}</div>
-                    <div class="score-big">${ex4Score} / ${ex4Data.length}</div>
+                    <div class="score-big">${score} / ${ex4Data.length}</div>
                     <div class="score-label">${'⭐'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
                     <div class="results-msg">${msg}</div>
                     <button class="restart-btn" onclick="restartEx4()">🔄 Nochmal</button>
@@ -1499,71 +1881,42 @@
         }
 
         function restartEx4() {
-            ex4Index = 0; ex4Score = 0; ex4Done = false;
+            state.stars.ex4 = 0; updateProgress();
             document.getElementById('ex4-results').style.display = 'none';
+            document.getElementById('ex4-area').innerHTML = '';
             renderEx4();
         }
 
-        // =========== EXERCISE 5: Finale – Gemischte Übung ===========
+        // =========== EXERCISE 5: Finale – Übersetzung ===========
         const ex5Data = [
-            {
-                type: 'fill',
-                text: "Heute: Je ___ au foot. (jouer – présent)",
-                answer: "joue",
-                hint: "Présent von jouer, 1. Person Singular"
-            },
-            {
-                type: 'fill',
-                text: "Gestern: J' ___ ___ au foot. (jouer – passé composé)",
-                answers: ["ai", "joué"],
-                multi: true,
-                hint: "avoir + participe passé von jouer"
-            },
-            {
-                type: 'mc',
-                question: "Welcher Satz steht im passé composé?",
-                options: ["Je mange une pizza.", "J'ai mangé une pizza.", "Je mangeais une pizza.", "Je vais manger."],
-                answer: "J'ai mangé une pizza."
-            },
-            {
-                type: 'fill',
-                text: "Il ___ ___ ses devoirs. (faire – passé composé)",
-                answers: ["a", "fait"],
-                multi: true,
-                hint: "avoir + participe passé von faire"
-            },
-            {
-                type: 'mc',
-                question: "Wie lautet die Verneinung von « J'ai parlé » ?",
-                options: ["Je pas ai parlé.", "Je n'ai pas parlé.", "Je n'ai parlé pas.", "Je ne parlé pas ai."],
-                answer: "Je n'ai pas parlé."
-            },
-            {
-                type: 'fill',
-                text: "Nous ___ ___ ___ le film. (regarder – passé composé, verneint)",
-                answers: ["n'", "avons", "pas", "regardé"],
-                multi: true,
-                multiCount: 4,
-                hint: "n' + avoir + pas + participe passé"
-            },
-            {
-                type: 'mc',
-                question: "« Elles ont eu un problème. » – Was ist das participe passé?",
-                options: ["ont", "eu", "un", "problème"],
-                answer: "eu"
-            },
-            {
-                type: 'fill',
-                text: "Tu ___ ___ ___ hier. (travailler – passé composé, verneint)",
-                answers: ["n'", "as", "pas", "travaillé"],
-                multi: true,
-                multiCount: 4,
-                hint: "n' + avoir + pas + participe passé"
-            }
+            { german: "Ich habe gespielt.", answers: ["j'ai joué", "j'ai joue"] },
+            { german: "Du hast gegessen.", answers: ["tu as mangé", "tu as mange"] },
+            { german: "Er hat gearbeitet.", answers: ["il a travaillé", "il a travaille"] },
+            { german: "Wir haben gesprochen.", answers: ["nous avons parlé", "nous avons parle"] },
+            { german: "Ihr habt geschaut.", answers: ["vous avez regardé", "vous avez regarde"] },
+            { german: "Ich habe nicht gespielt.", answers: ["je n'ai pas joué", "je n'ai pas joue", "je nai pas joué", "je nai pas joue"] },
+            { german: "Er hat nicht gegessen.", answers: ["il n'a pas mangé", "il n'a pas mange", "il na pas mangé", "il na pas mange"] },
+            { german: "Sie (Pl.) haben gemacht.", answers: ["ils ont fait", "elles ont fait"] }
         ];
         let ex5Index = 0;
         let ex5Score = 0;
         let ex5Done = false;
+
+        function normalizeAnswer(str) {
+            return str.trim().toLowerCase()
+                .replace(/['ʼ'`´]/g, "'")   // normalize apostrophes
+                .replace(/\s+/g, ' ')         // collapse whitespace
+                .replace(/\s*\.\s*$/, '')     // remove trailing period
+                .replace(/é/g, 'e');          // ignore accent differences for loose check
+        }
+
+        function checkLoose(userInput, acceptedAnswers) {
+            const norm = normalizeAnswer(userInput);
+            for (const ans of acceptedAnswers) {
+                if (normalizeAnswer(ans) === norm) return true;
+            }
+            return false;
+        }
 
         function renderEx5() {
             if (ex5Done) return;
@@ -1573,171 +1926,62 @@
             }
             const q = ex5Data[ex5Index];
             document.getElementById('ex5-counter').textContent = (ex5Index + 1) + ' / ' + ex5Data.length;
+
+            let html = `
+                <div class="question-card" id="ex5-card">
+                    <div class="question-german" style="font-size:1.2rem;">🇩🇪 ${q.german}</div>
+                    <div class="question-hint">Übersetze ins Französische:</div>
+                    <div class="input-row">
+                        <span style="font-size:1.2rem;">🇫🇷</span>
+                        <input type="text" class="answer-input" id="ex5-input" placeholder="..." autocomplete="off" autocorrect="off" spellcheck="false" style="width:320px;max-width:90%;text-align:left;padding-left:14px;">
+                    </div>
+                </div>
+            `;
+            document.getElementById('ex5-area').innerHTML = html;
             document.getElementById('ex5-check').style.display = '';
-            document.getElementById('ex5-check').disabled = false;
+            document.getElementById('ex5-accent').style.display = '';
             document.getElementById('ex5-feedback').className = 'feedback';
             document.getElementById('ex5-feedback').style.display = 'none';
 
-            let html = '';
-
-            if (q.type === 'fill') {
-                if (q.multi) {
-                    const count = q.multiCount || q.answers.length;
-                    let inputsHtml = '';
-                    for (let i = 0; i < count; i++) {
-                        inputsHtml += `<input type="text" class="answer-input" id="ex5-in-${i}" placeholder="..." style="width:${count > 2 ? '90px' : '110px'};display:inline;padding:8px 12px;font-size:0.95rem;margin:3px;" autocomplete="off" onkeydown="if(event.key==='Enter')checkExercise5()"> `;
-                    }
-                    html = `
-                        <div class="question-card" id="ex5-card">
-                            <div class="question-text">${q.text.replace(/___ /g, '').replace(/___/g, '')}</div>
-                            <div class="input-row" style="justify-content:center;flex-wrap:wrap;">
-                                ${inputsHtml}
-                            </div>
-                            <div class="question-hint">${q.hint}</div>
-                        </div>
-                    `;
-                } else {
-                    html = `
-                        <div class="question-card" id="ex5-card">
-                            <div class="question-text">${q.text.replace('___', '')}</div>
-                            <div class="input-row">
-                                <input type="text" class="answer-input" id="ex5-in-0" placeholder="..." autocomplete="off" onkeydown="if(event.key==='Enter')checkExercise5()">
-                            </div>
-                            <div class="question-hint">${q.hint}</div>
-                        </div>
-                    `;
-                }
-            } else if (q.type === 'mc') {
-                const shuffled = [...q.options].sort(() => Math.random() - 0.5);
-                let optsHtml = '';
-                shuffled.forEach((opt, i) => {
-                    optsHtml += `<div class="mc-option" id="ex5-opt-${i}" data-value="${opt}" onclick="selectEx5MC(this)">${opt}</div>`;
-                });
-                html = `
-                    <div class="question-card" id="ex5-card">
-                        <div class="question-text">${q.question}</div>
-                        <div class="mc-options" id="ex5-options">${optsHtml}</div>
-                    </div>
-                `;
-            }
-
-            document.getElementById('ex5-area').innerHTML = html;
-
-            // Hide check button for MC (auto-check on click)
-            if (q.type === 'mc') {
-                document.getElementById('ex5-check').style.display = 'none';
-            }
-
-            if (q.type === 'fill') {
-                document.getElementById('ex5-in-0').focus();
-            }
-        }
-
-        let ex5MCSelected = null;
-
-        function selectEx5MC(el) {
-            if (ex5Done) return;
-            const q = ex5Data[ex5Index];
-            const value = el.dataset.value;
-
-            document.querySelectorAll('#ex5-options .mc-option').forEach(o => o.classList.add('disabled'));
-
-            const fb = document.getElementById('ex5-feedback');
-            const card = document.getElementById('ex5-card');
-
-            if (value === q.answer) {
-                ex5Score++;
-                el.classList.add('correct-answer');
-                card.classList.add('correct');
-                fb.className = 'feedback correct show';
-                fb.textContent = '✅ Richtig!';
-            } else {
-                el.classList.add('wrong-answer');
-                card.classList.add('wrong');
-                card.classList.add('shake');
-                document.querySelectorAll('#ex5-options .mc-option').forEach(o => {
-                    if (o.dataset.value === q.answer) o.classList.add('correct-answer');
-                });
-                fb.className = 'feedback wrong show';
-                fb.textContent = '❌ Richtig wäre: ' + q.answer;
-            }
-
-            setTimeout(() => {
-                ex5Index++;
-                renderEx5();
-            }, 1800);
+            const inp = document.getElementById('ex5-input');
+            trackFocus('ex5', inp);
+            inp.addEventListener('keydown', e => { if (e.key === 'Enter') checkExercise5(); });
+            inp.focus();
         }
 
         function checkExercise5() {
             const q = ex5Data[ex5Index];
-            if (q.type === 'mc') return; // MC handled by click
-
+            const inp = document.getElementById('ex5-input');
+            const val = inp.value.trim();
             const fb = document.getElementById('ex5-feedback');
             const card = document.getElementById('ex5-card');
 
-            if (q.multi) {
-                const count = q.multiCount || q.answers.length;
-                let vals = [];
-                let allFilled = true;
-                for (let i = 0; i < count; i++) {
-                    const inp = document.getElementById('ex5-in-' + i);
-                    const v = inp.value.trim().toLowerCase();
-                    if (!v) allFilled = false;
-                    vals.push(v);
-                }
-                if (!allFilled) return;
+            if (!val) {
+                fb.className = 'feedback wrong show';
+                fb.textContent = '⚠️ Bitte schreibe eine Übersetzung!';
+                return;
+            }
 
-                // Disable inputs
-                for (let i = 0; i < count; i++) {
-                    document.getElementById('ex5-in-' + i).disabled = true;
-                }
-                document.getElementById('ex5-check').disabled = true;
+            inp.disabled = true;
+            const isCorrect = checkLoose(val, q.answers);
 
-                const correct = vals.every((v, i) => v === q.answers[i].toLowerCase());
-
-                if (correct) {
-                    ex5Score++;
-                    for (let i = 0; i < count; i++) document.getElementById('ex5-in-' + i).classList.add('correct');
-                    card.classList.add('correct');
-                    fb.className = 'feedback correct show';
-                    fb.textContent = '✅ Richtig!';
-                } else {
-                    for (let i = 0; i < count; i++) {
-                        const inp = document.getElementById('ex5-in-' + i);
-                        inp.classList.add(vals[i] === q.answers[i].toLowerCase() ? 'correct' : 'wrong');
-                    }
-                    card.classList.add('wrong');
-                    card.classList.add('shake');
-                    fb.className = 'feedback wrong show';
-                    fb.textContent = '❌ Richtig wäre: ' + q.answers.join(' ');
-                }
+            if (isCorrect) {
+                ex5Score++;
+                inp.classList.add('correct');
+                card.classList.add('correct');
+                fb.className = 'feedback correct show';
+                fb.textContent = '✅ Richtig! ' + q.answers[0];
             } else {
-                const inp = document.getElementById('ex5-in-0');
-                const val = inp.value.trim().toLowerCase();
-                if (!val) return;
-
-                inp.disabled = true;
-                document.getElementById('ex5-check').disabled = true;
-
-                if (val === q.answer.toLowerCase()) {
-                    ex5Score++;
-                    inp.classList.add('correct');
-                    card.classList.add('correct');
-                    fb.className = 'feedback correct show';
-                    fb.textContent = '✅ Richtig!';
-                } else {
-                    inp.classList.add('wrong');
-                    card.classList.add('wrong');
-                    card.classList.add('shake');
-                    fb.className = 'feedback wrong show';
-                    fb.textContent = '❌ Richtig wäre: ' + q.answer;
-                }
+                inp.classList.add('wrong');
+                card.classList.add('wrong');
+                fb.className = 'feedback wrong show';
+                fb.textContent = '❌ Richtig wäre: ' + q.answers[0];
             }
 
             setTimeout(() => {
                 ex5Index++;
                 renderEx5();
-            }, 2000);
+            }, 2200);
         }
 
         function showEx5Results() {
@@ -1746,62 +1990,64 @@
             state.stars.ex5 = stars;
             updateProgress();
             document.getElementById('ex5-check').style.display = 'none';
+            document.getElementById('ex5-accent').style.display = 'none';
             document.getElementById('ex5-feedback').style.display = 'none';
+            document.getElementById('ex5-area').innerHTML = '';
 
+            // Calculate total stars
             let total = 0, max = 0;
             for (let k in state.stars) { total += state.stars[k]; max += state.maxStars[k]; }
 
-            const emoji = stars >= 3 ? '🏆' : stars >= 2 ? '🎉' : stars >= 1 ? '💪' : '📚';
-            const msg = stars >= 3 ? 'Ausgezeichnet! Du hast das passé composé drauf!' :
-                        stars >= 2 ? 'Sehr gut! Fast perfekt!' :
-                        stars >= 1 ? 'Nicht schlecht! Übe weiter!' :
-                        'Geh nochmal die Lernseiten durch – du schaffst das!';
+            const emoji = total >= 13 ? '🏆' : total >= 10 ? '🌟' : total >= 7 ? '😊' : total >= 4 ? '💪' : '📚';
+            const msg = total >= 13 ? 'Ausgezeichnet! Du beherrschst das passé composé mit avoir!' :
+                        total >= 10 ? 'Sehr gut! Du bist auf einem super Weg!' :
+                        total >= 7 ? 'Gut! Wiederhole die schwierigen Teile nochmal.' :
+                        'Übung macht den Meister – versuch es nochmal!';
 
-            document.getElementById('ex5-area').innerHTML = '';
             document.getElementById('ex5-results').style.display = 'block';
             document.getElementById('ex5-results').innerHTML = `
                 <div class="results-card">
                     <div class="results-emoji">${emoji}</div>
                     <div class="score-big">${ex5Score} / ${ex5Data.length}</div>
                     <div class="score-label">${'⭐'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
-                    <div class="results-msg">${msg}</div>
-                    <hr style="border-color:rgba(255,255,255,0.1);margin:20px 0;">
-                    <div style="font-size:0.95rem;color:#a0a0c0;margin-bottom:10px;">
-                        <strong>Gesamtergebnis:</strong> ${total} / ${max} Sterne
+                    <div class="results-msg" style="margin-bottom:8px;">${stars >= 3 ? 'Perfektes Finale!' : stars >= 2 ? 'Gut gemacht!' : 'Weiter üben!'}</div>
+                    <hr style="border-color:rgba(255,255,255,0.1);margin:15px 0;">
+                    <div style="font-size:1rem;color:#c0c0ff;font-weight:700;margin-bottom:5px;">Gesamtergebnis</div>
+                    <div style="font-size:1.1rem;color:#a0a0c0;margin-bottom:10px;">
+                        ${total} / ${max} Sterne
                     </div>
                     <div style="font-size:1.5rem;margin-bottom:15px;">
                         ${'⭐'.repeat(total)}${'☆'.repeat(max - total)}
                     </div>
+                    <div class="results-msg">${msg}</div>
                     <button class="restart-btn" onclick="restartEx5()">🔄 Finale nochmal</button>
-                    <button class="restart-btn" style="background:linear-gradient(135deg,#667eea,#764ba2);margin-left:10px;" onclick="restartAll()">🔄 Alles von vorn</button>
+                    <button class="restart-btn" style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;margin-left:10px;" onclick="restartAll()">🔄 Alles von vorn</button>
                 </div>
             `;
         }
 
         function restartEx5() {
             ex5Index = 0; ex5Score = 0; ex5Done = false;
+            state.stars.ex5 = 0; updateProgress();
             document.getElementById('ex5-results').style.display = 'none';
             renderEx5();
         }
 
         function restartAll() {
-            // Reset all exercises
-            ex1Index = 0; ex1Score = 0; ex1Done = false;
+            ex1Placements = {};
             ex2Index = 0; ex2Score = 0; ex2Done = false;
             ex3Index = 0; ex3Score = 0; ex3Done = false;
-            ex4Index = 0; ex4Score = 0; ex4Done = false;
+            ex4Selections = [];
             ex5Index = 0; ex5Score = 0; ex5Done = false;
 
             for (let k in state.stars) state.stars[k] = 0;
             updateProgress();
 
-            // Hide all results
             ['ex1', 'ex2', 'ex3', 'ex4', 'ex5'].forEach(id => {
                 const res = document.getElementById(id + '-results');
                 if (res) res.style.display = 'none';
             });
 
-            // Re-render all exercises
             renderEx1();
             renderEx2();
             renderEx3();
