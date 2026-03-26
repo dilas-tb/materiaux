@@ -1,1 +1,643 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suchsel - Les adjectifs français</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a0533, #4a1a6b, #7b2d8e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #f9c74f;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .grid-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .grid-header {
+            text-align: center;
+            font-size: 1.1em;
+            color: #4a1a6b;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        #grid {
+            display: grid;
+            gap: 2px;
+            user-select: none;
+            cursor: crosshair;
+        }
+
+        .cell {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #1b1b1b;
+            background: #f0e6f6;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .cell:hover {
+            background: #d9b3f0;
+            transform: scale(1.05);
+        }
+
+        .cell.selecting {
+            background: #f9c74f;
+            color: white;
+            transform: scale(1.08);
+            box-shadow: 0 2px 8px rgba(249,199,79,0.4);
+        }
+
+        .cell.found {
+            background: #2ecc71;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(46,204,113,0.4);
+        }
+
+        .cell.solution {
+            background: #9b59b6;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(155,89,182,0.4);
+        }
+
+        .cell.wrong {
+            background: #e74c3c;
+            color: white;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        .word-list-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            min-width: 240px;
+        }
+
+        .word-list-header {
+            text-align: center;
+            font-size: 1.1em;
+            color: #4a1a6b;
+            margin-bottom: 15px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0e6f6;
+        }
+
+        .word-columns {
+            display: flex;
+            gap: 15px;
+        }
+
+        .word-column {
+            flex: 1;
+        }
+
+        .word-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            margin: 3px 0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #1b1b1b;
+            transition: all 0.3s ease;
+            background: #f8f4fb;
+        }
+
+        .word-item .word-text {
+            flex: 1;
+        }
+
+        .word-item.found {
+            background: #d5f5e3;
+            color: #27ae60;
+            text-decoration: line-through;
+            text-decoration-thickness: 3px;
+        }
+
+        .word-item .checkmark {
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 1.1em;
+        }
+
+        .word-item.found .checkmark {
+            opacity: 1;
+        }
+
+        .progress-bar {
+            margin-top: 15px;
+            background: #f0e6f6;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #4a1a6b;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .btn-new {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #f9c74f, #f0a500);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(249,199,79,0.3);
+            width: 100%;
+        }
+
+        .btn-new:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249,199,79,0.4);
+        }
+
+        .btn-solution {
+            display: block;
+            margin: 10px auto 0;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(155,89,182,0.3);
+            width: 100%;
+        }
+
+        .btn-solution:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(155,89,182,0.4);
+        }
+
+        .instructions {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .celebration {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #4a1a6b;
+            animation: pop 0.5s ease;
+        }
+
+        .celebration.show {
+            display: block;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .cell {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9em;
+            }
+            h1 { font-size: 1.6em; }
+            .word-columns {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇫🇷 Les adjectifs français</h1>
+        <p class="subtitle">Trouve tous les adjectifs cachés dans la grille !</p>
+        <p class="instructions">Klicke auf den ersten und dann auf den letzten Buchstaben eines Wortes, um es zu markieren.</p>
+
+        <div class="main-content">
+            <div class="grid-container">
+                <div class="grid-header">🔍 Suchsel</div>
+                <div id="grid"></div>
+            </div>
+
+            <div class="word-list-container">
+                <div class="word-list-header">📝 Wortliste</div>
+                <div class="word-columns" id="wordList"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0 / 22 gefunden</div>
+                <div class="celebration" id="celebration">🎉 Bravo ! Excellent travail ! 🎉</div>
+                <button class="btn-new" onclick="initGame()">🔄 Neues Suchsel</button>
+                <button class="btn-solution" onclick="showSolution()">💡 Lösung anzeigen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WORDS_DATA = [
+            { word: 'bon', display: 'bon' },
+            { word: 'mauvais', display: 'mauvais' },
+            { word: 'grand', display: 'grand' },
+            { word: 'petit', display: 'petit' },
+            { word: 'beau', display: 'beau' },
+            { word: 'nouveau', display: 'nouveau' },
+            { word: 'vieux', display: 'vieux' },
+            { word: 'jeune', display: 'jeune' },
+            { word: 'gentil', display: 'gentil' },
+            { word: 'méchant', display: 'méchant' },
+            { word: 'sympa', display: 'sympa' },
+            { word: 'content', display: 'content' },
+            { word: 'triste', display: 'triste' },
+            { word: 'heureux', display: 'heureux' },
+            { word: 'fatigué', display: 'fatigué' },
+            { word: 'malade', display: 'malade' },
+            { word: 'facile', display: 'facile' },
+            { word: 'difficile', display: 'difficile' },
+            { word: 'rapide', display: 'rapide' },
+            { word: 'lent', display: 'lent' },
+            { word: 'chaud', display: 'chaud' },
+            { word: 'froid', display: 'froid' }
+        ];
+
+        const GRID_SIZE = 18;
+        const DIRECTIONS = [
+            [0, 1],   // rechts
+            [1, 0]    // unten
+        ];
+
+        const FILL_LETTERS = 'abcdefghijklmnopqrstuvwxyz';
+
+        let grid = [];
+        let placedWords = [];
+        let foundWords = new Set();
+        let firstClick = null;
+        let solutionShown = false;
+
+        function normalize(str) {
+            return str;
+          // .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
+        function initGrid() {
+            grid = [];
+            for (let r = 0; r < GRID_SIZE; r++) {
+                grid.push(new Array(GRID_SIZE).fill(''));
+            }
+        }
+
+        function canPlace(word, r, c, dr, dc) {
+            const norm = normalize(word);
+            for (let i = 0; i < norm.length; i++) {
+                const nr = r + dr * i;
+                const nc = c + dc * i;
+                if (nr < 0 || nr >= GRID_SIZE || nc < 0 || nc >= GRID_SIZE) return false;
+                if (grid[nr][nc] !== '' && grid[nr][nc] !== norm[i]) return false;
+            }
+            return true;
+        }
+
+        function placeWord(word, r, c, dr, dc) {
+            const norm = normalize(word);
+            const cells = [];
+            for (let i = 0; i < norm.length; i++) {
+                const nr = r + dr * i;
+                const nc = c + dc * i;
+                grid[nr][nc] = norm[i];
+                cells.push({ r: nr, c: nc });
+            }
+            return cells;
+        }
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function placeAllWords() {
+            const sorted = [...WORDS_DATA].sort((a, b) => normalize(b.word).length - normalize(a.word).length);
+            placedWords = [];
+
+            for (const data of sorted) {
+                let placed = false;
+                const dirs = shuffle(DIRECTIONS);
+                const attempts = 500;
+
+                for (let attempt = 0; attempt < attempts && !placed; attempt++) {
+                    const dir = dirs[attempt % dirs.length];
+                    const r = Math.floor(Math.random() * GRID_SIZE);
+                    const c = Math.floor(Math.random() * GRID_SIZE);
+
+                    if (canPlace(data.word, r, c, dir[0], dir[1])) {
+                        const cells = placeWord(data.word, r, c, dir[0], dir[1]);
+                        placedWords.push({
+                            word: data.word,
+                            display: data.display,
+                            cells: cells
+                        });
+                        placed = true;
+                    }
+                }
+
+                if (!placed) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function fillEmpty() {
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    if (grid[r][c] === '') {
+                        grid[r][c] = FILL_LETTERS[Math.floor(Math.random() * FILL_LETTERS.length)];
+                    }
+                }
+            }
+        }
+
+        function generatePuzzle() {
+            let success = false;
+            let tries = 0;
+            while (!success && tries < 200) {
+                initGrid();
+                success = placeAllWords();
+                tries++;
+            }
+            if (success) {
+                fillEmpty();
+            }
+            return success;
+        }
+
+        function getCellsBetween(r1, c1, r2, c2) {
+            const dr = Math.sign(r2 - r1);
+            const dc = Math.sign(c2 - c1);
+            const distR = Math.abs(r2 - r1);
+            const distC = Math.abs(c2 - c1);
+
+            if (distR !== 0 && distC !== 0) return null;
+
+            const steps = Math.max(distR, distC);
+            const cells = [];
+            for (let i = 0; i <= steps; i++) {
+                cells.push({ r: r1 + dr * i, c: c1 + dc * i });
+            }
+            return cells;
+        }
+
+        function cellsMatch(cells1, cells2) {
+            if (cells1.length !== cells2.length) return false;
+            for (let i = 0; i < cells1.length; i++) {
+                if (cells1[i].r !== cells2[i].r || cells1[i].c !== cells2[i].c) return false;
+            }
+            return true;
+        }
+
+        function renderGrid() {
+            const gridEl = document.getElementById('grid');
+            gridEl.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 38px)`;
+            gridEl.innerHTML = '';
+
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.textContent = grid[r][c];
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    cell.addEventListener('click', () => onCellClick(r, c));
+                    gridEl.appendChild(cell);
+                }
+            }
+        }
+
+        function renderWordList() {
+            const listEl = document.getElementById('wordList');
+            listEl.innerHTML = '';
+
+            const half = Math.ceil(WORDS_DATA.length / 2);
+            const col1 = document.createElement('div');
+            col1.className = 'word-column';
+            const col2 = document.createElement('div');
+            col2.className = 'word-column';
+
+            WORDS_DATA.forEach((data, i) => {
+                const item = document.createElement('div');
+                item.className = 'word-item';
+                item.id = `word-${data.word}`;
+                item.innerHTML = `
+                    <span class="word-text">${data.display}</span>
+                    <span class="checkmark">✓</span>
+                `;
+                if (i < half) {
+                    col1.appendChild(item);
+                } else {
+                    col2.appendChild(item);
+                }
+            });
+
+            listEl.appendChild(col1);
+            listEl.appendChild(col2);
+        }
+
+        function updateProgress() {
+            const total = WORDS_DATA.length;
+            const found = foundWords.size;
+            const pct = (found / total) * 100;
+
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = `${found} / ${total} gefunden`;
+
+            if (found === total) {
+                document.getElementById('celebration').classList.add('show');
+            }
+        }
+
+        function clearSelection() {
+            document.querySelectorAll('.cell.selecting').forEach(c => c.classList.remove('selecting'));
+            firstClick = null;
+        }
+
+        function highlightCells(cells, className) {
+            cells.forEach(({ r, c }) => {
+                const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+                if (cell) cell.classList.add(className);
+            });
+        }
+
+        function flashWrong(cells) {
+            highlightCells(cells, 'wrong');
+            setTimeout(() => {
+                cells.forEach(({ r, c }) => {
+                    const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+                    if (cell) cell.classList.remove('wrong');
+                });
+            }, 400);
+        }
+
+        function onCellClick(r, c) {
+            if (solutionShown) return;
+
+            if (!firstClick) {
+                firstClick = { r, c };
+                const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+                cell.classList.add('selecting');
+            } else {
+                const cells = getCellsBetween(firstClick.r, firstClick.c, r, c);
+                clearSelection();
+
+                if (!cells) return;
+
+                let matched = null;
+                for (const pw of placedWords) {
+                    if (foundWords.has(pw.word)) continue;
+                    if (cellsMatch(cells, pw.cells)) {
+                        matched = pw;
+                        break;
+                    }
+                }
+
+                if (matched) {
+                    foundWords.add(matched.word);
+                    highlightCells(matched.cells, 'found');
+
+                    const wordItem = document.getElementById(`word-${matched.word}`);
+                    if (wordItem) wordItem.classList.add('found');
+
+                    updateProgress();
+                } else {
+                    flashWrong(cells);
+                }
+            }
+        }
+
+        function showSolution() {
+            solutionShown = true;
+            clearSelection();
+
+            for (const pw of placedWords) {
+                if (!foundWords.has(pw.word)) {
+                    highlightCells(pw.cells, 'solution');
+
+                    const wordItem = document.getElementById(`word-${pw.word}`);
+                    if (wordItem) wordItem.classList.add('found');
+                }
+            }
+
+            foundWords = new Set(placedWords.map(pw => pw.word));
+            updateProgress();
+        }
+
+        function initGame() {
+            foundWords.clear();
+            firstClick = null;
+            solutionShown = false;
+            document.getElementById('celebration').classList.remove('show');
+
+            generatePuzzle();
+            renderGrid();
+            renderWordList();
+            updateProgress();
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
