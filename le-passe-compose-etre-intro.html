@@ -2307,6 +2307,11 @@ document.head.appendChild(extraStyles);
 // Ersetze den DOMContentLoaded-Block:
 document.addEventListener('DOMContentLoaded', () => {
     // Nur Übung 1 sofort bauen (sie ist beim Laden bereits sichtbar)
+    console.log('DOM ready');
+    console.log('ex5-container:', document.getElementById('ex5-container'));
+    console.log('ex6-container:', document.getElementById('ex6-container'));
+    console.log('buildExercise5 exists:', typeof buildExercise5);
+    console.log('buildExercise6 exists:', typeof buildExercise6);
     buildExercise1();
     exerciseBuilt['ex1'] = true;
 });
