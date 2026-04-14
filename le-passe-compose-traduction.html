@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le passé composé avec avoir</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            color: #2d3748;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a365d;
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 12px 28px;
+            border: 2px solid #3182ce;
+            background: white;
+            color: #3182ce;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn:hover {
+            background: #ebf8ff;
+        }
+
+        .mode-btn.active {
+            background: #3182ce;
+            color: white;
+            box-shadow: 0 4px 12px rgba(49,130,206,0.35);
+        }
+
+        h2 {
+            color: #2b6cb0;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #bee3f8;
+        }
+
+        .section-label {
+            font-size: 0.85em;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        ol {
+            padding-left: 25px;
+            margin-bottom: 40px;
+        }
+
+        ol li {
+            margin-bottom: 6px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-weight: 700;
+            color: #1a365d;
+        }
+
+        ol li:hover {
+            background: #ebf8ff;
+        }
+
+        ol li .translation {
+            display: none;
+            font-weight: 400;
+            font-style: italic;
+            color: #555;
+            margin-top: 6px;
+            padding-left: 4px;
+            border-left: 3px solid #bee3f8;
+            padding: 4px 0 4px 10px;
+        }
+
+        ol li.open .translation {
+            display: block;
+        }
+
+        .hint {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Vokabelliste */
+        .vocab-section {
+            margin-top: 10px;
+        }
+
+        .vocab-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .vocab-table th {
+            background: #2b6cb0;
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+
+        .vocab-table th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        .vocab-table th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .vocab-table td {
+            padding: 8px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.93em;
+        }
+
+        .vocab-table tr:nth-child(even) {
+            background: #f7fafc;
+        }
+
+        .vocab-table tr:hover {
+            background: #ebf8ff;
+        }
+
+        .vocab-table tr:last-child td:first-child {
+            border-radius: 0 0 0 8px;
+        }
+
+        .vocab-table tr:last-child td:last-child {
+            border-radius: 0 0 8px 0;
+        }
+
+        .pp {
+            color: #e53e3e;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.4em;
+            }
+
+            .mode-btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🇫🇷 Le passé composé avec <em>avoir</em></h1>
+    <p class="subtitle">30 Übungssätze – Klicke auf einen Satz, um die Übersetzung zu sehen!</p>
+
+    <div class="button-group">
+        <button class="mode-btn active" id="btn-fr-de" onclick="setMode('fr-de')">🇫🇷 → 🇩🇪 Französisch → Deutsch</button>
+        <button class="mode-btn" id="btn-de-fr" onclick="setMode('de-fr')">🇩🇪 → 🇫🇷 Deutsch → Französisch</button>
+    </div>
+
+    <p class="hint">💡 Klicke auf einen Satz, um die Übersetzung aufzuklappen.</p>
+
+    <div class="section-label" id="sentences-label">Sätze</div>
+    <ol id="sentence-list"></ol>
+
+    <div class="vocab-section">
+        <h2>📖 Vokabelliste</h2>
+        <table class="vocab-table">
+            <thead>
+                <tr>
+                    <th>Français</th>
+                    <th>Deutsch</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>travailler (<span class="pp">travaillé</span>)</td><td>arbeiten</td></tr>
+                <tr><td>chercher qc. (<span class="pp">cherché</span>)</td><td>etw. suchen</td></tr>
+                <tr><td>demander qc. à qn. (<span class="pp">demandé</span>)</td><td>jdn. nach etw. fragen</td></tr>
+                <tr><td>trouver qc. (<span class="pp">trouvé</span>)</td><td>etw. finden</td></tr>
+                <tr><td>habiter près de qc. (<span class="pp">habité</span>)</td><td>in der Nähe von etw. wohnen</td></tr>
+                <tr><td>visiter qc. (<span class="pp">visité</span>)</td><td>etw. besichtigen / besuchen (Ort)</td></tr>
+                <tr><td>manger qc. (<span class="pp">mangé</span>)</td><td>etw. essen</td></tr>
+                <tr><td>jouer (<span class="pp">joué</span>)</td><td>spielen</td></tr>
+                <tr><td>écouter qc. (<span class="pp">écouté</span>)</td><td>etw. (an)hören</td></tr>
+                <tr><td>parler (<span class="pp">parlé</span>)</td><td>sprechen / reden</td></tr>
+                <tr><td>être (<span class="pp">été</span>)</td><td>sein</td></tr>
+                <tr><td>avoir (<span class="pp">eu</span>)</td><td>haben</td></tr>
+                <tr><td>faire (<span class="pp">fait</span>)</td><td>machen / tun</td></tr>
+                <tr><td>voir (<span class="pp">vu</span>)</td><td>sehen</td></tr>
+                <tr><td>dire (<span class="pp">dit</span>)</td><td>sagen</td></tr>
+                <tr><td>savoir (<span class="pp">su</span>)</td><td>wissen</td></tr>
+                <tr><td>pouvoir (<span class="pp">pu</span>)</td><td>können</td></tr>
+                <tr><td>vouloir (<span class="pp">voulu</span>)</td><td>wollen</td></tr>
+                <tr><td>prendre (<span class="pp">pris</span>)</td><td>nehmen</td></tr>
+                <tr><td>devoir (<span class="pp">dû</span>)</td><td>müssen / sollen</td></tr>
+                <tr><td>écrire (<span class="pp">écrit</span>)</td><td>schreiben</td></tr>
+                <tr><td>lire (<span class="pp">lu</span>)</td><td>lesen</td></tr>
+                <tr><td>beaucoup</td><td>viel</td></tr>
+                <tr><td>hier</td><td>gestern</td></tr>
+                <tr><td>ce matin</td><td>heute Morgen</td></tr>
+                <tr><td>ce week-end</td><td>dieses Wochenende</td></tr>
+                <tr><td>pendant les vacances</td><td>in den Ferien</td></tr>
+                <tr><td>le musée</td><td>das Museum</td></tr>
+                <tr><td>la plage</td><td>der Strand</td></tr>
+                <tr><td>une pizza</td><td>eine Pizza</td></tr>
+                <tr><td>un gâteau</td><td>ein Kuchen</td></tr>
+                <tr><td>au foot</td><td>Fußball (spielen)</td></tr>
+                <tr><td>de la musique</td><td>Musik</td></tr>
+                <tr><td>un film</td><td>einen Film</td></tr>
+                <tr><td>un livre</td><td>ein Buch</td></tr>
+                <tr><td>une lettre</td><td>einen Brief</td></tr>
+                <tr><td>un message</td><td>eine Nachricht</td></tr>
+                <tr><td>le bus</td><td>den Bus</td></tr>
+                <tr><td>la chance</td><td>das Glück</td></tr>
+                <tr><td>le métro</td><td>die Metro / U-Bahn</td></tr>
+                <tr><td>les devoirs (m.)</td><td>die Hausaufgaben</td></tr>
+                <tr><td>le professeur</td><td>der Lehrer</td></tr>
+                <tr><td>la vérité</td><td>die Wahrheit</td></tr>
+                <tr><td>la réponse</td><td>die Antwort</td></tr>
+                <tr><td>beaucoup de</td><td>viel</td></tr>
+                <tr><td>trop</td><td>zu viel</td></tr>
+                <tr><td>avec mes amis</td><td>mit meinen Freunden</td></tr>
+                <tr><td>en français</td><td>auf Französisch</td></tr>
+                <tr><td>toute la journée</td><td>den ganzen Tag</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const sentences = [
+        { fr: "J'ai travaillé toute la journée.", de: "Ich habe den ganzen Tag gearbeitet." },
+        { fr: "Nous avons travaillé beaucoup ce matin.", de: "Wir haben heute Morgen viel gearbeitet." },
+        { fr: "Il a cherché ses clés.", de: "Er hat seine Schlüssel gesucht." },
+        { fr: "Tu as cherché la réponse ?", de: "Hast du die Antwort gesucht?" },
+        { fr: "Elle a demandé l'heure.", de: "Sie hat nach der Uhrzeit gefragt." },
+        { fr: "J'ai demandé un café au serveur.", de: "Ich habe den Kellner nach einem Kaffee gefragt." },
+        { fr: "Nous avons trouvé un bon restaurant.", de: "Wir haben ein gutes Restaurant gefunden." },
+        { fr: "Ils ont trouvé la réponse.", de: "Sie haben die Antwort gefunden." },
+        { fr: "J'ai habité près de la plage.", de: "Ich habe in der Nähe vom Strand gewohnt." },
+        { fr: "Nous avons visité le musée.", de: "Wir haben das Museum besichtigt." },
+        { fr: "Ils ont visité Paris pendant les vacances.", de: "Sie haben Paris in den Ferien besucht." },
+        { fr: "J'ai mangé une pizza hier.", de: "Ich habe gestern eine Pizza gegessen." },
+        { fr: "Tu as mangé un croissant ce matin.", de: "Du hast heute Morgen ein Croissant gegessen." },
+        { fr: "Nous avons joué au foot ce week-end.", de: "Wir haben dieses Wochenende Fußball gespielt." },
+        { fr: "Elle a écouté de la musique.", de: "Sie hat Musik gehört." },
+        { fr: "Vous avez parlé en français.", de: "Ihr habt auf Französisch gesprochen." },
+        { fr: "J'ai parlé avec mes amis.", de: "Ich habe mit meinen Freunden gesprochen." },
+        { fr: "Il a été malade hier.", de: "Er ist gestern krank gewesen." },
+        { fr: "Nous avons eu beaucoup de chance.", de: "Wir haben viel Glück gehabt." },
+        { fr: "Tu as eu un problème ?", de: "Hast du ein Problem gehabt?" },
+        { fr: "J'ai fait mes devoirs.", de: "Ich habe meine Hausaufgaben gemacht." },
+        { fr: "Elle a fait un gâteau.", de: "Sie hat einen Kuchen gemacht." },
+        { fr: "J'ai vu un film hier.", de: "Ich habe gestern einen Film gesehen." },
+        { fr: "Il a dit la vérité.", de: "Er hat die Wahrheit gesagt." },
+        { fr: "J'ai su la réponse.", de: "Ich habe die Antwort gewusst." },
+        { fr: "Nous n'avons pas pu venir.", de: "Wir haben nicht kommen können." },
+        { fr: "Elle a voulu partir.", de: "Sie hat gehen wollen." },
+        { fr: "J'ai pris le bus ce matin.", de: "Ich habe heute Morgen den Bus genommen." },
+        { fr: "Tu as dû faire tes devoirs.", de: "Du hast deine Hausaufgaben machen müssen." },
+        { fr: "Il a écrit une lettre.", de: "Er hat einen Brief geschrieben." },
+        { fr: "J'ai lu un livre ce week-end.", de: "Ich habe dieses Wochenende ein Buch gelesen." }
+    ];
+
+    // Note: 31 sentences created (index 0-30), we display 1-30 (skip index 0 or display all)
+    // Actually we have 31 - let's keep 30 by using slice
+
+    const data = sentences.slice(0, 30);
+    let currentMode = 'fr-de';
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('btn-fr-de').classList.toggle('active', mode === 'fr-de');
+        document.getElementById('btn-de-fr').classList.toggle('active', mode === 'de-fr');
+        renderSentences();
+    }
+
+    function renderSentences() {
+        const list = document.getElementById('sentence-list');
+        list.innerHTML = '';
+
+        data.forEach((s, i) => {
+            const li = document.createElement('li');
+            const mainText = currentMode === 'fr-de' ? s.fr : s.de;
+            const transText = currentMode === 'fr-de' ? s.de : s.fr;
+
+            li.innerHTML = `<span class="main-text">${mainText}</span><div class="translation">${transText}</div>`;
+            li.addEventListener('click', function () {
+                this.classList.toggle('open');
+            });
+            list.appendChild(li);
+        });
+    }
+
+    renderSentences();
+</script>
+
+</body>
+</html>
