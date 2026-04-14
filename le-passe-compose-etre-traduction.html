@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le passé composé avec être</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #002395 0%, #002395 33%, #fff 33%, #fff 66%, #ED2939 66%, #ED2939 100%);
+            padding: 6px;
+        }
+
+        .header-inner {
+            background: white;
+            border-radius: 12px 12px 0 0;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        h1 span {
+            color: #667eea;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 12px 28px;
+            border: 2px solid #667eea;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #667eea;
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .mode-btn:hover:not(.active) {
+            background: #f0f0ff;
+        }
+
+        .content {
+            padding: 25px 30px 30px;
+        }
+
+        .instruction {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 12px 16px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+            color: #4a5568;
+            font-size: 0.95em;
+        }
+
+        .instruction em {
+            color: #667eea;
+        }
+
+        ol {
+            list-style: none;
+            counter-reset: sentence-counter;
+            padding: 0;
+        }
+
+        ol li {
+            counter-increment: sentence-counter;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+        ol li:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+        }
+
+        .sentence-main {
+            padding: 14px 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .sentence-main:hover {
+            background: #f7fafc;
+        }
+
+        .sentence-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 0.75em;
+            font-weight: 700;
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .sentence-text {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 1.05em;
+            line-height: 1.4;
+        }
+
+        .toggle-icon {
+            margin-left: auto;
+            color: #a0aec0;
+            font-size: 0.8em;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        li.open .toggle-icon {
+            transform: rotate(90deg);
+            color: #667eea;
+        }
+
+        .sentence-translation {
+            display: none;
+            padding: 0 18px 14px 56px;
+            font-style: italic;
+            color: #667eea;
+            font-size: 1em;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+        }
+
+        li.open .sentence-translation {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .vocab-section {
+            margin-top: 35px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 25px;
+        }
+
+        .vocab-section h2 {
+            color: #2d3748;
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+
+        .vocab-section h2 span {
+            color: #764ba2;
+        }
+
+        .vocab-note {
+            color: #718096;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .vocab-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 700;
+            padding: 10px 16px;
+            font-size: 0.95em;
+        }
+
+        .vocab-item {
+            padding: 9px 16px;
+            font-size: 0.93em;
+            border-bottom: 1px solid #f0f0f0;
+            color: #2d3748;
+        }
+
+        .vocab-item:nth-child(4n+1),
+        .vocab-item:nth-child(4n+2) {
+            background: #fafbff;
+        }
+
+        .vocab-item .pp {
+            color: #764ba2;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .vocab-item .grammar-note {
+            color: #a0aec0;
+            font-size: 0.82em;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .header-inner { padding: 20px 15px; }
+            h1 { font-size: 1.3em; }
+            .content { padding: 15px; }
+            .sentence-text { font-size: 0.95em; }
+            .sentence-translation { padding-left: 46px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="header-inner">
+            <h1>Le passé composé <span>avec être</span></h1>
+            <p class="subtitle">Übung für das 3. Lernjahr</p>
+            <div class="button-group">
+                <button class="mode-btn active" id="btn-fr-de" onclick="setMode('fr-de')">
+                    🇫🇷 Französisch → Deutsch
+                </button>
+                <button class="mode-btn" id="btn-de-fr" onclick="setMode('de-fr')">
+                    🇩🇪 Deutsch → Französisch
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="instruction">
+            💡 <em>Klicke auf einen Satz</em>, um die Übersetzung zu sehen oder zu verstecken.
+        </div>
+
+        <ol id="sentence-list"></ol>
+
+        <div class="vocab-section">
+            <h2>📖 Vokabelliste <span>– Liste de vocabulaire</span></h2>
+            <p class="vocab-note">Die Verben werden hier mit ihrer participe-passé-Form angegeben.</p>
+
+            <div class="vocab-grid">
+                <div class="vocab-header">Français</div>
+                <div class="vocab-header">Deutsch</div>
+
+                <div class="vocab-item">aller <span class="pp">(p.p. allé/allée)</span></div>
+                <div class="vocab-item">gehen, fahren</div>
+
+                <div class="vocab-item">venir <span class="pp">(p.p. venu/venue)</span></div>
+                <div class="vocab-item">kommen</div>
+
+                <div class="vocab-item">rentrer <span class="pp">(p.p. rentré/rentrée)</span></div>
+                <div class="vocab-item">nach Hause kommen/gehen</div>
+
+                <div class="vocab-item">arriver <span class="pp">(p.p. arrivé/arrivée)</span></div>
+                <div class="vocab-item">ankommen</div>
+
+                <div class="vocab-item">entrer <span class="pp">(p.p. entré/entrée)</span></div>
+                <div class="vocab-item">eintreten, hereinkommen</div>
+
+                <div class="vocab-item">monter <span class="pp">(p.p. monté/montée)</span></div>
+                <div class="vocab-item">hinaufgehen, hochgehen</div>
+
+                <div class="vocab-item">descendre <span class="pp">(p.p. descendu/descendue)</span></div>
+                <div class="vocab-item">hinuntergehen, herunterkommen</div>
+
+                <div class="vocab-item">tomber <span class="pp">(p.p. tombé/tombée)</span></div>
+                <div class="vocab-item">fallen, hinfallen</div>
+
+                <div class="vocab-item">passer <span class="pp">(p.p. passé/passée)</span></div>
+                <div class="vocab-item">vorbeikommen, vorbeigehen</div>
+
+                <div class="vocab-item">sortir <span class="pp">(p.p. sorti/sortie)</span></div>
+                <div class="vocab-item">hinausgehen, ausgehen</div>
+
+                <div class="vocab-item">partir <span class="pp">(p.p. parti/partie)</span></div>
+                <div class="vocab-item">weggehen, abfahren</div>
+
+                <div class="vocab-item">rester <span class="pp">(p.p. resté/restée)</span></div>
+                <div class="vocab-item">bleiben</div>
+
+                <div class="vocab-item">retourner <span class="pp">(p.p. retourné/retournée)</span></div>
+                <div class="vocab-item">zurückkehren, zurückgehen</div>
+
+                <div class="vocab-item">à la maison</div>
+                <div class="vocab-item">nach Hause / zu Hause</div>
+
+                <div class="vocab-item">l'école <span class="grammar-note">(f.)</span></div>
+                <div class="vocab-item">die Schule</div>
+
+                <div class="vocab-item">la gare</div>
+                <div class="vocab-item">der Bahnhof</div>
+
+                <div class="vocab-item">le cinéma</div>
+                <div class="vocab-item">das Kino</div>
+
+                <div class="vocab-item">le magasin</div>
+                <div class="vocab-item">das Geschäft, der Laden</div>
+
+                <div class="vocab-item">la chambre</div>
+                <div class="vocab-item">das Zimmer</div>
+
+                <div class="vocab-item">l'escalier <span class="grammar-note">(m.)</span></div>
+                <div class="vocab-item">die Treppe</div>
+
+                <div class="vocab-item">la rue</div>
+                <div class="vocab-item">die Straße</div>
+
+                <div class="vocab-item">la France</div>
+                <div class="vocab-item">Frankreich</div>
+
+                <div class="vocab-item">hier</div>
+                <div class="vocab-item">gestern</div>
+
+                <div class="vocab-item">ce matin</div>
+                <div class="vocab-item">heute Morgen</div>
+
+                <div class="vocab-item">samedi dernier</div>
+                <div class="vocab-item">letzten Samstag</div>
+
+                <div class="vocab-item">à huit heures</div>
+                <div class="vocab-item">um acht Uhr</div>
+
+                <div class="vocab-item">tard</div>
+                <div class="vocab-item">spät</div>
+
+                <div class="vocab-item">tôt</div>
+                <div class="vocab-item">früh</div>
+
+                <div class="vocab-item">vite</div>
+                <div class="vocab-item">schnell</div>
+
+                <div class="vocab-item">ensemble</div>
+                <div class="vocab-item">zusammen</div>
+
+                <div class="vocab-item">avec ses amis</div>
+                <div class="vocab-item">mit seinen/ihren Freunden</div>
+
+                <div class="vocab-item">chez moi</div>
+                <div class="vocab-item">bei mir (zu Hause)</div>
+
+                <div class="vocab-item">devant</div>
+                <div class="vocab-item">vor (örtlich)</div>
+
+                <div class="vocab-item">dans</div>
+                <div class="vocab-item">in</div>
+
+                <div class="vocab-item">pendant les vacances</div>
+                <div class="vocab-item">während der Ferien</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const sentences = [
+        { fr: "Pauline est allé au cinéma hier.", de: "Pauline ist gestern ins Kino gegangen." },
+        { fr: "Elle est venue chez moi ce matin.", de: "Sie ist heute Morgen zu mir gekommen." },
+        { fr: "Nous sommes rentrés tard à la maison.", de: "Wir sind spät nach Hause gekommen." },
+        { fr: "Il est arrivé à la gare à huit heures.", de: "Er ist um acht Uhr am Bahnhof angekommen." },
+        { fr: "Marie est entrée dans le magasin.", de: "Marie ist in das Geschäft hineingegangen." },
+        { fr: "Je suis monté dans ma chambre.", de: "Ich bin in mein Zimmer hochgegangen." },
+        { fr: "Elle est descendue vite.", de: "Sie ist schnell heruntergekommen." },
+        { fr: "Il est tombé dans la rue.", de: "Er ist auf der Straße hingefallen." },
+        { fr: "Nous sommes passés devant l'école.", de: "Wir sind an der Schule vorbeigegangen." },
+        { fr: "Elles sont sorties avec leurs amis.", de: "Sie (f.) sind mit ihren Freunden ausgegangen." },
+        { fr: "Mon père est parti ce matin.", de: "Mein Vater ist heute Morgen losgefahren." },
+        { fr: "Je suis resté à la maison hier.", de: "Ich bin gestern zu Hause geblieben." },
+        { fr: "Elle est retournée en France.", de: "Sie ist nach Frankreich zurückgekehrt." },
+        { fr: "Ils sont allés à l'école ensemble.", de: "Sie (m.) sind zusammen zur Schule gegangen." },
+        { fr: "Ma mère est sortie ce matin.", de: "Meine Mutter ist heute Morgen ausgegangen." },
+        { fr: "Nous sommes arrivés tôt.", de: "Wir sind früh angekommen." },
+        { fr: "Elle est montée par l'escalier.", de: "Sie ist die Treppe hinaufgegangen." },
+        { fr: "Il est resté à la maison pendant les vacances.", de: "Er ist während der Ferien zu Hause geblieben." },
+        { fr: "Je suis parti samedi dernier.", de: "Ich bin letzten Samstag abgefahren." },
+        { fr: "Elles sont tombées devant le magasin.", de: "Sie (f.) sind vor dem Geschäft hingefallen." }
+    ];
+
+    let currentMode = 'fr-de';
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('btn-fr-de').classList.toggle('active', mode === 'fr-de');
+        document.getElementById('btn-de-fr').classList.toggle('active', mode === 'de-fr');
+        renderSentences();
+    }
+
+    function renderSentences() {
+        const list = document.getElementById('sentence-list');
+        list.innerHTML = '';
+
+        sentences.forEach((s, i) => {
+            const mainText = currentMode === 'fr-de' ? s.fr : s.de;
+            const transText = currentMode === 'fr-de' ? s.de : s.fr;
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="sentence-main" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="sentence-number">${i + 1}</span>
+                    <span class="sentence-text">${mainText}</span>
+                    <span class="toggle-icon">▶</span>
+                </div>
+                <div class="sentence-translation">${transText}</div>
+            `;
+            list.appendChild(li);
+        });
+    }
+
+    renderSentences();
+</script>
+
+</body>
+</html>
