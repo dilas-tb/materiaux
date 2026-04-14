@@ -1400,4 +1400,897 @@
                         <div>Ergebnis:</div>
                         <div class="score-number" id="ex4-score-num">0/0</div>
                         <div class="score-bar"><div class="score-fill" id="ex4-score-bar" style="width:0%"></div></div>
-                
+                                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="checkExercise3()">✓ Überprüfen</button>
+                    <button class="btn btn-outline" onclick="resetExercise3()">↻ Zurücksetzen</button>
+                </div>
+                <div id="ex3-score" class="score-display" style="display:none;">
+                    <div>
+                        <div>Ergebnis:</div>
+                        <div class="score-number" id="ex3-score-num">0/0</div>
+                        <div class="score-bar"><div class="score-fill" id="ex3-score-bar" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise 4: Angleichung -->
+        <div id="ex4" class="tab-content">
+            <div class="card">
+                <h2><span class="icon">4️⃣</span> Angleichung des participe passé</h2>
+                <p>Wähle die richtige Form des participe passé – achte auf Geschlecht und Zahl des Subjekts!</p>
+
+                <div class="exercise-container" id="ex4-container"></div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="checkExercise4()">✓ Überprüfen</button>
+                    <button class="btn btn-outline" onclick="resetExercise4()">↻ Zurücksetzen</button>
+                </div>
+                <div id="ex4-score" class="score-display" style="display:none;">
+                    <div>
+                        <div>Ergebnis:</div>
+                        <div class="score-number" id="ex4-score-num">0/0</div>
+                        <div class="score-bar"><div class="score-fill" id="ex4-score-bar" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise 5: Lückentext -->
+        <div id="ex5" class="tab-content">
+            <div class="card">
+                <h2><span class="icon">5️⃣</span> Lückentext – Vollständige Sätze ergänzen</h2>
+                <p>Fülle die Lücken mit der richtigen Form des passé composé (être + participe passé angeglichen)!</p>
+
+                <div class="exercise-container" id="ex5-container"></div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="checkExercise5()">✓ Überprüfen</button>
+                    <button class="btn btn-outline" onclick="resetExercise5()">↻ Zurücksetzen</button>
+                </div>
+                <div id="ex5-score" class="score-display" style="display:none;">
+                    <div>
+                        <div>Ergebnis:</div>
+                        <div class="score-number" id="ex5-score-num">0/0</div>
+                        <div class="score-bar"><div class="score-fill" id="ex5-score-bar" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise 6: Sätze bilden -->
+        <div id="ex6" class="tab-content">
+            <div class="card">
+                <h2><span class="icon">6️⃣</span> Sätze bilden – Wörter in die richtige Reihenfolge bringen</h2>
+                <p>Bringe die Wörter in die richtige Reihenfolge, um einen korrekten Satz im passé composé zu bilden!</p>
+
+                <div class="exercise-container" id="ex6-container"></div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="checkExercise6()">✓ Überprüfen</button>
+                    <button class="btn btn-outline" onclick="resetExercise6()">↻ Zurücksetzen</button>
+                </div>
+                <div id="ex6-score" class="score-display" style="display:none;">
+                    <div>
+                        <div>Ergebnis:</div>
+                        <div class="score-number" id="ex6-score-num">0/0</div>
+                        <div class="score-bar"><div class="score-fill" id="ex6-score-bar" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end exercises section -->
+</main>
+
+<footer style="text-align:center; padding: 32px 20px; color: var(--text-light); font-size: 0.9em;">
+    <p>📘 Französisch · Klasse 9 · Le passé composé avec être</p>
+</footer>
+
+<script>
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+function showExercise(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.exercise-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+// ============================================================
+//  EXERCISE 1 – Avoir oder être?
+// ============================================================
+const ex1Data = [
+    { verb: 'aller',      answer: 'être',  hint: 'Bewegung von A nach B' },
+    { verb: 'manger',     answer: 'avoir', hint: 'kein Bewegungs-/Zustandsverb' },
+    { verb: 'partir',     answer: 'être',  hint: 'Bewegung: weggehen' },
+    { verb: 'regarder',   answer: 'avoir', hint: 'kein Bewegungs-/Zustandsverb' },
+    { verb: 'arriver',    answer: 'être',  hint: 'Bewegung: ankommen' },
+    { verb: 'venir',      answer: 'être',  hint: 'Bewegung: kommen' },
+    { verb: 'finir',      answer: 'avoir', hint: 'kein Bewegungs-/Zustandsverb' },
+    { verb: 'tomber',     answer: 'être',  hint: 'Zustandsveränderung: fallen' },
+    { verb: 'rentrer',    answer: 'être',  hint: 'Bewegung: heimkommen' },
+    { verb: 'écouter',    answer: 'avoir', hint: 'kein Bewegungs-/Zustandsverb' },
+    { verb: 'sortir',     answer: 'être',  hint: 'Bewegung: hinausgehen' },
+    { verb: 'rester',     answer: 'être',  hint: 'Verbleib: bleiben' },
+    { verb: 'monter',     answer: 'être',  hint: 'Bewegung: hinaufgehen' },
+    { verb: 'descendre',  answer: 'être',  hint: 'Bewegung: hinuntergehen' },
+    { verb: 'jouer',      answer: 'avoir', hint: 'kein Bewegungs-/Zustandsverb' },
+    { verb: 'naître',     answer: 'être',  hint: 'Zustandsveränderung: geboren werden' },
+    { verb: 'entrer',     answer: 'être',  hint: 'Bewegung: eintreten' },
+    { verb: 'passer',     answer: 'être',  hint: 'Bewegung: vorbeigehen' },
+];
+
+function buildExercise1() {
+    const container = document.getElementById('ex1-container');
+    if (!container) return;
+    container.innerHTML = '';
+    ex1Data.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'choice-row';
+        div.id = `ex1-row-${i}`;
+        div.innerHTML = `
+            <div class="choice-verb">${item.verb}</div>
+            <div class="choice-buttons">
+                <button class="choice-btn" data-idx="${i}" data-val="avoir" onclick="selectChoice1(this)">avoir</button>
+                <button class="choice-btn" data-idx="${i}" data-val="être"  onclick="selectChoice1(this)">être</button>
+            </div>
+            <div class="choice-feedback" id="ex1-fb-${i}"></div>`;
+        container.appendChild(div);
+    });
+}
+
+function selectChoice1(btn) {
+    const idx = btn.dataset.idx;
+    document.querySelectorAll(`[data-idx="${idx}"]`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+
+function checkExercise1() {
+    let correct = 0;
+    ex1Data.forEach((item, i) => {
+        const selected = document.querySelector(`[data-idx="${i}"].selected`);
+        const fb = document.getElementById(`ex1-fb-${i}`);
+        const row = document.getElementById(`ex1-row-${i}`);
+        if (!selected) {
+            fb.textContent = '⚠️ Bitte wählen!';
+            fb.style.color = 'var(--warning)';
+            return;
+        }
+        if (selected.dataset.val === item.answer) {
+            correct++;
+            fb.textContent = '✅ Richtig!';
+            fb.style.color = 'var(--success)';
+            row.style.background = 'var(--success-light)';
+        } else {
+            fb.textContent = `❌ → ${item.answer} (${item.hint})`;
+            fb.style.color = 'var(--accent)';
+            row.style.background = '#fff0f0';
+        }
+    });
+    showScore('ex1', correct, ex1Data.length);
+}
+
+function resetExercise1() {
+    document.querySelectorAll('#ex1-container .choice-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('#ex1-container .choice-feedback').forEach(f => { f.textContent = ''; });
+    document.querySelectorAll('#ex1-container .choice-row').forEach(r => { r.style.background = ''; });
+    hideScore('ex1');
+}
+
+// ============================================================
+//  EXERCISE 2 – Participe passé wählen
+// ============================================================
+const ex2Data = [
+    { sentence: 'Elle est ___ au marché.',         verb: 'aller',      options: ['allé','allée','allés','allées'], answer: 'allée' },
+    { sentence: 'Ils sont ___ en retard.',          verb: 'arriver',    options: ['arrivé','arrivée','arrivés','arrivées'], answer: 'arrivés' },
+    { sentence: 'Je (f.) suis ___ à 7 heures.',     verb: 'partir',     options: ['parti','partie','partis','parties'], answer: 'partie' },
+    { sentence: 'Nous (m.) sommes ___ ici.',         verb: 'rester',     options: ['resté','restée','restés','restées'], answer: 'restés' },
+    { sentence: 'Tu (m.) es ___ du bus.',            verb: 'descendre',  options: ['descendu','descendue','descendus','descendues'], answer: 'descendu' },
+    { sentence: 'Elles sont ___ dans la salle.',     verb: 'entrer',     options: ['entré','entrée','entrés','entrées'], answer: 'entrées' },
+    { sentence: 'Il est ___ de l\'école.',           verb: 'sortir',     options: ['sorti','sortie','sortis','sorties'], answer: 'sorti' },
+    { sentence: 'Elle est ___ dans l\'escalier.',    verb: 'tomber',     options: ['tombé','tombée','tombés','tombées'], answer: 'tombée' },
+    { sentence: 'Nous (f.) sommes ___ à Paris.',     verb: 'venir',      options: ['venu','venue','venus','venues'], answer: 'venues' },
+    { sentence: 'Tu (f.) es ___ tard hier soir.',    verb: 'rentrer',    options: ['rentré','rentrée','rentrés','rentrées'], answer: 'rentrée' },
+];
+
+function buildExercise2() {
+    const container = document.getElementById('ex2-container');
+    if (!container) return;
+    container.innerHTML = '';
+    ex2Data.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'choice-row';
+        div.id = `ex2-row-${i}`;
+        const btns = item.options.map(opt =>
+            `<button class="choice-btn pp-btn" data-idx2="${i}" data-val="${opt}" onclick="selectChoice2(this)">${opt}</button>`
+        ).join('');
+        div.innerHTML = `
+            <div class="choice-verb" style="flex:2; font-style:italic; font-weight:400; color:var(--text);">
+                ${item.sentence.replace('___','<span style="border-bottom:2px solid var(--primary); padding:0 20px;">___</span>')}
+                <span style="font-size:0.85em; color:var(--text-light); margin-left:8px;">(${item.verb})</span>
+            </div>
+            <div class="choice-buttons" style="flex-wrap:wrap;">${btns}</div>
+            <div class="choice-feedback" id="ex2-fb-${i}"></div>`;
+        container.appendChild(div);
+    });
+}
+
+function selectChoice2(btn) {
+    const idx = btn.dataset.idx2;
+    document.querySelectorAll(`[data-idx2="${idx}"]`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+
+function checkExercise2() {
+    let correct = 0;
+    ex2Data.forEach((item, i) => {
+        const selected = document.querySelector(`[data-idx2="${i}"].selected`);
+        const fb = document.getElementById(`ex2-fb-${i}`);
+        const row = document.getElementById(`ex2-row-${i}`);
+        if (!selected) { fb.textContent = '⚠️ Bitte wählen!'; fb.style.color = 'var(--warning)'; return; }
+        if (selected.dataset.val === item.answer) {
+            correct++;
+            fb.textContent = '✅ Richtig!';
+            fb.style.color = 'var(--success)';
+            row.style.background = 'var(--success-light)';
+        } else {
+            fb.textContent = `❌ → ${item.answer}`;
+            fb.style.color = 'var(--accent)';
+            row.style.background = '#fff0f0';
+        }
+    });
+    showScore('ex2', correct, ex2Data.length);
+}
+
+function resetExercise2() {
+    document.querySelectorAll('#ex2-container .choice-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('#ex2-container .choice-feedback').forEach(f => { f.textContent = ''; });
+    document.querySelectorAll('#ex2-container .choice-row').forEach(r => { r.style.background = ''; });
+    hideScore('ex2');
+}
+
+// ============================================================
+//  EXERCISE 3 – Form von être eintippen
+// ============================================================
+const ex3Data = [
+    { sentence: 'Je ___ allé au parc.',         subject: 'je',       answer: 'suis' },
+    { sentence: 'Tu ___ arrivée en retard.',     subject: 'tu',       answer: 'es' },
+    { sentence: 'Il ___ parti ce matin.',        subject: 'il',       answer: 'est' },
+    { sentence: 'Elle ___ venue avec nous.',     subject: 'elle',     answer: 'est' },
+    { sentence: 'Nous ___ restés à la maison.',  subject: 'nous',     answer: 'sommes' },
+    { sentence: 'Vous ___ montés au premier étage.', subject: 'vous', answer: 'êtes' },
+    { sentence: 'Ils ___ sortis à midi.',        subject: 'ils',      answer: 'sont' },
+    { sentence: 'Elles ___ rentrées tôt.',       subject: 'elles',    answer: 'sont' },
+    { sentence: 'On ___ passé devant la boulangerie.', subject: 'on', answer: 'est' },
+    { sentence: 'Je ___ tombée dans le jardin.', subject: 'je',       answer: 'suis' },
+];
+
+function buildExercise3() {
+    const container = document.getElementById('ex3-container');
+    if (!container) return;
+    container.innerHTML = '';
+    ex3Data.forEach((item, i) => {
+        const parts = item.sentence.split('___');
+        const div = document.createElement('div');
+        div.className = 'fill-row';
+        div.id = `ex3-row-${i}`;
+        div.innerHTML = `
+            <span class="fill-text">${parts[0]}</span>
+            <input class="fill-input" id="ex3-inp-${i}" type="text" placeholder="être …" autocomplete="off" autocorrect="off" spellcheck="false">
+            <span class="fill-text">${parts[1]}</span>
+            <span class="fill-feedback" id="ex3-fb-${i}"></span>`;
+        container.appendChild(div);
+    });
+}
+
+function checkExercise3() {
+    let correct = 0;
+    ex3Data.forEach((item, i) => {
+        const inp = document.getElementById(`ex3-inp-${i}`);
+        const fb  = document.getElementById(`ex3-fb-${i}`);
+        const row = document.getElementById(`ex3-row-${i}`);
+        const val = inp.value.trim().toLowerCase().replace('ê','ê');
+        if (val === item.answer) {
+            correct++;
+            fb.textContent = '✅';
+            inp.style.borderColor = 'var(--success)';
+            inp.style.background  = 'var(--success-light)';
+            row.style.background  = 'var(--success-light)';
+        } else {
+            fb.textContent = `❌ → ${item.answer}`;
+            fb.style.color = 'var(--accent)';
+            inp.style.borderColor = 'var(--accent)';
+            inp.style.background  = '#fff0f0';
+            row.style.background  = '#fff0f0';
+        }
+    });
+    showScore('ex3', correct, ex3Data.length);
+}
+
+function resetExercise3() {
+    ex3Data.forEach((_, i) => {
+        const inp = document.getElementById(`ex3-inp-${i}`);
+        const fb  = document.getElementById(`ex3-fb-${i}`);
+        const row = document.getElementById(`ex3-row-${i}`);
+        inp.value = ''; inp.style.borderColor = ''; inp.style.background = '';
+        fb.textContent = ''; row.style.background = '';
+    });
+    hideScore('ex3');
+}
+
+// ============================================================
+//  EXERCISE 4 – Angleichung: richtige Endung wählen
+// ============================================================
+const ex4Data = [
+    { before: 'Ma mère est', verb: 'partir', subject: 'f. sg.', options:['parti','partie','partis','parties'], answer:'partie',
+      hint: 'ma mère → féminin singulier → -e' },
+    { before: 'Mes frères sont', verb: 'venir', subject: 'm. pl.', options:['venu','venue','venus','venues'], answer:'venus',
+      hint: 'mes frères → masculin pluriel → -s' },
+    { before: 'Les filles sont', verb: 'aller', subject: 'f. pl.', options:['allé','allée','allés','allées'], answer:'allées',
+      hint: 'les filles → féminin pluriel → -es' },
+    { before: 'Mon père est', verb: 'rentrer', subject: 'm. sg.', options:['rentré','rentrée','rentrés','rentrées'], answer:'rentré',
+      hint: 'mon père → masculin singulier → pas d\'accord' },
+    { before: 'Lucie et Marie sont', verb: 'arriver', subject: 'f. pl.', options:['arrivé','arrivée','arrivés','arrivées'], answer:'arrivées',
+      hint: 'deux filles → féminin pluriel → -es' },
+    { before: 'Paul et Marc sont', verb: 'sortir', subject: 'm. pl.', options:['sorti','sortie','sortis','sorties'], answer:'sortis',
+      hint: 'deux garçons → masculin pluriel → -s' },
+    { before: 'Julie est', verb: 'tomber', subject: 'f. sg.', options:['tombé','tombée','tombés','tombées'], answer:'tombée',
+      hint: 'Julie → féminin singulier → -e' },
+    { before: 'Les élèves (m.) sont', verb: 'entrer', subject: 'm. pl.', options:['entré','entrée','entrés','entrées'], answer:'entrés',
+      hint: 'élèves masculin → masculin pluriel → -s' },
+];
+
+function buildExercise4() {
+    const container = document.getElementById('ex4-container');
+    if (!container) return;
+    container.innerHTML = '';
+    ex4Data.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'choice-row';
+        div.id = `ex4-row-${i}`;
+        const btns = item.options.map(opt =>
+            `<button class="choice-btn pp-btn" data-idx4="${i}" data-val="${opt}" onclick="selectChoice4(this)">${opt}</button>`
+        ).join('');
+        div.innerHTML = `
+            <div class="choice-verb" style="flex:2; font-weight:400; color:var(--text);">
+                <em>${item.before}</em> ___ 
+                <span style="font-size:0.85em; color:var(--text-light);">(${item.verb}, ${item.subject})</span>
+            </div>
+            <div class="choice-buttons" style="flex-wrap:wrap;">${btns}</div>
+            <div class="choice-feedback" id="ex4-fb-${i}"></div>`;
+        container.appendChild(div);
+    });
+}
+
+function selectChoice4(btn) {
+    const idx = btn.dataset.idx4;
+    document.querySelectorAll(`[data-idx4="${idx}"]`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+
+function checkExercise4() {
+    let correct = 0;
+    ex4Data.forEach((item, i) => {
+        const selected = document.querySelector(`[data-idx4="${i}"].selected`);
+        const fb  = document.getElementById(`ex4-fb-${i}`);
+        const row = document.getElementById(`ex4-row-${i}`);
+        if (!selected) { fb.textContent = '⚠️ Bitte wählen!'; fb.style.color = 'var(--warning)'; return; }
+        if (selected.dataset.val === item.answer) {
+            correct++;
+            fb.textContent = `✅ Richtig! (${item.hint})`;
+            fb.style.color = 'var(--success)';
+            row.style.background = 'var(--success-light)';
+        } else {
+            fb.textContent = `❌ → ${item.answer} (${item.hint})`;
+            fb.style.color = 'var(--accent)';
+            row.style.background = '#fff0f0';
+        }
+    });
+    showScore('ex4', correct, ex4Data.length);
+}
+
+function resetExercise4() {
+    document.querySelectorAll('#ex4-container .choice-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('#ex4-container .choice-feedback').forEach(f => { f.textContent = ''; });
+    document.querySelectorAll('#ex4-container .choice-row').forEach(r => { r.style.background = ''; });
+    hideScore('ex4');
+}
+
+// ============================================================
+//  EXERCISE 5 – Lückentext: être-Form + PP eintippen
+// ============================================================
+const ex5Data = [
+    {
+        intro: 'Complète le texte avec le passé composé correct!',
+        sentences: [
+            { text: 'Hier, Marie [aller] au supermarché.',          answers: ['est allée'] },
+            { text: 'Son frère [rester] à la maison.',              answers: ['est resté'] },
+            { text: 'Leurs parents [partir] tôt le matin.',         answers: ['sont partis'] },
+            { text: 'La grand-mère [arriver] à midi.',              answers: ['est arrivée'] },
+            { text: 'Les enfants [sortir] dans le jardin.',         answers: ['sont sortis'] },
+            { text: 'Marie [rentrer] à 18 heures.',                 answers: ['est rentrée'] },
+            { text: 'Le chien [tomber] dans l\'herbe.',             answers: ['est tombé'] },
+            { text: 'Tout le monde [venir] dîner ensemble.',        answers: ['est venu','sont venus'] },
+        ]
+    }
+];
+
+function buildExercise5() {
+    const container = document.getElementById('ex5-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const block = ex5Data[0];
+    const intro = document.createElement('p');
+    intro.style.cssText = 'font-style:italic; margin-bottom:16px; color:var(--text-light);';
+    intro.textContent = block.intro;
+    container.appendChild(intro);
+
+    block.sentences.forEach((item, i) => {
+        const display = item.text.replace(/\[.*?\]/, `<input class="fill-input-wide" id="ex5-inp-${i}" type="text" placeholder="être + PP …" autocomplete="off" spellcheck="false">`);
+        const div = document.createElement('div');
+        div.className = 'fill-row';
+        div.id = `ex5-row-${i}`;
+        div.style.cssText = 'flex-wrap:wrap; gap:6px;';
+        div.innerHTML = `
+            <span class="fill-text" style="flex:1; min-width:280px;">${display}</span>
+            <span class="fill-feedback" id="ex5-fb-${i}" style="min-width:160px;"></span>`;
+        container.appendChild(div);
+    });
+
+    // add hint
+    const hint = document.createElement('div');
+    hint.className = 'info-box';
+    hint.style.marginTop = '16px';
+    hint.innerHTML = `<span class="info-icon">💡</span>
+        <div>Gib immer <strong>deux mots</strong> ein: die Form von <em>être</em> + das participe passé (angeglichen). Beispiel: <em>est allée</em></div>`;
+    container.appendChild(hint);
+}
+
+function checkExercise5() {
+    let correct = 0;
+    const block = ex5Data[0];
+    block.sentences.forEach((item, i) => {
+        const inp = document.getElementById(`ex5-inp-${i}`);
+        const fb  = document.getElementById(`ex5-fb-${i}`);
+        const row = document.getElementById(`ex5-row-${i}`);
+        const val = inp.value.trim().toLowerCase();
+        const ok  = item.answers.map(a => a.toLowerCase()).includes(val);
+        if (ok) {
+            correct++;
+            fb.textContent = '✅ Super!';
+            fb.style.color = 'var(--success)';
+            inp.style.borderColor = 'var(--success)';
+            row.style.background  = 'var(--success-light)';
+        } else {
+            fb.textContent = `❌ → ${item.answers[0]}`;
+            fb.style.color = 'var(--accent)';
+            inp.style.borderColor = 'var(--accent)';
+            row.style.background  = '#fff0f0';
+        }
+    });
+    showScore('ex5', correct, block.sentences.length);
+}
+
+function resetExercise5() {
+    ex5Data[0].sentences.forEach((_, i) => {
+        const inp = document.getElementById(`ex5-inp-${i}`);
+        const fb  = document.getElementById(`ex5-fb-${i}`);
+        const row = document.getElementById(`ex5-row-${i}`);
+        if (inp) { inp.value = ''; inp.style.borderColor = ''; }
+        if (fb)  { fb.textContent = ''; }
+        if (row) { row.style.background = ''; }
+    });
+    hideScore('ex5');
+}
+
+// ============================================================
+//  EXERCISE 6 – Sätze in richtige Reihenfolge bringen
+// ============================================================
+const ex6Data = [
+    { words: ['Elle', 'est', 'allée', 'au', 'cinéma', '.'],        answer: 'Elle est allée au cinéma .' },
+    { words: ['Ils', 'sont', 'arrivés', 'en', 'retard', '.'],      answer: 'Ils sont arrivés en retard .' },
+    { words: ['Je', 'suis', 'tombée', 'dans', 'la', 'rue', '.'],   answer: 'Je suis tombée dans la rue .' },
+    { words: ['Nous', 'sommes', 'restés', 'à', 'la', 'maison', '.'], answer: 'Nous sommes restés à la maison .' },
+    { words: ['Tu', 'es', 'parti', 'tôt', 'ce', 'matin', '.'],     answer: 'Tu es parti tôt ce matin .' },
+    { words: ['Elles', 'sont', 'sorties', 'du', 'collège', '.'],   answer: 'Elles sont sorties du collège .' },
+];
+
+// Shuffle helper
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+let ex6State = []; // stores shuffled word arrays and built sentences
+
+function buildExercise6() {
+    const container = document.getElementById('ex6-container');
+    if (!container) return;
+    container.innerHTML = '';
+    ex6State = [];
+
+    ex6Data.forEach((item, i) => {
+        const shuffled = shuffle(item.words);
+        ex6State.push({ built: [], pool: [...shuffled] });
+
+        const div = document.createElement('div');
+        div.className = 'sentence-exercise';
+        div.id = `ex6-row-${i}`;
+        div.style.cssText = 'margin-bottom:24px; padding:16px; background:#f8f9fe; border-radius:var(--radius-sm); border:1px solid var(--border);';
+
+        div.innerHTML = `
+            <p style="font-size:0.85em; color:var(--text-light); margin-bottom:8px;">Satz ${i+1} – bringe die Wörter in die richtige Reihenfolge:</p>
+            <div class="word-pool" id="ex6-pool-${i}" style="display:flex; flex-wrap:wrap; gap:8px; min-height:44px; margin-bottom:10px; padding:10px; background:white; border-radius:8px; border:2px dashed var(--border);">
+                ${shuffled.map((w, wi) =>
+                    `<button class="word-chip" id="ex6-chip-${i}-${wi}" data-sent="${i}" data-word="${w}" onclick="addWordToSentence(this)">${w}</button>`
+                ).join('')}
+            </div>
+            <div style="font-size:0.85em; color:var(--text-light); margin-bottom:4px;">Dein Satz:</div>
+            <div class="sentence-built" id="ex6-built-${i}" style="display:flex; flex-wrap:wrap; gap:8px; min-height:44px; padding:10px; background:var(--primary-pale); border-radius:8px; border:2px dashed var(--primary-light);" onclick="focusSentence(${i})">
+                <span class="built-placeholder" id="ex6-placeholder-${i}" style="color:var(--text-light); font-style:italic; font-size:0.9em; user-select:none;">Klicke auf die Wörter oben …</span>
+            </div>
+            <button onclick="clearSentence(${i})" style="margin-top:8px; font-size:0.8em; background:none; border:none; color:var(--text-light); cursor:pointer; text-decoration:underline;">✕ Zurücksetzen</button>
+            <div class="fill-feedback" id="ex6-fb-${i}" style="margin-top:6px; font-weight:700;"></div>`;
+        container.appendChild(div);
+    });
+}
+
+function addWordToSentence(btn) {
+    const i    = parseInt(btn.dataset.sent);
+    const word = btn.dataset.word;
+    btn.style.display = 'none';
+    ex6State[i].built.push({ word, btnId: btn.id });
+
+    const builtDiv = document.getElementById(`ex6-built-${i}`);
+    const placeholder = document.getElementById(`ex6-placeholder-${i}`);
+    if (placeholder) placeholder.style.display = 'none';
+
+    const chip = document.createElement('button');
+    chip.className = 'word-chip word-chip-built';
+    chip.textContent = word;
+    chip.style.cssText = 'background:var(--primary); color:white; border:none; padding:6px 14px; border-radius:20px; cursor:pointer; font-family:inherit; font-weight:700; font-size:0.95em;';
+    chip.title = 'Klicken zum Entfernen';
+    chip.onclick = () => removeWordFromSentence(i, btn.id, chip, word);
+    builtDiv.appendChild(chip);
+}
+
+function removeWordFromSentence(sentIdx, btnId, chip, word) {
+    // restore pool button
+    const poolBtn = document.getElementById(btnId);
+    if (poolBtn) poolBtn.style.display = '';
+    // remove from built array
+    const idx = ex6State[sentIdx].built.findIndex(b => b.btnId === btnId);
+    if (idx > -1) ex6State[sentIdx].built.splice(idx, 1);
+    // remove chip
+    chip.remove();
+    // show placeholder if empty
+    if (ex6State[sentIdx].built.length === 0) {
+        const placeholder = document.getElementById(`ex6-placeholder-${sentIdx}`);
+        if (placeholder) placeholder.style.display = '';
+    }
+}
+
+function clearSentence(i) {
+    ex6State[i].built.forEach(b => {
+        const btn = document.getElementById(b.btnId);
+        if (btn) btn.style.display = '';
+    });
+    ex6State[i].built = [];
+    const builtDiv = document.getElementById(`ex6-built-${i}`);
+    // remove all chip buttons
+    builtDiv.querySelectorAll('.word-chip-built').forEach(c => c.remove());
+    const placeholder = document.getElementById(`ex6-placeholder-${i}`);
+    if (placeholder) placeholder.style.display = '';
+    const fb = document.getElementById(`ex6-fb-${i}`);
+    if (fb) fb.textContent = '';
+    document.getElementById(`ex6-row-${i}`).style.background = '#f8f9fe';
+}
+
+function checkExercise6() {
+    let correct = 0;
+    ex6Data.forEach((item, i) => {
+        const built = ex6State[i].built.map(b => b.word).join(' ');
+        const fb    = document.getElementById(`ex6-fb-${i}`);
+        const row   = document.getElementById(`ex6-row-${i}`);
+        if (built.trim() === '') {
+            fb.textContent = '⚠️ Bitte Wörter auswählen!';
+            fb.style.color = 'var(--warning)';
+            return;
+        }
+        if (built === item.answer) {
+            correct++;
+            fb.textContent = '✅ Perfekt!';
+            fb.style.color = 'var(--success)';
+            row.style.background = 'var(--success-light)';
+        } else {
+            fb.textContent = `❌ Richtig: ${item.answer}`;
+            fb.style.color = 'var(--accent)';
+            row.style.background = '#fff0f0';
+        }
+    });
+    showScore('ex6', correct, ex6Data.length);
+}
+
+function resetExercise6() {
+    ex6Data.forEach((_, i) => clearSentence(i));
+    hideScore('ex6');
+    buildExercise6(); // rebuild with fresh shuffle
+}
+
+// ============================================================
+//  SHARED HELPERS
+// ============================================================
+function showScore(id, correct, total) {
+    const scoreDiv = document.getElementById(`${id}-score`);
+    const scoreNum = document.getElementById(`${id}-score-num`);
+    const scoreBar = document.getElementById(`${id}-score-bar`);
+    if (!scoreDiv) return;
+    scoreDiv.style.display = 'block';
+    scoreNum.textContent = `${correct}/${total}`;
+    const pct = Math.round((correct / total) * 100);
+    scoreBar.style.width = pct + '%';
+    scoreBar.style.background = pct === 100
+        ? 'var(--success)'
+        : pct >= 60
+            ? 'var(--warning)'
+            : 'var(--accent)';
+}
+
+function hideScore(id) {
+    const scoreDiv = document.getElementById(`${id}-score`);
+    if (scoreDiv) scoreDiv.style.display = 'none';
+}
+
+// ============================================================
+//  ADDITIONAL STYLES injected via JS for exercise elements
+// ============================================================
+const extraStyles = document.createElement('style');
+extraStyles.textContent = `
+    .choice-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: var(--radius-sm);
+        margin-bottom: 10px;
+        border: 1px solid var(--border);
+        background: white;
+        transition: var(--transition);
+    }
+    .choice-verb {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.05em;
+        min-width: 120px;
+        flex: 1;
+    }
+    .choice-buttons {
+        display: flex;
+        gap: 8px;
+    }
+    .choice-btn {
+        padding: 7px 18px;
+        border-radius: 20px;
+        border: 2px solid var(--border);
+        background: white;
+        font-family: inherit;
+        font-size: 0.95em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .choice-btn:hover {
+        border-color: var(--primary-light);
+        background: var(--primary-pale);
+        color: var(--primary);
+    }
+    .choice-btn.selected {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    .pp-btn {
+        padding: 6px 14px;
+        font-size: 0.9em;
+    }
+    .choice-feedback {
+        font-size: 0.9em;
+        font-weight: 700;
+        min-width: 160px;
+    }
+    .fill-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: var(--radius-sm);
+        margin-bottom: 10px;
+        border: 1px solid var(--border);
+        background: white;
+        transition: var(--transition);
+    }
+    .fill-text {
+        font-size: 1em;
+        color: var(--text);
+    }
+    .fill-input {
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-family: inherit;
+        font-size: 1em;
+        font-weight: 700;
+        width: 100px;
+        text-align: center;
+        color: var(--primary);
+        outline: none;
+        transition: var(--transition);
+    }
+    .fill-input:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(74, 95, 193, 0.15);
+    }
+    .fill-input-wide {
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-family: inherit;
+        font-size: 1em;
+        font-weight: 700;
+        width: 180px;
+        text-align: center;
+        color: var(--primary);
+        outline: none;
+        transition: var(--transition);
+        display: inline-block;
+    }
+    .fill-input-wide:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(74, 95, 193, 0.15);
+    }
+    .fill-feedback {
+        font-size: 0.9em;
+        font-weight: 700;
+    }
+    .word-chip {
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 2px solid var(--primary-light);
+        background: var(--primary-pale);
+        font-family: inherit;
+        font-size: 0.95em;
+        font-weight: 700;
+        color: var(--primary);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .word-chip:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+        transform: translateY(-1px);
+    }
+    .score-display {
+        margin-top: 20px;
+        padding: 16px 20px;
+        background: var(--primary-pale);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--primary-light);
+    }
+    .score-number {
+        font-size: 2em;
+        font-weight: 800;
+        color: var(--primary);
+        margin: 8px 0;
+    }
+    .score-bar {
+        height: 10px;
+        background: var(--border);
+        border-radius: 5px;
+        overflow: hidden;
+        margin-top: 8px;
+    }
+    .score-fill {
+        height: 100%;
+        border-radius: 5px;
+        transition: width 0.6s ease;
+        background: var(--primary);
+    }
+    .btn-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+    .btn {
+        padding: 10px 24px;
+        border-radius: 25px;
+        font-family: inherit;
+        font-size: 1em;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid transparent;
+    }
+    .btn-primary {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    .btn-primary:hover {
+        background: var(--primary-light);
+        border-color: var(--primary-light);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+    }
+    .btn-outline {
+        background: white;
+        color: var(--primary);
+        border-color: var(--primary);
+    }
+    .btn-outline:hover {
+        background: var(--primary-pale);
+        transform: translateY(-2px);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .exercise-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+    }
+    .exercise-tab {
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: 2px solid var(--border);
+        background: white;
+        font-family: inherit;
+        font-weight: 700;
+        font-size: 0.9em;
+        cursor: pointer;
+        transition: var(--transition);
+        color: var(--text);
+    }
+    .exercise-tab.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    .exercise-tab:hover:not(.active) {
+        border-color: var(--primary-light);
+        background: var(--primary-pale);
+        color: var(--primary);
+    }
+`;
+document.head.appendChild(extraStyles);
+
+// ============================================================
+//  INIT – build all exercises on page load
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    buildExercise1();
+    buildExercise2();
+    buildExercise3();
+    buildExercise4();
+    buildExercise5();
+    buildExercise6();
+});
+</script>
+</body>
+</html>
