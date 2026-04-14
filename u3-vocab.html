@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vokabelkarten – L'école</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    color: #a78bfa;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .subtitle {
+    font-size: 0.95rem;
+    color: #888;
+    margin-bottom: 24px;
+  }
+
+  /* Unit selector */
+  .unit-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .unit-btn {
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 2px solid #a78bfa;
+    background: transparent;
+    color: #a78bfa;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .unit-btn.active {
+    background: #a78bfa;
+    color: #1a1a2e;
+  }
+  .unit-btn:hover:not(.active) {
+    background: #2d2d4e;
+  }
+
+  /* Direction selector */
+  .direction-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .dir-btn {
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 2px solid #38bdf8;
+    background: transparent;
+    color: #38bdf8;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .dir-btn.active {
+    background: #38bdf8;
+    color: #1a1a2e;
+  }
+  .dir-btn:hover:not(.active) {
+    background: #1e3a4a;
+  }
+
+  /* Progress */
+  .progress-info {
+    font-size: 0.95rem;
+    color: #aaa;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .progress-bar-outer {
+    width: 100%;
+    max-width: 480px;
+    height: 8px;
+    background: #2d2d4e;
+    border-radius: 999px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, #a78bfa, #38bdf8);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  /* Card scene */
+  .scene {
+    width: 100%;
+    max-width: 480px;
+    height: 260px;
+    perspective: 1000px;
+    margin-bottom: 28px;
+    cursor: pointer;
+  }
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .card-front {
+    background: linear-gradient(135deg, #2d2d4e, #3b3b6b);
+    border: 1px solid #4a4a7a;
+  }
+  .card-back {
+    background: linear-gradient(135deg, #1e3a4a, #164a3a);
+    border: 1px solid #2a6a5a;
+    transform: rotateY(180deg);
+  }
+  .card-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.6;
+  }
+  .card-word {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #f0f0f0;
+    line-height: 1.3;
+  }
+  .card-hint {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-top: 16px;
+  }
+
+  /* Speak button */
+  .speak-btn {
+    margin-top: 18px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: none;
+    background: #a78bfa;
+    color: #1a1a2e;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .speak-btn:hover { background: #c4b5fd; }
+  .speak-btn:active { transform: scale(0.96); }
+
+  /* Action buttons */
+  .action-btns {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .knew-btn, .knew-not-btn {
+    padding: 14px 32px;
+    border-radius: 999px;
+    border: none;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 160px;
+  }
+  .knew-btn {
+    background: #22c55e;
+    color: #fff;
+  }
+  .knew-btn:hover { background: #16a34a; }
+  .knew-not-btn {
+    background: #ef4444;
+    color: #fff;
+  }
+  .knew-not-btn:hover { background: #dc2626; }
+  .action-btns.hidden { display: none; }
+
+  /* Flip hint */
+  .flip-hint {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 10px;
+  }
+
+  /* Finish screen */
+  .finish-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    max-width: 480px;
+  }
+  .finish-screen h2 {
+    font-size: 2rem;
+    color: #a78bfa;
+  }
+  .finish-screen p {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.6;
+  }
+  .restart-btn {
+    padding: 14px 36px;
+    border-radius: 999px;
+    border: none;
+    background: #a78bfa;
+    color: #1a1a2e;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .restart-btn:hover { background: #c4b5fd; }
+
+  /* No cards message */
+  .no-cards {
+    display: none;
+    color: #ef4444;
+    font-size: 1rem;
+    text-align: center;
+    max-width: 400px;
+  }
+
+  /* Review badge */
+  .review-badge {
+    display: inline-block;
+    background: #ef444430;
+    color: #ef4444;
+    border: 1px solid #ef4444;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 12px;
+    margin-bottom: 10px;
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<h1>🇫🇷 Vokabelkarten – L'école</h1>
+<p class="subtitle">Klicke auf die Karte, um sie umzudrehen</p>
+
+<div class="unit-selector">
+  <button class="unit-btn active" data-unit="3A">Unité 3A</button>
+  <button class="unit-btn active" data-unit="3B">Unité 3B</button>
+  <button class="unit-btn active" data-unit="3C">Unité 3C</button>
+</div>
+
+<div class="direction-selector">
+  <button class="dir-btn active" data-dir="fr-de">Französisch → Deutsch</button>
+  <button class="dir-btn" data-dir="de-fr">Deutsch → Französisch</button>
+</div>
+
+<div class="progress-info" id="progressInfo">Karte 1 von 1</div>
+<div class="progress-bar-outer">
+  <div class="progress-bar-inner" id="progressBar" style="width:0%"></div>
+</div>
+
+<div class="no-cards" id="noCards">Bitte wähle mindestens eine Unité aus.</div>
+
+<div id="reviewBadge" class="review-badge" style="display:none">🔄 Wiederholung</div>
+
+<div class="scene" id="scene">
+  <div class="card" id="card">
+    <div class="card-face card-front" id="cardFront">
+      <div class="card-label" id="frontLabel">Französisch</div>
+      <div class="card-word" id="frontWord">…</div>
+      <button class="speak-btn" id="speakBtn" onclick="event.stopPropagation(); speakFrench()">
+        🔊 Aussprechen
+      </button>
+    </div>
+    <div class="card-face card-back" id="cardBack">
+      <div class="card-label" id="backLabel">Deutsch</div>
+      <div class="card-word" id="backWord">…</div>
+    </div>
+  </div>
+</div>
+
+<p class="flip-hint" id="flipHint">Klicke auf die Karte, um die Übersetzung zu sehen</p>
+
+<div class="action-btns hidden" id="actionBtns">
+  <button class="knew-not-btn" onclick="handleAnswer(false)">😟 Wusste ich nicht.</button>
+  <button class="knew-btn" onclick="handleAnswer(true)">😊 Wusste ich!</button>
+</div>
+
+<div class="finish-screen" id="finishScreen">
+  <h2>🎉 Geschafft!</h2>
+  <p id="finishText">Du hast alle Vokabeln durchgearbeitet.</p>
+  <button class="restart-btn" onclick="restartSession()">↺ Nochmal üben</button>
+</div>
+
+<script>
+const vocabData = {
+  "3A": [
+    { fr: "une école", de: "eine Schule" },
+    { fr: "un collège", de: "eine Mittelschule" },
+    { fr: "un lycée", de: "ein Gymnasium" },
+    { fr: "une élève", de: "eine Schülerin" },
+    { fr: "un élève", de: "ein Schüler" },
+    { fr: "une professeure", de: "eine Lehrerin" },
+    { fr: "un professeur", de: "ein Lehrer" },
+    { fr: "une directrice", de: "eine Direktorin" },
+    { fr: "un directeur", de: "ein Direktor" },
+    { fr: "une classe", de: "eine Klasse" },
+    { fr: "être à l'école", de: "in der Schule sein" },
+    { fr: "aujourd'hui", de: "heute" },
+    { fr: "un ami", de: "ein Freund" },
+    { fr: "une amie", de: "eine Freundin" },
+    { fr: "une salle de classe", de: "ein Klassenzimmer" },
+    { fr: "une cour", de: "ein Schulhof" },
+    { fr: "un gymnase", de: "eine Turnhalle" },
+    { fr: "une cantine", de: "eine Kantine" },
+    { fr: "une pause", de: "eine Pause" },
+    { fr: "une cafétéria", de: "eine Cafeteria" },
+  ],
+  "3B": [
+    { fr: "un jour", de: "ein Tag" },
+    { fr: "une semaine", de: "eine Woche" },
+    { fr: "un week-end", de: "ein Wochenende" },
+    { fr: "lundi", de: "Montag" },
+    { fr: "mardi", de: "Dienstag" },
+    { fr: "mercredi", de: "Mittwoch" },
+    { fr: "jeudi", de: "Donnerstag" },
+    { fr: "vendredi", de: "Freitag" },
+    { fr: "samedi", de: "Samstag" },
+    { fr: "dimanche", de: "Sonntag" },
+    { fr: "le lundi", de: "montags" },
+    { fr: "le cours", de: "der Unterricht" },
+    { fr: "les devoirs", de: "die Hausaufgaben" },
+    { fr: "une heure", de: "eine Stunde" },
+    { fr: "un livre", de: "ein Buch" },
+    { fr: "un cahier", de: "ein Heft" },
+    { fr: "un stylo", de: "ein Stift" },
+    { fr: "une table", de: "ein Tisch" },
+    { fr: "un sac", de: "ein Rucksack / eine Mappe" },
+    { fr: "le stress", de: "der Stress" },
+    { fr: "J'ai cours.", de: "Ich habe Unterricht." },
+  ],
+  "3C": [
+    { fr: "le français", de: "Französisch" },
+    { fr: "l'allemand", de: "Deutsch" },
+    { fr: "les maths", de: "Mathe" },
+    { fr: "l'anglais", de: "Englisch" },
+    { fr: "l'EPS", de: "Sport" },
+    { fr: "les arts", de: "Kunst" },
+    { fr: "la musique", de: "Musik" },
+    { fr: "les SVT", de: "Bio-Geographie-Gesundheit" },
+    { fr: "l'histoire-géo", de: "Geschichte-Geographie" },
+    { fr: "la physique-chimie", de: "Physik-Chemie" },
+    { fr: "la techno", de: "Informatik" },
+    { fr: "un emploi du temps", de: "ein Stundenplan" },
+    { fr: "une matière", de: "ein Fach" },
+    { fr: "une matière préférée", de: "ein Lieblingsfach" },
+    { fr: "Nous avons …", de: "Wir haben …" },
+    { fr: "J'aime …", de: "Ich mag …" },
+    { fr: "aimer", de: "mögen" },
+    { fr: "Je n'aime pas …", de: "Ich mag … nicht." },
+    { fr: "et", de: "und" },
+    { fr: "mais", de: "aber" },
+    { fr: "ne … pas", de: "… nicht" },
+    { fr: "adorer", de: "lieben" },
+    { fr: "détester", de: "hassen" },
+  ]
+};
+
+// State
+let activeUnits = { "3A": true, "3B": true, "3C": true };
+let direction = "fr-de"; // "fr-de" or "de-fr"
+let queue = [];
+let repeatQueue = [];
+let currentIndex = 0;
+let isFlipped = false;
+let isAnimating = false;
+let totalCards = 0;
+let knewCount = 0;
+let knewNotCount = 0;
+let isReviewMode = false;
+let currentFrWord = "";
+
+function buildQueue() {
+  let cards = [];
+  for (const unit of ["3A", "3B", "3C"]) {
+    if (activeUnits[unit]) {
+      cards = cards.concat(vocabData[unit]);
+    }
+  }
+  // Shuffle
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  return cards;
+}
+
+function startSession() {
+  queue = buildQueue();
+  repeatQueue = [];
+  currentIndex = 0;
+  knewCount = 0;
+  knewNotCount = 0;
+  totalCards = queue.length;
+  isReviewMode = false;
+
+  const scene = document.getElementById("scene");
+  const finishScreen = document.getElementById("finishScreen");
+  const noCards = document.getElementById("noCards");
+  const flipHint = document.getElementById("flipHint");
+  const progressBar = document.getElementById("progressBar");
+
+  if (totalCards === 0) {
+    scene.style.display = "none";
+    finishScreen.style.display = "none";
+    noCards.style.display = "block";
+    document.getElementById("progressInfo").textContent = "";
+    progressBar.style.width = "0%";
+    document.getElementById("actionBtns").classList.add("hidden");
+    document.getElementById("flipHint").style.display = "none";
+    return;
+  }
+
+  noCards.style.display = "none";
+  scene.style.display = "block";
+  finishScreen.style.display = "none";
+  flipHint.style.display = "block";
+  document.getElementById("reviewBadge").style.display = "none";
+
+  showCard(0);
+}
+
+function showCard(index) {
+  const cardEl = document.getElementById("card");
+  const actionBtns = document.getElementById("actionBtns");
+  const flipHint = document.getElementById("flipHint");
+
+  // Determine source
+  const currentQueue = isReviewMode ? repeatQueue : queue;
+  const card = currentQueue[index];
+
+  // Set front/back based on direction
+  let frontWord, backWord, frontLabel, backLabel;
+  if (direction === "fr-de") {
+    frontWord = card.fr;
+    backWord = card.de;
+    frontLabel = "Französisch";
+    backLabel = "Deutsch";
+    currentFrWord = card.fr;
+  } else {
+    frontWord = card.de;
+    backWord = card.fr;
+    frontLabel = "Deutsch";
+    backLabel = "Französisch";
+    currentFrWord = card.fr;
+  }
+
+  document.getElementById("frontLabel").textContent = frontLabel;
+  document.getElementById("frontWord").textContent = frontWord;
+  document.getElementById("backLabel").textContent = backLabel;
+  document.getElementById("backWord").textContent = backWord;
+
+  // Show speak button only on French side
+  const speakBtn = document.getElementById("speakBtn");
+  if (direction === "fr-de") {
+    speakBtn.style.display = "flex";
+  } else {
+    speakBtn.style.display = "none";
+  }
+
+  // Reset flip
+  isFlipped = false;
+  cardEl.classList.remove("flipped");
+  actionBtns.classList.add("hidden");
+  flipHint.style.display = "block";
+
+  // Update progress
+  updateProgress();
+}
+
+function updateProgress() {
+  const currentQueue = isReviewMode ? repeatQueue : queue;
+  const total = isReviewMode ? repeatQueue.length : totalCards;
+  const current = currentIndex + 1;
+  document.getElementById("progressInfo").textContent =
+    (isReviewMode ? "🔄 Wiederholung – " : "") + `Karte ${current} von ${total}`;
+  const pct = totalCards > 0 ? ((currentIndex) / (isReviewMode ? repeatQueue.length : totalCards)) * 100 : 0;
+  document.getElementById("progressBar").style.width = pct + "%";
+}
+
+function flipCard() {
+  if (isAnimating) return;
+
+  const cardEl = document.getElementById("card");
+  const actionBtns = document.getElementById("actionBtns");
+  const flipHint = document.getElementById("flipHint");
+  const speakBtn = document.getElementById("speakBtn");
+
+  if (!isFlipped) {
+    isAnimating = true;
+    isFlipped = true;
+    cardEl.classList.add("flipped");
+
+    // After animation, show action buttons and speak if needed
+    setTimeout(() => {
+      isAnimating = false;
+      actionBtns.classList.remove("hidden");
+      flipHint.style.display = "none";
+
+      // If direction is de-fr, show speak button on back face
+      if (direction === "de-fr") {
+        speakBtn.style.display = "flex";
+      }
+    }, 560);
+  }
+}
+
+function handleAnswer(knew) {
+  if (isAnimating) return;
+
+  const cardEl = document.getElementById("card");
+  const actionBtns = document.getElementById("actionBtns");
+  const flipHint = document.getElementById("flipHint");
+  const speakBtn = document.getElementById("speakBtn");
+
+  if (knew) {
+    knewCount++;
+  } else {
+    const currentQueue = isReviewMode ? repeatQueue : queue;
+    repeatQueue.push(currentQueue[currentIndex]);
+    knewNotCount++;
+  }
+
+  currentIndex++;
+  const currentQueue = isReviewMode ? repeatQueue : queue;
+  const queueLen = isReviewMode ? repeatQueue.length - (knew ? 0 : 1) : totalCards;
+
+  // Flip back
+  isAnimating = true;
+  actionBtns.classList.add("hidden");
+  flipHint.style.display = "none";
+  speakBtn.style.display = "none";
+  cardEl.classList.remove("flipped");
+
+  setTimeout(() => {
+    isAnimating = false;
+
+    const nextQueue = isReviewMode ? repeatQueue : queue;
+
+    if (currentIndex >= nextQueue.length) {
+      // Check if we have a repeat queue to go through
+      if (!isReviewMode && repeatQueue.length > 0) {
+        // Start review round
+        isReviewMode = true;
+        currentIndex = 0;
+        document.getElementById("reviewBadge").style.display = "inline-block";
+        showCard(0);
+      } else if (isReviewMode) {
+        // Remove the cards we just added from the repeat queue for this round
+        // Actually repeatQueue grows as we add new "nicht gewusst" — 
+        // We need to slice to only show NEW additions
+        // Simple approach: start fresh review with newly added cards
+        const newRepeat = repeatQueue.slice(currentIndex);
+        if (newRepeat.length > 0) {
+          repeatQueue = newRepeat;
+          currentIndex = 0;
+          showCard(0);
+        } else {
+          showFinish();
+        }
+      } else {
+        showFinish();
+      }
+    } else {
+      showCard(currentIndex);
+    }
+  }, 560);
+}
+
+function showFinish() {
+  document.getElementById("scene").style.display = "none";
+  document.getElementById("flipHint").style.display = "none";
+  document.getElementById("reviewBadge").style.display = "none";
+  document.getElementById("progressBar").style.width = "100%";
+  document.getElementById("progressInfo").textContent = "Fertig!";
+
+  const finishScreen = document.getElementById("finishScreen");
+  finishScreen.style.display = "flex";
+  document.getElementById("finishText").innerHTML =
+    `Du hast alle Vokabeln durchgearbeitet!<br>` +
+    `✅ Gewusst: <strong style="color:#22c55e">${knewCount}</strong> &nbsp;|&nbsp; ` +
+    `❌ Nicht gewusst: <strong style="color:#ef4444">${knewNotCount}</strong>`;
+}
+
+function restartSession() {
+  document.getElementById("finishScreen").style.display = "none";
+  document.getElementById("scene").style.display = "block";
+  startSession();
+}
+
+function speakFrench() {
+  if (!currentFrWord) return;
+  const utterance = new SpeechSynthesisUtterance(currentFrWord);
+  utterance.lang = "fr-FR";
+  utterance.rate = 0.9;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+// Event listeners
+document.getElementById("scene").addEventListener("click", function() {
+  if (!isFlipped && !isAnimating) {
+    flipCard();
+  }
+});
+
+document.querySelectorAll(".unit-btn").forEach(btn => {
+  btn.addEventListener("click", function() {
+    const unit = this.dataset.unit;
+    activeUnits[unit] = !activeUnits[unit];
+    this.classList.toggle("active", activeUnits[unit]);
+    startSession();
+  });
+});
+
+document.querySelectorAll(".dir-btn").forEach(btn => {
+  btn.addEventListener("click", function() {
+    document.querySelectorAll(".dir-btn").forEach(b => b.classList.remove("active"));
+    this.classList.add("active");
+    direction = this.dataset.dir;
+    startSession();
+  });
+});
+
+// Init
+startSession();
+</script>
+</body>
+</html>
