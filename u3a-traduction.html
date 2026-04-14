@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'école – Übersetzungsübung</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #2d3748;
+    padding: 2rem 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+    color: #2b6cb0;
+    margin-bottom: 0.3rem;
+    font-size: 1.8rem;
+  }
+  .subtitle {
+    text-align: center;
+    color: #718096;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+  .btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 0.6rem 1.4rem;
+    border: 2px solid #2b6cb0;
+    background: white;
+    color: #2b6cb0;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: #ebf4ff; }
+  .btn.active {
+    background: #2b6cb0;
+    color: white;
+  }
+  .sentence-list {
+    list-style: none;
+    counter-reset: satz;
+  }
+  .sentence-list li {
+    counter-increment: satz;
+    background: white;
+    margin-bottom: 0.6rem;
+    padding: 0.9rem 1rem 0.9rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .sentence-list li:hover { background: #ebf8ff; }
+  .sentence-list li .prompt {
+    font-weight: 700;
+    display: block;
+  }
+  .sentence-list li .prompt::before {
+    content: counter(satz) ". ";
+    font-weight: 700;
+  }
+  .sentence-list li .answer {
+    display: none;
+    margin-top: 0.45rem;
+    font-style: italic;
+    color: #38a169;
+    padding-left: 1.2rem;
+  }
+  .sentence-list li.open .answer {
+    display: block;
+  }
+
+  h2 {
+    color: #2b6cb0;
+    margin-top: 2.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.25rem;
+    border-bottom: 2px solid #bee3f8;
+    padding-bottom: 0.3rem;
+  }
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .vocab-table th {
+    background: #2b6cb0;
+    color: white;
+    text-align: left;
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+  }
+  .vocab-table td {
+    padding: 0.45rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.93rem;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table tr:nth-child(even) { background: #f7fafc; }
+
+  .hint {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #a0aec0;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>🏫 L'école</h1>
+<p class="subtitle">Übersetzungsübung – Klasse 7 (1. Lernjahr)</p>
+
+<div class="btn-group">
+  <button class="btn active" id="btnFrDe" onclick="setMode('frde')">Französisch → Deutsch</button>
+  <button class="btn" id="btnDeFr" onclick="setMode('defr')">Deutsch → Französisch</button>
+</div>
+<p class="hint">Klicke auf einen Satz, um die Übersetzung zu sehen.</p>
+
+<ol class="sentence-list" id="sentenceList"></ol>
+
+<h2>📖 Vokabelhilfe</h2>
+<table class="vocab-table">
+  <thead>
+    <tr><th>Französisch</th><th>Deutsch</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>une école</td><td>eine Schule</td></tr>
+    <tr><td>un collège</td><td>eine Mittelschule</td></tr>
+    <tr><td>un lycée</td><td>ein Gymnasium</td></tr>
+    <tr><td>un/une élève</td><td>ein Schüler / eine Schülerin</td></tr>
+    <tr><td>un professeur / une professeure</td><td>ein Lehrer / eine Lehrerin</td></tr>
+    <tr><td>un directeur / une directrice</td><td>ein Direktor / eine Direktorin</td></tr>
+    <tr><td>une classe</td><td>eine Klasse</td></tr>
+    <tr><td>être à l'école</td><td>in der Schule sein</td></tr>
+    <tr><td>être près de qc.</td><td>in der Nähe von etw. sein</td></tr>
+    <tr><td>aujourd'hui</td><td>heute</td></tr>
+    <tr><td>plus tard</td><td>später</td></tr>
+    <tr><td>un ami / une amie</td><td>ein Freund / eine Freundin</td></tr>
+    <tr><td>une salle de classe</td><td>ein Klassenzimmer</td></tr>
+    <tr><td>une cour</td><td>ein Schulhof</td></tr>
+    <tr><td>un gymnase</td><td>eine Turnhalle</td></tr>
+    <tr><td>une cantine</td><td>eine Kantine</td></tr>
+    <tr><td>une pause</td><td>eine Pause</td></tr>
+    <tr><td>une cafétéria</td><td>eine Cafeteria</td></tr>
+    <tr><td>travailler</td><td>arbeiten</td></tr>
+    <tr><td>chercher qc.</td><td>etwas suchen</td></tr>
+    <tr><td>demander qc. à qn.</td><td>jdn. nach etw. fragen</td></tr>
+    <tr><td>arriver à qc.</td><td>an etw. ankommen</td></tr>
+    <tr><td>trouver qc.</td><td>etwas finden</td></tr>
+    <tr><td>habiter près de qc.</td><td>in der Nähe von etw. wohnen</td></tr>
+    <tr><td>visiter qc.</td><td>etwas besichtigen / besuchen</td></tr>
+    <tr><td>manger qc.</td><td>etwas essen</td></tr>
+    <tr><td>jouer</td><td>spielen</td></tr>
+    <tr><td>jouer au foot</td><td>Fußball spielen</td></tr>
+    <tr><td>écouter de la musique</td><td>Musik hören</td></tr>
+    <tr><td>parler</td><td>sprechen</td></tr>
+    <tr><td>avec</td><td>mit</td></tr>
+    <tr><td>bien</td><td>gut</td></tr>
+    <tr><td>de</td><td>von</td></tr>
+    <tr><td>dans</td><td>in / auf</td></tr>
+    <tr><td>aussi</td><td>auch</td></tr>
+    <tr><td>le livre</td><td>das Buch</td></tr>
+    <tr><td>la musique</td><td>die Musik</td></tr>
+    <tr><td>le football</td><td>der Fußball</td></tr>
+  </tbody>
+</table>
+
+<script>
+const sentences = [
+  { fr: "Les élèves travaillent dans la salle de classe.", de: "Die Schüler arbeiten im Klassenzimmer." },
+  { fr: "Nous cherchons un professeur.", de: "Wir suchen einen Lehrer." },
+  { fr: "Vous mangez à la cantine.", de: "Ihr esst in der Kantine." },
+  { fr: "Marie cherche un livre dans la bibliothèque.", de: "Marie sucht ein Buch in der Bibliothek." },
+  { fr: "Le gymnase est près de la cafétéria.", de: "Die Turnhalle ist in der Nähe der Cafeteria." },
+  { fr: "Les élèves jouent dans la cour.", de: "Die Schüler spielen auf dem Schulhof." },
+  { fr: "La directrice parle avec une professeure.", de: "Die Direktorin spricht mit einer Lehrerin." },
+  { fr: "J'écoute de la musique avec une amie.", de: "Ich höre Musik mit einer Freundin." },
+  { fr: "Paul cherche la salle de classe.", de: "Paul sucht das Klassenzimmer." },
+  { fr: "Les élèves arrivent à l'école.", de: "Die Schüler kommen an der Schule an." },
+  { fr: "Tu travailles bien.", de: "Du arbeitest gut." },
+  { fr: "Nous sommes dans la cafétéria.", de: "Wir sind in der Cafeteria." },
+  { fr: "Le professeur parle avec un élève.", de: "Der Lehrer spricht mit einem Schüler." },
+  { fr: "Je mange avec un ami à la cantine.", de: "Ich esse mit einem Freund in der Kantine." },
+  { fr: "Les amis jouent au foot dans la cour.", de: "Die Freunde spielen Fußball auf dem Schulhof." },
+  { fr: "Vous visitez aussi l'école aujourd'hui?", de: "Ihr besichtigt heute auch die Schule?" },
+  { fr: "J'habite près de l'école.", de: "Ich wohne in der Nähe der Schule." }
+];
+
+let currentMode = 'frde';
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('btnFrDe').classList.toggle('active', mode === 'frde');
+  document.getElementById('btnDeFr').classList.toggle('active', mode === 'defr');
+  render();
+}
+
+function render() {
+  const list = document.getElementById('sentenceList');
+  list.innerHTML = '';
+  sentences.forEach((s, i) => {
+    const li = document.createElement('li');
+    const prompt = document.createElement('span');
+    prompt.className = 'prompt';
+    const answer = document.createElement('span');
+    answer.className = 'answer';
+
+    if (currentMode === 'frde') {
+      prompt.textContent = s.fr;
+      answer.textContent = s.de;
+    } else {
+      prompt.textContent = s.de;
+      answer.textContent = s.fr;
+    }
+
+    li.appendChild(prompt);
+    li.appendChild(answer);
+    li.addEventListener('click', () => li.classList.toggle('open'));
+    list.appendChild(li);
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
