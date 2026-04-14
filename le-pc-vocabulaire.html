@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le passé composé - Karteikarten</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #e94560;
+            text-align: center;
+        }
+
+        .progress {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #a0a0b0;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            max-width: 500px;
+            height: 8px;
+            background: #16213e;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #0f3460);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        .card-scene {
+            width: 420px;
+            max-width: 90vw;
+            height: 270px;
+            perspective: 800px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s ease;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            border-radius: 18px;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #16213e, #0f3460);
+            border: 2px solid #e94560;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #0f3460, #16213e);
+            border: 2px solid #53d8a8;
+            transform: rotateY(180deg);
+        }
+
+        .french-word {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #e94560;
+            margin-bottom: 8px;
+        }
+
+        .german-word {
+            font-size: 1.2rem;
+            color: #a0a0b0;
+            font-style: italic;
+        }
+
+        .participe {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #53d8a8;
+            margin-bottom: 8px;
+        }
+
+        .auxiliaire {
+            font-size: 1.3rem;
+            color: #f0c040;
+            font-weight: 600;
+        }
+
+        .auxiliaire-label {
+            font-size: 0.85rem;
+            color: #a0a0b0;
+            margin-bottom: 4px;
+        }
+
+        .speak-btn {
+            margin-top: 14px;
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid #e94560;
+            color: #e94560;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .speak-btn:hover {
+            background: rgba(233, 69, 96, 0.4);
+            transform: scale(1.1);
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: #606080;
+            margin-top: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 170px;
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn-know {
+            background: linear-gradient(135deg, #1b8a5a, #53d8a8);
+            color: #1a1a2e;
+        }
+
+        .btn-know:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(83, 216, 168, 0.4);
+        }
+
+        .btn-dont-know {
+            background: linear-gradient(135deg, #c0392b, #e94560);
+            color: #fff;
+        }
+
+        .btn-dont-know:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.4);
+        }
+
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .result-screen h2 {
+            font-size: 2rem;
+            color: #53d8a8;
+            margin-bottom: 16px;
+        }
+
+        .result-screen p {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #a0a0b0;
+        }
+
+        .result-screen .score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #e94560;
+            margin: 20px 0;
+        }
+
+        .btn-restart {
+            margin-top: 20px;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #e94560, #0f3460);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.4);
+        }
+
+        .round-info {
+            font-size: 0.9rem;
+            color: #f0c040;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 500px) {
+            .card-scene {
+                height: 240px;
+            }
+            .french-word {
+                font-size: 1.7rem;
+            }
+            .participe {
+                font-size: 1.6rem;
+            }
+            .btn {
+                padding: 12px 20px;
+                min-width: 140px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🇫🇷 Le passé composé</h1>
+
+    <div id="round-info" class="round-info"></div>
+    <div id="progress" class="progress">Karte 1 / 35</div>
+    <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+    </div>
+
+    <div class="card-scene" id="card-scene">
+        <div class="card" id="card">
+            <div class="card-face card-front" id="card-front">
+                <div class="french-word" id="french-word">travailler</div>
+                <div class="german-word" id="german-word">arbeiten</div>
+                <button class="speak-btn" id="speak-btn" title="Aussprechen">🔊</button>
+                <div class="hint">Klicke auf die Karte zum Umdrehen</div>
+            </div>
+            <div class="card-face card-back" id="card-back">
+                <div class="auxiliaire-label">Hilfsverb:</div>
+                <div class="auxiliaire" id="auxiliaire">avoir</div>
+                <div class="participe" id="participe">travaillé</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="buttons" id="buttons">
+        <button class="btn btn-dont-know" id="btn-dont-know" disabled>❌ Wusste ich nicht</button>
+        <button class="btn btn-know" id="btn-know" disabled>✅ Wusste ich!</button>
+    </div>
+
+    <div class="result-screen" id="result-screen">
+        <h2>🎉 Geschafft!</h2>
+        <p>Du hast alle Karteikarten durchgearbeitet.</p>
+        <div class="score" id="score"></div>
+        <p id="result-details"></p>
+        <button class="btn-restart" id="btn-restart">🔄 Nochmal starten</button>
+    </div>
+
+    <script>
+        const verbs = [
+            { fr: "travailler", de: "arbeiten", pp: "travaillé", aux: "avoir" },
+            { fr: "chercher", de: "suchen", pp: "cherché", aux: "avoir" },
+            { fr: "demander", de: "fragen / verlangen", pp: "demandé", aux: "avoir" },
+            { fr: "trouver", de: "finden", pp: "trouvé", aux: "avoir" },
+            { fr: "habiter", de: "wohnen", pp: "habité", aux: "avoir" },
+            { fr: "visiter", de: "besichtigen", pp: "visité", aux: "avoir" },
+            { fr: "manger", de: "essen", pp: "mangé", aux: "avoir" },
+            { fr: "jouer", de: "spielen", pp: "joué", aux: "avoir" },
+            { fr: "écouter", de: "zuhören", pp: "écouté", aux: "avoir" },
+            { fr: "parler", de: "sprechen", pp: "parlé", aux: "avoir" },
+            { fr: "être", de: "sein", pp: "été", aux: "avoir" },
+            { fr: "avoir", de: "haben", pp: "eu", aux: "avoir" },
+            { fr: "faire", de: "machen / tun", pp: "fait", aux: "avoir" },
+            { fr: "voir", de: "sehen", pp: "vu", aux: "avoir" },
+            { fr: "dire", de: "sagen", pp: "dit", aux: "avoir" },
+            { fr: "savoir", de: "wissen", pp: "su", aux: "avoir" },
+            { fr: "pouvoir", de: "können", pp: "pu", aux: "avoir" },
+            { fr: "vouloir", de: "wollen", pp: "voulu", aux: "avoir" },
+            { fr: "prendre", de: "nehmen", pp: "pris", aux: "avoir" },
+            { fr: "devoir", de: "müssen / sollen", pp: "dû", aux: "avoir" },
+            { fr: "écrire", de: "schreiben", pp: "écrit", aux: "avoir" },
+            { fr: "lire", de: "lesen", pp: "lu", aux: "avoir" },
+            { fr: "aller", de: "gehen", pp: "allé", aux: "être" },
+            { fr: "venir", de: "kommen", pp: "venu", aux: "être" },
+            { fr: "rentrer", de: "zurückkehren", pp: "rentré", aux: "être" },
+            { fr: "arriver", de: "ankommen", pp: "arrivé", aux: "être" },
+            { fr: "entrer", de: "eintreten", pp: "entré", aux: "être" },
+            { fr: "monter", de: "hinaufgehen", pp: "monté", aux: "être" },
+            { fr: "descendre", de: "hinuntergehen", pp: "descendu", aux: "être" },
+            { fr: "tomber", de: "fallen", pp: "tombé", aux: "être" },
+            { fr: "passer", de: "vorbeigehen", pp: "passé", aux: "être" },
+            { fr: "sortir", de: "hinausgehen", pp: "sorti", aux: "être" },
+            { fr: "partir", de: "weggehen / abfahren", pp: "parti", aux: "être" },
+            { fr: "rester", de: "bleiben", pp: "resté", aux: "être" },
+            { fr: "retourner", de: "zurückkehren", pp: "retourné", aux: "être" }
+        ];
+
+        let currentDeck = [];
+        let retryDeck = [];
+        let currentIndex = 0;
+        let knownCount = 0;
+        let totalAnswered = 0;
+        let isFlipped = false;
+        let isAnimating = false;
+        let isRetryRound = false;
+
+        const card = document.getElementById('card');
+        const frenchWord = document.getElementById('french-word');
+        const germanWord = document.getElementById('german-word');
+        const participe = document.getElementById('participe');
+        const auxiliaire = document.getElementById('auxiliaire');
+        const speakBtn = document.getElementById('speak-btn');
+        const btnKnow = document.getElementById('btn-know');
+        const btnDontKnow = document.getElementById('btn-dont-know');
+        const progressText = document.getElementById('progress');
+        const progressBar = document.getElementById('progress-bar');
+        const resultScreen = document.getElementById('result-screen');
+        const buttons = document.getElementById('buttons');
+        const cardScene = document.getElementById('card-scene');
+        const roundInfo = document.getElementById('round-info');
+        const btnRestart = document.getElementById('btn-restart');
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function init() {
+            currentDeck = shuffle([...verbs]);
+            retryDeck = [];
+            currentIndex = 0;
+            knownCount = 0;
+            totalAnswered = 0;
+            isRetryRound = false;
+            resultScreen.style.display = 'none';
+            buttons.style.display = 'flex';
+            cardScene.style.display = 'block';
+            progressText.style.display = 'block';
+            document.querySelector('.progress-bar-container').style.display = 'block';
+            roundInfo.textContent = '';
+            loadCard();
+        }
+
+        function loadCard() {
+            isFlipped = false;
+            card.classList.remove('flipped');
+            btnKnow.disabled = true;
+            btnDontKnow.disabled = true;
+
+            const v = currentDeck[currentIndex];
+            frenchWord.textContent = v.fr;
+            germanWord.textContent = v.de;
+            participe.textContent = v.pp;
+            auxiliaire.textContent = v.aux;
+
+            const total = currentDeck.length;
+            progressText.textContent = `Karte ${currentIndex + 1} / ${total}`;
+            progressBar.style.width = `${((currentIndex) / total) * 100}%`;
+
+            if (isRetryRound) {
+                roundInfo.textContent = `🔁 Wiederholungsrunde – noch ${currentDeck.length - currentIndex} Karte(n)`;
+            }
+        }
+
+        function speak(text) {
+            speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'fr-FR';
+            utter.rate = 0.85;
+            const voices = speechSynthesis.getVoices();
+            const frVoice = voices.find(v => v.lang.startsWith('fr'));
+            if (frVoice) utter.voice = frVoice;
+            speechSynthesis.speak(utter);
+        }
+
+        speakBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speak(currentDeck[currentIndex].fr);
+        });
+
+        card.addEventListener('click', () => {
+            if (isAnimating) return;
+            isFlipped = !isFlipped;
+            card.classList.toggle('flipped');
+            if (isFlipped) {
+                btnKnow.disabled = false;
+                btnDontKnow.disabled = false;
+            } else {
+                btnKnow.disabled = true;
+                btnDontKnow.disabled = true;
+            }
+        });
+
+        function nextCard(known) {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            totalAnswered++;
+            if (known) {
+                knownCount++;
+            } else {
+                retryDeck.push(currentDeck[currentIndex]);
+            }
+
+            // Flip back first if flipped
+            if (isFlipped) {
+                isFlipped = false;
+                card.classList.remove('flipped');
+            }
+
+            btnKnow.disabled = true;
+            btnDontKnow.disabled = true;
+
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < currentDeck.length) {
+                    loadCard();
+                    isAnimating = false;
+                } else if (retryDeck.length > 0 && !isRetryRound) {
+                    // Start retry round
+                    isRetryRound = true;
+                    currentDeck = shuffle([...retryDeck]);
+                    retryDeck = [];
+                    currentIndex = 0;
+                    loadCard();
+                    isAnimating = false;
+                } else if (retryDeck.length > 0 && isRetryRound) {
+                    // Another retry round
+                    currentDeck = shuffle([...retryDeck]);
+                    retryDeck = [];
+                    currentIndex = 0;
+                    loadCard();
+                    isAnimating = false;
+                } else {
+                    showResults();
+                    isAnimating = false;
+                }
+            }, 650);
+        }
+
+        btnKnow.addEventListener('click', () => nextCard(true));
+        btnDontKnow.addEventListener('click', () => nextCard(false));
+
+        function showResults() {
+            cardScene.style.display = 'none';
+            buttons.style.display = 'none';
+            progressText.style.display = 'none';
+            document.querySelector('.progress-bar-container').style.display = 'none';
+            roundInfo.textContent = '';
+
+            const pct = Math.round((knownCount / totalAnswered) * 100);
+            document.getElementById('score').textContent = `${knownCount} / ${totalAnswered}`;
+            document.getElementById('result-details').textContent =
+                `Du hast ${pct}% der Antworten gewusst (über alle Runden).`;
+            resultScreen.style.display = 'block';
+        }
+
+        btnRestart.addEventListener('click', init);
+
+        // Load voices
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => {};
+        }
+
+        init();
+    </script>
+</body>
+</html>
