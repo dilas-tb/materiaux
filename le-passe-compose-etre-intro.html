@@ -1487,6 +1487,9 @@
 </footer>
 
 <script>
+window.onerror = function(msg, src, line, col, err) {
+    console.error(`FEHLER Zeile ${line}: ${msg}`);
+};
 // ============================================================
 //  NAVIGATION
 // ============================================================
