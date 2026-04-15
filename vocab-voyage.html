@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vokabelliste: Reisen & Urlaub / Voyages & Vacances</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .category {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .category h2 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid rgba(255,215,0,0.4);
+            padding-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 5px;
+        }
+
+        thead th {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        thead th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        thead th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        tbody tr {
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            transform: translateX(5px);
+        }
+
+        tbody td {
+            background: rgba(255,255,255,0.9);
+            padding: 10px 15px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        tbody td:first-child {
+            border-radius: 8px 0 0 8px;
+            font-weight: 500;
+            color: #1a1a2e;
+        }
+
+        tbody td:nth-child(2) {
+            font-weight: 500;
+            color: #0055a4;
+        }
+
+        tbody td:last-child {
+            border-radius: 0 8px 8px 0;
+            text-align: center;
+            width: 60px;
+        }
+
+        .speak-btn {
+            background: linear-gradient(135deg, #0055a4, #0077cc);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .speak-btn:hover {
+            background: linear-gradient(135deg, #003d7a, #0055a4);
+            transform: scale(1.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .speak-btn:active {
+            transform: scale(0.95);
+        }
+
+        .speak-btn.speaking {
+            animation: pulse 0.6s ease-in-out;
+            background: linear-gradient(135deg, #e63946, #ff6b6b);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(230, 57, 70, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); }
+        }
+
+        .word-count {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .flag {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.3em; }
+            tbody td, thead th { padding: 8px 10px; font-size: 0.85em; }
+            .speak-btn { width: 30px; height: 30px; font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧳 Reisen & Urlaub / Voyages & Vacances</h1>
+        <p class="subtitle">Deutsch-Französische Vokabelliste – ca. 60 Wörter</p>
+
+        <!-- Kategorie 1: Transport -->
+        <div class="category">
+            <h2>🚂 Transport / Les transports</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th><span class="flag">🇩🇪</span> Deutsch</th>
+                        <th><span class="flag">🇫🇷</span> Français</th>
+                        <th>🔊</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>das Flugzeug</td><td>l'avion (m)</td><td><button class="speak-btn" onclick="speak('l\'avion')">🔊</button></td></tr>
+                    <tr><td>der Flughafen</td><td>l'aéroport (m)</td><td><button class="speak-btn" onclick="speak('l\'aéroport')">🔊</button></td></tr>
+                    <tr><td>der Flug</td><td>le vol</td><td><button class="speak-btn" onclick="speak('le vol')">🔊</button></td></tr>
+                    <tr><td>der Zug</td><td>le train</td><td><button class="speak-btn" onclick="speak('le train')">🔊</button></td></tr>
+                    <tr><td>der Bahnhof</td><td>la gare</td><td><button class="speak-btn" onclick="speak('la gare')">🔊</button></td></tr>
+                    <tr><td>das Auto</td><td>la voiture</td><td><button class="speak-btn" onclick="speak('la voiture')">🔊</button></td></tr>
+                    <tr><td>das Schiff</td><td>le bateau</td><td><button class="speak-btn" onclick="speak('le bateau')">🔊</button></td></tr>
+                    <tr><td>der Bus</td><td>le bus</td><td><button class="speak-btn" onclick="speak('le bus')">🔊</button></td></tr>
+                    <tr><td>die Fahrkarte</td><td>le billet</td><td><button class="speak-btn" onclick="speak('le billet')">🔊</button></td></tr>
+                    <tr><td>die Abfahrt</td><td>le départ</td><td><button class="speak-btn" onclick="speak('le départ')">🔊</button></td></tr>
+                    <tr><td>die Ankunft</td><td>l'arrivée (f)</td><td><button class="speak-btn" onclick="speak('l\'arrivée')">🔊</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Kategorie 2: Unterkunft -->
+        <div class="category">
+            <h2>🏨 Unterkunft / L'hébergement</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th><span class="flag">🇩🇪</span> Deutsch</th>
+                        <th><span class="flag">🇫🇷</span> Français</th>
+                        <th>🔊</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>das Hotel</td><td>l'hôtel (m)</td><td><button class="speak-btn" onclick="speak('l\'hôtel')">🔊</button></td></tr>
+                    <tr><td>das Zimmer</td><td>la chambre</td><td><button class="speak-btn" onclick="speak('la chambre')">🔊</button></td></tr>
+                    <tr><td>die Reservierung</td><td>la réservation</td><td><button class="speak-btn" onclick="speak('la réservation')">🔊</button></td></tr>
+                    <tr><td>die Jugendherberge</td><td>l'auberge de jeunesse (f)</td><td><button class="speak-btn" onclick="speak('l\'auberge de jeunesse')">🔊</button></td></tr>
+                    <tr><td>der Campingplatz</td><td>le camping</td><td><button class="speak-btn" onclick="speak('le camping')">🔊</button></td></tr>
+                    <tr><td>die Ferienwohnung</td><td>la location de vacances</td><td><button class="speak-btn" onclick="speak('la location de vacances')">🔊</button></td></tr>
+                    <tr><td>der Schlüssel</td><td>la clé</td><td><button class="speak-btn" onclick="speak('la clé')">🔊</button></td></tr>
+                    <tr><td>die Rezeption</td><td>la réception</td><td><button class="speak-btn" onclick="speak('la réception')">🔊</button></td></tr>
+                    <tr><td>die Übernachtung</td><td>la nuitée</td><td><button class="speak-btn" onclick="speak('la nuitée')">🔊</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Kategorie 3: Reiseziele & Orte -->
+        <div class="category">
+            <h2>🗺️ Reiseziele & Orte / Destinations & Lieux</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th><span class="flag">🇩🇪</span> Deutsch</th>
+                        <th><span class="flag">🇫🇷</span> Français</th>
+                        <th>🔊</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>der Strand</td><td>la plage</td><td><button class="speak-btn" onclick="speak('la plage')">🔊</button></td></tr>
+                    <tr><td>das Meer</td><td>la mer</td><td><button class="speak-btn" onclick="speak('la mer')">🔊</button></td></tr>
+                    <tr><td>der Berg</td><td>la montagne</td><td><button class="speak-btn" onclick="speak('la montagne')">🔊</button></td></tr>
+                    <tr><td>die Insel</td><td>l'île (f)</td><td><button class="speak-btn" onclick="speak('l\'île')">🔊</button></td></tr>
+                    <tr><td>die Stadt</td><td>la ville</td><td><button class="speak-btn" onclick="speak('la ville')">🔊</button></td></tr>
+                    <tr><td>das Land</td><td>le pays</td><td><button class="speak-btn" onclick="speak('le pays')">🔊</button></td></tr>
+                    <tr><td>die Sehenswürdigkeit</td><td>le site touristique</td><td><button class="speak-btn" onclick="speak('le site touristique')">🔊</button></td></tr>
+                    <tr><td>das Museum</td><td>le musée</td><td><button class="speak-btn" onclick="speak('le musée')">🔊</button></td></tr>
+                    <tr><td>der Hafen</td><td>le port</td><td><button class="speak-btn" onclick="speak('le port')">🔊</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Kategorie 4: Gepäck & Ausrüstung -->
+        <div class="category">
+            <h2>🎒 Gepäck & Ausrüstung / Bagages & Équipement</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th><span class="flag">🇩🇪</span> Deutsch</th>
+                        <th><span class="flag">🇫🇷</span> Français</th>
+                        <th>🔊</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>der Koffer</td><td>la valise</td><td><button class="speak-btn" onclick="speak('la valise')">🔊</button></td></tr>
+                    <tr><td>der Rucksack</td><td>le sac à dos</td><td><button class="speak-btn" onclick="speak('le sac à dos')">🔊</button></td></tr>
+                    <tr><td>das Gepäck</td><td>les bagages (m)</td><td><button class="speak-btn" onclick="speak('les bagages')">🔊</button></td></tr>
+                    <tr><td>der Reisepass</td><td>le passeport</td><td><button class="speak-btn" onclick="speak('le passeport')">🔊</button></td></tr>
+                    <tr><td>der Personalausweis</td><td>la carte d'identité</td><td><button class="speak-btn" onclick="speak('la carte d\'identité')">🔊</button></td></tr>
+                    <tr><td>die Sonnenbrille</td><td>les lunettes de soleil (f)</td><td><button class="speak-btn" onclick="speak('les lunettes de soleil')">🔊</button></td></tr>
+                    <tr><td>die Sonnencreme</td><td>la crème solaire</td><td><button class="speak-btn" onclick="speak('la crème solaire')">🔊</button></td></tr>
+                    <tr><td>die Landkarte</td><td>la carte</td><td><button class="speak-btn" onclick="speak('la carte')">🔊</button></td></tr>
+                    <tr><td>der Reiseführer</td><td>le guide de voyage</td><td><button class="speak-btn" onclick="speak('le guide de voyage')">🔊</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Kategorie 5: Aktivitäten & Verben -->
+        <div class="category">
+            <h2>🏄 Aktivitäten & Verben / Activités & Verbes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th><span class="flag">🇩🇪</span> Deutsch</th>
+                        <th><span class="flag">🇫🇷</span> Français</th>
+                        <th>🔊</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>reisen</td><td>voyager</td><td><button class="speak-btn" onclick="speak('voyager')">🔊</button></td></tr>
+                    <tr><td>fliegen</td><td>voler / prendre l'avion</td><td><button class="speak-btn" onclick="speak('prendre l\'avion')">🔊</button></td></tr>
+                    <tr><td>buchen</td><td>réserver</td><td><button class="speak-btn" onclick="speak('réserver')">🔊</button></td></tr>
+                    <tr><td>besichtigen</td><td>visiter</td><td><button class="speak-btn" onclick="speak('visiter')">🔊</button></td></tr>
+                    <tr><td>schwimmen</td><td>nager</td><td><button class="speak-btn" onclick="speak('nager')">🔊</button></td></tr>
+                    <tr><td>wandern</td><td>randonner</td><td><button class="speak-btn" onclick="speak('randonner')">🔊</button></td></tr>
+                    <tr><td>fotografieren</td><td>photographier</td><td><button class="speak-btn" onclick="speak('photographier')">🔊</button></td></tr>
+                    <tr><td>sich entspannen</td><td>se détendre</td><td><button class="speak-btn" onclick="speak('se détendre')">🔊</button></td></tr>
+                    <tr><td>entdecken</td><td>découvrir</td><td><button class="speak-btn" onclick="speak('découvrir')">🔊</button></td></tr>
+                    <tr><td>packen</td><td>faire les valises</td><td><button class="speak-btn" onclick="speak('faire les valises')">🔊</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Kategorie 6: Nützliche Ausdrücke -->
+        <div class="category">
+            <h2>💬 Nützliche Ausdrücke / Expressions utiles</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th><span class="flag">🇩🇪</span> Deutsch</th>
+                        <th><span class="flag">🇫🇷</span> Français</th>
+                        <th>🔊</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>der Urlaub</td><td>les vacances (f)</td><td><button class="speak-btn" onclick="speak('les vacances')">🔊</button></td></tr>
+                    <tr><td>die Reise</td><td>le voyage</td><td><button class="speak-btn" onclick="speak('le voyage')">🔊</button></td></tr>
+                    <tr><td>die Verspätung</td><td>le retard</td><td><button class="speak-btn" onclick="speak('le retard')">🔊</button></td></tr>
+                    <tr><td>der Ausflug</td><td>l'excursion (f)</td><td><button class="speak-btn" onclick="speak('l\'excursion')">🔊</button></td></tr>
+                    <tr><td>die Rundreise</td><td>le circuit</td><td><button class="speak-btn" onclick="speak('le circuit')">🔊</button></td></tr>
+                    <tr><td>das Andenken / Souvenir</td><td>le souvenir</td><td><button class="speak-btn" onclick="speak('le souvenir')">🔊</button></td></tr>
+                    <tr><td>die Postkarte</td><td>la carte postale</td><td><button class="speak-btn" onclick="speak('la carte postale')">🔊</button></td></tr>
+                    <tr><td>die Reiseversicherung</td><td>l'assurance voyage (f)</td><td><button class="speak-btn" onclick="speak('l\'assurance voyage')">🔊</button></td></tr>
+                    <tr><td>Gute Reise!</td><td>Bon voyage !</td><td><button class="speak-btn" onclick="speak('Bon voyage !')">🔊</button></td></tr>
+                    <tr><td>der Zoll</td><td>la douane</td><td><button class="speak-btn" onclick="speak('la douane')">🔊</button></td></tr>
+                    <tr><td>das Trinkgeld</td><td>le pourboire</td><td><button class="speak-btn" onclick="speak('le pourboire')">🔊</button></td></tr>
+                    <tr><td>der Wechselkurs</td><td>le taux de change</td><td><button class="speak-btn" onclick="speak('le taux de change')">🔊</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="word-count">📚 Insgesamt ca. 60 Vokabeln · Klicke auf 🔊, um die französische Aussprache zu hören</p>
+    </div>
+
+    <script>
+        function speak(text) {
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'fr-FR';
+            utterance.rate = 0.85;
+            utterance.pitch = 1;
+
+            // Try to find a French voice
+            const voices = window.speechSynthesis.getVoices();
+            const frenchVoice = voices.find(v => v.lang.startsWith('fr'));
+            if (frenchVoice) {
+                utterance.voice = frenchVoice;
+            }
+
+            // Find the button that was clicked and add animation
+            const buttons = document.querySelectorAll('.speak-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('onclick').includes(text.replace(/'/g, "\\'"))) {
+                    btn.classList.add('speaking');
+                    setTimeout(() => btn.classList.remove('speaking'), 800);
+                }
+            });
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Load voices (needed for some browsers)
+        window.speechSynthesis.onvoiceschanged = () => {
+            window.speechSynthesis.getVoices();
+        };
+    </script>
+</body>
+</html>
