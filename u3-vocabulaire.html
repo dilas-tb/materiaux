@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>L'école – Vokabelübersicht</title>
+<style>
+  :root {
+    --petrol: #1F6F78;
+    --petrol-light: #E6F1F2;
+    --bordeaux: #7B1E3A;
+    --bordeaux-light: #F4E4E9;
+    --white: #FFFFFF;
+    --text: #1a1a1a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: var(--white);
+    color: var(--text);
+    margin: 0;
+    padding: 2rem;
+    line-height: 1.5;
+  }
+  h1 {
+    color: var(--petrol);
+    border-bottom: 4px solid var(--bordeaux);
+    padding-bottom: 0.5rem;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  h2 {
+    color: var(--white);
+    background: var(--petrol);
+    padding: 0.6rem 1rem;
+    margin-top: 2.5rem;
+    border-left: 8px solid var(--bordeaux);
+    border-radius: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    background: var(--white);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  th {
+    background: var(--petrol);
+    color: var(--white);
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid var(--petrol-light);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td {
+    background: var(--petrol-light);
+  }
+  tr:hover td {
+    background: var(--bordeaux-light);
+  }
+  .fr-word {
+    font-weight: 600;
+    color: var(--bordeaux);
+  }
+  .example-fr {
+    color: var(--bordeaux);
+    font-style: italic;
+  }
+  .example-de {
+    color: var(--text);
+    display: block;
+    font-size: 0.92rem;
+  }
+  button.speak {
+    background: var(--bordeaux);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    margin-left: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    line-height: 1;
+    vertical-align: middle;
+    transition: background 0.2s, transform 0.1s;
+  }
+  button.speak:hover {
+    background: var(--petrol);
+    transform: scale(1.1);
+  }
+  button.speak:active { transform: scale(0.95); }
+  footer {
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    color: var(--petrol);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>L'école</h1>
+
+<!-- ============ UNITÉ 3A ============ -->
+<h2>Unité 3A</h2>
+<table>
+  <thead>
+    <tr><th>Deutsch</th><th>Französisch</th><th>Beispielsatz</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>eine Schule</td><td><span class="fr-word">une école</span><button class="speak" data-text="une école" title="Aussprache anhören">🔊</button></td><td><span class="example-fr">C'est une école.</span><span class="example-de">Das ist eine Schule.</span></td></tr>
+    <tr><td>eine Mittelschule</td><td><span class="fr-word">un collège</span><button class="speak" data-text="un collège">🔊</button></td><td><span class="example-fr">Je vais au collège.</span><span class="example-de">Ich gehe in die Mittelschule.</span></td></tr>
+    <tr><td>ein Gymnasium</td><td><span class="fr-word">un lycée</span><button class="speak" data-text="un lycée">🔊</button></td><td><span class="example-fr">Mon frère est au lycée.</span><span class="example-de">Mein Bruder ist am Gymnasium.</span></td></tr>
+    <tr><td>eine Schülerin</td><td><span class="fr-word">une élève</span><button class="speak" data-text="une élève">🔊</button></td><td><span class="example-fr">Léa est une élève.</span><span class="example-de">Léa ist eine Schülerin.</span></td></tr>
+    <tr><td>ein Schüler</td><td><span class="fr-word">un élève</span><button class="speak" data-text="un élève">🔊</button></td><td><span class="example-fr">Paul est un élève.</span><span class="example-de">Paul ist ein Schüler.</span></td></tr>
+    <tr><td>eine Lehrerin</td><td><span class="fr-word">une professeure</span><button class="speak" data-text="une professeure">🔊</button></td><td><span class="example-fr">Madame Martin est une professeure.</span><span class="example-de">Frau Martin ist eine Lehrerin.</span></td></tr>
+    <tr><td>ein Lehrer</td><td><span class="fr-word">un professeur</span><button class="speak" data-text="un professeur">🔊</button></td><td><span class="example-fr">Monsieur Dupont est un professeur.</span><span class="example-de">Herr Dupont ist ein Lehrer.</span></td></tr>
+    <tr><td>eine Direktorin</td><td><span class="fr-word">une directrice</span><button class="speak" data-text="une directrice">🔊</button></td><td><span class="example-fr">La directrice est sympa.</span><span class="example-de">Die Direktorin ist nett.</span></td></tr>
+    <tr><td>ein Direktor</td><td><span class="fr-word">un directeur</span><button class="speak" data-text="un directeur">🔊</button></td><td><span class="example-fr">Le directeur est là.</span><span class="example-de">Der Direktor ist da.</span></td></tr>
+    <tr><td>eine Klasse</td><td><span class="fr-word">une classe</span><button class="speak" data-text="une classe">🔊</button></td><td><span class="example-fr">Ma classe est grande.</span><span class="example-de">Meine Klasse ist groß.</span></td></tr>
+    <tr><td>in der Schule sein</td><td><span class="fr-word">être à l'école</span><button class="speak" data-text="être à l'école">🔊</button></td><td><span class="example-fr">Je suis à l'école.</span><span class="example-de">Ich bin in der Schule.</span></td></tr>
+    <tr><td>heute</td><td><span class="fr-word">aujourd'hui</span><button class="speak" data-text="aujourd'hui">🔊</button></td><td><span class="example-fr">Aujourd'hui, c'est lundi.</span><span class="example-de">Heute ist Montag.</span></td></tr>
+    <tr><td>ein Freund</td><td><span class="fr-word">un ami</span><button class="speak" data-text="un ami">🔊</button></td><td><span class="example-fr">Tom est un ami.</span><span class="example-de">Tom ist ein Freund.</span></td></tr>
+    <tr><td>eine Freundin</td><td><span class="fr-word">une amie</span><button class="speak" data-text="une amie">🔊</button></td><td><span class="example-fr">Julie est une amie.</span><span class="example-de">Julie ist eine Freundin.</span></td></tr>
+    <tr><td>ein Klassenzimmer</td><td><span class="fr-word">une salle de classe</span><button class="speak" data-text="une salle de classe">🔊</button></td><td><span class="example-fr">La salle de classe est claire.</span><span class="example-de">Das Klassenzimmer ist hell.</span></td></tr>
+    <tr><td>ein Schulhof</td><td><span class="fr-word">une cour</span><button class="speak" data-text="une cour">🔊</button></td><td><span class="example-fr">Les élèves sont dans la cour.</span><span class="example-de">Die Schüler sind auf dem Schulhof.</span></td></tr>
+    <tr><td>eine Turnhalle</td><td><span class="fr-word">un gymnase</span><button class="speak" data-text="un gymnase">🔊</button></td><td><span class="example-fr">Le gymnase est grand.</span><span class="example-de">Die Turnhalle ist groß.</span></td></tr>
+    <tr><td>eine Kantine</td><td><span class="fr-word">une cantine</span><button class="speak" data-text="une cantine">🔊</button></td><td><span class="example-fr">Je mange à la cantine.</span><span class="example-de">Ich esse in der Kantine.</span></td></tr>
+    <tr><td>eine Pause</td><td><span class="fr-word">une pause</span><button class="speak" data-text="une pause">🔊</button></td><td><span class="example-fr">On fait une pause.</span><span class="example-de">Wir machen eine Pause.</span></td></tr>
+    <tr><td>eine Cafeteria</td><td><span class="fr-word">une cafétéria</span><button class="speak" data-text="une cafétéria">🔊</button></td><td><span class="example-fr">La cafétéria est ouverte.</span><span class="example-de">Die Cafeteria ist geöffnet.</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ============ UNITÉ 3B ============ -->
+<h2>Unité 3B</h2>
+<table>
+  <thead>
+    <tr><th>Deutsch</th><th>Französisch</th><th>Beispielsatz</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>ein Tag</td><td><span class="fr-word">un jour</span><button class="speak" data-text="un jour">🔊</button></td><td><span class="example-fr">C'est un beau jour.</span><span class="example-de">Das ist ein schöner Tag.</span></td></tr>
+    <tr><td>eine Woche</td><td><span class="fr-word">une semaine</span><button class="speak" data-text="une semaine">🔊</button></td><td><span class="example-fr">La semaine commence.</span><span class="example-de">Die Woche beginnt.</span></td></tr>
+    <tr><td>ein Wochenende</td><td><span class="fr-word">un week-end</span><button class="speak" data-text="un week-end">🔊</button></td><td><span class="example-fr">Bon week-end !</span><span class="example-de">Schönes Wochenende!</span></td></tr>
+    <tr><td>Montag</td><td><span class="fr-word">lundi</span><button class="speak" data-text="lundi">🔊</button></td><td><span class="example-fr">Lundi, j'ai cours.</span><span class="example-de">Am Montag habe ich Unterricht.</span></td></tr>
+    <tr><td>Dienstag</td><td><span class="fr-word">mardi</span><button class="speak" data-text="mardi">🔊</button></td><td><span class="example-fr">Mardi, je fais du sport.</span><span class="example-de">Am Dienstag mache ich Sport.</span></td></tr>
+    <tr><td>Mittwoch</td><td><span class="fr-word">mercredi</span><button class="speak" data-text="mercredi">🔊</button></td><td><span class="example-fr">Mercredi, je suis libre.</span><span class="example-de">Am Mittwoch habe ich frei.</span></td></tr>
+    <tr><td>Donnerstag</td><td><span class="fr-word">jeudi</span><button class="speak" data-text="jeudi">🔊</button></td><td><span class="example-fr">Jeudi, j'ai anglais.</span><span class="example-de">Am Donnerstag habe ich Englisch.</span></td></tr>
+    <tr><td>Freitag</td><td><span class="fr-word">vendredi</span><button class="speak" data-text="vendredi">🔊</button></td><td><span class="example-fr">Vendredi, c'est le week-end !</span><span class="example-de">Freitag – dann kommt das Wochenende!</span></td></tr>
+    <tr><td>Samstag</td><td><span class="fr-word">samedi</span><button class="speak" data-text="samedi">🔊</button></td><td><span class="example-fr">Samedi, je joue au foot.</span><span class="example-de">Am Samstag spiele ich Fußball.</span></td></tr>
+    <tr><td>Sonntag</td><td><span class="fr-word">dimanche</span><button class="speak" data-text="dimanche">🔊</button></td><td><span class="example-fr">Dimanche, je me repose.</span><span class="example-de">Am Sonntag ruhe ich mich aus.</span></td></tr>
+    <tr><td>montags</td><td><span class="fr-word">le lundi</span><button class="speak" data-text="le lundi">🔊</button></td><td><span class="example-fr">Le lundi, j'ai maths.</span><span class="example-de">Montags habe ich Mathe.</span></td></tr>
+    <tr><td>der Unterricht</td><td><span class="fr-word">le cours</span><button class="speak" data-text="le cours">🔊</button></td><td><span class="example-fr">Le cours est intéressant.</span><span class="example-de">Der Unterricht ist interessant.</span></td></tr>
+    <tr><td>die Hausaufgaben</td><td><span class="fr-word">les devoirs</span><button class="speak" data-text="les devoirs">🔊</button></td><td><span class="example-fr">Je fais mes devoirs.</span><span class="example-de">Ich mache meine Hausaufgaben.</span></td></tr>
+    <tr><td>eine Stunde</td><td><span class="fr-word">une heure</span><button class="speak" data-text="une heure">🔊</button></td><td><span class="example-fr">J'attends une heure.</span><span class="example-de">Ich warte eine Stunde.</span></td></tr>
+    <tr><td>ein Buch</td><td><span class="fr-word">un livre</span><button class="speak" data-text="un livre">🔊</button></td><td><span class="example-fr">J'ai un livre de français.</span><span class="example-de">Ich habe ein Französischbuch.</span></td></tr>
+    <tr><td>ein Heft</td><td><span class="fr-word">un cahier</span><button class="speak" data-text="un cahier">🔊</button></td><td><span class="example-fr">Mon cahier est bleu.</span><span class="example-de">Mein Heft ist blau.</span></td></tr>
+    <tr><td>ein Stift</td><td><span class="fr-word">un stylo</span><button class="speak" data-text="un stylo">🔊</button></td><td><span class="example-fr">J'ai un stylo noir.</span><span class="example-de">Ich habe einen schwarzen Stift.</span></td></tr>
+    <tr><td>ein Tisch</td><td><span class="fr-word">une table</span><button class="speak" data-text="une table">🔊</button></td><td><span class="example-fr">Le livre est sur la table.</span><span class="example-de">Das Buch liegt auf dem Tisch.</span></td></tr>
+    <tr><td>ein Rucksack, eine Mappe</td><td><span class="fr-word">un sac</span><button class="speak" data-text="un sac">🔊</button></td><td><span class="example-fr">Mon sac est lourd.</span><span class="example-de">Mein Rucksack ist schwer.</span></td></tr>
+    <tr><td>der Stress</td><td><span class="fr-word">le stress</span><button class="speak" data-text="le stress">🔊</button></td><td><span class="example-fr">J'ai du stress.</span><span class="example-de">Ich habe Stress.</span></td></tr>
+    <tr><td>Ich habe …</td><td><span class="fr-word">J'ai …</span><button class="speak" data-text="J'ai">🔊</button></td><td><span class="example-fr">J'ai un chat.</span><span class="example-de">Ich habe eine Katze.</span></td></tr>
+    <tr><td>Ich habe Unterricht.</td><td><span class="fr-word">J'ai cours.</span><button class="speak" data-text="J'ai cours.">🔊</button></td><td><span class="example-fr">Aujourd'hui, j'ai cours.</span><span class="example-de">Heute habe ich Unterricht.</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ============ UNITÉ 3C ============ -->
+<h2>Unité 3C</h2>
+<table>
+  <thead>
+    <tr><th>Deutsch</th><th>Französisch</th><th>Beispielsatz</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Französisch</td><td><span class="fr-word">le français</span><button class="speak" data-text="le français">🔊</button></td><td><span class="example-fr">J'aime le français.</span><span class="example-de">Ich mag Französisch.</span></td></tr>
+    <tr><td>Deutsch</td><td><span class="fr-word">l'allemand</span><button class="speak" data-text="l'allemand">🔊</button></td><td><span class="example-fr">Je parle allemand.</span><span class="example-de">Ich spreche Deutsch.</span></td></tr>
+    <tr><td>Mathe</td><td><span class="fr-word">les maths</span><button class="speak" data-text="les maths">🔊</button></td><td><span class="example-fr">Les maths sont difficiles.</span><span class="example-de">Mathe ist schwierig.</span></td></tr>
+    <tr><td>Englisch</td><td><span class="fr-word">l'anglais</span><button class="speak" data-text="l'anglais">🔊</button></td><td><span class="example-fr">J'apprends l'anglais.</span><span class="example-de">Ich lerne Englisch.</span></td></tr>
+    <tr><td>Sport</td><td><span class="fr-word">l'EPS (éducation physique et sportive)</span><button class="speak" data-text="l'EPS">🔊</button></td><td><span class="example-fr">J'ai EPS le mardi.</span><span class="example-de">Ich habe dienstags Sport.</span></td></tr>
+    <tr><td>Kunst</td><td><span class="fr-word">les arts</span><button class="speak" data-text="les arts">🔊</button></td><td><span class="example-fr">J'adore les arts.</span><span class="example-de">Ich liebe Kunst.</span></td></tr>
+    <tr><td>Musik</td><td><span class="fr-word">la musique</span><button class="speak" data-text="la musique">🔊</button></td><td><span class="example-fr">La musique est super.</span><span class="example-de">Musik ist super.</span></td></tr>
+    <tr><td>Bio-Geographie-Gesundheit</td><td><span class="fr-word">les SVT (sciences de la vie et de la terre)</span><button class="speak" data-text="les SVT">🔊</button></td><td><span class="example-fr">Les SVT, c'est intéressant.</span><span class="example-de">Bio-Geo-Gesundheit ist interessant.</span></td></tr>
+    <tr><td>Geschichte-Geographie</td><td><span class="fr-word">l'histoire-géo</span><button class="speak" data-text="l'histoire-géo">🔊</button></td><td><span class="example-fr">J'aime l'histoire-géo.</span><span class="example-de">Ich mag Geschichte-Geographie.</span></td></tr>
+    <tr><td>Physik-Chemie</td><td><span class="fr-word">la physique-chimie</span><button class="speak" data-text="la physique-chimie">🔊</button></td><td><span class="example-fr">La physique-chimie est difficile.</span><span class="example-de">Physik-Chemie ist schwierig.</span></td></tr>
+    <tr><td>Informatik</td><td><span class="fr-word">la techno</span><button class="speak" data-text="la techno">🔊</button></td><td><span class="example-fr">J'ai techno le jeudi.</span><span class="example-de">Ich habe donnerstags Informatik.</span></td></tr>
+    <tr><td>ein Stundenplan</td><td><span class="fr-word">un emploi du temps</span><button class="speak" data-text="un emploi du temps">🔊</button></td><td><span class="example-fr">Voici mon emploi du temps.</span><span class="example-de">Hier ist mein Stundenplan.</span></td></tr>
+    <tr><td>ein Fach</td><td><span class="fr-word">une matière</span><button class="speak" data-text="une matière">🔊</button></td><td><span class="example-fr">C'est une matière facile.</span><span class="example-de">Das ist ein leichtes Fach.</span></td></tr>
+    <tr><td>ein Lieblingsfach</td><td><span class="fr-word">une matière préférée</span><button class="speak" data-text="une matière préférée">🔊</button></td><td><span class="example-fr">Ma matière préférée, c'est la musique.</span><span class="example-de">Mein Lieblingsfach ist Musik.</span></td></tr>
+    <tr><td>Wir haben …</td><td><span class="fr-word">Nous avons …</span><button class="speak" data-text="Nous avons">🔊</button></td><td><span class="example-fr">Nous avons maths.</span><span class="example-de">Wir haben Mathe.</span></td></tr>
+    <tr><td>Ich mag …</td><td><span class="fr-word">J'aime …</span><button class="speak" data-text="J'aime">🔊</button></td><td><span class="example-fr">J'aime la musique.</span><span class="example-de">Ich mag Musik.</span></td></tr>
+    <tr><td>mögen</td><td><span class="fr-word">aimer</span><button class="speak" data-text="aimer">🔊</button></td><td><span class="example-fr">J'aime aimer la vie.</span><span class="example-de">Ich mag es, das Leben zu mögen.</span></td></tr>
+    <tr><td>Ich mag … nicht.</td><td><span class="fr-word">Je n'aime pas …</span><button class="speak" data-text="Je n'aime pas">🔊</button></td><td><span class="example-fr">Je n'aime pas les maths.</span><span class="example-de">Ich mag Mathe nicht.</span></td></tr>
+    <tr><td>und</td><td><span class="fr-word">et</span><button class="speak" data-text="et">🔊</button></td><td><span class="example-fr">J'aime la musique et le sport.</span><span class="example-de">Ich mag Musik und Sport.</span></td></tr>
+    <tr><td>aber</td><td><span class="fr-word">mais</span><button class="speak" data-text="mais">🔊</button></td><td><span class="example-fr">J'aime le français, mais pas les maths.</span><span class="example-de">Ich mag Französisch, aber nicht Mathe.</span></td></tr>
+    <tr><td>nicht</td><td><span class="fr-word">ne … pas</span><button class="speak" data-text="ne pas">🔊</button></td><td><span class="example-fr">Je ne parle pas anglais.</span><span class="example-de">Ich spreche nicht Englisch.</span></td></tr>
+    <tr><td>lieben</td><td><span class="fr-word">adorer</span><button class="speak" data-text="adorer">🔊</button></td><td><span class="example-fr">J'adore le chocolat.</span><span class="example-de">Ich liebe Schokolade.</span></td></tr>
+    <tr><td>hassen</td><td><span class="fr-word">détester</span><button class="speak" data-text="détester">🔊</button></td><td><span class="example-fr">Je déteste le lundi.</span><span class="example-de">Ich hasse den Montag.</span></td></tr>
+  </tbody>
+</table>
+
+<footer>L'école – Vocabulaire Unité 3 · © Français en classe</footer>
+
+<script>
+  // Sprachausgabe für alle 🔊-Buttons
+  document.querySelectorAll('button.speak').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.getAttribute('data-text');
+      if (!text || !('speechSynthesis' in window)) {
+        alert('Dein Browser unterstützt keine Sprachausgabe.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'fr-FR';
+      utter.rate = 0.9;
+      // Bevorzugte französische Stimme wählen, falls vorhanden
+      const voices = window.speechSynthesis.getVoices();
+      const frVoice = voices.find(v => v.lang.startsWith('fr'));
+      if (frVoice) utter.voice = frVoice;
+      window.speechSynthesis.speak(utter);
+    });
+  });
+  // Stimmen initial laden (Chrome-Eigenheit)
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => {};
+  }
+</script>
+
+</body>
+</html>
