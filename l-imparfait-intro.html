@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>L'imparfait - Einführung</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background: #f0f4f8; color: #222; line-height: 1.6; }
+  header { background: linear-gradient(135deg, #002395, #ffffff, #ed2939); color: #000; padding: 20px; text-align: center; border-bottom: 3px solid #002395; }
+  header h1 { margin: 0; font-size: 2em; color: #002395; text-shadow: 1px 1px 2px #fff; }
+  nav { background: #002395; display: flex; justify-content: center; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; }
+  nav button { background: transparent; color: white; border: none; padding: 12px 20px; cursor: pointer; font-size: 1em; border-right: 1px solid #ffffff44; }
+  nav button:hover, nav button.active { background: #ed2939; }
+  main { max-width: 900px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 8px #0002; min-height: 60vh; }
+  section { display: none; }
+  section.active { display: block; animation: fade 0.4s; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  h2 { color: #002395; border-bottom: 2px solid #ed2939; padding-bottom: 6px; }
+  h3 { color: #ed2939; }
+  .box { background: #eaf0fb; border-left: 5px solid #002395; padding: 12px 18px; margin: 15px 0; border-radius: 4px; }
+  .example { font-style: italic; color: #333; background: #fff8dc; padding: 8px; border-radius: 4px; margin: 6px 0; }
+  .exercise { background: #f9f9f9; border: 1px solid #ccc; padding: 15px; margin: 15px 0; border-radius: 6px; }
+  .exercise p { margin: 8px 0; }
+  input[type="text"] { padding: 6px; font-size: 1em; border: 1px solid #aaa; border-radius: 4px; width: 140px; }
+  button.check { background: #002395; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+  button.check:hover { background: #ed2939; }
+  .feedback { margin-top: 10px; font-weight: bold; }
+  .correct { color: green; }
+  .wrong { color: #c00; }
+  .choice { display: inline-block; margin: 4px; padding: 6px 12px; background: #eaf0fb; border: 2px solid #002395; border-radius: 4px; cursor: pointer; }
+  .choice.selected { background: #002395; color: white; }
+  .choice.correct-ans { background: #6c6; color: white; border-color: #060; }
+  .choice.wrong-ans { background: #e88; color: white; border-color: #900; }
+  table { border-collapse: collapse; margin: 10px 0; width: 100%; }
+  th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
+  th { background: #002395; color: white; }
+  .stem { color: #ed2939; font-weight: bold; }
+  .ending { color: #002395; font-weight: bold; }
+  footer { background: #002395; color: white; padding: 15px 20px; margin-top: 30px; }
+  footer h4 { margin: 0 0 8px 0; color: #ffd700; }
+  footer ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 4px 15px; font-size: 0.9em; }
+  footer li::before { content: "▸ "; color: #ed2939; }
+  .tag { display: inline-block; background: #ed2939; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.85em; margin-right: 5px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>L'imparfait</h1>
+  <p>Die Vergangenheit entdecken — Schritt für Schritt</p>
+</header>
+
+<nav>
+  <button onclick="showSection(0, this)" class="active">1. Funktion</button>
+  <button onclick="showSection(1, this)">2. Übungen zur Funktion</button>
+  <button onclick="showSection(2, this)">3. Bildung</button>
+  <button onclick="showSection(3, this)">4. Übungen zur Bildung</button>
+  <button onclick="showSection(4, this)">5. Festigung</button>
+</nav>
+
+<main>
+
+<!-- SEKTION 1: FUNKTION -->
+<section class="active">
+  <h2>1. Wofür braucht man das imparfait?</h2>
+  <p>Das <strong>imparfait</strong> ist eine Zeitform der Vergangenheit. Man benutzt es in drei Fällen:</p>
+
+  <div class="box">
+    <h3><span class="tag">A</span> Beschreibungen in der Vergangenheit</h3>
+    <p>Wie war etwas früher? Personen, Orte, Gefühle, das Wetter...</p>
+    <div class="example">La maison <b>était</b> grande. — Das Haus <b>war</b> groß.</div>
+    <div class="example">Nous <b>avions</b> un chien. — Wir <b>hatten</b> einen Hund.</div>
+  </div>
+
+  <div class="box">
+    <h3><span class="tag">B</span> Gewohnheiten in der Vergangenheit</h3>
+    <p>Was hat man immer / oft / jeden Tag gemacht?</p>
+    <div class="example">Tous les jours, je <b>jouais</b> au foot. — Jeden Tag <b>spielte</b> ich Fußball.</div>
+    <div class="example">Le samedi, nous <b>allions</b> au parc. — Samstags <b>gingen</b> wir in den Park.</div>
+  </div>
+
+  <div class="box">
+    <h3><span class="tag">C</span> Gleichzeitige Handlungen in der Vergangenheit</h3>
+    <p>Zwei Dinge passierten zur selben Zeit.</p>
+    <div class="example">Je <b>travaillais</b> et mon frère <b>écoutait</b> la radio. — Ich <b>arbeitete</b> und mein Bruder <b>hörte</b> Radio.</div>
+  </div>
+
+  <p><b>Merke:</b> Beschreibung — Gewohnheit — Gleichzeitigkeit. Drei "G": <i>Gestalt, Gewohnheit, Gleichzeitig</i>.</p>
+</section>
+
+<!-- SEKTION 2: ÜBUNGEN ZUR FUNKTION -->
+<section>
+  <h2>2. Übungen: Welche Funktion?</h2>
+  <p>Klicke die passende Funktion an: <b>A</b> Beschreibung, <b>B</b> Gewohnheit, <b>C</b> Gleichzeitigkeit.</p>
+
+  <div class="exercise" id="ex-fn">
+    <p>1. « Quand j'étais petit, j'habitais à Paris. »</p>
+    <div>
+      <span class="choice" data-q="1" data-a="A">A Beschreibung</span>
+      <span class="choice" data-q="1" data-a="B">B Gewohnheit</span>
+      <span class="choice" data-q="1" data-a="C">C Gleichzeitigkeit</span>
+    </div>
+
+    <p>2. « Chaque matin, je parlais avec ma mère. »</p>
+    <div>
+      <span class="choice" data-q="2" data-a="A">A Beschreibung</span>
+      <span class="choice" data-q="2" data-a="B">B Gewohnheit</span>
+      <span class="choice" data-q="2" data-a="C">C Gleichzeitigkeit</span>
+    </div>
+
+    <p>3. « Paul jouait au foot et Marie écoutait de la musique. »</p>
+    <div>
+      <span class="choice" data-q="3" data-a="A">A Beschreibung</span>
+      <span class="choice" data-q="3" data-a="B">B Gewohnheit</span>
+      <span class="choice" data-q="3" data-a="C">C Gleichzeitigkeit</span>
+    </div>
+
+    <p>4. « La ville était petite et calme. »</p>
+    <div>
+      <span class="choice" data-q="4" data-a="A">A Beschreibung</span>
+      <span class="choice" data-q="4" data-a="B">B Gewohnheit</span>
+      <span class="choice" data-q="4" data-a="C">C Gleichzeitigkeit</span>
+    </div>
+
+    <p>5. « Le dimanche, nous allions chez mes grands-parents. »</p>
+    <div>
+      <span class="choice" data-q="5" data-a="A">A Beschreibung</span>
+      <span class="choice" data-q="5" data-a="B">B Gewohnheit</span>
+      <span class="choice" data-q="5" data-a="C">C Gleichzeitigkeit</span>
+    </div>
+  </div>
+</section>
+
+<!-- SEKTION 3: BILDUNG -->
+<section>
+  <h2>3. Die Bildung des imparfait — das Baukastenprinzip</h2>
+
+  <div class="box">
+    <h3>Schritt 1: Der Stamm</h3>
+    <p>Nimm die <b>nous-Form im Präsens</b> und streiche die Endung <b>-ons</b>.</p>
+    <table>
+      <tr><th>Verb</th><th>nous-Form (Präsens)</th><th>Stamm</th></tr>
+      <tr><td>parler</td><td>nous parl<b>ons</b></td><td class="stem">parl-</td></tr>
+      <tr><td>faire</td><td>nous fais<b>ons</b></td><td class="stem">fais-</td></tr>
+      <tr><td>aller</td><td>nous all<b>ons</b></td><td class="stem">all-</td></tr>
+      <tr><td>avoir</td><td>nous av<b>ons</b></td><td class="stem">av-</td></tr>
+    </table>
+  </div>
+
+  <div class="box">
+    <h3>Schritt 2: Die Endungen — IMMER gleich!</h3>
+    <table>
+      <tr><th>Person</th><th>Endung</th><th>Beispiel: parler</th></tr>
+      <tr><td>je</td><td class="ending">-ais</td><td><span class="stem">parl</span><span class="ending">ais</span></td></tr>
+      <tr><td>tu</td><td class="ending">-ais</td><td><span class="stem">parl</span><span class="ending">ais</span></td></tr>
+      <tr><td>il / elle / on</td><td class="ending">-ait</td><td><span class="stem">parl</span><span class="ending">ait</span></td></tr>
+      <tr><td>nous</td><td class="ending">-ions</td><td><span class="stem">parl</span><span class="ending">ions</span></td></tr>
+      <tr><td>vous</td><td class="ending">-iez</td><td><span class="stem">parl</span><span class="ending">iez</span></td></tr>
+      <tr><td>ils / elles</td><td class="ending">-aient</td><td><span class="stem">parl</span><span class="ending">aient</span></td></tr>
+    </table>
+    <p><b>Formel:</b> <span class="stem">Stamm</span> + <span class="ending">Endung</span> = imparfait ✔</p>
+  </div>
+
+  <div class="box" style="border-left-color:#ed2939; background:#fde8ec;">
+    <h3>⚠ Die einzige Ausnahme: être</h3>
+    <p>Der Stamm ist <span class="stem">ét-</span> (nicht aus der nous-Form!). Die Endungen sind gleich.</p>
+    <table>
+      <tr><td>j'étais</td><td>tu étais</td><td>il/elle était</td></tr>
+      <tr><td>nous étions</td><td>vous étiez</td><td>ils/elles étaient</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SEKTION 4: ÜBUNGEN ZUR BILDUNG -->
+<section>
+  <h2>4. Übungen zur Bildung</h2>
+
+  <div class="exercise">
+    <h3>Aufgabe 1: Finde den Stamm</h3>
+    <p>Schreibe den imparfait-Stamm (ohne Bindestrich).</p>
+    <p>a) travailler (nous travaillons) → <input type="text" id="s1"> <span class="feedback" id="f-s1"></span></p>
+    <p>b) chercher (nous cherchons) → <input type="text" id="s2"> <span class="feedback" id="f-s2"></span></p>
+    <p>c) habiter (nous habitons) → <input type="text" id="s3"> <span class="feedback" id="f-s3"></span></p>
+    <p>d) faire (nous faisons) → <input type="text" id="s4"> <span class="feedback" id="f-s4"></span></p>
+    <p>e) avoir (nous avons) → <input type="text" id="s5"> <span class="feedback" id="f-s5"></span></p>
+    <button class="check" onclick="checkStems()">Prüfen</button>
+  </div>
+
+  <div class="exercise">
+    <h3>Aufgabe 2: Setze die richtige Endung ein</h3>
+    <p>a) je parl<input type="text" id="e1" size="5"> <span class="feedback" id="f-e1"></span></p>
+    <p>b) nous jou<input type="text" id="e2" size="5"> <span class="feedback" id="f-e2"></span></p>
+    <p>c) ils all<input type="text" id="e3" size="5"> <span class="feedback" id="f-e3"></span></p>
+    <p>d) vous demand<input type="text" id="e4" size="5"> <span class="feedback" id="f-e4"></span></p>
+    <p>e) elle écout<input type="text" id="e5" size="5"> <span class="feedback" id="f-e5"></span></p>
+    <button class="check" onclick="checkEndings()">Prüfen</button>
+  </div>
+
+  <div class="exercise">
+    <h3>Aufgabe 3: Vollständige Formen bilden</h3>
+    <p>Schreibe die vollständige Form im imparfait (nur das Verb).</p>
+    <p>a) tu (jouer) → <input type="text" id="v1"></p>
+    <p>b) nous (habiter) → <input type="text" id="v2"></p>
+    <p>c) il (faire) → <input type="text" id="v3"></p>
+    <p>d) elles (avoir) → <input type="text" id="v4"></p>
+    <p>e) je (être) → <input type="text" id="v5"></p>
+    <p>f) vous (travailler) → <input type="text" id="v6"></p>
+    <button class="check" onclick="checkVerbs()">Prüfen</button>
+    <div class="feedback" id="f-verbs"></div>
+  </div>
+</section>
+
+<!-- SEKTION 5: FESTIGUNG -->
+<section>
+  <h2>5. Festigungsübungen</h2>
+
+  <div class="exercise">
+    <h3>Aufgabe 1: Formenerkennung — Ist das imparfait?</h3>
+    <p>Klicke: JA oder NEIN.</p>
+    <div id="rec-ex">
+      <p>1. <i>je travaillais</i>
+        <span class="choice" data-r="1" data-a="J">JA</span>
+        <span class="choice" data-r="1" data-a="N">NEIN</span>
+      </p>
+      <p>2. <i>nous avons</i>
+        <span class="choice" data-r="2" data-a="J">JA</span>
+        <span class="choice" data-r="2" data-a="N">NEIN</span>
+      </p>
+      <p>3. <i>elle était</i>
+        <span class="choice" data-r="3" data-a="J">JA</span>
+        <span class="choice" data-r="3" data-a="N">NEIN</span>
+      </p>
+      <p>4. <i>ils jouent</i>
+        <span class="choice" data-r="4" data-a="J">JA</span>
+        <span class="choice" data-r="4" data-a="N">NEIN</span>
+      </p>
+      <p>5. <i>vous alliez</i>
+        <span class="choice" data-r="5" data-a="J">JA</span>
+        <span class="choice" data-r="5" data-a="N">NEIN</span>
+      </p>
+      <p>6. <i>tu demandais</i>
+        <span class="choice" data-r="6" data-a="J">JA</span>
+        <span class="choice" data-r="6" data-a="N">NEIN</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <h3>Aufgabe 2: Lückentext — Setze das Verb in Klammern ins imparfait</h3>
+    <p>Quand j'<input type="text" id="l1"> (être) petit, j'<input type="text" id="l2"> (habiter) à Lyon.</p>
+    <p>Chaque samedi, mes parents <input type="text" id="l3"> (travailler) et moi, je <input type="text" id="l4"> (jouer) avec mon frère.</p>
+    <p>Nous <input type="text" id="l5"> (aller) au parc. Nous <input type="text" id="l6"> (avoir) un chien.</p>
+    <p>Mon frère <input type="text" id="l7"> (écouter) la radio et moi, je <input type="text" id="l8"> (parler) avec les amis.</p>
+    <button class="check" onclick="checkLueck()">Prüfen</button>
+    <div class="feedback" id="f-lueck"></div>
+  </div>
+
+  <div class="exercise">
+    <h3>Aufgabe 3: Übersetze ins Französische (imparfait)</h3>
+    <p>a) Ich war klein. → <input type="text" id="t1" style="width:250px"></p>
+    <p>b) Wir wohnten in Paris. → <input type="text" id="t2" style="width:250px"></p>
+    <p>c) Er spielte Fußball. → <input type="text" id="t3" style="width:250px"></p>
+    <p>d) Sie (pl.) machten ihre Hausaufgaben. → <input type="text" id="t4" style="width:280px"></p>
+    <p>e) Du fragtest deinen Freund. → <input type="text" id="t5" style="width:280px"></p>
+    <button class="check" onclick="checkTrans()">Prüfen</button>
+    <div class="feedback" id="f-trans"></div>
+  </div>
+
+  <div class="exercise">
+    <h3>Aufgabe 4: Freies Schreiben (mündlich/schriftlich)</h3>
+    <p>Schreibe 3–4 Sätze über dein Leben, als du 6 Jahre alt warst. Verwende mindestens <b>3 verschiedene Verben</b> der Wortliste im imparfait.</p>
+    <textarea style="width:100%; height:100px; font-size:1em;" placeholder="Quand j'avais 6 ans, ..."></textarea>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <h4>📚 Wortliste (Vokabeln für diese Stunde)</h4>
+  <ul>
+    <li><b>Verben:</b> être (sein), avoir (haben)</li>
+    <li>aller (gehen), faire (machen)</li>
+    <li>travailler (arbeiten), chercher (suchen)</li>
+    <li>habiter (wohnen), parler (sprechen)</li>
+    <li>jouer (spielen), écouter (hören)</li>
+    <li>demander (fragen)</li>
+    <li><b>Nomen:</b> la maison (Haus)</li>
+    <li>le chien (Hund), le parc (Park)</li>
+    <li>la ville (Stadt), le frère (Bruder)</li>
+    <li>la mère (Mutter), les parents (Eltern)</li>
+    <li>les grands-parents (Großeltern)</li>
+    <li>le foot (Fußball), la radio (Radio)</li>
+    <li>la musique (Musik), l'ami / les amis (Freund/e)</li>
+    <li>les devoirs (Hausaufgaben)</li>
+    <li>le matin (Morgen), le jour (Tag)</li>
+    <li>le samedi / le dimanche (Sa/So)</li>
+    <li><b>Adjektive:</b> petit (klein), grand (groß)</li>
+    <li>calme (ruhig)</li>
+    <li><b>Signalwörter:</b> quand (als), chaque (jeder)</li>
+    <li>tous les jours (jeden Tag), souvent (oft)</li>
+  </ul>
+</footer>
+
+<script>
+  // Navigation
+  const sections = document.querySelectorAll('main > section');
+  const navBtns = document.querySelectorAll('nav button');
+  function showSection(i, btn){
+    sections.forEach(s => s.classList.remove('active'));
+    sections[i].classList.add('active');
+    navBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // Sektion 2: Funktionsübung
+  const fnAnswers = {1:'A', 2:'B', 3:'C', 4:'A', 5:'B'};
+  document.querySelectorAll('#ex-fn .choice').forEach(c => {
+    c.addEventListener('click', () => {
+      const q = c.dataset.q, a = c.dataset.a;
+      const siblings = document.querySelectorAll(`#ex-fn .choice[data-q="${q}"]`);
+      siblings.forEach(s => { s.classList.remove('correct-ans','wrong-ans'); });
+      if(a === fnAnswers[q]){ c.classList.add('correct-ans'); }
+      else { c.classList.add('wrong-ans');
+        siblings.forEach(s => { if(s.dataset.a === fnAnswers[q]) s.classList.add('correct-ans'); });
+      }
+    });
+  });
+
+  // Sektion 5: Formenerkennung
+  const recAnswers = {1:'J',2:'N',3:'J',4:'N',5:'J',6:'J'};
+  document.querySelectorAll('#rec-ex .choice').forEach(c => {
+    c.addEventListener('click', () => {
+      const r = c.dataset.r, a = c.dataset.a;
+      const sibs = document.querySelectorAll(`#rec-ex .choice[data-r="${r}"]`);
+      sibs.forEach(s => s.classList.remove('correct-ans','wrong-ans'));
+      if(a === recAnswers[r]) c.classList.add('correct-ans');
+      else { c.classList.add('wrong-ans');
+        sibs.forEach(s => { if(s.dataset.a === recAnswers[r]) s.classList.add('correct-ans'); });
+      }
+    });
+  });
+
+  // Hilfsfunktion
+  function check(id, correct, fbId){
+    const val = document.getElementById(id).value.trim().toLowerCase().replace(/['']/g,"'");
+    const fb = document.getElementById(fbId);
+    if(Array.isArray(correct) ? correct.includes(val) : val === correct){
+      fb.textContent = '✔'; fb.className = 'feedback correct'; return true;
+    } else {
+      fb.textContent = '✘ richtig: ' + (Array.isArray(correct) ? correct[0] : correct);
+      fb.className = 'feedback wrong'; return false;
+    }
+  }
+
+  function checkStems(){
+    check('s1','travaill','f-s1');
+    check('s2','cherch','f-s2');
+    check('s3','habit','f-s3');
+    check('s4','fais','f-s4');
+    check('s5','av','f-s5');
+  }
+  function checkEndings(){
+    check('e1','ais','f-e1');
+    check('e2','ions','f-e2');
+    check('e3','aient','f-e3');
+    check('e4','iez','f-e4');
+    check('e5','ait','f-e5');
+  }
+  function checkVerbs(){
+    const answers = {
+      v1:'jouais', v2:'habitions', v3:'faisait',
+      v4:'avaient', v5:['étais',"j'étais"], v6:'travailliez'
+    };
+    let ok = 0, total = 6;
+    for(const id in answers){
+      const val = document.getElementById(id).value.trim().toLowerCase();
+      const c = answers[id];
+      const match = Array.isArray(c) ? c.includes(val) : val === c;
+      document.getElementById(id).style.background = match ? '#cfc' : '#fcc';
+      if(match) ok++;
+    }
+    document.getElementById('f-verbs').textContent = `${ok}/${total} richtig.`;
+    document.getElementById('f-verbs').className = 'feedback ' + (ok===total?'correct':'wrong');
+  }
+  function checkLueck(){
+    const ans = {
+      l1:'étais', l2:'habitais', l3:'travaillaient', l4:'jouais',
+      l5:'allions', l6:'avions', l7:'écoutait', l8:'parlais'
+    };
+    let ok = 0, total = 8;
+    for(const id in ans){
+      const val = document.getElementById(id).value.trim().toLowerCase();
+      const match = val === ans[id];
+      document.getElementById(id).style.background = match ? '#cfc' : '#fcc';
+      if(match) ok++;
+    }
+    const fb = document.getElementById('f-lueck');
+    fb.textContent = `${ok}/${total} richtig.`;
+    fb.className = 'feedback ' + (ok===total?'correct':'wrong');
+  }
+  function checkTrans(){
+    const ans = {
+      t1: ["j'étais petit","j'étais petite"],
+      t2: ["nous habitions à paris"],
+      t3: ["il jouait au foot"],
+      t4: ["elles faisaient leurs devoirs","ils faisaient leurs devoirs"],
+      t5: ["tu demandais à ton ami","tu demandais ton ami"]
+    };
+    let ok = 0, total = 5;
+    for(const id in ans){
+      const val = document.getElementById(id).value.trim().toLowerCase().replace(/['']/g,"'").replace(/\s+/g,' ');
+      const match = ans[id].includes(val);
+      document.getElementById(id).style.background = match ? '#cfc' : '#fcc';
+      if(match) ok++;
+    }
+    const fb = document.getElementById('f-trans');
+    fb.textContent = `${ok}/${total} richtig. (Musterlösungen: j'étais petit(e) / nous habitions à Paris / il jouait au foot / elles faisaient leurs devoirs / tu demandais à ton ami)`;
+    fb.className = 'feedback ' + (ok===total?'correct':'wrong');
+  }
+</script>
+
+</body>
+</html>
