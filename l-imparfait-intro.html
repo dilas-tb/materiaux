@@ -85,7 +85,7 @@
     <div class="example">Je <b>travaillais</b> et mon frère <b>écoutait</b> la radio. — Ich <b>arbeitete</b> und mein Bruder <b>hörte</b> Radio.</div>
   </div>
 
-  <p><b>Merke:</b> Beschreibung — Gewohnheit — Gleichzeitigkeit. Drei "G": <i>Gestalt, Gewohnheit, Gleichzeitig</i>.</p>
+  <p><b>Merke:</b> Beschreibung — Gewohnheit — Gleichzeitigkeit.</p>
 </section>
 
 <!-- SEKTION 2: ÜBUNGEN ZUR FUNKTION -->
@@ -94,7 +94,7 @@
   <p>Klicke die passende Funktion an: <b>A</b> Beschreibung, <b>B</b> Gewohnheit, <b>C</b> Gleichzeitigkeit.</p>
 
   <div class="exercise" id="ex-fn">
-    <p>1. « Quand j'étais petit, j'habitais à Paris. »</p>
+    <p>1. « Quand j'étais petit, j'ai été en France. »</p>
     <div>
       <span class="choice" data-q="1" data-a="A">A Beschreibung</span>
       <span class="choice" data-q="1" data-a="B">B Gewohnheit</span>
@@ -203,7 +203,7 @@
     <p>b) nous (habiter) → <input type="text" id="v2"></p>
     <p>c) il (faire) → <input type="text" id="v3"></p>
     <p>d) elles (avoir) → <input type="text" id="v4"></p>
-    <p>e) je (être) → <input type="text" id="v5"></p>
+    <p>e) j' (être) → <input type="text" id="v5"></p>
     <p>f) vous (travailler) → <input type="text" id="v6"></p>
     <button class="check" onclick="checkVerbs()">Prüfen</button>
     <div class="feedback" id="f-verbs"></div>
@@ -264,12 +264,6 @@
     <p>e) Du fragtest deinen Freund. → <input type="text" id="t5" style="width:280px"></p>
     <button class="check" onclick="checkTrans()">Prüfen</button>
     <div class="feedback" id="f-trans"></div>
-  </div>
-
-  <div class="exercise">
-    <h3>Aufgabe 4: Freies Schreiben (mündlich/schriftlich)</h3>
-    <p>Schreibe 3–4 Sätze über dein Leben, als du 6 Jahre alt warst. Verwende mindestens <b>3 verschiedene Verben</b> der Wortliste im imparfait.</p>
-    <textarea style="width:100%; height:100px; font-size:1em;" placeholder="Quand j'avais 6 ans, ..."></textarea>
   </div>
 </section>
 
@@ -401,11 +395,11 @@
   }
   function checkTrans(){
     const ans = {
-      t1: ["j'étais petit","j'étais petite"],
-      t2: ["nous habitions à paris"],
-      t3: ["il jouait au foot"],
-      t4: ["elles faisaient leurs devoirs","ils faisaient leurs devoirs"],
-      t5: ["tu demandais à ton ami","tu demandais ton ami"]
+      t1: ["J'étais petit.","J'étais petite."],
+      t2: ["Nous habitions à Paris."],
+      t3: ["Il jouait au foot."],
+      t4: ["Elles faisaient les devoirs.","Ils faisaient les devoirs."],
+      t5: ["Tu demandais à ton ami.","Tu demandais ton ami."]
     };
     let ok = 0, total = 5;
     for(const id in ans){
