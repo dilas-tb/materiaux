@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les verbes en -er</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #003399;
+            text-align: center;
+        }
+        ol {
+            line-height: 2.5;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .french {
+            font-weight: bold;
+            cursor: pointer;
+            color: #003399;
+        }
+        .french:hover {
+            text-decoration: underline;
+        }
+        .translation {
+            display: none;
+            font-style: italic;
+            color: #555;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Les verbes en -er</h1>
+    <p style="text-align:center; color: #555;">👆 Klicke auf einen Satz, um die Übersetzung zu sehen!</p>
+    <ol>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Je travaille à Paris.</span>
+            <span class="translation">Ich arbeite in Paris.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Tu travailles beaucoup.</span>
+            <span class="translation">Du arbeitest viel.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Il travaille dans un restaurant.</span>
+            <span class="translation">Er arbeitet in einem Restaurant.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Je cherche mon livre.</span>
+            <span class="translation">Ich suche mein Buch.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Elle cherche une boulangerie.</span>
+            <span class="translation">Sie sucht eine Bäckerei.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Nous cherchons un hôtel.</span>
+            <span class="translation">Wir suchen ein Hotel.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Je demande l'addition au serveur.</span>
+            <span class="translation">Ich bitte den Kellner um die Rechnung.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Il demande l'adresse à la fille.</span>
+            <span class="translation">Er fragt das Mädchen nach der Adresse.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Tu demandes un café au garçon.</span>
+            <span class="translation">Du bestellst beim Kellner einen Kaffee.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Le train arrive à huit heures.</span>
+            <span class="translation">Der Zug kommt um acht Uhr an.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Nous arrivons à l'école.</span>
+            <span class="translation">Wir kommen in der Schule an.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Elle arrive en bus.</span>
+            <span class="translation">Sie kommt mit dem Bus an.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Je trouve le musée très beau.</span>
+            <span class="translation">Ich finde das Museum sehr schön.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Tu trouves le livre intéressant.</span>
+            <span class="translation">Du findest das Buch interessant.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Il trouve un chat dans le jardin.</span>
+            <span class="translation">Er findet eine Katze im Garten.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">J'habite à Berlin.</span>
+            <span class="translation">Ich wohne in Berlin.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Nous habitons dans une grande maison.</span>
+            <span class="translation">Wir wohnen in einem großen Haus.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Elle habite près de l'école.</span>
+            <span class="translation">Sie wohnt in der Nähe der Schule.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Nous visitons le château.</span>
+            <span class="translation">Wir besichtigen das Schloss.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Ils visitent Paris en juillet.</span>
+            <span class="translation">Sie besuchen Paris im Juli.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Tu visites le musée avec ta famille.</span>
+            <span class="translation">Du besichtigst das Museum mit deiner Familie.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Je mange une pizza.</span>
+            <span class="translation">Ich esse eine Pizza.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Nous mangeons dans un restaurant.</span>
+            <span class="translation">Wir essen in einem Restaurant.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Il achète du pain à la boulangerie.</span>
+            <span class="translation">Er kauft Brot in der Bäckerei.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Elle achète une robe rouge.</span>
+            <span class="translation">Sie kauft ein rotes Kleid.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Je joue au football avec mes amis.</span>
+            <span class="translation">Ich spiele Fußball mit meinen Freunden.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Tu joues de la guitare.</span>
+            <span class="translation">Du spielst Gitarre.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">J'écoute de la musique.</span>
+            <span class="translation">Ich höre Musik.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Nous parlons français en classe.</span>
+            <span class="translation">Wir sprechen Französisch im Unterricht.</span>
+        </li>
+        <li>
+            <span class="french" onclick="toggleTranslation(this)">Il parle avec son ami.</span>
+            <span class="translation">Er spricht mit seinem Freund.</span>
+        </li>
+    </ol>
+
+    <script>
+        function toggleTranslation(element) {
+            const translation = element.nextElementSibling;
+            if (translation.style.display === "block") {
+                translation.style.display = "none";
+            } else {
+                translation.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
