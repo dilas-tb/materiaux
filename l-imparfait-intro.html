@@ -393,25 +393,30 @@
     fb.textContent = `${ok}/${total} richtig.`;
     fb.className = 'feedback ' + (ok===total?'correct':'wrong');
   }
-  function checkTrans(){
-    const ans = {
-      t1: ["J'étais petit.","J'étais petite."],
-      t2: ["Nous habitions à Paris."],
-      t3: ["Il jouait au foot."],
-      t4: ["Elles faisaient les devoirs.","Ils faisaient les devoirs."],
-      t5: ["Tu demandais à ton ami.","Tu demandais ton ami."]
-    };
-    let ok = 0, total = 5;
-    for(const id in ans){
-      const val = document.getElementById(id).value.trim().toLowerCase().replace(/['']/g,"'").replace(/\s+/g,' ');
-      const match = ans[id].includes(val);
-      document.getElementById(id).style.background = match ? '#cfc' : '#fcc';
-      if(match) ok++;
-    }
-    const fb = document.getElementById('f-trans');
-    fb.textContent = `${ok}/${total} richtig. (Musterlösungen: j'étais petit(e) / nous habitions à Paris / il jouait au foot / elles faisaient leurs devoirs / tu demandais à ton ami)`;
-    fb.className = 'feedback ' + (ok===total?'correct':'wrong');
+function checkTrans(){
+  const ans = {
+    t1: ["j'étais petit","j'étais petite"],
+    t2: ["nous habitions à paris"],
+    t3: ["il jouait au foot"],
+    t4: ["elles faisaient les devoirs","ils faisaient les devoirs"],
+    t5: ["tu demandais à ton ami","tu demandais ton ami"]
+  };
+  let ok = 0, total = 5;
+  for(const id in ans){
+    const val = document.getElementById(id).value
+      .trim()
+      .toLowerCase()
+      .replace(/['']/g,"'")
+      .replace(/[.!?]+$/,"")   // Punkt/Satzzeichen am Ende entfernen
+      .replace(/\s+/g,' ');
+    const match = ans[id].includes(val);
+    document.getElementById(id).style.background = match ? '#cfc' : '#fcc';
+    if(match) ok++;
   }
+  const fb = document.getElementById('f-trans');
+  fb.textContent = `${ok}/${total} richtig. (Musterlösungen: J'étais petit(e). / Nous habitions à Paris. / Il jouait au foot. / Elles faisaient les devoirs. / Tu demandais à ton ami.)`;
+  fb.className = 'feedback ' + (ok===total?'correct':'wrong');
+}
 </script>
 
 </body>
