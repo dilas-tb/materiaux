@@ -246,31 +246,31 @@ const speakerIcon = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
 </svg>`;
 
 const vocab = [
-    { fr: "quelqu'un (qn.)", de: "jemand (jmd.)", exFr: "", exDe: "keine Lernvokabel – Erklärung der Abkürzung qn.", abbrev: true },
-    { fr: "quelque chose (qc.)", de: "etwas (etw.)", exFr: "", exDe: "keine Lernvokabel – Erklärung der Abkürzung qc.", abbrev: true },
-    { fr: "aider qn.", de: "jmd. helfen", exFr: "J'aide Paul.", exDe: "Ich helfe Paul." },
-    { fr: "aimer qn. / qc.", de: "jmd. / etw. mögen", exFr: "Marie aime Laura.", exDe: "Marie mag Laura." },
-    { fr: "arriver à …", de: "in … ankommen", exFr: "Vous arrivez à Paris.", exDe: "Ihr kommt in Paris an." },
-    { fr: "chercher qc.", de: "etw. suchen", exFr: "Elle cherche un trésor.", exDe: "Sie sucht einen Schatz." },
-    { fr: "commencer qc.", de: "etw. beginnen", exFr: "Ils commencent le jeu.", exDe: "Sie beginnen das Spiel." },
-    { fr: "continuer qc.", de: "etw. weitermachen", exFr: "Elles continuent le jeu.", exDe: "Sie machen das Spiel weiter." },
-    { fr: "demander qc. à qn.", de: "jmd. etw. fragen", exFr: "Je demande un stylo à Marie.", exDe: "Ich frage Marie nach einem Stift." },
-    { fr: "donner qc. à qn.", de: "jmd. etw. geben", exFr: "Marie donne un stylo à moi.", exDe: "Marie gibt mir einen Stift." },
-    { fr: "écouter de la musique", de: "Musik hören", exFr: "Nous écoutons de la musique.", exDe: "Wir hören Musik." },
-    { fr: "habiter à …", de: "in … wohnen", exFr: "J'habite à Rostock.", exDe: "Ich wohne in Rostock." },
-    { fr: "jouer au foot", de: "Fußball spielen", exFr: "Marie joue au foot.", exDe: "Marie spielt Fußball." },
-    { fr: "jouer de la guitare", de: "Gitarre spielen", exFr: "Paul et Laura jouent de la guitare.", exDe: "Paul und Laura spielen Gitarre." },
-    { fr: "manger qc.", de: "etw. essen", exFr: "Tu manges un crêpe.", exDe: "Du isst einen Crêpe." },
-    { fr: "marcher", de: "gehen, laufen", exFr: "Vous marchez trop vite.", exDe: "Ihr lauft zu schnell." },
-    { fr: "montrer qc.", de: "etw. zeigen", exFr: "Elle montre le diagramme.", exDe: "Sie zeigt das Diagramm." },
-    { fr: "oublier qc.", de: "etw. vergessen", exFr: "Marie oublie l'anniv de Paul.", exDe: "Marie vergisst Pauls Geburtstag." },
-    { fr: "parler qc.", de: "etw. sprechen", exFr: "Paul parle allemand et français.", exDe: "Paul spricht Deutsch und Französisch." },
-    { fr: "penser qc.", de: "etw. denken", exFr: "Je pense donc je suis.", exDe: "Ich denke also bin ich." },
-    { fr: "porter qc.", de: "etw. tragen", exFr: "Elle porte une jupe rouge.", exDe: "Sie trägt ein rotes Kleid." },
-    { fr: "regarder qc.", de: "etw. anschauen", exFr: "Ils regardent le match de foot.", exDe: "Sie schauen das Fußballspiel." },
-    { fr: "travailler", de: "arbeiten", exFr: "Je travaille comme professeur.", exDe: "Ich arbeite als Lehrer." },
-    { fr: "trouver qc.", de: "etw. finden", exFr: "Laura trouve ça bien !", exDe: "Laura findet das gut." },
-    { fr: "visiter qc.", de: "etw. besichtigen", exFr: "Ils visitent le musée.", exDe: "Sie besuchen das Museum." },
+    { fr: "quelqu'un (qn.)", speak: "quelqu'un", de: "jemand (jmd.)", exFr: "", exDe: "keine Lernvokabel – Erklärung der Abkürzung qn.", abbrev: true },
+    { fr: "quelque chose (qc.)", speak: "quelque chose", de: "etwas (etw.)", exFr: "", exDe: "keine Lernvokabel – Erklärung der Abkürzung qc.", abbrev: true },
+    { fr: "aider qn.", speak: "aider", de: "jmd. helfen", exFr: "J'aide Paul.", exDe: "Ich helfe Paul." },
+    { fr: "aimer qn. / qc.", speak: "aimer", de: "jmd. / etw. mögen", exFr: "Marie aime Laura.", exDe: "Marie mag Laura." },
+    { fr: "arriver à …", speak: "arriver", de: "in … ankommen", exFr: "Vous arrivez à Paris.", exDe: "Ihr kommt in Paris an." },
+    { fr: "chercher qc.", speak: "chercher", de: "etw. suchen", exFr: "Elle cherche un trésor.", exDe: "Sie sucht einen Schatz." },
+    { fr: "commencer qc.", speak: "commencer", de: "etw. beginnen", exFr: "Ils commencent le jeu.", exDe: "Sie beginnen das Spiel." },
+    { fr: "continuer qc.", speak: "continuer", de: "etw. weitermachen", exFr: "Elles continuent le jeu.", exDe: "Sie machen das Spiel weiter." },
+    { fr: "demander qc. à qn.", speak: "demander", de: "jmd. etw. fragen", exFr: "Je demande un stylo à Marie.", exDe: "Ich frage Marie nach einem Stift." },
+    { fr: "donner qc. à qn.", speak: "donner", de: "jmd. etw. geben", exFr: "Marie donne un stylo à moi.", exDe: "Marie gibt mir einen Stift." },
+    { fr: "écouter de la musique", speak: "écouter de la musique", de: "Musik hören", exFr: "Nous écoutons de la musique.", exDe: "Wir hören Musik." },
+    { fr: "habiter à …", speak: "habiter", e: "in … wohnen", exFr: "J'habite à Rostock.", exDe: "Ich wohne in Rostock." },
+    { fr: "jouer au foot", speak: "jouer au foot", de: "Fußball spielen", exFr: "Marie joue au foot.", exDe: "Marie spielt Fußball." },
+    { fr: "jouer de la guitare", speak: "jouer de la guitare", de: "Gitarre spielen", exFr: "Paul et Laura jouent de la guitare.", exDe: "Paul und Laura spielen Gitarre." },
+    { fr: "manger qc.", speak: "manger", de: "etw. essen", exFr: "Tu manges un crêpe.", exDe: "Du isst einen Crêpe." },
+    { fr: "marcher", speak: "marcher", de: "gehen, laufen", exFr: "Vous marchez trop vite.", exDe: "Ihr lauft zu schnell." },
+    { fr: "montrer qc.", speak: "montrer", de: "etw. zeigen", exFr: "Elle montre le diagramme.", exDe: "Sie zeigt das Diagramm." },
+    { fr: "oublier qc.", speak: "oublier", de: "etw. vergessen", exFr: "Marie oublie l'anniv de Paul.", exDe: "Marie vergisst Pauls Geburtstag." },
+    { fr: "parler qc.", speak: "parler", de: "etw. sprechen", exFr: "Paul parle allemand et français.", exDe: "Paul spricht Deutsch und Französisch." },
+    { fr: "penser qc.", speak: "penser", de: "etw. denken", exFr: "Je pense donc je suis.", exDe: "Ich denke also bin ich." },
+    { fr: "porter qc.", speak: "porter", de: "etw. tragen", exFr: "Elle porte une jupe rouge.", exDe: "Sie trägt ein rotes Kleid." },
+    { fr: "regarder qc.", speak: "regarder", de: "etw. anschauen", exFr: "Ils regardent le match de foot.", exDe: "Sie schauen das Fußballspiel." },
+    { fr: "travailler", speak: "travailler", de: "arbeiten", exFr: "Je travaille comme professeur.", exDe: "Ich arbeite als Lehrer." },
+    { fr: "trouver qc.", speak: "trouver", de: "etw. finden", exFr: "Laura trouve ça bien !", exDe: "Laura findet das gut." },
+    { fr: "visiter qc.", speak: "visiter", de: "etw. besichtigen", exFr: "Ils visitent le musée.", exDe: "Sie besuchen das Museum." },
 ];
 
 function speak(text) {
@@ -316,7 +316,7 @@ vocab.forEach(item => {
     divFr.appendChild(spanFr);
 
     if (!item.abbrev) {
-        divFr.appendChild(makeBtn(item.fr));
+        divFr.appendChild(makeBtn(item.speak));
     }
     tdFr.appendChild(divFr);
 
