@@ -281,7 +281,7 @@ function speak(text) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "fr-FR";
-    utterance.rate = 0.9;
+    utterance.rate = 0.85;
 
     const voices = window.speechSynthesis.getVoices();
     const frVoice = voices.find(v => v.lang.startsWith("fr"));
