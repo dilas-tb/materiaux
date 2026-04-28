@@ -5,62 +5,166 @@
 <title>L'imparfait - Karteikarten</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg: #0f1115;
+    --bg-elev: #1a1d24;
+    --bg-elev-2: #232730;
+    --border: #2d323d;
+    --text: #e8eaed;
+    --text-dim: #9aa0a8;
+    --text-faint: #5f6570;
+    --accent: #7c9eff;
+    --accent-hover: #95b1ff;
+    --green: #4ade80;
+    --green-bg: rgba(74, 222, 128, 0.12);
+    --red: #f87171;
+    --red-bg: rgba(248, 113, 113, 0.12);
+  }
+  
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #1a1a1a;
-    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    background-image: 
+      radial-gradient(ellipse at top left, rgba(124, 158, 255, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.06), transparent 50%);
+    color: var(--text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 40px 20px;
+    -webkit-font-smoothing: antialiased;
   }
-  h1 { font-weight: 300; margin-bottom: 10px; font-size: 1.8em; }
-  .subtitle { color: #888; margin-bottom: 25px; font-size: 0.95em; }
   
-  .mode-selector, .start-screen, .end-screen {
-    background: #2a2a2a;
-    padding: 30px;
-    border-radius: 10px;
+  .header {
     text-align: center;
-    max-width: 500px;
+    margin-bottom: 40px;
+  }
+  h1 { 
+    font-weight: 600; 
+    font-size: 2.2em;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, #9aa0a8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+  .subtitle { 
+    color: var(--text-dim); 
+    font-size: 0.95em;
+    font-weight: 400;
+  }
+  
+  .panel {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    padding: 36px;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 520px;
     width: 100%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  }
+  .panel h2 {
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 1.3em;
+    letter-spacing: -0.01em;
+  }
+  .panel p {
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    font-size: 0.95em;
+    line-height: 1.5;
   }
   
   button {
-    background: #3a3a3a;
-    color: #e0e0e0;
-    border: 1px solid #555;
-    padding: 12px 24px;
-    border-radius: 6px;
-    font-size: 1em;
+    background: var(--bg-elev-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 0.95em;
+    font-weight: 500;
+    font-family: inherit;
     cursor: pointer;
-    margin: 8px;
-    transition: background 0.2s;
+    transition: all 0.15s ease;
   }
-  button:hover { background: #4a4a4a; }
-  button.primary { background: #4a6fa5; border-color: #4a6fa5; }
-  button.primary:hover { background: #5a7fb5; }
+  button:hover:not(:disabled) { 
+    background: #2d323d;
+    border-color: #3a4050;
+    transform: translateY(-1px);
+  }
+  button:active:not(:disabled) { transform: translateY(0); }
+  button:disabled { 
+    opacity: 0.4; 
+    cursor: not-allowed; 
+  }
   
-  .progress {
-    color: #888;
-    margin-bottom: 15px;
-    font-size: 0.9em;
+  .mode-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
+  button.primary { 
+    background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+    border: none;
+    color: white;
+    padding: 14px 24px;
+    font-size: 1em;
+    box-shadow: 0 4px 14px rgba(124, 158, 255, 0.25);
+  }
+  button.primary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(124, 158, 255, 0.35);
+    transform: translateY(-1px);
+  }
+  
+  .progress-bar {
+    width: 100%;
+    max-width: 480px;
+    height: 4px;
+    background: var(--bg-elev);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #a855f7);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 480px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    font-size: 0.85em;
+  }
+  .progress-info span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.green { background: var(--green); }
+  .dot.red { background: var(--red); }
+  .dot.blue { background: var(--accent); }
   
   .card-container {
-    perspective: 1200px;
+    perspective: 1500px;
     width: 100%;
-    max-width: 450px;
-    height: 280px;
-    margin-bottom: 20px;
+    max-width: 480px;
+    height: 320px;
+    margin-bottom: 24px;
   }
   .card {
     position: relative;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.6s;
+    transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
     cursor: pointer;
   }
   .card.flipped { transform: rotateY(180deg); }
@@ -71,117 +175,218 @@
     height: 100%;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    background: #2a2a2a;
-    border-radius: 12px;
+    background: linear-gradient(145deg, var(--bg-elev) 0%, var(--bg-elev-2) 100%);
+    border-radius: 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 25px;
-    border: 1px solid #3a3a3a;
+    padding: 32px;
+    border: 1px solid var(--border);
+    box-shadow: 
+      0 20px 50px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.04);
   }
   .card-back { transform: rotateY(180deg); }
   
+  .card-label {
+    position: absolute;
+    top: 18px;
+    left: 22px;
+    font-size: 0.72em;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+    font-weight: 600;
+  }
+  
   .card-main {
-    font-size: 2em;
-    font-weight: 300;
+    font-size: 2.3em;
+    font-weight: 500;
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
   }
   .card-sub {
-    font-size: 0.95em;
-    color: #888;
+    font-size: 1em;
+    color: var(--text-dim);
     font-style: italic;
+    font-weight: 400;
   }
   .hint {
     position: absolute;
-    bottom: 12px;
-    color: #555;
-    font-size: 0.75em;
+    bottom: 18px;
+    color: var(--text-faint);
+    font-size: 0.78em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hint-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--text-faint);
+    border-radius: 3px;
+    position: relative;
+  }
+  .hint-icon::after {
+    content: '↻';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
   }
   
   .speak-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: transparent;
-    border: 1px solid #555;
+    top: 14px;
+    right: 14px;
+    background: rgba(124, 158, 255, 0.1);
+    border: 1px solid rgba(124, 158, 255, 0.25);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     padding: 0;
-    margin: 0;
-    font-size: 1.2em;
+    font-size: 1.1em;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--accent);
+  }
+  .speak-btn:hover:not(:disabled) {
+    background: rgba(124, 158, 255, 0.18);
+    border-color: rgba(124, 158, 255, 0.4);
   }
   
   .answer-buttons {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     justify-content: center;
     width: 100%;
-    max-width: 450px;
+    max-width: 480px;
   }
   .answer-buttons button {
     flex: 1;
-    margin: 0;
+    padding: 14px 20px;
+    font-size: 0.95em;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
-  .knew { background: #2d5a3d; border-color: #2d5a3d; }
-  .knew:hover { background: #3d6a4d; }
-  .didnt-know { background: #5a2d2d; border-color: #5a2d2d; }
-  .didnt-know:hover { background: #6a3d3d; }
+  .knew { 
+    background: var(--green-bg); 
+    border-color: rgba(74, 222, 128, 0.3); 
+    color: var(--green);
+  }
+  .knew:hover:not(:disabled) { 
+    background: rgba(74, 222, 128, 0.2); 
+    border-color: rgba(74, 222, 128, 0.5);
+  }
+  .didnt-know { 
+    background: var(--red-bg); 
+    border-color: rgba(248, 113, 113, 0.3); 
+    color: var(--red);
+  }
+  .didnt-know:hover:not(:disabled) { 
+    background: rgba(248, 113, 113, 0.2); 
+    border-color: rgba(248, 113, 113, 0.5);
+  }
+  
+  .answer-hint {
+    color: var(--text-faint);
+    font-size: 0.82em;
+    margin-top: 14px;
+    text-align: center;
+    height: 18px;
+    transition: opacity 0.2s;
+  }
   
   .hidden { display: none !important; }
+  
+  .end-stats {
+    background: var(--bg-elev-2);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    font-size: 1.1em;
+  }
+  .stat-number {
+    font-size: 2.5em;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin-bottom: 4px;
+  }
 </style>
 </head>
 <body>
 
-<h1>L'imparfait</h1>
-<div class="subtitle">Karteikarten zum Üben</div>
+<div class="header">
+  <h1>L'imparfait</h1>
+  <div class="subtitle">Karteikarten zum Üben</div>
+</div>
 
-<div id="startScreen" class="start-screen">
-  <h2 style="font-weight:300; margin-bottom:20px;">Übungsrichtung wählen</h2>
-  <p style="color:#aaa; margin-bottom:20px; font-size:0.95em;">
-    Klicke auf eine Karte, um sie umzudrehen.
-  </p>
-  <button class="primary" onclick="startGame('toInfinitive')">Imparfait → Infinitiv</button><br>
-  <button class="primary" onclick="startGame('toImparfait')">Infinitiv + Pronomen → Imparfait</button>
+<div id="startScreen" class="panel">
+  <h2>Übungsrichtung wählen</h2>
+  <p>Klicke auf eine Karte, um sie umzudrehen. Bewerte dich anschließend selbst – falsche Karten kommen am Ende noch einmal dran.</p>
+  <div class="mode-buttons">
+    <button class="primary" onclick="startGame('toInfinitive')">Imparfait → Infinitiv</button>
+    <button class="primary" onclick="startGame('toImparfait')">Infinitiv + Pronomen → Imparfait</button>
+  </div>
 </div>
 
 <div id="gameScreen" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-  <div class="progress" id="progress"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-info">
+    <span><span class="dot blue"></span><span id="progRemaining">0</span> verbleibend</span>
+    <span><span class="dot green"></span><span id="progKnew">0</span> gewusst</span>
+    <span><span class="dot red"></span><span id="progRepeat">0</span> wiederholen</span>
+  </div>
+  
   <div class="card-container">
     <div class="card" id="card" onclick="flipCard()">
       <div class="card-face card-front">
+        <div class="card-label" id="frontLabel"></div>
         <button class="speak-btn hidden" id="speakFront" onclick="event.stopPropagation(); speak(currentSpeakText)">🔊</button>
         <div class="card-main" id="frontMain"></div>
         <div class="card-sub" id="frontSub"></div>
-        <div class="hint">Klicken zum Umdrehen</div>
+        <div class="hint"><span class="hint-icon"></span> Klicken zum Umdrehen</div>
       </div>
       <div class="card-face card-back">
+        <div class="card-label" id="backLabel"></div>
         <button class="speak-btn hidden" id="speakBack" onclick="event.stopPropagation(); speak(currentSpeakText)">🔊</button>
         <div class="card-main" id="backMain"></div>
         <div class="card-sub" id="backSub"></div>
-        <div class="hint">Klicken zum Umdrehen</div>
+        <div class="hint"><span class="hint-icon"></span> Klicken zum Umdrehen</div>
       </div>
     </div>
   </div>
+  
   <div class="answer-buttons">
-    <button class="knew" onclick="answer(true)">Wusste ich!</button>
-    <button class="didnt-know" onclick="answer(false)">Wusste ich nicht.</button>
+    <button class="didnt-know" id="btnDidntKnow" onclick="answer(false)" disabled>✗ Wusste ich nicht</button>
+    <button class="knew" id="btnKnew" onclick="answer(true)" disabled>✓ Wusste ich</button>
   </div>
+  <div class="answer-hint" id="answerHint">Drehe die Karte zuerst um</div>
 </div>
 
-<div id="endScreen" class="end-screen hidden">
-  <h2 style="font-weight:300; margin-bottom:20px;">Fertig! 🎉</h2>
-  <p id="endStats" style="color:#aaa; margin-bottom:20px;"></p>
+<div id="endScreen" class="panel hidden">
+  <h2>Geschafft! 🎉</h2>
+  <div class="end-stats">
+    <span class="stat-number" id="endStatNumber">0/0</span>
+    <span style="color: var(--text-dim); font-size: 0.9em;">Karten beim ersten Versuch gewusst</span>
+  </div>
   <button class="primary" onclick="location.reload()">Neu starten</button>
 </div>
 
 <script>
-// Verbliste: Infinitiv, deutsche Übersetzung, Stamm fürs Imparfait
 const verbs = [
   { inf: "regarder", de: "anschauen", stem: "regard" },
   { inf: "parler", de: "sprechen", stem: "parl" },
@@ -223,34 +428,21 @@ const pronouns = [
 function conjugate(verb, pronoun) {
   let stem = verb.stem;
   let end = pronoun.end;
-  // -ger Verben: "mange" + ais => mangeais (e bleibt vor a/o)
-  // bei nous/vous (ions/iez) entfällt das e nicht: mangions? Eigentlich: nous mangions (ohne e)
-  if (verb.isGer) {
-    if (pronoun.end.startsWith("i")) {
-      stem = stem.slice(0, -1); // entferne e
-    }
+  if (verb.isGer && pronoun.end.startsWith("i")) {
+    stem = stem.slice(0, -1);
   }
-  if (verb.isEtre) {
-    stem = "ét";
-  }
+  if (verb.isEtre) stem = "ét";
   let pr = pronoun.pr;
   let conjugated = stem + end;
-  // Elision je -> j' vor Vokal
   if (pronoun.elision && /^[aeiouéèêâîôûh]/i.test(conjugated)) {
-    pr = "j'";
-    return pr + conjugated;
+    return "j'" + conjugated;
   }
   return pr + " " + conjugated;
 }
 
-let mode;
-let queue = [];
-let didntKnow = [];
-let currentItem = null;
-let total = 0;
-let knewCount = 0;
-let isFlipped = false;
-let isAnimating = false;
+let mode, queue = [], didntKnow = [], currentItem = null;
+let total = 0, knewCount = 0, isFlipped = false, isAnimating = false;
+let hasBeenFlipped = false;
 let currentSpeakText = "";
 
 function shuffle(arr) {
@@ -263,10 +455,10 @@ function shuffle(arr) {
 
 function startGame(selectedMode) {
   mode = selectedMode;
-  queue = shuffle(verbs.map(v => {
-    const pronoun = pronouns[Math.floor(Math.random() * pronouns.length)];
-    return { verb: v, pronoun: pronoun };
-  }));
+  queue = shuffle(verbs.map(v => ({
+    verb: v,
+    pronoun: pronouns[Math.floor(Math.random() * pronouns.length)]
+  })));
   didntKnow = [];
   total = queue.length;
   knewCount = 0;
@@ -276,9 +468,20 @@ function startGame(selectedMode) {
 }
 
 function updateProgress() {
-  const remaining = queue.length;
-  document.getElementById('progress').textContent = 
-    `Verbleibend: ${remaining}  |  Gewusst: ${knewCount}  |  Wiederholen: ${didntKnow.length}`;
+  document.getElementById('progRemaining').textContent = queue.length;
+  document.getElementById('progKnew').textContent = knewCount;
+  document.getElementById('progRepeat').textContent = didntKnow.length;
+  const done = total - queue.length;
+  const pct = total > 0 ? (done / total) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function setAnswerButtonsEnabled(enabled) {
+  document.getElementById('btnKnew').disabled = !enabled;
+  document.getElementById('btnDidntKnow').disabled = !enabled;
+  const hint = document.getElementById('answerHint');
+  hint.textContent = enabled ? 'Wie gut wusstest du es?' : 'Drehe die Karte zuerst um';
+  hint.style.opacity = enabled ? '0.6' : '1';
 }
 
 function nextCard() {
@@ -293,10 +496,11 @@ function nextCard() {
   }
   currentItem = queue.shift();
   isFlipped = false;
-  const card = document.getElementById('card');
-  card.classList.remove('flipped');
+  hasBeenFlipped = false;
+  document.getElementById('card').classList.remove('flipped');
   loadCardContent();
   updateProgress();
+  setAnswerButtonsEnabled(false);
 }
 
 function loadCardContent() {
@@ -305,7 +509,8 @@ function loadCardContent() {
   const speakBack = document.getElementById('speakBack');
   
   if (mode === 'toInfinitive') {
-    // Front: konjugierte Form (mit Speak), Back: Infinitiv + Übersetzung
+    document.getElementById('frontLabel').textContent = 'Imparfait';
+    document.getElementById('backLabel').textContent = 'Infinitif';
     document.getElementById('frontMain').textContent = conjugated;
     document.getElementById('frontSub').textContent = "";
     document.getElementById('backMain').textContent = currentItem.verb.inf;
@@ -314,7 +519,8 @@ function loadCardContent() {
     speakBack.classList.add('hidden');
     currentSpeakText = conjugated;
   } else {
-    // Front: Infinitiv + Pronomen, Back: konjugierte Form (mit Speak)
+    document.getElementById('frontLabel').textContent = 'Infinitif';
+    document.getElementById('backLabel').textContent = 'Imparfait';
     document.getElementById('frontMain').textContent = 
       currentItem.verb.inf + " — " + currentItem.pronoun.pr;
     document.getElementById('frontSub').textContent = currentItem.verb.de;
@@ -331,15 +537,20 @@ function flipCard() {
   const card = document.getElementById('card');
   isFlipped = !isFlipped;
   card.classList.toggle('flipped');
+  if (!hasBeenFlipped) {
+    hasBeenFlipped = true;
+    // Buttons aktivieren, sobald die Animation durch ist
+    setTimeout(() => setAnswerButtonsEnabled(true), 350);
+  }
 }
 
 function answer(knew) {
-  if (isAnimating) return;
+  if (isAnimating || !hasBeenFlipped) return;
   if (knew) knewCount++;
   else didntKnow.push(currentItem);
   
-  // Wenn umgedreht, erst zurückdrehen, dann neue Karte laden
   isAnimating = true;
+  setAnswerButtonsEnabled(false);
   const card = document.getElementById('card');
   
   if (isFlipped) {
@@ -348,7 +559,7 @@ function answer(knew) {
     setTimeout(() => {
       isAnimating = false;
       nextCard();
-    }, 650);
+    }, 720);
   } else {
     setTimeout(() => {
       isAnimating = false;
@@ -360,8 +571,7 @@ function answer(knew) {
 function endGame() {
   document.getElementById('gameScreen').classList.add('hidden');
   document.getElementById('endScreen').classList.remove('hidden');
-  document.getElementById('endStats').textContent = 
-    `Du hast insgesamt ${knewCount} von ${total} Karten beim ersten Versuch gewusst.`;
+  document.getElementById('endStatNumber').textContent = `${knewCount}/${total}`;
 }
 
 function speak(text) {
