@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kreuzworträtsel – L'imparfait</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: #a0c4ff;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+  }
+
+  .layout {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* ── Grid ── */
+  .grid-wrapper {
+    overflow-x: auto;
+  }
+
+  #crossword-grid {
+    border-collapse: collapse;
+    display: block;
+  }
+
+  #crossword-grid td {
+    width: 38px;
+    height: 38px;
+    border: none;
+    padding: 0;
+    position: relative;
+  }
+
+  .cell-black {
+    background: #0d0d1a;
+  }
+
+  .cell-white {
+    background: #2a2a4a;
+    border: 1px solid #444;
+  }
+
+  .cell-white input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #e0e0e0;
+    font-size: 1.1rem;
+    text-align: center;
+    text-transform: lowercase;
+    caret-color: #a0c4ff;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 0;
+  }
+
+  .cell-white input.correct {
+    color: #69db7c;
+    background: rgba(105, 219, 124, 0.08);
+  }
+
+  .cell-white input.incorrect {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.08);
+  }
+
+  .cell-number {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    font-size: 0.5rem;
+    color: #a0c4ff;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Clues ── */
+  .clues {
+    min-width: 260px;
+    max-width: 340px;
+  }
+
+  .clues h2 {
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #a0c4ff;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+  }
+
+  .clue-section { margin-bottom: 22px; }
+
+  .clue-section h3 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .clue {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 0.83rem;
+    line-height: 1.4;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  .clue:hover { background: rgba(160,196,255,0.07); }
+  .clue.active { background: rgba(160,196,255,0.13); }
+
+  .clue-num {
+    color: #a0c4ff;
+    font-weight: 600;
+    min-width: 18px;
+  }
+
+  .clue-text { color: #ccc; }
+  .clue-text em { color: #a0c4ff; font-style: normal; }
+
+  /* ── Buttons ── */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    background: transparent;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 9px 22px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  button:hover {
+    border-color: #a0c4ff;
+    color: #a0c4ff;
+  }
+
+  button.primary {
+    border-color: #a0c4ff;
+    color: #a0c4ff;
+  }
+
+  button.primary:hover {
+    background: rgba(160,196,255,0.12);
+  }
+
+  /* ── Result ── */
+  #result-msg {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 0.9rem;
+    min-height: 24px;
+    color: #69db7c;
+    letter-spacing: 1px;
+  }
+
+  /* ── Highlight active word ── */
+  .cell-white.highlight input {
+    background: rgba(160,196,255,0.10);
+  }
+
+  .cell-white.highlight-active input {
+    background: rgba(160,196,255,0.22);
+  }
+</style>
+</head>
+<body>
+
+<h1>L'IMPARFAIT</h1>
+<p class="subtitle">Trage das konjugierte Verb im imparfait in die Kästchen ein.</p>
+
+<div class="layout">
+  <div class="grid-wrapper">
+    <table id="crossword-grid"></table>
+    <div class="btn-row">
+      <button class="primary" onclick="checkAll()">Überprüfen</button>
+      <button onclick="revealAll()">Lösung zeigen</button>
+      <button onclick="clearAll()">Löschen</button>
+    </div>
+    <div id="result-msg"></div>
+  </div>
+
+  <div class="clues">
+    <h2>Hinweise</h2>
+    <div class="clue-section">
+      <h3>→ Waagerecht</h3>
+      <div id="clues-across"></div>
+    </div>
+    <div class="clue-section">
+      <h3>↓ Senkrecht</h3>
+      <div id="clues-down"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  PUZZLE DATA
+//  Each entry: { id, clue, answer, row, col, dir }
+//  row/col are 0-based, dir: 'across' | 'down'
+// ─────────────────────────────────────────────
+const entries = [
+  // ACROSS
+  { id:  1, clue: "je + <em>être</em>",     answer: "jetais",      row:  0, col: 0,  dir: "across" },
+  { id:  3, clue: "ils + <em>avoir</em>",   answer: "ilsavaient",  row:  2, col: 0,  dir: "across" },
+  { id:  5, clue: "tu + <em>aller</em>",    answer: "tuallais",    row:  4, col: 0,  dir: "across" },
+  { id:  7, clue: "il + <em>faire</em>",    answer: "ilfaisait",   row:  6, col: 0,  dir: "across" },
+  { id:  9, clue: "nous + <em>voir</em>",   answer: "nousvoyions", row:  8, col: 0,  dir: "across" },
+  { id: 11, clue: "vous + <em>dire</em>",   answer: "vousdisiez",  row: 10, col: 0,  dir: "across" },
+  { id: 13, clue: "je + <em>savoir</em>",   answer: "jesavais",    row: 12, col: 0,  dir: "across" },
+  // DOWN
+  { id:  2, clue: "elle + <em>pouvoir</em>",  answer: "ellepouvait",  row: 0, col: 8,  dir: "down" },
+  { id:  4, clue: "tu + <em>vouloir</em>",    answer: "tuvoulais",    row: 2, col: 5,  dir: "down" },
+  { id:  6, clue: "nous + <em>venir</em>",    answer: "nousvenions",  row: 4, col: 2,  dir: "down" },
+  { id:  8, clue: "je + <em>prendre</em>",    answer: "jeprenais",    row: 6, col: 6,  dir: "down" },
+  { id: 10, clue: "ils + <em>devoir</em>",    answer: "ilsdevaient",  row: 8, col: 9,  dir: "down" },
+  { id: 12, clue: "elle + <em>écrire</em>",   answer: "elleecrivait", row:10, col: 3,  dir: "down" },
+  { id: 14, clue: "tu + <em>lire</em>",       answer: "tulisais",     row:12, col: 7,  dir: "down" },
+];
+
+// Pretty display labels for clues (pronoun + infinitive, spaces)
+const clueLabels = {
+   1: ["je",   "être"],
+   3: ["ils",  "avoir"],
+   5: ["tu",   "aller"],
+   7: ["il",   "faire"],
+   9: ["nous", "voir"],
+  11: ["vous", "dire"],
+  13: ["je",   "savoir"],
+   2: ["elle", "pouvoir"],
+   4: ["tu",   "vouloir"],
+   6: ["nous", "venir"],
+   8: ["je",   "prendre"],
+  10: ["ils",  "devoir"],
+  12: ["elle", "écrire"],
+  14: ["tu",   "lire"],
+};
+
+// The actual answers (just the conjugated form, no pronoun)
+const answers = {
+   1: "étais",
+   3: "avaient",
+   5: "allais",
+   7: "faisait",
+   9: "voyions",
+  11: "disiez",
+  13: "savais",
+   2: "pouvait",
+   4: "voulais",
+   6: "venions",
+   8: "prenais",
+  10: "devaient",
+  12: "écrivait",
+  14: "lisais",
+};
+
+// ─────────────────────────────────────────────
+//  BUILD GRID
+// ─────────────────────────────────────────────
+
+// Determine grid size from entries
+let maxRow = 0, maxCol = 0;
+entries.forEach(e => {
+  if (e.dir === "across") {
+    maxRow = Math.max(maxRow, e.row);
+    maxCol = Math.max(maxCol, e.col + e.answer.length - 1);
+  } else {
+    maxCol = Math.max(maxCol, e.col);
+    maxRow = Math.max(maxRow, e.row + e.answer.length - 1);
+  }
+});
+
+const ROWS = maxRow + 1;
+const COLS = maxCol + 1;
+
+// Grid data: null = black, else { entryIds: [], letter: '' }
+const gridData = Array.from({length: ROWS}, () => Array(COLS).fill(null));
+
+entries.forEach(e => {
+  for (let i = 0; i < e.answer.length; i++) {
+    const r = e.dir === "across" ? e.row : e.row + i;
+    const c = e.dir === "across" ? e.col + i : e.col;
+    if (!gridData[r][c]) gridData[r][c] = { entryIds: [], number: null };
+    gridData[r][c].entryIds.push(e.id);
+  }
+});
+
+// Assign numbers
+entries.forEach(e => {
+  const cell = gridData[e.row][e.col];
+  if (cell && cell.number === null) cell.number = e.id;
+});
+
+// Render table
+const table = document.getElementById("crossword-grid");
+for (let r = 0; r < ROWS; r++) {
+  const tr = document.createElement("tr");
+  for (let c = 0; c < COLS; c++) {
+    const td = document.createElement("td");
+    const cell = gridData[r][c];
+    if (!cell) {
+      td.className = "cell-black";
+    } else {
+      td.className = "cell-white";
+      td.dataset.row = r;
+      td.dataset.col = c;
+
+      if (cell.number !== null) {
+        const span = document.createElement("span");
+        span.className = "cell-number";
+        span.textContent = cell.number;
+        td.appendChild(span);
+      }
+
+      const input = document.createElement("input");
+      input.maxLength = 1;
+      input.dataset.row = r;
+      input.dataset.col = c;
+      input.setAttribute("autocomplete", "off");
+      input.setAttribute("spellcheck", "false");
+
+      input.addEventListener("input", onInput);
+      input.addEventListener("keydown", onKeyDown);
+      input.addEventListener("focus", onFocus);
+      td.appendChild(input);
+    }
+    tr.appendChild(td);
+  }
+  table.appendChild(tr);
+}
+
+// ─────────────────────────────────────────────
+//  NAVIGATION
+// ─────────────────────────────────────────────
+let currentDir = "across";
+let currentEntry = null;
+
+function getInput(r, c) {
+  return document.querySelector(`input[data-row="${r}"][data-col="${c}"]`);
+}
+function getTd(r, c) {
+  return document.querySelector(`td[data-row="${r}"][data-col="${c}"]`);
+}
+
+function onFocus(e) {
+  const r = +e.target.dataset.row;
+  const c = +e.target.dataset.col;
+  const cell = gridData[r][c];
+  if (!cell) return;
+
+  // Determine direction: prefer current, else pick available
+  const hasAcross = entries.find(en => en.dir === "across" && en.row === r && c >= en.col && c < en.col + en.answer.length);
+  const hasDown   = entries.find(en => en.dir === "down"   && en.col === c && r >= en.row && r < en.row + en.answer.length);
+
+  if (hasAcross && hasDown) {
+    // toggle on same cell click, keep currentDir
+  } else if (hasAcross) {
+    currentDir = "across";
+  } else if (hasDown) {
+    currentDir = "down";
+  }
+
+  highlightWord(r, c);
+}
+
+function highlightWord(r, c) {
+  // Clear all highlights
+  document.querySelectorAll(".cell-white").forEach(td => {
+    td.classList.remove("highlight", "highlight-active");
+  });
+
+  const entry = findEntryForCell(r, c, currentDir)
+             || findEntryForCell(r, c, currentDir === "across" ? "down" : "across");
+  if (!entry) return;
+  currentEntry = entry;
+
+  // Highlight word
+  for (let i = 0; i < entry.answer.length; i++) {
+    const er = entry.dir === "across" ? entry.row : entry.row + i;
+    const ec = entry.dir === "across" ? entry.col + i : entry.col;
+    const td = getTd(er, ec);
+    if (td) td.classList.add("highlight");
+  }
+  const activeTd = getTd(r, c);
+  if (activeTd) activeTd.classList.add("highlight-active");
+
+  // Highlight clue
+  document.querySelectorAll(".clue").forEach(cl => cl.classList.remove("active"));
+  const clueEl = document.querySelector(`.clue[data-id="${entry.id}"]`);
+  if (clueEl) {
+    clueEl.classList.add("active");
+    clueEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+}
+
+function findEntryForCell(r, c, dir) {
+  return entries.find(e => {
+    if (e.dir !== dir) return false;
+    if (dir === "across") return e.row === r && c >= e.col && c < e.col + e.answer.length;
+    return e.col === c && r >= e.row && r < e.row + e.answer.length;
+  });
+}
+
+function onInput(e) {
+  const input = e.target;
+  let val = input.value;
+
+  // Handle special French characters typed normally
+  val = val.replace(/[^a-zA-ZàâäéèêëîïôùûüçœæÀÂÄÉÈÊËÎÏÔÙÛÜÇŒÆ]/g, "");
+  if (val.length > 1) val = val.slice(-1);
+  input.value = val.toLowerCase();
+  input.classList.remove("correct", "incorrect");
+
+  if (val) {
+    moveForward(+input.dataset.row, +input.dataset.col);
+  }
+}
+
+function onKeyDown(e) {
+  const r = +e.target.dataset.row;
+  const c = +e.target.dataset.col;
+
+  if (e.key === "Backspace") {
+    if (!e.target.value) {
+      moveBackward(r, c);
+    } else {
+      e.target.value = "";
+      e.target.classList.remove("correct", "incorrect");
+    }
+    e.preventDefault();
+    return;
+  }
+  if (e.key === "ArrowRight") { tryMove(r, c+1, r, c); e.preventDefault(); }
+  if (e.key === "ArrowLeft")  { tryMove(r, c-1, r, c); e.preventDefault(); }
+  if (e.key === "ArrowDown")  { tryMove(r+1, c, r, c); e.preventDefault(); }
+  if (e.key === "ArrowUp")    { tryMove(r-1, c, r, c); e.preventDefault(); }
+  if (e.key === "Tab") {
+    e.preventDefault();
+    moveToNextEntry(e.shiftKey);
+  }
+}
+
+function tryMove(r, c, fromR, fromC) {
+  if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
+  if (!gridData[r][c]) return;
+  const inp = getInput(r, c);
+  if (inp) inp.focus();
+}
+
+function moveForward(r, c) {
+  if (!currentEntry) return;
+  const e = currentEntry;
+  if (e.dir === "across") {
+    if (c + 1 < e.col + e.answer.length) tryMove(r, c+1, r, c);
+  } else {
+    if (r + 1 < e.row + e.answer.length) tryMove(r+1, c, r, c);
+  }
+}
+
+function moveBackward(r, c) {
+  if (!currentEntry) return;
+  const e = currentEntry;
+  if (e.dir === "across") {
+    if (c - 1 >= e.col) tryMove(r, c-1, r, c);
+  } else {
+    if (r - 1 >= e.row) tryMove(r-1, c, r, c);
+  }
+}
+
+function moveToNextEntry(reverse) {
+  const sorted = [...entries].sort((a,b) => a.id - b.id);
+  const idx = currentEntry ? sorted.findIndex(e => e.id === currentEntry.id) : -1;
+  const next = reverse ? sorted[(idx - 1 + sorted.length) % sorted.length]
+                       : sorted[(idx + 1) % sorted.length];
+  if (next) {
+    currentDir = next.dir;
+    const inp = getInput(next.row, next.col);
+    if (inp) inp.focus();
+  }
+}
+
+// ─────────────────────────────────────────────
+//  CLUES
+// ─────────────────────────────────────────────
+function buildClues() {
+  const acrossDiv = document.getElementById("clues-across");
+  const downDiv   = document.getElementById("clues-down");
+
+  entries.filter(e => e.dir === "across").sort((a,b) => a.id - b.id).forEach(e => {
+    acrossDiv.appendChild(makeClueEl(e));
+  });
+  entries.filter(e => e.dir === "down").sort((a,b) => a.id - b.id).forEach(e => {
+    downDiv.appendChild(makeClueEl(e));
+  });
+}
+
+function makeClueEl(e) {
+  const [pron, inf] = clueLabels[e.id];
+  const div = document.createElement("div");
+  div.className = "clue";
+  div.dataset.id = e.id;
+  div.innerHTML = `<span class="clue-num">${e.id}</span><span class="clue-text">${pron} + <em>${inf}</em></span>`;
+  div.addEventListener("click", () => {
+    currentDir = e.dir;
+    const inp = getInput(e.row, e.col);
+    if (inp) inp.focus();
+  });
+  return div;
+}
+
+// ─────────────────────────────────────────────
+//  CHECK / REVEAL / CLEAR
+// ─────────────────────────────────────────────
+function checkAll() {
+  let correct = 0, total = 0;
+  entries.forEach(e => {
+    const ans = answers[e.id];
+    for (let i = 0; i < ans.length; i++) {
+      const r = e.dir === "across" ? e.row : e.row + i;
+      const c = e.dir === "across" ? e.col + i : e.col;
+      const inp = getInput(r, c);
+      if (!inp) continue;
+      // A cell may be shared; only check once per cell
+      if (inp.dataset.checked) continue;
+      inp.dataset.checked = "1";
+      total++;
+      const expected = ans[i].toLowerCase();
+      const actual   = inp.value.toLowerCase();
+      if (actual === expected) {
+        inp.classList.add("correct");
+        inp.classList.remove("incorrect");
+        correct++;
+      } else if (actual !== "") {
+        inp.classList.add("incorrect");
+        inp.classList.remove("correct");
+      }
+    }
+  });
+  // clear temp flag
+  document.querySelectorAll("input").forEach(i => delete i.dataset.checked);
+
+  const msg = document.getElementById("result-msg");
+  if (correct === total) {
+    msg.style.color = "#69db7c";
+    msg.textContent = "✓ Alles richtig! Félicitations !";
+  } else {
+    msg.style.color = "#ffd43b";
+    msg.textContent = `${correct} von ${total} Buchstaben korrekt.`;
+  }
+}
+
+function revealAll() {
+  entries.forEach(e => {
+    const ans = answers[e.id];
+    for (let i = 0; i < ans.length; i++) {
+      const r = e.dir === "across" ? e.row : e.row + i;
+      const c = e.dir === "across" ? e.col + i : e.col;
+      const inp = getInput(r, c);
+      if (inp) {
+        inp.value = ans[i].toLowerCase();
+        inp.classList.add("correct");
+        inp.classList.remove("incorrect");
+      }
+    }
+  });
+  document.getElementById("result-msg").style.color = "#a0c4ff";
+  document.getElementById("result-msg").textContent = "Lösung eingetragen.";
+}
+
+function clearAll() {
+  document.querySelectorAll("input").forEach(inp => {
+    inp.value = "";
+    inp.classList.remove("correct", "incorrect");
+  });
+  document.getElementById("result-msg").textContent = "";
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+buildClues();
+</script>
+</body>
+</html>
