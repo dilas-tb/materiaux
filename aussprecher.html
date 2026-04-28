@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Französisch Aussprache-Trainer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  header {
+    grid-column: 1 / -1;
+    background: #006d77;
+    color: white;
+    padding: 2rem;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+  .left {
+    background: white;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .right {
+    background: #8b1e3f;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    color: white;
+  }
+  label {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+  textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border: 3px solid #006d77;
+    font-size: 1.2rem;
+    resize: vertical;
+    outline: none;
+    font-family: inherit;
+  }
+  textarea:focus { border-color: #8b1e3f; }
+  button {
+    background: #8b1e3f;
+    color: white;
+    border: none;
+    padding: 1.2rem;
+    font-size: 1.3rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background 0.2s;
+  }
+  button:hover { background: #6e1832; }
+  button:disabled { background: #aaa; cursor: not-allowed; }
+  .stop-btn { background: #006d77; }
+  .stop-btn:hover { background: #00525a; }
+  input[type="range"] {
+    width: 100%;
+    accent-color: white;
+    height: 8px;
+  }
+  .speed-display {
+    font-size: 2.5rem;
+    font-weight: 300;
+    text-align: center;
+  }
+  .info {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+  <header>Aussprache-Trainer · Français</header>
+
+  <section class="left">
+    <label for="text">Wort oder Satz eingeben:</label>
+    <textarea id="text" placeholder="z.B. Bonjour, comment allez-vous ?"></textarea>
+    <button id="speak">▶ Aussprechen</button>
+    <button id="stop" class="stop-btn">■ Stopp</button>
+  </section>
+
+  <section class="right">
+    <label for="speed">Lesegeschwindigkeit</label>
+    <div class="speed-display"><span id="speedVal">85</span>%</div>
+    <input type="range" id="speed" min="30" max="150" value="85" step="5">
+    <p class="info">Tipp: Beginne mit langsamem Tempo und steigere dich. Bei Bedarf kannst du einzelne Wörter wiederholen lassen.</p>
+  </section>
+
+<script>
+  const textEl = document.getElementById('text');
+  const speakBtn = document.getElementById('speak');
+  const stopBtn = document.getElementById('stop');
+  const speedEl = document.getElementById('speed');
+  const speedVal = document.getElementById('speedVal');
+
+  speedEl.addEventListener('input', () => speedVal.textContent = speedEl.value);
+
+  let frenchVoice = null;
+  function loadVoices() {
+    const voices = speechSynthesis.getVoices();
+    frenchVoice = voices.find(v => v.lang.startsWith('fr')) || null;
+  }
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+
+  speakBtn.addEventListener('click', () => {
+    const text = textEl.value.trim();
+    if (!text) return;
+    speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'fr-FR';
+    if (frenchVoice) utt.voice = frenchVoice;
+    utt.rate = speedEl.value / 100;
+    speechSynthesis.speak(utt);
+  });
+
+  stopBtn.addEventListener('click', () => speechSynthesis.cancel());
+</script>
+</body>
+</html>
