@@ -274,7 +274,7 @@
     if (!('speechSynthesis' in window)) { alert('Sprachausgabe nicht verfügbar.'); return; }
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'fr-FR'; u.rate = 0.9;
+    u.lang = 'fr-FR'; u.rate = 0.75;
     const v = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('fr'));
     if (v) u.voice = v;
     window.speechSynthesis.speak(u);
