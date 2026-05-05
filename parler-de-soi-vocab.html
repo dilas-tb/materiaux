@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Parler de soi - Über sich sprechen</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #fef9f3 0%, #f0f7ff 100%);
+    color: #2c3e50;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  header {
+    text-align: center;
+    background: #ffffff;
+    padding: 30px 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+  }
+  header h1 {
+    margin: 0;
+    color: #0055a4;
+    font-size: 2.2em;
+  }
+  header p { color: #555; margin-top: 8px; }
+  .flag {
+    display: inline-block;
+    width: 8px; height: 30px; vertical-align: middle;
+  }
+  .blue { background: #0055a4; }
+  .white { background: #fff; border-top:1px solid #ccc; border-bottom:1px solid #ccc;}
+  .red { background: #ef4135; }
+  section {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  section h2 {
+    color: #ef4135;
+    border-bottom: 3px solid #ffd9d6;
+    padding-bottom: 8px;
+    margin-top: 0;
+  }
+  section h3 {
+    color: #0055a4;
+    margin-top: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 8px;
+    border-bottom: 1px solid #eef2f6;
+    vertical-align: top;
+  }
+  th {
+    background: #f0f7ff;
+    color: #0055a4;
+  }
+  tr:hover td { background: #fafcff; }
+  .fr { font-weight: 600; color: #0055a4; }
+  .example { font-style: italic; color: #444; }
+  button.speak {
+    background: #0055a4;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.1s;
+    vertical-align: middle;
+  }
+  button.speak:hover { background: #ef4135; transform: scale(1.1); }
+  button.speak:active { transform: scale(0.95); }
+  footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.9em;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="flag blue"></span><span class="flag white"></span><span class="flag red"></span>
+  <h1>Parler de soi</h1>
+  <p>Über sich selbst sprechen – Satzanfänge, Vokabeln & Beispiele</p>
+</header>
+
+<section>
+  <h2>📝 Satzanfänge / Redemittel</h2>
+
+  <h3>Name</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr>
+      <td><span class="fr">Je m'appelle …</span><button class="speak" onclick="speak('Je m\'appelle Lucas.')">🔊</button></td>
+      <td>Ich heiße …</td>
+      <td class="example">Je m'appelle Lucas. <button class="speak" onclick="speak('Je m\'appelle Lucas.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Mon nom est …</span><button class="speak" onclick="speak('Mon nom est Dupont.')">🔊</button></td>
+      <td>Mein Name ist …</td>
+      <td class="example">Mon nom est Dupont. <button class="speak" onclick="speak('Mon nom est Dupont.')">🔊</button></td>
+    </tr>
+  </table>
+
+  <h3>Alter</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr>
+      <td><span class="fr">J'ai … ans.</span><button class="speak" onclick="speak('J\'ai quatorze ans.')">🔊</button></td>
+      <td>Ich bin … Jahre alt.</td>
+      <td class="example">J'ai quatorze ans. <button class="speak" onclick="speak('J\'ai quatorze ans.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Mon anniversaire est le …</span><button class="speak" onclick="speak('Mon anniversaire est le 5 mai.')">🔊</button></td>
+      <td>Mein Geburtstag ist am …</td>
+      <td class="example">Mon anniversaire est le 5 mai. <button class="speak" onclick="speak('Mon anniversaire est le cinq mai.')">🔊</button></td>
+    </tr>
+  </table>
+
+  <h3>Wohnort & Herkunft</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr>
+      <td><span class="fr">J'habite à …</span><button class="speak" onclick="speak('J\'habite à Berlin.')">🔊</button></td>
+      <td>Ich wohne in …</td>
+      <td class="example">J'habite à Berlin. <button class="speak" onclick="speak('J\'habite à Berlin.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Je viens de …</span><button class="speak" onclick="speak('Je viens d\'Allemagne.')">🔊</button></td>
+      <td>Ich komme aus …</td>
+      <td class="example">Je viens d'Allemagne. <button class="speak" onclick="speak('Je viens d\'Allemagne.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Je suis allemand(e).</span><button class="speak" onclick="speak('Je suis allemand.')">🔊</button></td>
+      <td>Ich bin Deutsche(r).</td>
+      <td class="example">Je suis allemande. <button class="speak" onclick="speak('Je suis allemande.')">🔊</button></td>
+    </tr>
+  </table>
+
+  <h3>Familie</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr>
+      <td><span class="fr">J'ai … frère(s) et … sœur(s).</span><button class="speak" onclick="speak('J\'ai un frère et deux sœurs.')">🔊</button></td>
+      <td>Ich habe … Bruder/Brüder und … Schwester(n).</td>
+      <td class="example">J'ai un frère et deux sœurs. <button class="speak" onclick="speak('J\'ai un frère et deux sœurs.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Je suis fils/fille unique.</span><button class="speak" onclick="speak('Je suis fille unique.')">🔊</button></td>
+      <td>Ich bin Einzelkind.</td>
+      <td class="example">Je suis fille unique. <button class="speak" onclick="speak('Je suis fille unique.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">J'ai un animal de compagnie.</span><button class="speak" onclick="speak('J\'ai un animal de compagnie.')">🔊</button></td>
+      <td>Ich habe ein Haustier.</td>
+      <td class="example">J'ai un chat qui s'appelle Minou. <button class="speak" onclick="speak('J\'ai un chat qui s\'appelle Minou.')">🔊</button></td>
+    </tr>
+  </table>
+
+  <h3>Aussehen</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr>
+      <td><span class="fr">J'ai les cheveux …</span><button class="speak" onclick="speak('J\'ai les cheveux blonds.')">🔊</button></td>
+      <td>Ich habe … Haare.</td>
+      <td class="example">J'ai les cheveux blonds et longs. <button class="speak" onclick="speak('J\'ai les cheveux blonds et longs.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">J'ai les yeux …</span><button class="speak" onclick="speak('J\'ai les yeux bleus.')">🔊</button></td>
+      <td>Ich habe … Augen.</td>
+      <td class="example">J'ai les yeux bleus. <button class="speak" onclick="speak('J\'ai les yeux bleus.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Je suis grand(e) / petit(e).</span><button class="speak" onclick="speak('Je suis grand.')">🔊</button></td>
+      <td>Ich bin groß / klein.</td>
+      <td class="example">Je suis assez grande. <button class="speak" onclick="speak('Je suis assez grande.')">🔊</button></td>
+    </tr>
+  </table>
+
+  <h3>Charakter</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr>
+      <td><span class="fr">Je suis …</span><button class="speak" onclick="speak('Je suis sympa.')">🔊</button></td>
+      <td>Ich bin …</td>
+      <td class="example">Je suis sympa et drôle. <button class="speak" onclick="speak('Je suis sympa et drôle.')">🔊</button></td>
+    </tr>
+  </table>
+
+  <h3>Hobbys & Vorlieben</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr>
+      <td><span class="fr">J'aime …</span><button class="speak" onclick="speak('J\'aime la musique.')">🔊</button></td>
+      <td>Ich mag …</td>
+      <td class="example">J'aime la musique et le sport. <button class="speak" onclick="speak('J\'aime la musique et le sport.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Je n'aime pas …</span><button class="speak" onclick="speak('Je n\'aime pas les maths.')">🔊</button></td>
+      <td>Ich mag … nicht.</td>
+      <td class="example">Je n'aime pas les maths. <button class="speak" onclick="speak('Je n\'aime pas les maths.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Mon hobby préféré est …</span><button class="speak" onclick="speak('Mon hobby préféré est le foot.')">🔊</button></td>
+      <td>Mein Lieblingshobby ist …</td>
+      <td class="example">Mon hobby préféré est le foot. <button class="speak" onclick="speak('Mon hobby préféré est le foot.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Je joue au / à la …</span><button class="speak" onclick="speak('Je joue au tennis.')">🔊</button></td>
+      <td>Ich spiele …</td>
+      <td class="example">Je joue au tennis le samedi. <button class="speak" onclick="speak('Je joue au tennis le samedi.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Je fais du / de la …</span><button class="speak" onclick="speak('Je fais du sport.')">🔊</button></td>
+      <td>Ich mache …</td>
+      <td class="example">Je fais de la danse. <button class="speak" onclick="speak('Je fais de la danse.')">🔊</button></td>
+    </tr>
+  </table>
+
+  <h3>Schule</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr>
+      <td><span class="fr">Je vais au collège / au lycée.</span><button class="speak" onclick="speak('Je vais au collège.')">🔊</button></td>
+      <td>Ich gehe auf die Mittel-/Oberstufe.</td>
+      <td class="example">Je vais au collège à Hambourg. <button class="speak" onclick="speak('Je vais au collège à Hambourg.')">🔊</button></td>
+    </tr>
+    <tr>
+      <td><span class="fr">Ma matière préférée est …</span><button class="speak" onclick="speak('Ma matière préférée est le français.')">🔊</button></td>
+      <td>Mein Lieblingsfach ist …</td>
+      <td class="example">Ma matière préférée est le français. <button class="speak" onclick="speak('Ma matière préférée est le français.')">🔊</button></td>
+    </tr>
+  </table>
+</section>
+
+<section>
+  <h2>📚 Nützliche Vokabeln</h2>
+
+  <h3>Körper & Aussehen</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr><td><span class="fr">les cheveux</span><button class="speak" onclick="speak('les cheveux')">🔊</button></td><td>die Haare</td><td class="example">J'ai les cheveux courts. <button class="speak" onclick="speak('J\'ai les cheveux courts.')">🔊</button></td></tr>
+    <tr><td><span class="fr">les yeux</span><button class="speak" onclick="speak('les yeux')">🔊</button></td><td>die Augen</td><td class="example">J'ai les yeux verts. <button class="speak" onclick="speak('J\'ai les yeux verts.')">🔊</button></td></tr>
+    <tr><td><span class="fr">long(s) / court(s)</span><button class="speak" onclick="speak('longs, courts')">🔊</button></td><td>lang / kurz</td><td class="example">J'ai les cheveux longs. <button class="speak" onclick="speak('J\'ai les cheveux longs.')">🔊</button></td></tr>
+    <tr><td><span class="fr">raide(s) / frisé(s)</span><button class="speak" onclick="speak('raides, frisés')">🔊</button></td><td>glatt / lockig</td><td class="example">J'ai les cheveux frisés. <button class="speak" onclick="speak('J\'ai les cheveux frisés.')">🔊</button></td></tr>
+    <tr><td><span class="fr">grand(e) / petit(e)</span><button class="speak" onclick="speak('grand, petit')">🔊</button></td><td>groß / klein</td><td class="example">Mon frère est petit. <button class="speak" onclick="speak('Mon frère est petit.')">🔊</button></td></tr>
+    <tr><td><span class="fr">mince</span><button class="speak" onclick="speak('mince')">🔊</button></td><td>schlank</td><td class="example">Ma sœur est mince. <button class="speak" onclick="speak('Ma sœur est mince.')">🔊</button></td></tr>
+  </table>
+
+  <h3>Farben</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr><td><span class="fr">blond(s)</span><button class="speak" onclick="speak('blond')">🔊</button></td><td>blond</td><td class="example">Elle a les cheveux blonds. <button class="speak" onclick="speak('Elle a les cheveux blonds.')">🔊</button></td></tr>
+    <tr><td><span class="fr">brun(s)</span><button class="speak" onclick="speak('brun')">🔊</button></td><td>braun (Haare)</td><td class="example">Il a les cheveux bruns. <button class="speak" onclick="speak('Il a les cheveux bruns.')">🔊</button></td></tr>
+    <tr><td><span class="fr">noir(s)</span><button class="speak" onclick="speak('noir')">🔊</button></td><td>schwarz</td><td class="example">J'ai les cheveux noirs. <button class="speak" onclick="speak('J\'ai les cheveux noirs.')">🔊</button></td></tr>
+    <tr><td><span class="fr">roux</span><button class="speak" onclick="speak('roux')">🔊</button></td><td>rot (Haare)</td><td class="example">Léa a les cheveux roux. <button class="speak" onclick="speak('Léa a les cheveux roux.')">🔊</button></td></tr>
+    <tr><td><span class="fr">bleu(s)</span><button class="speak" onclick="speak('bleu')">🔊</button></td><td>blau</td><td class="example">J'ai les yeux bleus. <button class="speak" onclick="speak('J\'ai les yeux bleus.')">🔊</button></td></tr>
+    <tr><td><span class="fr">vert(s)</span><button class="speak" onclick="speak('vert')">🔊</button></td><td>grün</td><td class="example">Il a les yeux verts. <button class="speak" onclick="speak('Il a les yeux verts.')">🔊</button></td></tr>
+    <tr><td><span class="fr">marron</span><button class="speak" onclick="speak('marron')">🔊</button></td><td>braun (Augen)</td><td class="example">J'ai les yeux marron. <button class="speak" onclick="speak('J\'ai les yeux marron.')">🔊</button></td></tr>
+    <tr><td><span class="fr">gris</span><button class="speak" onclick="speak('gris')">🔊</button></td><td>grau</td><td class="example">Elle a les yeux gris. <button class="speak" onclick="speak('Elle a les yeux gris.')">🔊</button></td></tr>
+  </table>
+
+  <h3>Charaktereigenschaften</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr><td><span class="fr">sympa</span><button class="speak" onclick="speak('sympa')">🔊</button></td><td>nett</td><td class="example">Mon ami est sympa. <button class="speak" onclick="speak('Mon ami est sympa.')">🔊</button></td></tr>
+    <tr><td><span class="fr">drôle</span><button class="speak" onclick="speak('drôle')">🔊</button></td><td>lustig</td><td class="example">Je suis drôle. <button class="speak" onclick="speak('Je suis drôle.')">🔊</button></td></tr>
+    <tr><td><span class="fr">gentil(le)</span><button class="speak" onclick="speak('gentil')">🔊</button></td><td>freundlich</td><td class="example">Ma mère est gentille. <button class="speak" onclick="speak('Ma mère est gentille.')">🔊</button></td></tr>
+    <tr><td><span class="fr">timide</span><button class="speak" onclick="speak('timide')">🔊</button></td><td>schüchtern</td><td class="example">Je suis un peu timide. <button class="speak" onclick="speak('Je suis un peu timide.')">🔊</button></td></tr>
+    <tr><td><span class="fr">bavard(e)</span><button class="speak" onclick="speak('bavard')">🔊</button></td><td>gesprächig</td><td class="example">Ma sœur est bavarde. <button class="speak" onclick="speak('Ma sœur est bavarde.')">🔊</button></td></tr>
+    <tr><td><span class="fr">sportif/sportive</span><button class="speak" onclick="speak('sportif')">🔊</button></td><td>sportlich</td><td class="example">Je suis très sportif. <button class="speak" onclick="speak('Je suis très sportif.')">🔊</button></td></tr>
+    <tr><td><span class="fr">paresseux/paresseuse</span><button class="speak" onclick="speak('paresseux')">🔊</button></td><td>faul</td><td class="example">Je suis parfois paresseux. <button class="speak" onclick="speak('Je suis parfois paresseux.')">🔊</button></td></tr>
+    <tr><td><span class="fr">intelligent(e)</span><button class="speak" onclick="speak('intelligent')">🔊</button></td><td>intelligent</td><td class="example">Mon frère est intelligent. <button class="speak" onclick="speak('Mon frère est intelligent.')">🔊</button></td></tr>
+  </table>
+
+  <h3>Familie</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr><td><span class="fr">le père / la mère</span><button class="speak" onclick="speak('le père, la mère')">🔊</button></td><td>der Vater / die Mutter</td><td class="example">Mon père s'appelle Marc. <button class="speak" onclick="speak('Mon père s\'appelle Marc.')">🔊</button></td></tr>
+    <tr><td><span class="fr">le frère / la sœur</span><button class="speak" onclick="speak('le frère, la sœur')">🔊</button></td><td>der Bruder / die Schwester</td><td class="example">Ma sœur a 12 ans. <button class="speak" onclick="speak('Ma sœur a douze ans.')">🔊</button></td></tr>
+    <tr><td><span class="fr">les parents</span><button class="speak" onclick="speak('les parents')">🔊</button></td><td>die Eltern</td><td class="example">Mes parents sont gentils. <button class="speak" onclick="speak('Mes parents sont gentils.')">🔊</button></td></tr>
+    <tr><td><span class="fr">le grand-père / la grand-mère</span><button class="speak" onclick="speak('le grand-père, la grand-mère')">🔊</button></td><td>der Großvater / die Großmutter</td><td class="example">Ma grand-mère habite à Paris. <button class="speak" onclick="speak('Ma grand-mère habite à Paris.')">🔊</button></td></tr>
+    <tr><td><span class="fr">un chien / un chat</span><button class="speak" onclick="speak('un chien, un chat')">🔊</button></td><td>ein Hund / eine Katze</td><td class="example">J'ai un chien. <button class="speak" onclick="speak('J\'ai un chien.')">🔊</button></td></tr>
+  </table>
+
+  <h3>Hobbys</h3>
+  <table>
+    <tr><th>Französisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+    <tr><td><span class="fr">le foot(ball)</span><button class="speak" onclick="speak('le football')">🔊</button></td><td>Fußball</td><td class="example">J'aime le foot. <button class="speak" onclick="speak('J\'aime le foot.')">🔊</button></td></tr>
+    <tr><td><span class="fr">la musique</span><button class="speak" onclick="speak('la musique')">🔊</button></td><td>Musik</td><td class="example">J'écoute de la musique. <button class="speak" onclick="speak('J\'écoute de la musique.')">🔊</button></td></tr>
+    <tr><td><span class="fr">la lecture</span><button class="speak" onclick="speak('la lecture')">🔊</button></td><td>das Lesen</td><td class="example">J'aime la lecture. <button class="speak" onclick="speak('J\'aime la lecture.')">🔊</button></td></tr>
+    <tr><td><span class="fr">le cinéma</span><button class="speak" onclick="speak('le cinéma')">🔊</button></td><td>Kino</td><td class="example">Je vais souvent au cinéma. <button class="speak" onclick="speak('Je vais souvent au cinéma.')">🔊</button></td></tr>
+    <tr><td><span class="fr">les jeux vidéo</span><button class="speak" onclick="speak('les jeux vidéo')">🔊</button></td><td>Videospiele</td><td class="example">J'adore les jeux vidéo. <button class="speak" onclick="speak('J\'adore les jeux vidéo.')">🔊</button></td></tr>
+    <tr><td><span class="fr">la danse</span><button class="speak" onclick="speak('la danse')">🔊</button></td><td>Tanz</td><td class="example">Je fais de la danse. <button class="speak" onclick="speak('Je fais de la danse.')">🔊</button></td></tr>
+    <tr><td><span class="fr">la natation</span><button class="speak" onclick="speak('la natation')">🔊</button></td><td>Schwimmen</td><td class="example">Je fais de la natation. <button class="speak" onclick="speak('Je fais de la natation.')">🔊</button></td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>✨ Beispieltext</h2>
+  <p class="example">
+    Salut ! Je m'appelle Marie. J'ai quatorze ans et j'habite à Munich, en Allemagne. J'ai un frère et une sœur. Mon frère s'appelle Tom et ma sœur s'appelle Anna. J'ai les cheveux longs et bruns, et j'ai les yeux verts. Je suis sympa, drôle et un peu timide. J'aime la musique et le sport, mais je n'aime pas les maths. Mon hobby préféré est la danse. Je vais au collège et ma matière préférée est le français.
+    <button class="speak" onclick="speak(this.parentElement.innerText)">🔊 Ganzen Text anhören</button>
+  </p>
+</section>
+
+<footer>
+  💡 Tipp: Klicke auf 🔊, um die französische Aussprache zu hören. Bonne chance !
+</footer>
+
+<script>
+  function speak(text) {
+    if (!('speechSynthesis' in window)) {
+      alert('Dein Browser unterstützt leider keine Sprachausgabe.');
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'fr-FR';
+    utter.rate = 0.9;
+    const voices = window.speechSynthesis.getVoices();
+    const frVoice = voices.find(v => v.lang.startsWith('fr'));
+    if (frVoice) utter.voice = frVoice;
+    window.speechSynthesis.speak(utter);
+  }
+  // Stimmen vorab laden
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+</script>
+
+</body>
+</html>
