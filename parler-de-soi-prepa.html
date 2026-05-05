@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Arbeitsblatt - Parler de soi</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #fef9f3 0%, #f0f7ff 100%);
+    color: #2c3e50;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  header {
+    text-align: center;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+  }
+  header h1 { color: #0055a4; margin: 0; }
+  header p { color: #555; }
+  section {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 22px 28px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  h2 {
+    color: #ef4135;
+    border-bottom: 3px solid #ffd9d6;
+    padding-bottom: 8px;
+    margin-top: 0;
+  }
+  .step {
+    display: inline-block;
+    background: #0055a4;
+    color: white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  input[type="text"], textarea, select {
+    border: 2px solid #d6e4f5;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 1em;
+    font-family: inherit;
+    background: #fafcff;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #0055a4;
+  }
+  input[type="text"] { width: 200px; }
+  textarea { width: 100%; min-height: 160px; resize: vertical; }
+  label { display: inline-block; margin: 4px 8px 4px 0; }
+  .checkbox-group label {
+    background: #f0f7ff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .checkbox-group input[type="checkbox"]:checked + span {
+    font-weight: bold;
+  }
+  .checkbox-group label:has(input:checked) {
+    background: #ffd9d6;
+    border-color: #ef4135;
+  }
+  button.action {
+    background: #0055a4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 1em;
+    cursor: pointer;
+    margin: 8px 6px 0 0;
+    transition: background 0.2s, transform 0.1s;
+  }
+  button.action:hover { background: #ef4135; }
+  button.action:active { transform: scale(0.97); }
+  button.speak {
+    background: #0055a4;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.1s;
+    vertical-align: middle;
+  }
+  button.speak:hover { background: #ef4135; transform: scale(1.1); }
+  .text-output {
+    background: #f0f7ff;
+    border-left: 5px solid #0055a4;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 12px;
+    min-height: 60px;
+    font-style: italic;
+    white-space: pre-wrap;
+  }
+  .tip {
+    background: #fff8e1;
+    border-left: 5px solid #f9a825;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-size: 0.95em;
+  }
+  .timer {
+    font-size: 2em;
+    text-align: center;
+    color: #0055a4;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  ol li { margin-bottom: 6px; }
+  footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.9em;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📝 Mon arbeitsblatt — Parler de soi</h1>
+  <p>Schritt für Schritt zum eigenen Text und Vortrag</p>
+</header>
+
+<!-- SCHRITT 1 -->
+<section>
+  <h2><span class="step">1</span>Wortschatz aktivieren</h2>
+  <p>Ordne zu! Schreibe die richtige <strong>deutsche</strong> Bedeutung in das Feld:</p>
+  <div>
+    <p><span class="fr">les cheveux</span> <button class="speak" onclick="speak('les cheveux')">🔊</button> → <input type="text" data-answer="die haare"> <span class="check"></span></p>
+    <p><span class="fr">les yeux</span> <button class="speak" onclick="speak('les yeux')">🔊</button> → <input type="text" data-answer="die augen"> <span class="check"></span></p>
+    <p><span class="fr">drôle</span> <button class="speak" onclick="speak('drôle')">🔊</button> → <input type="text" data-answer="lustig"> <span class="check"></span></p>
+    <p><span class="fr">la sœur</span> <button class="speak" onclick="speak('la sœur')">🔊</button> → <input type="text" data-answer="die schwester"> <span class="check"></span></p>
+    <p><span class="fr">j'habite</span> <button class="speak" onclick="speak('j\'habite à Berlin')">🔊</button> → <input type="text" data-answer="ich wohne"> <span class="check"></span></p>
+    <p><span class="fr">sportif</span> <button class="speak" onclick="speak('sportif')">🔊</button> → <input type="text" data-answer="sportlich"> <span class="check"></span></p>
+  </div>
+  <button class="action" onclick="checkVocab()">✅ Überprüfen</button>
+  <p id="vocabResult" style="font-weight:bold;"></p>
+</section>
+
+<!-- SCHRITT 2 -->
+<section>
+  <h2><span class="step">2</span>Lückentext ausfüllen</h2>
+  <p>Vervollständige den Steckbrief mit deinen eigenen Angaben:</p>
+  <p>Salut ! Je m'appelle <input type="text" id="f_nom" placeholder="dein Name">.</p>
+  <p>J'ai <input type="text" id="f_age" placeholder="z.B. quatorze" style="width:130px"> ans.</p>
+  <p>J'habite à <input type="text" id="f_ville" placeholder="z.B. Hambourg">.</p>
+  <p>Je suis 
+    <select id="f_nat">
+      <option value="allemand">allemand</option>
+      <option value="allemande">allemande</option>
+      <option value="autrichien">autrichien</option>
+      <option value="autrichienne">autrichienne</option>
+      <option value="suisse">suisse</option>
+    </select>.
+  </p>
+  <p>Dans ma famille, il y a <input type="text" id="f_famille" placeholder="z.B. ma mère, mon père et mon frère">.</p>
+  <p>J'ai les cheveux 
+    <select id="f_cheveux">
+      <option>blonds</option><option>bruns</option><option>noirs</option><option>roux</option>
+      <option>longs</option><option>courts</option>
+    </select>
+    et les yeux 
+    <select id="f_yeux">
+      <option>bleus</option><option>verts</option><option>marron</option><option>gris</option>
+    </select>.
+  </p>
+  <p>Je suis 
+    <select id="f_char1"><option>sympa</option><option>drôle</option><option>gentil(le)</option><option>timide</option><option>sportif/sportive</option></select>
+    et 
+    <select id="f_char2"><option>intelligent(e)</option><option>bavard(e)</option><option>calme</option><option>créatif/créative</option></select>.
+  </p>
+  <p>J'aime <input type="text" id="f_aime" placeholder="z.B. la musique et le foot">,</p>
+  <p>mais je n'aime pas <input type="text" id="f_aimepas" placeholder="z.B. les maths">.</p>
+  <p>Mon hobby préféré est <input type="text" id="f_hobby" placeholder="z.B. la danse">.</p>
+
+  <button class="action" onclick="generateText()">📄 Meinen Text erstellen</button>
+  <button class="action" onclick="speakText()" style="background:#ef4135;">🔊 Text vorlesen</button>
+  <div class="text-output" id="textOutput">Hier erscheint dein fertiger Text …</div>
+</section>
+
+<!-- SCHRITT 3 -->
+<section>
+  <h2><span class="step">3</span>Eigenen Text schreiben</h2>
+  <p>Schreibe nun deinen eigenen Text (mind. 6 Sätze). Du darfst Schritt 2 als Vorlage nutzen, aber ergänze etwas Persönliches!</p>
+  <div class="tip">💡 <strong>Tipp:</strong> Verwende die Wörter <em>aussi, mais, et, parce que</em>, um deine Sätze zu verbinden.</div>
+  <textarea id="freeText" placeholder="Salut ! Je m'appelle ..."></textarea>
+  <p>Wörter: <span id="wordCount">0</span></p>
+  <button class="action" onclick="speakFreeText()">🔊 Eigenen Text anhören</button>
+</section>
+
+<!-- SCHRITT 4 -->
+<section>
+  <h2><span class="step">4</span>Aussprache üben</h2>
+  <p>Höre dir folgende schwierige Wörter genau an und sprich sie nach:</p>
+  <ul style="list-style:none; padding-left:0;">
+    <li>🔹 <span class="fr">les yeux</span> <button class="speak" onclick="speak('les yeux')">🔊</button></li>
+    <li>🔹 <span class="fr">je m'appelle</span> <button class="speak" onclick="speak('je m\'appelle')">🔊</button></li>
+    <li>🔹 <span class="fr">j'habite à</span> <button class="speak" onclick="speak('j\'habite à')">🔊</button></li>
+    <li>🔹 <span class="fr">une sœur</span> <button class="speak" onclick="speak('une sœur')">🔊</button></li>
+    <li>🔹 <span class="fr">sportif</span> <button class="speak" onclick="speak('sportif')">🔊</button></li>
+    <li>🔹 <span class="fr">anniversaire</span> <button class="speak" onclick="speak('anniversaire')">🔊</button></li>
+  </ul>
+  <div class="tip">💡 Sprich jedes Wort dreimal nach – einmal langsam, einmal normal, einmal flüssig!</div>
+</section>
+
+<!-- SCHRITT 5 -->
+<section>
+  <h2><span class="step">5</span>Frei sprechen — der Countdown</h2>
+  <p>Stelle dich nun mündlich vor! Du hast <strong>60 Sekunden</strong> Zeit. Versuche, ohne Ablesen zu sprechen.</p>
+  <div class="timer" id="timer">01:00</div>
+  <button class="action" onclick="startTimer()">▶️ Start</button>
+  <button class="action" onclick="resetTimer()" style="background:#888;">⏹ Reset</button>
+
+  <div class="tip" style="margin-top:18px;">
+    <strong>Mini-Checkliste — habe ich alles gesagt?</strong>
+    <div class="checkbox-group" style="margin-top:8px;">
+      <label><input type="checkbox"> <span>Name</span></label>
+      <label><input type="checkbox"> <span>Alter</span></label>
+      <label><input type="checkbox"> <span>Wohnort</span></label>
+      <label><input type="checkbox"> <span>Familie</span></label>
+      <label><input type="checkbox"> <span>Aussehen</span></label>
+      <label><input type="checkbox"> <span>Charakter</span></label>
+      <label><input type="checkbox"> <span>Hobbys</span></label>
+    </div>
+  </div>
+</section>
+
+<!-- SCHRITT 6 -->
+<section>
+  <h2><span class="step">6</span>Partnerinterview</h2>
+  <p>Stelle deinem Partner / deiner Partnerin diese Fragen und notiere die Antworten:</p>
+  <ol>
+    <li><span class="fr">Comment tu t'appelles ?</span> <button class="speak" onclick="speak('Comment tu t\'appelles ?')">🔊</button><br><input type="text" style="width:90%"></li>
+    <li><span class="fr">Quel âge as-tu ?</span> <button class="speak" onclick="speak('Quel âge as-tu ?')">🔊</button><br><input type="text" style="width:90%"></li>
+    <li><span class="fr">Où habites-tu ?</span> <button class="speak" onclick="speak('Où habites-tu ?')">🔊</button><br><input type="text" style="width:90%"></li>
+    <li><span class="fr">Tu as des frères et sœurs ?</span> <button class="speak" onclick="speak('Tu as des frères et sœurs ?')">🔊</button><br><input type="text" style="width:90%"></li>
+    <li><span class="fr">Quel est ton hobby préféré ?</span> <button class="speak" onclick="speak('Quel est ton hobby préféré ?')">🔊</button><br><input type="text" style="width:90%"></li>
+  </ol>
+  <div class="tip">💡 Stelle anschließend deinen Partner / deine Partnerin in der Klasse vor: <em>"Il/Elle s'appelle … Il/Elle a … ans …"</em></div>
+</section>
+
+<footer>
+  Bonne chance et amuse-toi bien ! 🇫🇷✨
+</footer>
+
+<script>
+  // ---- Aussprache ----
+  function speak(text) {
+    if (!('speechSynthesis' in window)) { alert('Sprachausgabe nicht verfügbar.'); return; }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'fr-FR'; u.rate = 0.9;
+    const v = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('fr'));
+    if (v) u.voice = v;
+    window.speechSynthesis.speak(u);
+  }
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+
+  // ---- Vokabel-Check ----
+  function checkVocab() {
+    const inputs = document.querySelectorAll('[data-answer]');
+    let correct = 0;
+    inputs.forEach(i => {
+      const user = i.value.trim().toLowerCase();
+      const ok = user === i.dataset.answer;
+      i.style.borderColor = user === '' ? '#d6e4f5' : (ok ? '#4caf50' : '#ef4135');
+      i.nextElementSibling.textContent = user === '' ? '' : (ok ? ' ✅' : ' ❌');
+      if (ok) correct++;
+    });
+    document.getElementById('vocabResult').textContent =
+      `Ergebnis: ${correct} von ${inputs.length} richtig ${correct === inputs.length ? '🎉 Super!' : '— probiere es nochmal!'}`;
+  }
+
+  // ---- Lückentext ----
+  function buildText() {
+    const v = id => document.getElementById(id).value.trim() || '...';
+    return `Salut ! Je m'appelle ${v('f_nom')}. J'ai ${v('f_age')} ans. J'habite à ${v('f_ville')}. Je suis ${v('f_nat')}. Dans ma famille, il y a ${v('f_famille')}. J'ai les cheveux ${v('f_cheveux')} et les yeux ${v('f_yeux')}. Je suis ${v('f_char1')} et ${v('f_char2')}. J'aime ${v('f_aime')}, mais je n'aime pas ${v('f_aimepas')}. Mon hobby préféré est ${v('f_hobby')}.`;
+  }
+  function generateText() { document.getElementById('textOutput').textContent = buildText(); }
+  function speakText() { generateText(); speak(buildText()); }
+
+  // ---- Freier Text ----
+  const freeText = document.getElementById('freeText');
+  freeText.addEventListener('input', () => {
+    const words = freeText.value.trim().split(/\s+/).filter(Boolean).length;
+    document.getElementById('wordCount').textContent = words;
+  });
+  function speakFreeText() {
+    const t = freeText.value.trim();
+    if (!t) { alert('Schreibe zuerst etwas in das Textfeld!'); return; }
+    speak(t);
+  }
+
+  // ---- Timer ----
+  let timerId = null, secs = 60;
+  function updateTimer() {
+    const m = String(Math.floor(secs/60)).padStart(2,'0');
+    const s = String(secs%60).padStart(2,'0');
+    document.getElementById('timer').textContent = `${m}:${s}`;
+  }
+  function startTimer() {
+    if (timerId) return;
+    timerId = setInterval(() => {
+      secs--; updateTimer();
+      if (secs <= 0) {
+        clearInterval(timerId); timerId = null;
+        document.getElementById('timer').textContent = '⏰ Stop !';
+      }
+    }, 1000);
+  }
+  function resetTimer() {
+    clearInterval(timerId); timerId = null; secs = 60; updateTimer();
+  }
+</script>
+
+</body>
+</html>
