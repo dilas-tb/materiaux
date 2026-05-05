@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Signalwörter: Imparfait vs. Passé composé</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --bg: #0f1115;
+    --bg-elev: #1a1d24;
+    --bg-elev-2: #232730;
+    --border: #2d323d;
+    --text: #e8eaed;
+    --text-dim: #9aa0a8;
+    --text-faint: #5f6570;
+    --accent: #7c9eff;
+    --imp: #4ade80;       /* grün = Imparfait (andauernd) */
+    --imp-bg: rgba(74, 222, 128, 0.12);
+    --imp-border: rgba(74, 222, 128, 0.35);
+    --pc: #fb923c;        /* orange = Passé composé (punktuell) */
+    --pc-bg: rgba(251, 146, 60, 0.12);
+    --pc-border: rgba(251, 146, 60, 0.35);
+    --red: #f87171;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    background-image: 
+      radial-gradient(ellipse at top left, rgba(74, 222, 128, 0.06), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(251, 146, 60, 0.06), transparent 50%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 30px 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .container { max-width: 900px; margin: 0 auto; }
+  
+  .header { text-align: center; margin-bottom: 30px; }
+  h1 { 
+    font-weight: 600; font-size: 2em; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--imp) 0%, var(--pc) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+  .subtitle { color: var(--text-dim); font-size: 0.95em; }
+  
+  /* Phasen-Navigation */
+  .phase-nav {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 30px;
+  }
+  .phase-btn {
+    background: var(--bg-elev); color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 10px 16px; border-radius: 8px; font-size: 0.85em;
+    font-family: inherit; cursor: pointer; transition: all 0.15s;
+  }
+  .phase-btn:hover { background: var(--bg-elev-2); color: var(--text); }
+  .phase-btn.active {
+    background: linear-gradient(135deg, var(--imp), var(--pc));
+    color: white; border-color: transparent; font-weight: 500;
+  }
+  .phase-btn .num {
+    display: inline-block; width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); margin-right: 6px;
+    font-size: 0.85em; line-height: 20px; text-align: center;
+  }
+  
+  .phase { display: none; }
+  .phase.active { display: block; animation: fadeIn 0.3s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  .panel {
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px; margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .panel h2 { font-weight: 500; margin-bottom: 8px; font-size: 1.3em; }
+  .panel .desc { color: var(--text-dim); margin-bottom: 20px; font-size: 0.95em; line-height: 1.5; }
+  
+  /* Phase 1: Tabelle */
+  .table-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .table-wrapper { grid-template-columns: 1fr; } }
+  
+  .signal-table {
+    border-radius: 10px; overflow: hidden; border: 1px solid var(--border);
+  }
+  .signal-table.imp { border-color: var(--imp-border); }
+  .signal-table.pc { border-color: var(--pc-border); }
+  
+  .table-header {
+    padding: 14px; font-weight: 600; text-align: center;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .imp .table-header { background: var(--imp-bg); color: var(--imp); }
+  .pc .table-header { background: var(--pc-bg); color: var(--pc); }
+  .table-header .badge { font-size: 0.7em; opacity: 0.8; font-weight: 400; }
+  
+  .signal-row {
+    display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px;
+    padding: 10px 14px; border-top: 1px solid var(--border);
+    align-items: center; font-size: 0.92em;
+  }
+  .signal-row .fr { font-weight: 500; }
+  .signal-row .de { color: var(--text-dim); font-style: italic; font-size: 0.9em; }
+  .speak-mini {
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 50%; width: 28px; height: 28px; padding: 0;
+    color: var(--accent); cursor: pointer; font-size: 0.8em;
+  }
+  .speak-mini:hover { background: rgba(124, 158, 255, 0.1); }
+  
+  /* Buttons allgemein */
+  button.action {
+    background: var(--bg-elev-2); color: var(--text);
+    border: 1px solid var(--border); padding: 10px 18px;
+    border-radius: 8px; font-family: inherit; font-size: 0.9em;
+    cursor: pointer; transition: all 0.15s;
+  }
+  button.action:hover { background: #2d323d; }
+  button.primary {
+    background: linear-gradient(135deg, var(--imp), var(--pc));
+    color: white; border: none; font-weight: 500;
+  }
+  
+  /* Phase 2: Schreibübung */
+  .write-exercise { display: flex; flex-direction: column; gap: 12px; }
+  .write-row {
+    display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px;
+    align-items: center;
+    background: var(--bg-elev-2); padding: 12px; border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .write-row .prompt { font-weight: 500; }
+  .write-row input {
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 12px; font-family: inherit; font-size: 0.95em;
+    width: 100%;
+  }
+  .write-row input:focus { outline: none; border-color: var(--accent); }
+  .write-row.correct { border-color: var(--imp); background: var(--imp-bg); }
+  .write-row.wrong { border-color: var(--red); }
+  .feedback-icon { font-size: 1.2em; min-width: 24px; text-align: center; }
+  
+  .switch-direction {
+    display: flex; gap: 8px; margin-bottom: 16px; justify-content: center;
+  }
+  .switch-direction button {
+    background: var(--bg-elev-2); color: var(--text-dim);
+    border: 1px solid var(--border); padding: 8px 14px;
+    border-radius: 6px; font-family: inherit; font-size: 0.85em; cursor: pointer;
+  }
+  .switch-direction button.active { background: var(--accent); color: white; border-color: var(--accent); }
+  
+  /* Phase 3: Drag & Drop */
+  .dnd-pool {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 16px; background: var(--bg-elev-2);
+    border-radius: 10px; min-height: 80px; margin-bottom: 20px;
+    border: 1px dashed var(--border);
+  }
+  .dnd-item {
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 8px 14px; border-radius: 20px; cursor: grab;
+    font-size: 0.9em; user-select: none; transition: transform 0.1s;
+  }
+  .dnd-item:active { cursor: grabbing; }
+  .dnd-item.dragging { opacity: 0.4; }
+  .dnd-item.placed-correct { background: var(--imp-bg); border-color: var(--imp); color: var(--imp); }
+  .dnd-item.placed-wrong { background: rgba(248, 113, 113, 0.12); border-color: var(--red); color: var(--red); animation: shake 0.4s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  
+  .dnd-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .dnd-zones { grid-template-columns: 1fr; } }
+  
+  .dnd-zone {
+    border-radius: 10px; padding: 16px; min-height: 200px;
+    border: 2px dashed; transition: all 0.2s;
+  }
+  .dnd-zone.imp { border-color: var(--imp-border); background: rgba(74, 222, 128, 0.04); }
+  .dnd-zone.pc { border-color: var(--pc-border); background: rgba(251, 146, 60, 0.04); }
+  .dnd-zone.over { transform: scale(1.02); }
+  .dnd-zone.imp.over { background: var(--imp-bg); }
+  .dnd-zone.pc.over { background: var(--pc-bg); }
+  .dnd-zone-title { font-weight: 600; margin-bottom: 4px; font-size: 1em; }
+  .dnd-zone.imp .dnd-zone-title { color: var(--imp); }
+  .dnd-zone.pc .dnd-zone-title { color: var(--pc); }
+  .dnd-zone-sub { font-size: 0.8em; color: var(--text-dim); margin-bottom: 12px; }
+  .dnd-zone-content { display: flex; flex-wrap: wrap; gap: 6px; }
+  
+  /* Phase 4 + 5: Sätze */
+  .sentence-card {
+    background: var(--bg-elev-2); padding: 20px; border-radius: 10px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+  }
+  .sentence {
+    font-size: 1.1em; line-height: 1.6; margin-bottom: 14px;
+  }
+  .sentence .signal {
+    background: rgba(124, 158, 255, 0.15); color: var(--accent);
+    padding: 2px 6px; border-radius: 4px; font-weight: 500;
+  }
+  .sentence .blank {
+    display: inline-block; min-width: 100px; padding: 4px 8px;
+    background: var(--bg); border-bottom: 2px solid var(--accent);
+    margin: 0 2px; border-radius: 4px 4px 0 0;
+  }
+  .sentence input {
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 10px; font-family: inherit; font-size: 0.95em;
+    width: 200px; max-width: 100%;
+  }
+  .sentence input:focus { outline: none; border-color: var(--accent); }
+  
+  .choice-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+  .choice-btn {
+    flex: 1; min-width: 140px;
+    padding: 12px 18px; border-radius: 8px; font-family: inherit;
+    font-size: 0.95em; font-weight: 500; cursor: pointer;
+    border: 1px solid var(--border); background: var(--bg);
+    color: var(--text); transition: all 0.15s;
+  }
+  .choice-btn.imp:hover { background: var(--imp-bg); border-color: var(--imp); color: var(--imp); }
+  .choice-btn.pc:hover { background: var(--pc-bg); border-color: var(--pc); color: var(--pc); }
+  .choice-btn.selected-correct { background: var(--imp-bg); border-color: var(--imp); color: var(--imp); }
+  .choice-btn.selected-wrong { background: rgba(248, 113, 113, 0.12); border-color: var(--red); color: var(--red); }
+  .choice-btn:disabled { cursor: not-allowed; }
+  
+  .verb-hint { color: var(--text-dim); font-size: 0.85em; font-style: italic; margin-top: 8px; }
+  .explanation {
+    margin-top: 12px; padding: 10px 14px; border-radius: 6px;
+    background: rgba(124, 158, 255, 0.08); border-left: 3px solid var(--accent);
+    font-size: 0.88em; color: var(--text-dim); line-height: 1.5;
+  }
+  
+  .score-bar {
+    background: var(--bg-elev); padding: 12px 18px; border-radius: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; font-size: 0.9em;
+  }
+  .score-bar .score { font-weight: 600; color: var(--imp); }
+  .score-bar .progress-mini {
+    flex: 1; height: 6px; background: var(--bg-elev-2);
+    border-radius: 3px; margin: 0 16px; overflow: hidden;
+  }
+  .score-bar .progress-mini-fill {
+    height: 100%; background: linear-gradient(90deg, var(--imp), var(--pc));
+    transition: width 0.4s;
+  }
+  
+  .nav-buttons {
+    display: flex; justify-content: space-between; margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>Signalwörter: Imparfait vs. Passé composé</h1>
+  <div class="subtitle">In 5 Schritten von der Vokabel zur sicheren Anwendung</div>
+</div>
+
+<div class="phase-nav">
+  <button class="phase-btn active" onclick="showPhase(1)"><span class="num">1</span>Übersicht</button>
+  <button class="phase-btn" onclick="showPhase(2)"><span class="num">2</span>Vokabeln</button>
+  <button class="phase-btn" onclick="showPhase(3)"><span class="num">3</span>Zuordnen</button>
+  <button class="phase-btn" onclick="showPhase(4)"><span class="num">4</span>Erkennen</button>
+  <button class="phase-btn" onclick="showPhase(5)"><span class="num">5</span>Anwenden</button>
+</div>
+
+<!-- PHASE 1: Tabelle -->
+<div class="phase active" id="phase1">
+  <div class="panel">
+    <h2>📋 Die Signalwörter im Überblick</h2>
+    <p class="desc">Lies dir die Signalwörter in Ruhe durch. Klicke auf 🔊, um die Aussprache zu hören. Merkregel: <b style="color:var(--imp)">Grün = wiederholt/andauernd (Imparfait)</b> · <b style="color:var(--pc)">Orange = einmalig/abgeschlossen (Passé composé)</b>.</p>
+    <div class="table-wrapper" id="tableWrapper"></div>
+  </div>
+</div>
+
+<!-- PHASE 2: Schreibübung -->
+<div class="phase" id="phase2">
+  <div class="panel">
+    <h2>✏️ Vokabeltraining</h2>
+    <p class="desc">Übersetze die Signalwörter. Achte auf korrekte Schreibweise mit Akzenten!</p>
+    <div class="switch-direction">
+      <button class="active" onclick="setWriteDirection('de2fr', this)">Deutsch → Französisch</button>
+      <button onclick="setWriteDirection('fr2de', this)">Französisch → Deutsch</button>
+    </div>
+    <div class="write-exercise" id="writeExercise"></div>
+    <div class="nav-buttons">
+      <button class="action" onclick="resetWrite()">↺ Neu mischen</button>
+      <button class="action primary" onclick="checkWrite()">Überprüfen</button>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3: Drag & Drop -->
+<div class="phase" id="phase3">
+  <div class="panel">
+    <h2>🎯 Zuordnung: Wiederholt oder Einmalig?</h2>
+    <p class="desc">Ziehe jedes Signalwort in das passende Feld. Bei einer falschen Zuordnung springt das Wort zurück.</p>
+    <div class="dnd-pool" id="dndPool"></div>
+    <div class="dnd-zones">
+      <div class="dnd-zone imp" data-zone="imp">
+        <div class="dnd-zone-title">🔁 Wiederholt / Andauernd</div>
+        <div class="dnd-zone-sub">→ Imparfait</div>
+        <div class="dnd-zone-content" id="zoneImp"></div>
+      </div>
+      <div class="dnd-zone pc" data-zone="pc">
+        <div class="dnd-zone-title">⚡ Einmalig / Abgeschlossen</div>
+        <div class="dnd-zone-sub">→ Passé composé</div>
+        <div class="dnd-zone-content" id="zonePc"></div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="action" onclick="resetDnd()">↺ Neu starten</button>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 4: Erkennen -->
+<div class="phase" id="phase4">
+  <div class="panel">
+    <h2>🔍 Welche Zeit passt?</h2>
+    <p class="desc">Lies den Satz und entscheide anhand des hervorgehobenen Signalworts, welche Zeit verwendet werden muss.</p>
+    <div class="score-bar">
+      <span>Frage <span id="recogCurrent">1</span> / <span id="recogTotal">10</span></span>
+      <div class="progress-mini"><div class="progress-mini-fill" id="recogProgress"></div></div>
+      <span class="score">✓ <span id="recogScore">0</span></span>
+    </div>
+    <div id="recogContainer"></div>
+  </div>
+</div>
+
+<!-- PHASE 5: Anwenden -->
+<div class="phase" id="phase5">
+  <div class="panel">
+    <h2>🎓 Verb richtig konjugieren</h2>
+    <p class="desc">Setze das angegebene Verb in der richtigen Zeit ein. Das Signalwort hilft dir bei der Entscheidung.</p>
+    <div class="score-bar">
+      <span>Frage <span id="applyCurrent">1</span> / <span id="applyTotal">8</span></span>
+      <div class="progress-mini"><div class="progress-mini-fill" id="applyProgress"></div></div>
+      <span class="score">✓ <span id="applyScore">0</span></span>
+    </div>
+    <div id="applyContainer"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// =========== DATEN ===========
+const signalsImp = [
+  { fr: "autrefois", de: "früher" },
+  { fr: "d'habitude", de: "gewöhnlich" },
+  { fr: "chaque fois", de: "jedes Mal" },
+  { fr: "chaque semaine", de: "jede Woche" },
+  { fr: "pendant que", de: "während" },
+  { fr: "quelquefois", de: "manchmal" },
+  { fr: "régulièrement", de: "regelmäßig" },
+  { fr: "souvent", de: "oft" },
+  { fr: "toujours", de: "immer" },
+  { fr: "tous les jours", de: "jeden Tag" },
+  { fr: "de temps en temps", de: "von Zeit zu Zeit" },
+  { fr: "parfois", de: "manchmal" }
+];
+
+const signalsPc = [
+  { fr: "à ce moment-là", de: "in diesem Moment" },
+  { fr: "ce jour-là", de: "an diesem Tag" },
+  { fr: "d'abord", de: "zuerst" },
+  { fr: "ensuite", de: "danach" },
+  { fr: "puis", de: "dann" },
+  { fr: "finalement", de: "schließlich" },
+  { fr: "la semaine dernière", de: "letzte Woche" },
+  { fr: "soudain", de: "plötzlich" },
+  { fr: "tout à coup", de: "plötzlich" },
+  { fr: "hier", de: "gestern" },
+  { fr: "un jour", de: "eines Tages" },
+  { fr: "une fois", de: "einmal" }
+];
+
+// Sätze für Phase 4 (Erkennen)
+const recogSentences = [
+  { text: "Autrefois, les gens ___ sans téléphone portable.", signal: "Autrefois", answer: "imp", expl: "« Autrefois » beschreibt einen früheren Dauerzustand → Imparfait." },
+  { text: "Hier, j'___ au cinéma avec mes amis.", signal: "Hier", answer: "pc", expl: "« Hier » markiert eine abgeschlossene Handlung in der Vergangenheit → Passé composé." },
+  { text: "Chaque été, nous ___ chez nos grands-parents.", signal: "Chaque été", answer: "imp", expl: "« Chaque été » zeigt eine wiederholte Gewohnheit → Imparfait." },
+  { text: "Tout à coup, il ___ à pleuvoir.", signal: "Tout à coup", answer: "pc", expl: "« Tout à coup » markiert ein plötzliches, einmaliges Ereignis → Passé composé." },
+  { text: "D'habitude, je ___ du café le matin.", signal: "D'habitude", answer: "imp", expl: "« D'habitude » beschreibt eine Gewohnheit → Imparfait." },
+  { text: "La semaine dernière, j'___ un nouveau film.", signal: "La semaine dernière", answer: "pc", expl: "« La semaine dernière » bezeichnet einen abgeschlossenen Zeitpunkt → Passé composé." },
+  { text: "Souvent, mon père ___ des histoires le soir.", signal: "Souvent", answer: "imp", expl: "« Souvent » zeigt eine wiederholte Handlung → Imparfait." },
+  { text: "Soudain, le téléphone ___ .", signal: "Soudain", answer: "pc", expl: "« Soudain » markiert einen plötzlichen Moment → Passé composé." },
+  { text: "Régulièrement, elle ___ au sport.", signal: "Régulièrement", answer: "imp", expl: "« Régulièrement » zeigt eine wiederkehrende Handlung → Imparfait." },
+  { text: "Ce jour-là, nous ___ une grande surprise.", signal: "Ce jour-là", answer: "pc", expl: "« Ce jour-là » verweist auf einen bestimmten, einmaligen Tag → Passé composé." }
+];
+
+// Sätze für Phase 5 (Anwenden) – Verb selbst eintragen
+const applySentences = [
+  { 
+    parts: ["Quand j'étais petit, je ", " souvent au parc.", ""],
+    signal: "souvent", verb: "aller", subject: "je", tense: "imp",
+    answers: ["allais"],
+    expl: "« souvent » → wiederholte Handlung → Imparfait: j'allais"
+  },
+  { 
+    parts: ["Hier soir, nous ", " un bon film.", ""],
+    signal: "Hier soir", verb: "regarder", subject: "nous", tense: "pc",
+    answers: ["avons regardé"],
+    expl: "« Hier soir » → einmaliges, abgeschlossenes Ereignis → Passé composé: nous avons regardé"
+  },
+  { 
+    parts: ["Tous les matins, ma mère ", " du thé.", ""],
+    signal: "Tous les matins", verb: "boire", subject: "ma mère", tense: "imp",
+    answers: ["buvait"],
+    expl: "« Tous les matins » → tägliche Gewohnheit → Imparfait: elle buvait"
+  },
+  { 
+    parts: ["Soudain, Paul ", " dans la salle.", ""],
+    signal: "Soudain", verb: "entrer", subject: "Paul", tense: "pc",
+    answers: ["est entré"],
+    expl: "« Soudain » → plötzliches Ereignis → Passé composé mit être: il est entré"
+  },
+  { 
+    parts: ["Autrefois, les enfants ", " dans la rue.", ""],
+    signal: "Autrefois", verb: "jouer", subject: "les enfants", tense: "imp",
+    answers: ["jouaient"],
+    expl: "« Autrefois » → früherer Dauerzustand → Imparfait: ils jouaient"
+  },
+  { 
+    parts: ["La semaine dernière, j'", " mes grands-parents.", ""],
+    signal: "La semaine dernière", verb: "visiter", subject: "je", tense: "pc",
+    answers: ["ai visité"],
+    expl: "« La semaine dernière » → abgeschlossener Zeitpunkt → Passé composé: j'ai visité"
+  },
+  { 
+    parts: ["D'habitude, tu ", " à 7 heures.", ""],
+    signal: "D'habitude", verb: "se lever", subject: "tu", tense: "imp",
+    answers: ["te levais"],
+    expl: "« D'habitude » → Gewohnheit → Imparfait reflexiv: tu te levais"
+  },
+  { 
+    parts: ["Tout à coup, elles ", " un grand bruit.", ""],
+    signal: "Tout à coup", verb: "entendre", subject: "elles", tense: "pc",
+    answers: ["ont entendu"],
+    expl: "« Tout à coup » → plötzliches Ereignis → Passé composé: elles ont entendu"
+  }
+];
+
+// =========== PHASEN-NAVIGATION ===========
+function showPhase(n) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('phase' + n).classList.add('active');
+  document.querySelectorAll('.phase-btn')[n-1].classList.add('active');
+  if (n === 2 && !writeInitialized) initWrite();
+  if (n === 3 && !dndInitialized) initDnd();
+  if (n === 4 && !recogInitialized) initRecog();
+  if (n === 5 && !applyInitialized) initApply();
+}
+
+// =========== PHASE 1: TABELLE ===========
+function buildTable() {
+  const wrap = document.getElementById('tableWrapper');
+  const buildSide = (signals, cls, title, badge) => {
+    let html = `<div class="signal-table ${cls}"><div class="table-header">${title} <span class="badge">${badge}</span></div>`;
+    signals.forEach(s => {
+      html += `<div class="signal-row">
+        <span class="fr">${s.fr}</span>
+        <span class="de">${s.de}</span>
+        <button class="speak-mini" onclick="speak('${s.fr.replace(/'/g, "\\'")}')">🔊</button>
+      </div>`;
+    });
+    html += '</div>';
+    return html;
+  };
+  wrap.innerHTML = buildSide(signalsImp, 'imp', 'Imparfait', 'wiederholt / andauernd') 
+                 + buildSide(signalsPc, 'pc', 'Passé composé', 'einmalig / abgeschlossen');
+}
+buildTable();
+
+// =========== PHASE 2: SCHREIBÜBUNG ===========
+let writeInitialized = false;
+let writeDirection = 'de2fr';
+let writeItems = [];
+
+function setWriteDirection(dir, btn) {
+  writeDirection = dir;
+  document.querySelectorAll('.switch-direction button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  initWrite();
+}
+
+function initWrite() {
+  writeInitialized = true;
+  const all = [...signalsImp, ...signalsPc];
+  writeItems = shuffle([...all]).slice(0, 10);
+  const container = document.getElementById('writeExercise');
+  container.innerHTML = '';
+  writeItems.forEach((item, i) => {
+    const prompt = writeDirection === 'de2fr' ? item.de : item.fr;
+    container.innerHTML += `
+      <div class="write-row" id="writeRow${i}">
+        <span class="prompt">${prompt}</span>
+        <input type="text" id="writeInput${i}" autocomplete="off" placeholder="...">
+        <span class="feedback-icon" id="writeFb${i}"></span>
+      </div>`;
+  });
+}
+
+function checkWrite() {
+  writeItems.forEach((item, i) => {
+    const input = document.getElementById('writeInput' + i);
+    const row = document.getElementById('writeRow' + i);
+    const fb = document.getElementById('writeFb' + i);
+    const expected = (writeDirection === 'de2fr' ? item.fr : item.de).toLowerCase().trim();
+    const got = input.value.toLowerCase().trim();
+    row.classList.remove('correct', 'wrong');
+    if (got === expected) {
+      row.classList.add('correct');
+      fb.textContent = '✓';
+      fb.style.color = 'var(--imp)';
+    } else {
+      row.classList.add('wrong');
+      fb.innerHTML = `✗ <span style="font-size:0.8em;color:var(--text-dim);">(${expected})</span>`;
+      fb.style.color = 'var(--red)';
+    }
+  });
+}
+
+function resetWrite() { initWrite(); }
+
+// =========== PHASE 3: DRAG & DROP ===========
+let dndInitialized = false;
+
+function initDnd() {
+  dndInitialized = true;
+  const pool = document.getElementById('dndPool');
+  document.getElementById('zoneImp').innerHTML = '';
+  document.getElementById('zonePc').innerHTML = '';
+  pool.innerHTML = '';
+  
+  const all = shuffle([
+    ...signalsImp.map(s => ({ ...s, type: 'imp' })),
+    ...signalsPc.map(s => ({ ...s, type: 'pc' }))
+  ]);
+  
+  all.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'dnd-item';
+    el.draggable = true;
+    el.textContent = s.fr;
+    el.dataset.type = s.type;
+    el.dataset.id = 'dnd' + i;
+    el.id = 'dnd' + i;
+    el.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', el.id);
+      el.classList.add('dragging');
+    });
+    el.addEventListener('dragend', () => el.classList.remove('dragging'));
+    pool.appendChild(el);
+  });
+  
+  document.querySelectorAll('.dnd-zone').forEach(zone => {
+    zone.ondragover = e => { e.preventDefault(); zone.classList.add('over'); };
+    zone.ondragleave = () => zone.classList.remove('over');
+    zone.ondrop = e => {
+      e.preventDefault();
+      zone.classList.remove('over');
+      const id = e.dataTransfer.getData('text/plain');
+      const item = document.getElementById(id);
+      if (!item) return;
+      const zoneType = zone.dataset.zone;
+      if (item.dataset.type === zoneType) {
+        item.classList.add('placed-correct');
+        item.draggable = false;
+        zone.querySelector('.dnd-zone-content').appendChild(item);
+      } else {
+        item.classList.add('placed-wrong');
+        setTimeout(() => item.classList.remove('placed-wrong'), 600);
+      }
+    };
+  });
+}
+
+function resetDnd() { initDnd(); }
+
+// =========== PHASE 4: ERKENNEN ===========
+let recogInitialized = false;
+let recogIdx = 0, recogScore = 0, recogQueue = [];
+
+function initRecog() {
+  recogInitialized = true;
+  recogQueue = shuffle([...recogSentences]);
+  recogIdx = 0;
+  recogScore = 0;
+  document.getElementById('recogTotal').textContent = recogQueue.length;
+  document.getElementById('recogScore').textContent = '0';
+  showRecog();
+}
+
+function showRecog() {
+  const container = document.getElementById('recogContainer');
+  if (recogIdx >= recogQueue.length) {
+    container.innerHTML = `<div class="sentence-card" style="text-align:center;">
+      <h3 style="margin-bottom:10px;">🎉 Geschafft!</h3>
+      <p>Du hast ${recogScore} von ${recogQueue.length} richtig.</p>
+      <button class="action primary" style="margin-top:14px;" onclick="initRecog()">Nochmal üben</button>
+    </div>`;
+    return;
+  }
+  const q = recogQueue[recogIdx];
+  document.getElementById('recogCurrent').textContent = recogIdx + 1;
+  document.getElementById('recogProgress').style.width = ((recogIdx) / recogQueue.length * 100) + '%';
+  
+  const highlighted = q.text.replace(q.signal, `<span class="signal">${q.signal}</span>`);
+  container.innerHTML = `
+    <div class="sentence-card">
+      <div class="sentence">${highlighted}</div>
+      <div class="choice-buttons">
+        <button class="choice-btn imp" onclick="answerRecog('imp')">🔁 Imparfait</button>
+        <button class="choice-btn pc" onclick="answerRecog('pc')">⚡ Passé composé</button>
+      </div>
+      <div id="recogExpl"></div>
+    </div>`;
+}
+
+function answerRecog(choice) {
+  const q = recogQueue[recogIdx];
+  const buttons = document.querySelectorAll('.choice-btn');
+  buttons.forEach(b => b.disabled = true);
+  const correct = choice === q.answer;
+  if (correct) recogScore++;
+  document.getElementById('recogScore').textContent = recogScore;
+  
+  buttons.forEach(b => {
+    if (b.classList.contains(q.answer)) b.classList.add('selected-correct');
+    else if (b.classList.contains(choice)) b.classList.add('selected-wrong');
+  });
+  
+  document.getElementById('recogExpl').innerHTML = 
+    `<div class="explanation">${correct ? '✓ Richtig!' : '✗ Nicht ganz.'} ${q.expl}</div>
+     <button class="action" style="margin-top:12px;" onclick="nextRecog()">Weiter →</button>`;
+}
+
+function nextRecog() { recogIdx++; showRecog(); }
+
+// =========== PHASE 5: ANWENDEN ===========
+let applyInitialized = false;
+let applyIdx = 0, applyScore = 0, applyQueue = [];
+
+function initApply() {
+  applyInitialized = true;
+  applyQueue = shuffle([...applySentences]);
+  applyIdx = 0;
+  applyScore = 0;
+  document.getElementById('applyTotal').textContent = applyQueue.length;
+  document.getElementById('applyScore').textContent = '0';
+  showApply();
+}
+
+function showApply() {
+  const container = document.getElementById('applyContainer');
+  if (applyIdx >= applyQueue.length) {
+    container.innerHTML = `<div class="sentence-card" style="text-align:center;">
+      <h3 style="margin-bottom:10px;">🎉 Stark gemacht!</h3>
+      <p>Du hast ${applyScore} von ${applyQueue.length} richtig.</p>
+      <button class="action primary" style="margin-top:14px;" onclick="initApply()">Nochmal üben</button>
+    </div>`;
+    return;
+  }
+  const q = applyQueue[applyIdx];
+  document.getElementById('applyCurrent').textContent = applyIdx + 1;
+  document.getElementById('applyProgress').style.width = ((applyIdx) / applyQueue.length * 100) + '%';
+  
+  const highlightedSignal = q.signal;
+  const sentenceHtml = q.parts[0].replace(highlightedSignal, `<span class="signal">${highlightedSignal}</span>`)
+    + `<input type="text" id="applyInput" autocomplete="off" placeholder="...">`
+    + q.parts[1];
+  
+  container.innerHTML = `
+    <div class="sentence-card">
+      <div class="sentence">${sentenceHtml}</div>
+      <div class="verb-hint">Verb: <b>${q.verb}</b> · Subjekt: <b>${q.subject}</b></div>
+      <div style="margin-top:12px;">
+        <button class="action primary" onclick="checkApply()">Überprüfen</button>
+      </div>
+      <div id="applyExpl"></div>
+    </div>`;
+  setTimeout(() => document.getElementById('applyInput').focus(), 50);
+  document.getElementById('applyInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') checkApply();
+  });
+}
+
+function checkApply() {
+  const q = applyQueue[applyIdx];
+  const input = document.getElementById('applyInput');
+  if (!input || input.disabled) return;
+  const got = input.value.toLowerCase().trim().replace(/\s+/g, ' ');
+  const correct = q.answers.some(a => a.toLowerCase() === got);
+  input.disabled = true;
+  if (correct) {
+    applyScore++;
+    input.style.borderColor = 'var(--imp)';
+    input.style.background = 'var(--imp-bg)';
+  } else {
+    input.style.borderColor = 'var(--red)';
+    input.style.background = 'rgba(248, 113, 113, 0.12)';
+  }
+  document.getElementById('applyScore').textContent = applyScore;
+  document.getElementById('applyExpl').innerHTML = 
+    `<div class="explanation">${correct ? '✓ Richtig!' : '✗ Erwartet war: <b>' + q.answers[0] + '</b>.'} ${q.expl}</div>
+     <button class="action" style="margin-top:12px;" onclick="nextApply()">Weiter →</button>`;
+}
+
+function nextApply() { applyIdx++; showApply(); }
+
+// =========== HILFSFUNKTIONEN ===========
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'fr-FR';
+  utt.rate = 0.85;
+  window.speechSynthesis.speak(utt);
+}
+</script>
+</body>
+</html>
