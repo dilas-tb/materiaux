@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Französische unregelmäßige Verben</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #121212;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+  h1 { font-weight: 300; margin-bottom: 1.5rem; }
+  .groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    max-width: 700px;
+  }
+  .group-btn {
+    background: #1e1e1e;
+    color: #888;
+    border: 1px solid #333;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .group-btn.active {
+    background: #2d4a3a;
+    color: #a8e6b8;
+    border-color: #3d6a4d;
+  }
+  .start-btn, .control-btn {
+    background: #3d6a4d;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 0.5rem;
+  }
+  .start-btn:hover, .control-btn:hover { background: #4d8a5d; }
+  .card-container {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 420px;
+    height: 260px;
+    margin: 1rem 0;
+  }
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    background: #1e1e1e;
+    border: 1px solid #2c2c2c;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .back { transform: rotateY(180deg); }
+  .front-text { font-size: 2rem; font-weight: 300; }
+  .back-text { font-size: 2rem; font-weight: 400; color: #a8e6b8; }
+  .translation { font-style: italic; color: #777; margin-top: 0.6rem; font-size: 1rem; }
+  .speak-btn {
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .speak-btn:hover { background: #2a2a2a; }
+  .answer-btns {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    min-height: 50px;
+  }
+  .knew { background: #2d4a3a; color: #a8e6b8; border:none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; }
+  .didnt { background: #4a2d2d; color: #e6a8a8; border:none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; }
+  .knew:hover { background: #3d6a4d; }
+  .didnt:hover { background: #6a3d3d; }
+  .progress { color: #777; font-size: 0.9rem; margin-top: 1rem; }
+  .hidden { display: none !important; }
+  .done { font-size: 1.3rem; color: #a8e6b8; margin: 2rem; }
+</style>
+</head>
+<body>
+
+<h1>Französische unregelmäßige Verben</h1>
+
+<div class="groups">
+  <button class="group-btn active" data-group="goldene">Goldene Verben</button>
+  <button class="group-btn" data-group="oir">Verben auf -oir</button>
+  <button class="group-btn" data-group="dre">Verben auf -dre</button>
+  <button class="group-btn" data-group="ire">Verben auf -ire</button>
+  <button class="group-btn" data-group="ir">Verben auf -ir</button>
+</div>
+
+<button class="start-btn" id="startBtn">Übung starten</button>
+
+<div id="exercise" class="hidden" style="display:flex; flex-direction:column; align-items:center;">
+  <div class="card-container">
+    <div class="card" id="card">
+      <div class="face front">
+        <div class="front-text" id="frontText"></div>
+      </div>
+      <div class="face back">
+        <div class="back-text" id="backText"></div>
+        <div class="translation" id="translation"></div>
+        <button class="speak-btn" id="speakBtn">🔊 Aussprache</button>
+      </div>
+    </div>
+  </div>
+  <div class="answer-btns" id="answerBtns">
+    <button class="knew" id="knewBtn">Wusste ich!</button>
+    <button class="didnt" id="didntBtn">Wusste ich nicht.</button>
+  </div>
+  <div class="progress" id="progress"></div>
+  <button class="control-btn" id="restartBtn">Neu starten</button>
+</div>
+
+<div id="doneScreen" class="hidden done"></div>
+
+<script>
+/* ============================================================
+   VERBTABELLEN - Lesefreundlich
+   Format: infinitiv: { translation, je, tu, il, nous, vous, ils, translations: {...} }
+   ============================================================ */
+
+const PRONOUNS = ["je", "tu", "il", "nous", "vous", "ils"];
+const PRONOUN_TRANS = {
+  "je": "ich", "tu": "du", "il": "er",
+  "nous": "wir", "vous": "ihr", "ils": "sie"
+};
+
+const VERBS = {
+  goldene: {
+    "être":  { de: "sein",   forms: ["suis","es","est","sommes","êtes","sont"] },
+    "avoir": { de: "haben",  forms: ["ai","as","a","avons","avez","ont"] },
+    "aller": { de: "gehen",  forms: ["vais","vas","va","allons","allez","vont"] },
+    "faire": { de: "machen", forms: ["fais","fais","fait","faisons","faites","font"] }
+  },
+  oir: {
+    "pouvoir":  { de: "können",   forms: ["peux","peux","peut","pouvons","pouvez","peuvent"] },
+    "vouloir":  { de: "wollen",   forms: ["veux","veux","veut","voulons","voulez","veulent"] },
+    "voir":     { de: "sehen",    forms: ["vois","vois","voit","voyons","voyez","voient"] },
+    "savoir":   { de: "wissen",   forms: ["sais","sais","sait","savons","savez","savent"] },
+    "devoir":   { de: "müssen",   forms: ["dois","dois","doit","devons","devez","doivent"] },
+    "recevoir": { de: "erhalten", forms: ["reçois","reçois","reçoit","recevons","recevez","reçoivent"] }
+  },
+  dre: {
+    "prendre":    { de: "nehmen",       forms: ["prends","prends","prend","prenons","prenez","prennent"] },
+    "apprendre":  { de: "lernen",       forms: ["apprends","apprends","apprend","apprenons","apprenez","apprennent"] },
+    "comprendre": { de: "verstehen",    forms: ["comprends","comprends","comprend","comprenons","comprenez","comprennent"] },
+    "vendre":     { de: "verkaufen",    forms: ["vends","vends","vend","vendons","vendez","vendent"] },
+    "descendre":  { de: "hinuntergehen",forms: ["descends","descends","descend","descendons","descendez","descendent"] },
+    "attendre":   { de: "warten",       forms: ["attends","attends","attend","attendons","attendez","attendent"] },
+    "entendre":   { de: "hören",        forms: ["entends","entends","entend","entendons","entendez","entendent"] },
+    "répondre":   { de: "antworten",    forms: ["réponds","réponds","répond","répondons","répondez","répondent"] },
+    "perdre":     { de: "verlieren",    forms: ["perds","perds","perd","perdons","perdez","perdent"] }
+  },
+  ire: {
+    "dire":       { de: "sagen",        forms: ["dis","dis","dit","disons","dites","disent"] },
+    "lire":       { de: "lesen",        forms: ["lis","lis","lit","lisons","lisez","lisent"] },
+    "écrire":     { de: "schreiben",    forms: ["écris","écris","écrit","écrivons","écrivez","écrivent"] },
+    "boire":      { de: "trinken",      forms: ["bois","bois","boit","buvons","buvez","boivent"] },
+    "croire":     { de: "glauben",      forms: ["crois","crois","croit","croyons","croyez","croient"] },
+    "traduire":   { de: "übersetzen",   forms: ["traduis","traduis","traduit","traduisons","traduisez","traduisent"] },
+    "produire":   { de: "produzieren",  forms: ["produis","produis","produit","produisons","produisez","produisent"] },
+    "construire": { de: "bauen",        forms: ["construis","construis","construit","construisons","construisez","construisent"] }
+  },
+  ir: {
+    "venir":   { de: "kommen",     forms: ["viens","viens","vient","venons","venez","viennent"] },
+    "sortir":  { de: "ausgehen",   forms: ["sors","sors","sort","sortons","sortez","sortent"] },
+    "tenir":   { de: "halten",     forms: ["tiens","tiens","tient","tenons","tenez","tiennent"] },
+    "devenir": { de: "werden",     forms: ["deviens","deviens","devient","devenons","devenez","deviennent"] },
+    "dormir":  { de: "schlafen",   forms: ["dors","dors","dort","dormons","dormez","dorment"] },
+    "mentir":  { de: "lügen",      forms: ["mens","mens","ment","mentons","mentez","mentent"] },
+    "partir":  { de: "abreisen",   forms: ["pars","pars","part","partons","partez","partent"] },
+    "sentir":  { de: "fühlen",     forms: ["sens","sens","sent","sentons","sentez","sentent"] },
+    "ouvrir":  { de: "öffnen",     forms: ["ouvre","ouvres","ouvre","ouvrons","ouvrez","ouvrent"] }
+  }
+};
+
+/* ============================================================
+   Logik
+   ============================================================ */
+
+const activeGroups = new Set(["goldene"]);
+
+document.querySelectorAll(".group-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const g = btn.dataset.group;
+    if (activeGroups.has(g)) {
+      if (activeGroups.size > 1) { activeGroups.delete(g); btn.classList.remove("active"); }
+    } else {
+      activeGroups.add(g); btn.classList.add("active");
+    }
+  });
+});
+
+let queue = [];
+let retryQueue = [];
+let current = null;
+let isFlipped = false;
+let isAnimating = false;
+
+function buildQueue() {
+  const cards = [];
+  activeGroups.forEach(g => {
+    const group = VERBS[g];
+    for (const inf in group) {
+      const v = group[inf];
+      PRONOUNS.forEach((p, i) => {
+        let form = v.forms[i];
+        let pron = p;
+        // Elision je -> j'
+        if (p === "je" && /^[aeiouhéè]/i.test(form)) {
+          pron = "j'";
+        }
+        const front = (pron.endsWith("'") ? pron : pron + " + ") + inf;
+        const back = (pron.endsWith("'") ? pron : pron + " ") + form;
+        const trans = PRONOUN_TRANS[p] + " " + v.de;
+        cards.push({ front, back, trans, speak: back });
+      });
+    }
+  });
+  // shuffle
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  return cards;
+}
+
+const card = document.getElementById("card");
+const frontText = document.getElementById("frontText");
+const backText = document.getElementById("backText");
+const translation = document.getElementById("translation");
+const progress = document.getElementById("progress");
+const speakBtn = document.getElementById("speakBtn");
+const answerBtns = document.getElementById("answerBtns");
+
+document.getElementById("startBtn").addEventListener("click", () => {
+  queue = buildQueue();
+  retryQueue = [];
+  document.getElementById("startBtn").classList.add("hidden");
+  document.querySelector(".groups").classList.add("hidden");
+  document.getElementById("exercise").classList.remove("hidden");
+  document.getElementById("doneScreen").classList.add("hidden");
+  nextCard();
+});
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  location.reload();
+});
+
+function nextCard() {
+  if (queue.length === 0 && retryQueue.length > 0) {
+    queue = retryQueue;
+    retryQueue = [];
+  }
+  if (queue.length === 0) {
+    finish();
+    return;
+  }
+  current = queue.shift();
+  frontText.textContent = current.front;
+  backText.textContent = current.back;
+  translation.textContent = current.trans;
+  progress.textContent = `Verbleibend: ${queue.length} | Wiederholungen: ${retryQueue.length}`;
+}
+
+card.addEventListener("click", () => {
+  if (isAnimating) return;
+  if (!isFlipped) {
+    isFlipped = true;
+    card.classList.add("flipped");
+  }
+});
+
+speakBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const u = new SpeechSynthesisUtterance(current.speak);
+  u.lang = "fr-FR";
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+});
+
+function handleAnswer(knew) {
+  if (!isFlipped || isAnimating) return;
+  if (!knew) retryQueue.push(current);
+  isAnimating = true;
+  card.classList.remove("flipped");
+  setTimeout(() => {
+    isFlipped = false;
+    isAnimating = false;
+    nextCard();
+  }, 650);
+}
+
+document.getElementById("knewBtn").addEventListener("click", (e) => {
+  e.stopPropagation(); handleAnswer(true);
+});
+document.getElementById("didntBtn").addEventListener("click", (e) => {
+  e.stopPropagation(); handleAnswer(false);
+});
+
+function finish() {
+  document.getElementById("exercise").classList.add("hidden");
+  const done = document.getElementById("doneScreen");
+  done.classList.remove("hidden");
+  done.innerHTML = "🎉 Bravo ! Alle Karten geschafft.<br><br><button class='control-btn' onclick='location.reload()'>Neu starten</button>";
+}
+</script>
+</body>
+</html>
