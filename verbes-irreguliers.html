@@ -8,54 +8,68 @@
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #121212;
-    color: #e0e0e0;
+    background: radial-gradient(circle at 20% 0%, #2a1f3d 0%, #16121f 60%);
+    color: #ece6f5;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 2rem 1rem;
   }
-  h1 { font-weight: 300; margin-bottom: 1.5rem; }
+  h1 {
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #ffd86b, #c79bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 0.5px;
+  }
   .groups {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
     justify-content: center;
     margin-bottom: 2rem;
-    max-width: 700px;
+    max-width: 720px;
   }
   .group-btn {
-    background: #1e1e1e;
-    color: #888;
-    border: 1px solid #333;
-    padding: 0.5rem 1rem;
+    background: rgba(255,255,255,0.04);
+    color: #b8aacb;
+    border: 1px solid rgba(199,155,255,0.25);
+    padding: 0.55rem 1.1rem;
     border-radius: 999px;
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.2s;
   }
+  .group-btn:hover { border-color: #c79bff; color: #ece6f5; }
   .group-btn.active {
-    background: #2d4a3a;
-    color: #a8e6b8;
-    border-color: #3d6a4d;
+    background: linear-gradient(135deg, #c79bff, #8e6bd6);
+    color: #1a1426;
+    border-color: transparent;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(199,155,255,0.3);
   }
   .start-btn, .control-btn {
-    background: #3d6a4d;
-    color: #fff;
+    background: linear-gradient(135deg, #ffd86b, #ffb347);
+    color: #2a1f0a;
     border: none;
-    padding: 0.7rem 1.5rem;
-    border-radius: 8px;
+    padding: 0.75rem 1.7rem;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 1rem;
+    font-weight: 600;
     margin: 0.5rem;
+    box-shadow: 0 4px 20px rgba(255,216,107,0.25);
+    transition: transform 0.15s;
   }
-  .start-btn:hover, .control-btn:hover { background: #4d8a5d; }
+  .start-btn:hover, .control-btn:hover { transform: translateY(-2px); }
   .card-container {
     perspective: 1000px;
     width: 100%;
-    max-width: 420px;
-    height: 260px;
+    max-width: 440px;
+    height: 280px;
     margin: 1rem 0;
   }
   .card {
@@ -71,44 +85,55 @@
     position: absolute;
     inset: 0;
     backface-visibility: hidden;
-    background: #1e1e1e;
-    border: 1px solid #2c2c2c;
-    border-radius: 16px;
+    background: linear-gradient(145deg, #251c38, #1c1529);
+    border: 1px solid rgba(199,155,255,0.2);
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 1.5rem;
     text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
   }
-  .back { transform: rotateY(180deg); }
-  .front-text { font-size: 2rem; font-weight: 300; }
-  .back-text { font-size: 2rem; font-weight: 400; color: #a8e6b8; }
-  .translation { font-style: italic; color: #777; margin-top: 0.6rem; font-size: 1rem; }
+  .front { border-top: 3px solid #ffd86b; }
+  .back  { transform: rotateY(180deg); border-top: 3px solid #c79bff; }
+  .front-text { font-size: 2.1rem; font-weight: 300; color: #ffd86b; }
+  .back-text  { font-size: 2.1rem; font-weight: 500; color: #c79bff; }
+  .translation { font-style: italic; color: #8a7fa3; margin-top: 0.7rem; font-size: 1rem; }
   .speak-btn {
-    margin-top: 1rem;
-    background: transparent;
-    border: 1px solid #444;
-    color: #ccc;
-    padding: 0.4rem 0.9rem;
+    margin-top: 1.1rem;
+    background: rgba(199,155,255,0.1);
+    border: 1px solid rgba(199,155,255,0.4);
+    color: #c79bff;
+    padding: 0.45rem 1rem;
     border-radius: 999px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    transition: all 0.2s;
   }
-  .speak-btn:hover { background: #2a2a2a; }
+  .speak-btn:hover { background: rgba(199,155,255,0.2); }
   .answer-btns {
     display: flex;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 1.2rem;
     min-height: 50px;
   }
-  .knew { background: #2d4a3a; color: #a8e6b8; border:none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; }
-  .didnt { background: #4a2d2d; color: #e6a8a8; border:none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; }
-  .knew:hover { background: #3d6a4d; }
-  .didnt:hover { background: #6a3d3d; }
-  .progress { color: #777; font-size: 0.9rem; margin-top: 1rem; }
+  .knew, .didnt {
+    border: none;
+    padding: 0.65rem 1.3rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.15s;
+  }
+  .knew  { background: linear-gradient(135deg, #ffd86b, #ffb347); color: #2a1f0a; }
+  .didnt { background: rgba(199,155,255,0.15); color: #d4bbf5; border: 1px solid rgba(199,155,255,0.4); }
+  .knew:hover, .didnt:hover { transform: translateY(-2px); }
+  .progress { color: #8a7fa3; font-size: 0.9rem; margin-top: 1rem; }
   .hidden { display: none !important; }
-  .done { font-size: 1.3rem; color: #a8e6b8; margin: 2rem; }
+  .done { font-size: 1.4rem; color: #ffd86b; margin: 2rem; text-align:center; }
 </style>
 </head>
 <body>
@@ -151,7 +176,9 @@
 <script>
 /* ============================================================
    VERBTABELLEN - Lesefreundlich
-   Format: infinitiv: { translation, je, tu, il, nous, vous, ils, translations: {...} }
+   Format pro Verb:
+     de_forms: konjugierte deutsche Formen [ich, du, er, wir, ihr, sie]
+     forms:    konjugierte französische Formen analog
    ============================================================ */
 
 const PRONOUNS = ["je", "tu", "il", "nous", "vous", "ils"];
@@ -162,50 +189,86 @@ const PRONOUN_TRANS = {
 
 const VERBS = {
   goldene: {
-    "être":  { de: "sein",   forms: ["suis","es","est","sommes","êtes","sont"] },
-    "avoir": { de: "haben",  forms: ["ai","as","a","avons","avez","ont"] },
-    "aller": { de: "gehen",  forms: ["vais","vas","va","allons","allez","vont"] },
-    "faire": { de: "machen", forms: ["fais","fais","fait","faisons","faites","font"] }
+    "être":  { forms: ["suis","es","est","sommes","êtes","sont"],
+               de_forms: ["bin","bist","ist","sind","seid","sind"] },
+    "avoir": { forms: ["ai","as","a","avons","avez","ont"],
+               de_forms: ["habe","hast","hat","haben","habt","haben"] },
+    "aller": { forms: ["vais","vas","va","allons","allez","vont"],
+               de_forms: ["gehe","gehst","geht","gehen","geht","gehen"] },
+    "faire": { forms: ["fais","fais","fait","faisons","faites","font"],
+               de_forms: ["mache","machst","macht","machen","macht","machen"] }
   },
   oir: {
-    "pouvoir":  { de: "können",   forms: ["peux","peux","peut","pouvons","pouvez","peuvent"] },
-    "vouloir":  { de: "wollen",   forms: ["veux","veux","veut","voulons","voulez","veulent"] },
-    "voir":     { de: "sehen",    forms: ["vois","vois","voit","voyons","voyez","voient"] },
-    "savoir":   { de: "wissen",   forms: ["sais","sais","sait","savons","savez","savent"] },
-    "devoir":   { de: "müssen",   forms: ["dois","dois","doit","devons","devez","doivent"] },
-    "recevoir": { de: "erhalten", forms: ["reçois","reçois","reçoit","recevons","recevez","reçoivent"] }
+    "pouvoir":  { forms: ["peux","peux","peut","pouvons","pouvez","peuvent"],
+                  de_forms: ["kann","kannst","kann","können","könnt","können"] },
+    "vouloir":  { forms: ["veux","veux","veut","voulons","voulez","veulent"],
+                  de_forms: ["will","willst","will","wollen","wollt","wollen"] },
+    "voir":     { forms: ["vois","vois","voit","voyons","voyez","voient"],
+                  de_forms: ["sehe","siehst","sieht","sehen","seht","sehen"] },
+    "savoir":   { forms: ["sais","sais","sait","savons","savez","savent"],
+                  de_forms: ["weiß","weißt","weiß","wissen","wisst","wissen"] },
+    "devoir":   { forms: ["dois","dois","doit","devons","devez","doivent"],
+                  de_forms: ["muss","musst","muss","müssen","müsst","müssen"] },
+    "recevoir": { forms: ["reçois","reçois","reçoit","recevons","recevez","reçoivent"],
+                  de_forms: ["erhalte","erhältst","erhält","erhalten","erhaltet","erhalten"] }
   },
   dre: {
-    "prendre":    { de: "nehmen",       forms: ["prends","prends","prend","prenons","prenez","prennent"] },
-    "apprendre":  { de: "lernen",       forms: ["apprends","apprends","apprend","apprenons","apprenez","apprennent"] },
-    "comprendre": { de: "verstehen",    forms: ["comprends","comprends","comprend","comprenons","comprenez","comprennent"] },
-    "vendre":     { de: "verkaufen",    forms: ["vends","vends","vend","vendons","vendez","vendent"] },
-    "descendre":  { de: "hinuntergehen",forms: ["descends","descends","descend","descendons","descendez","descendent"] },
-    "attendre":   { de: "warten",       forms: ["attends","attends","attend","attendons","attendez","attendent"] },
-    "entendre":   { de: "hören",        forms: ["entends","entends","entend","entendons","entendez","entendent"] },
-    "répondre":   { de: "antworten",    forms: ["réponds","réponds","répond","répondons","répondez","répondent"] },
-    "perdre":     { de: "verlieren",    forms: ["perds","perds","perd","perdons","perdez","perdent"] }
+    "prendre":    { forms: ["prends","prends","prend","prenons","prenez","prennent"],
+                    de_forms: ["nehme","nimmst","nimmt","nehmen","nehmt","nehmen"] },
+    "apprendre":  { forms: ["apprends","apprends","apprend","apprenons","apprenez","apprennent"],
+                    de_forms: ["lerne","lernst","lernt","lernen","lernt","lernen"] },
+    "comprendre": { forms: ["comprends","comprends","comprend","comprenons","comprenez","comprennent"],
+                    de_forms: ["verstehe","verstehst","versteht","verstehen","versteht","verstehen"] },
+    "vendre":     { forms: ["vends","vends","vend","vendons","vendez","vendent"],
+                    de_forms: ["verkaufe","verkaufst","verkauft","verkaufen","verkauft","verkaufen"] },
+    "descendre":  { forms: ["descends","descends","descend","descendons","descendez","descendent"],
+                    de_forms: ["gehe hinunter","gehst hinunter","geht hinunter","gehen hinunter","geht hinunter","gehen hinunter"] },
+    "attendre":   { forms: ["attends","attends","attend","attendons","attendez","attendent"],
+                    de_forms: ["warte","wartest","wartet","warten","wartet","warten"] },
+    "entendre":   { forms: ["entends","entends","entend","entendons","entendez","entendent"],
+                    de_forms: ["höre","hörst","hört","hören","hört","hören"] },
+    "répondre":   { forms: ["réponds","réponds","répond","répondons","répondez","répondent"],
+                    de_forms: ["antworte","antwortest","antwortet","antworten","antwortet","antworten"] },
+    "perdre":     { forms: ["perds","perds","perd","perdons","perdez","perdent"],
+                    de_forms: ["verliere","verlierst","verliert","verlieren","verliert","verlieren"] }
   },
   ire: {
-    "dire":       { de: "sagen",        forms: ["dis","dis","dit","disons","dites","disent"] },
-    "lire":       { de: "lesen",        forms: ["lis","lis","lit","lisons","lisez","lisent"] },
-    "écrire":     { de: "schreiben",    forms: ["écris","écris","écrit","écrivons","écrivez","écrivent"] },
-    "boire":      { de: "trinken",      forms: ["bois","bois","boit","buvons","buvez","boivent"] },
-    "croire":     { de: "glauben",      forms: ["crois","crois","croit","croyons","croyez","croient"] },
-    "traduire":   { de: "übersetzen",   forms: ["traduis","traduis","traduit","traduisons","traduisez","traduisent"] },
-    "produire":   { de: "produzieren",  forms: ["produis","produis","produit","produisons","produisez","produisent"] },
-    "construire": { de: "bauen",        forms: ["construis","construis","construit","construisons","construisez","construisent"] }
+    "dire":       { forms: ["dis","dis","dit","disons","dites","disent"],
+                    de_forms: ["sage","sagst","sagt","sagen","sagt","sagen"] },
+    "lire":       { forms: ["lis","lis","lit","lisons","lisez","lisent"],
+                    de_forms: ["lese","liest","liest","lesen","lest","lesen"] },
+    "écrire":     { forms: ["écris","écris","écrit","écrivons","écrivez","écrivent"],
+                    de_forms: ["schreibe","schreibst","schreibt","schreiben","schreibt","schreiben"] },
+    "boire":      { forms: ["bois","bois","boit","buvons","buvez","boivent"],
+                    de_forms: ["trinke","trinkst","trinkt","trinken","trinkt","trinken"] },
+    "croire":     { forms: ["crois","crois","croit","croyons","croyez","croient"],
+                    de_forms: ["glaube","glaubst","glaubt","glauben","glaubt","glauben"] },
+    "traduire":   { forms: ["traduis","traduis","traduit","traduisons","traduisez","traduisent"],
+                    de_forms: ["übersetze","übersetzt","übersetzt","übersetzen","übersetzt","übersetzen"] },
+    "produire":   { forms: ["produis","produis","produit","produisons","produisez","produisent"],
+                    de_forms: ["produziere","produzierst","produziert","produzieren","produziert","produzieren"] },
+    "construire": { forms: ["construis","construis","construit","construisons","construisez","construisent"],
+                    de_forms: ["baue","baust","baut","bauen","baut","bauen"] }
   },
   ir: {
-    "venir":   { de: "kommen",     forms: ["viens","viens","vient","venons","venez","viennent"] },
-    "sortir":  { de: "ausgehen",   forms: ["sors","sors","sort","sortons","sortez","sortent"] },
-    "tenir":   { de: "halten",     forms: ["tiens","tiens","tient","tenons","tenez","tiennent"] },
-    "devenir": { de: "werden",     forms: ["deviens","deviens","devient","devenons","devenez","deviennent"] },
-    "dormir":  { de: "schlafen",   forms: ["dors","dors","dort","dormons","dormez","dorment"] },
-    "mentir":  { de: "lügen",      forms: ["mens","mens","ment","mentons","mentez","mentent"] },
-    "partir":  { de: "abreisen",   forms: ["pars","pars","part","partons","partez","partent"] },
-    "sentir":  { de: "fühlen",     forms: ["sens","sens","sent","sentons","sentez","sentent"] },
-    "ouvrir":  { de: "öffnen",     forms: ["ouvre","ouvres","ouvre","ouvrons","ouvrez","ouvrent"] }
+    "venir":   { forms: ["viens","viens","vient","venons","venez","viennent"],
+                 de_forms: ["komme","kommst","kommt","kommen","kommt","kommen"] },
+    "sortir":  { forms: ["sors","sors","sort","sortons","sortez","sortent"],
+                 de_forms: ["gehe aus","gehst aus","geht aus","gehen aus","geht aus","gehen aus"] },
+    "tenir":   { forms: ["tiens","tiens","tient","tenons","tenez","tiennent"],
+                 de_forms: ["halte","hältst","hält","halten","haltet","halten"] },
+    "devenir": { forms: ["deviens","deviens","devient","devenons","devenez","deviennent"],
+                 de_forms: ["werde","wirst","wird","werden","werdet","werden"] },
+    "dormir":  { forms: ["dors","dors","dort","dormons","dormez","dorment"],
+                 de_forms: ["schlafe","schläfst","schläft","schlafen","schlaft","schlafen"] },
+    "mentir":  { forms: ["mens","mens","ment","mentons","mentez","mentent"],
+                 de_forms: ["lüge","lügst","lügt","lügen","lügt","lügen"] },
+    "partir":  { forms: ["pars","pars","part","partons","partez","partent"],
+                 de_forms: ["reise ab","reist ab","reist ab","reisen ab","reist ab","reisen ab"] },
+    "sentir":  { forms: ["sens","sens","sent","sentons","sentez","sentent"],
+                 de_forms: ["fühle","fühlst","fühlt","fühlen","fühlt","fühlen"] },
+    "ouvrir":  { forms: ["ouvre","ouvres","ouvre","ouvrons","ouvrez","ouvrent"],
+                 de_forms: ["öffne","öffnest","öffnet","öffnen","öffnet","öffnen"] }
   }
 };
 
@@ -241,18 +304,16 @@ function buildQueue() {
       PRONOUNS.forEach((p, i) => {
         let form = v.forms[i];
         let pron = p;
-        // Elision je -> j'
         if (p === "je" && /^[aeiouhéè]/i.test(form)) {
           pron = "j'";
         }
         const front = (pron.endsWith("'") ? pron : pron + " + ") + inf;
-        const back = (pron.endsWith("'") ? pron : pron + " ") + form;
-        const trans = PRONOUN_TRANS[p] + " " + v.de;
+        const back  = (pron.endsWith("'") ? pron : pron + " ") + form;
+        const trans = PRONOUN_TRANS[p] + " " + v.de_forms[i];
         cards.push({ front, back, trans, speak: back });
       });
     }
   });
-  // shuffle
   for (let i = cards.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [cards[i], cards[j]] = [cards[j], cards[i]];
@@ -266,7 +327,6 @@ const backText = document.getElementById("backText");
 const translation = document.getElementById("translation");
 const progress = document.getElementById("progress");
 const speakBtn = document.getElementById("speakBtn");
-const answerBtns = document.getElementById("answerBtns");
 
 document.getElementById("startBtn").addEventListener("click", () => {
   queue = buildQueue();
@@ -278,19 +338,14 @@ document.getElementById("startBtn").addEventListener("click", () => {
   nextCard();
 });
 
-document.getElementById("restartBtn").addEventListener("click", () => {
-  location.reload();
-});
+document.getElementById("restartBtn").addEventListener("click", () => location.reload());
 
 function nextCard() {
   if (queue.length === 0 && retryQueue.length > 0) {
     queue = retryQueue;
     retryQueue = [];
   }
-  if (queue.length === 0) {
-    finish();
-    return;
-  }
+  if (queue.length === 0) { finish(); return; }
   current = queue.shift();
   frontText.textContent = current.front;
   backText.textContent = current.back;
@@ -300,10 +355,7 @@ function nextCard() {
 
 card.addEventListener("click", () => {
   if (isAnimating) return;
-  if (!isFlipped) {
-    isFlipped = true;
-    card.classList.add("flipped");
-  }
+  if (!isFlipped) { isFlipped = true; card.classList.add("flipped"); }
 });
 
 speakBtn.addEventListener("click", (e) => {
@@ -326,12 +378,8 @@ function handleAnswer(knew) {
   }, 650);
 }
 
-document.getElementById("knewBtn").addEventListener("click", (e) => {
-  e.stopPropagation(); handleAnswer(true);
-});
-document.getElementById("didntBtn").addEventListener("click", (e) => {
-  e.stopPropagation(); handleAnswer(false);
-});
+document.getElementById("knewBtn").addEventListener("click", (e) => { e.stopPropagation(); handleAnswer(true); });
+document.getElementById("didntBtn").addEventListener("click", (e) => { e.stopPropagation(); handleAnswer(false); });
 
 function finish() {
   document.getElementById("exercise").classList.add("hidden");
