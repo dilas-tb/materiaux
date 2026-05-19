@@ -362,6 +362,7 @@ speakBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   const u = new SpeechSynthesisUtterance(current.speak);
   u.lang = "fr-FR";
+  u.rate = 0.7;
   speechSynthesis.cancel();
   speechSynthesis.speak(u);
 });
