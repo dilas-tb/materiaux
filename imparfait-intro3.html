@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test: Bildung des imparfait</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a1a2e;
+    padding: 20px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+    color: #1a5276;
+    margin: 20px 0 6px;
+    font-size: 1.5em;
+  }
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 28px;
+    font-size: 0.93em;
+  }
+  .section {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .section-title {
+    background: #1a5276;
+    color: white;
+    padding: 10px 18px;
+    font-weight: bold;
+    font-size: 1em;
+  }
+  .section-body { padding: 20px; }
+  .task {
+    margin-bottom: 26px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .task:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .task-label {
+    font-size: 0.78em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #1a5276;
+    margin-bottom: 5px;
+  }
+  .task-question {
+    font-size: 0.97em;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  /* Options (radio/checkbox) */
+  .options { display: flex; flex-direction: column; gap: 7px; }
+  .option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 9px 13px;
+    border: 2px solid #d0dce8;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.94em;
+    line-height: 1.4;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .option-label:hover { background: #eaf2fb; border-color: #aac4de; }
+  .option-label input { margin-top: 2px; flex-shrink: 0; }
+  .option-label.correct { background: #d4efdf; border-color: #27ae60 !important; }
+  .option-label.wrong   { background: #fadbd8; border-color: #e74c3c !important; }
+  .option-label.missed  { background: #fef9e7; border-color: #f39c12 !important; }
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.93em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.15s;
+  }
+  .btn:disabled { opacity: 0.5; cursor: default; }
+  .btn-check { background: #1a5276; color: white; }
+  .btn-check:hover:not(:disabled) { background: #154360; }
+  .btn-green { background: #27ae60; color: white; }
+  .btn-green:hover:not(:disabled) { background: #1e8449; }
+  /* Feedback */
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.91em;
+    line-height: 1.5;
+  }
+  .feedback.show   { display: block; }
+  .feedback.correct { background: #d4efdf; border-left: 4px solid #27ae60; color: #186a3b; }
+  .feedback.wrong   { background: #fadbd8; border-left: 4px solid #e74c3c; color: #922b21; }
+  .feedback.partial { background: #fef9e7; border-left: 4px solid #f39c12; color: #784212; }
+
+  /* ── Drag & Drop (Aufgabe 2) ── */
+  .dnd-pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+    min-height: 44px;
+    padding: 8px;
+    background: #f7fbff;
+    border: 2px dashed #aac4de;
+    border-radius: 6px;
+  }
+  .chip {
+    background: #1a5276;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    cursor: grab;
+    user-select: none;
+    white-space: nowrap;
+    font-style: italic;
+  }
+  .chip:active { cursor: grabbing; }
+  .chip.dragging { opacity: 0.3; }
+  .dnd-rows { display: flex; flex-direction: column; gap: 9px; margin-bottom: 10px; }
+  .dnd-row  { display: flex; align-items: center; gap: 10px; }
+  .dnd-row-label {
+    min-width: 120px;
+    font-size: 0.92em;
+    font-weight: bold;
+    color: #1a5276;
+    flex-shrink: 0;
+  }
+  .drop-zone {
+    flex: 1;
+    min-height: 38px;
+    border: 2px dashed #aac4de;
+    border-radius: 6px;
+    background: #f7fbff;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    padding: 3px 7px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .drop-zone.over    { background: #d6eaf8; border-color: #1a5276; }
+  .drop-zone.correct { background: #d4efdf; border-color: #27ae60; }
+  .drop-zone.wrong   { background: #fadbd8; border-color: #e74c3c; }
+  .drop-zone .chip   { background: #2980b9; cursor: pointer; font-size: 0.84em; }
+  .drop-zone .chip:hover { background: #c0392b; }
+
+  /* ── Stamm-Eingabe (Aufgabe 3) ── */
+  .stem-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .stem-table th {
+    background: #d6eaf8;
+    color: #1a5276;
+    padding: 7px 12px;
+    font-size: 0.88em;
+    text-align: left;
+    border: 1px solid #b8d4e8;
+  }
+  .stem-table td {
+    padding: 7px 12px;
+    border: 1px solid #d0dce8;
+    font-size: 0.93em;
+    vertical-align: middle;
+  }
+  .stem-table tr:nth-child(even) td { background: #f7fbff; }
+  .stem-input {
+    border: 2px solid #aac4de;
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 0.93em;
+    width: 110px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .stem-input:focus { outline: none; border-color: #1a5276; }
+  .stem-input.correct { background: #d4efdf; border-color: #27ae60; }
+  .stem-input.wrong   { background: #fadbd8; border-color: #e74c3c; }
+
+  /* ── Dropdown (Aufgabe 4) ── */
+  .conj-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .conj-table th {
+    background: #d6eaf8;
+    color: #1a5276;
+    padding: 7px 12px;
+    font-size: 0.88em;
+    text-align: left;
+    border: 1px solid #b8d4e8;
+  }
+  .conj-table td {
+    padding: 7px 12px;
+    border: 1px solid #d0dce8;
+    font-size: 0.93em;
+    vertical-align: middle;
+  }
+  .conj-table tr:nth-child(even) td { background: #f7fbff; }
+  .stem-cell {
+    font-weight: bold;
+    color: #1a5276;
+    font-style: italic;
+    min-width: 60px;
+  }
+  .ending-select {
+    border: 2px solid #aac4de;
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 0.93em;
+    font-family: inherit;
+    font-style: italic;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .ending-select:focus { outline: none; border-color: #1a5276; }
+  .ending-select.correct { background: #d4efdf; border-color: #27ae60; }
+  .ending-select.wrong   { background: #fadbd8; border-color: #e74c3c; }
+
+  /* ── Freie Konjugation (Aufgabe 5) ── */
+  .free-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .free-table th {
+    background: #d6eaf8;
+    color: #1a5276;
+    padding: 7px 12px;
+    font-size: 0.88em;
+    text-align: left;
+    border: 1px solid #b8d4e8;
+  }
+  .free-table td {
+    padding: 7px 12px;
+    border: 1px solid #d0dce8;
+    font-size: 0.93em;
+    vertical-align: middle;
+  }
+  .free-table tr:nth-child(even) td { background: #f7fbff; }
+  .pronoun-cell { font-weight: bold; color: #1a5276; min-width: 80px; }
+  .free-input {
+    border: 2px solid #aac4de;
+    border-radius: 5px;
+    padding: 5px 8px;
+    font-size: 0.93em;
+    width: 200px;
+    font-family: inherit;
+    font-style: italic;
+    transition: border-color 0.15s;
+  }
+  .free-input:focus { outline: none; border-color: #1a5276; }
+  .free-input.correct { background: #d4efdf; border-color: #27ae60; }
+  .free-input.wrong   { background: #fadbd8; border-color: #e74c3c; }
+  .correct-hint { font-size: 0.85em; color: #922b21; margin-left: 8px; font-style: italic; }
+
+  /* Score */
+  #score-box {
+    display: none;
+    background: white;
+    border-radius: 8px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    margin-bottom: 24px;
+  }
+  #score-box h2  { color: #1a5276; margin-bottom: 10px; }
+  #score-num  { font-size: 1.4em; font-weight: bold; margin-bottom: 8px; }
+  #score-msg  { color: #555; margin-bottom: 18px; }
+  .submit-row { text-align: center; margin: 6px 0 24px; }
+  .btn-big { padding: 12px 36px; font-size: 1em; }
+
+  /* Info box */
+  .info-box {
+    background: #eaf2fb;
+    border-left: 4px solid #1a5276;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 0.9em;
+    margin-bottom: 14px;
+    line-height: 1.6;
+    color: #1a3a5c;
+  }
+</style>
+</head>
+<body>
+
+<h1>✏️ Test: Bildung des imparfait</h1>
+<p class="subtitle">Bearbeite alle Aufgaben und klicke am Ende auf „Alle auswerten".</p>
+
+<!-- ══ AUFGABE 1 ══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">Aufgabe 1 · Die nous-Form im présent</div>
+  <div class="section-body">
+    <div class="task" id="task-1">
+      <div class="task-label">Multiple Choice</div>
+      <div class="task-question">
+        Der Imparfait-Stamm ist die <strong>nous-Form des présent indicatif</strong> – ohne die Endung <em>-ons</em>.<br>
+        Wähle alle korrekten <strong>nous-Formen</strong> aus der Liste aus.
+      </div>
+      <div class="options" id="opts-1">
+        <label class="option-label"><input type="checkbox" name="q1" value="a"> nous <em>avons</em> (avoir)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="b"> nous <em>allons</em> (aller)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="c"> nous <em>faisons</em> (faire)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="d"> nous <em>cherchons</em> (chercher)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="e"> nous <em>jouons</em> (jouer)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="f"> nous <em>travaillons</em> (travailler)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="g"> nous <em>regardons</em> (regarder)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="h"> nous <em>regardent</em> (regarder)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="i"> nous <em>jouez</em> (jouer)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="j"> nous <em>allez</em> (aller)</label>
+      </div>
+      <button class="btn btn-check" data-task="1">Auswerten</button>
+      <div class="feedback" id="fb-1"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AUFGABE 2 ══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">Aufgabe 2 · Die Endungen des imparfait</div>
+  <div class="section-body">
+    <div class="task" id="task-2">
+      <div class="task-label">Drag &amp; Drop</div>
+      <div class="task-question">
+        Ordne jede Endung dem richtigen Personalpronomen zu.<br>
+        <small>Abgelegte Karten durch Anklicken zurücklegen.</small>
+      </div>
+      <div class="dnd-pool" id="pool-2">
+        <div class="chip" draggable="true" data-id="c2-1" data-val="-ais">-ais</div>
+        <div class="chip" draggable="true" data-id="c2-2" data-val="-ais2">-ais</div>
+        <div class="chip" draggable="true" data-id="c2-3" data-val="-ait">-ait</div>
+        <div class="chip" draggable="true" data-id="c2-4" data-val="-ions">-ions</div>
+        <div class="chip" draggable="true" data-id="c2-5" data-val="-iez">-iez</div>
+        <div class="chip" draggable="true" data-id="c2-6" data-val="-aient">-aient</div>
+      </div>
+      <div class="dnd-rows">
+        <div class="dnd-row">
+          <div class="dnd-row-label">je</div>
+          <div class="drop-zone" id="dz2-1" data-correct="-ais" data-max="1"></div>
+        </div>
+        <div class="dnd-row">
+          <div class="dnd-row-label">tu</div>
+          <div class="drop-zone" id="dz2-2" data-correct="-ais2" data-max="1"></div>
+        </div>
+        <div class="dnd-row">
+          <div class="dnd-row-label">il / elle / on</div>
+          <div class="drop-zone" id="dz2-3" data-correct="-ait" data-max="1"></div>
+        </div>
+        <div class="dnd-row">
+          <div class="dnd-row-label">nous</div>
+          <div class="drop-zone" id="dz2-4" data-correct="-ions" data-max="1"></div>
+        </div>
+        <div class="dnd-row">
+          <div class="dnd-row-label">vous</div>
+          <div class="drop-zone" id="dz2-5" data-correct="-iez" data-max="1"></div>
+        </div>
+        <div class="dnd-row">
+          <div class="dnd-row-label">ils / elles</div>
+          <div class="drop-zone" id="dz2-6" data-correct="-aient" data-max="1"></div>
+        </div>
+      </div>
+      <button class="btn btn-check" data-task="2">Auswerten</button>
+      <div class="feedback" id="fb-2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AUFGABE 3 ══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">Aufgabe 3 · Den Imparfait-Stamm finden</div>
+  <div class="section-body">
+    <div class="task" id="task-3">
+      <div class="task-label">Texteingabe</div>
+      <div class="task-question">
+        Gegeben ist die <strong>nous-Form im présent</strong>. Trage den <strong>Imparfait-Stamm</strong> ein (also die nous-Form <em>ohne</em> die Endung <em>-ons</em>).
+      </div>
+      <table class="stem-table">
+        <thead>
+          <tr>
+            <th>Infinitif</th>
+            <th>nous-Form (présent)</th>
+            <th>Imparfait-Stamm</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><em>avoir</em></td>
+            <td><em>nous avons</em></td>
+            <td><input class="stem-input" id="stem-1" type="text" placeholder="Stamm …" autocomplete="off" spellcheck="false"></td>
+          </tr>
+          <tr>
+            <td><em>aller</em></td>
+            <td><em>nous allons</em></td>
+            <td><input class="stem-input" id="stem-2" type="text" placeholder="Stamm …" autocomplete="off" spellcheck="false"></td>
+          </tr>
+          <tr>
+            <td><em>faire</em></td>
+            <td><em>nous faisons</em></td>
+            <td><input class="stem-input" id="stem-3" type="text" placeholder="Stamm …" autocomplete="off" spellcheck="false"></td>
+          </tr>
+          <tr>
+            <td><em>chercher</em></td>
+            <td><em>nous cherchons</em></td>
+            <td><input class="stem-input" id="stem-4" type="text" placeholder="Stamm …" autocomplete="off" spellcheck="false"></td>
+          </tr>
+          <tr>
+            <td><em>jouer</em></td>
+            <td><em>nous jouons</em></td>
+            <td><input class="stem-input" id="stem-5" type="text" placeholder="Stamm …" autocomplete="off" spellcheck="false"></td>
+          </tr>
+          <tr>
+            <td><em>travailler</em></td>
+            <td><em>nous travaillons</em></td>
+            <td><input class="stem-input" id="stem-6" type="text" placeholder="Stamm …" autocomplete="off" spellcheck="false"></td>
+          </tr>
+          <tr>
+            <td><em>regarder</em></td>
+            <td><em>nous regardons</em></td>
+            <td><input class="stem-input" id="stem-7" type="text" placeholder="Stamm …" autocomplete="off" spellcheck="false"></td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-check" data-task="3">Auswerten</button>
+      <div class="feedback" id="fb-3"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AUFGABE 4 ══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">Aufgabe 4 · „aller" im imparfait konjugieren</div>
+  <div class="section-body">
+    <div class="task" id="task-4">
+      <div class="task-label">Dropdown</div>
+      <div class="task-question">
+        Der Stamm von <em>aller</em> im imparfait lautet <strong><em>all-</em></strong>.<br>
+        Wähle die richtige Endung aus dem Dropdown-Menü.
+      </div>
+      <table class="conj-table">
+        <thead>
+          <tr><th>Pronomen</th><th>Stamm</th><th>Endung</th></tr>
+        </thead>
+        <tbody id="conj-table-4"></tbody>
+      </table>
+      <button class="btn btn-check" data-task="4">Auswerten</button>
+      <div class="feedback" id="fb-4"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AUFGABE 5 ══════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">Aufgabe 5 · „chercher" im imparfait</div>
+  <div class="section-body">
+    <div class="task" id="task-5">
+      <div class="task-label">Freie Eingabe</div>
+      <div class="task-question">
+        Konjugiere <strong><em>chercher</em></strong> vollständig im imparfait.<br>
+        <small>Tipp: Stamm = <em>cherch-</em> · Endungen wie in Aufgabe 2</small>
+      </div>
+      <table class="free-table">
+        <thead>
+          <tr><th>Pronomen</th><th>imparfait</th></tr>
+        </thead>
+        <tbody id="free-table-5"></tbody>
+      </table>
+      <button class="btn btn-check" data-task="5">Auswerten</button>
+      <div class="feedback" id="fb-5"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Submit -->
+<div class="submit-row">
+  <button class="btn btn-green btn-big" id="btn-submit">🏁 Alle auswerten &amp; Ergebnis anzeigen</button>
+</div>
+
+<!-- Score -->
+<div id="score-box">
+  <h2>Dein Ergebnis</h2>
+  <div id="score-num"></div>
+  <div id="score-msg"></div>
+  <button class="btn btn-green" id="btn-reset">🔄 Nochmal versuchen</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════════
+
+// Aufgabe 4: aller – Stamm all-
+var ALLER_ROWS = [
+  { pronoun: 'je',           stem: 'all-', correct: '-ais'   },
+  { pronoun: 'tu',           stem: 'all-', correct: '-ais'   },
+  { pronoun: 'il / elle / on', stem: 'all-', correct: '-ait' },
+  { pronoun: 'nous',         stem: 'all-', correct: '-ions'  },
+  { pronoun: 'vous',         stem: 'all-', correct: '-iez'   },
+  { pronoun: 'ils / elles',  stem: 'all-', correct: '-aient' }
+];
+var ENDINGS = ['-ais', '-ait', '-ions', '-iez', '-aient'];
+
+// Aufgabe 5: chercher
+var CHERCHER_ROWS = [
+  { pronoun: 'je',             correct: 'cherchais'   },
+  { pronoun: 'tu',             correct: 'cherchais'   },
+  { pronoun: 'il / elle / on', correct: 'cherchait'   },
+  { pronoun: 'nous',           correct: 'cherchions'  },
+  { pronoun: 'vous',           correct: 'cherchiez'   },
+  { pronoun: 'ils / elles',    correct: 'cherchaient' }
+];
+
+// Aufgabe 3: stems (accept with or without trailing hyphen, case-insensitive)
+var STEM_CORRECT = ['av', 'all', 'fais', 'cherch', 'jou', 'travaill', 'regard'];
+
+// ═══════════════════════════════════════════════════════════════════
+// BUILD DYNAMIC TABLES
+// ═══════════════════════════════════════════════════════════════════
+function buildTable4() {
+  var tbody = document.getElementById('conj-table-4');
+  ALLER_ROWS.forEach(function(row, i) {
+    var tr = document.createElement('tr');
+    // pronoun
+    var td1 = document.createElement('td');
+    td1.style.fontWeight = 'bold';
+    td1.style.color = '#1a5276';
+    td1.textContent = row.pronoun;
+    // stem
+    var td2 = document.createElement('td');
+    td2.className = 'stem-cell';
+    td2.textContent = row.stem;
+    // dropdown
+    var td3 = document.createElement('td');
+    var sel = document.createElement('select');
+    sel.className = 'ending-select';
+    sel.id = 'sel4-' + i;
+    var opt0 = document.createElement('option');
+    opt0.value = '';
+    opt0.textContent = '– Endung –';
+    sel.appendChild(opt0);
+    ENDINGS.forEach(function(e) {
+      var opt = document.createElement('option');
+      opt.value = e;
+      opt.textContent = e;
+      sel.appendChild(opt);
+    });
+    td3.appendChild(sel);
+    tr.appendChild(td1); tr.appendChild(td2); tr.appendChild(td3);
+    tbody.appendChild(tr);
+  });
+}
+
+function buildTable5() {
+  var tbody = document.getElementById('free-table-5');
+  CHERCHER_ROWS.forEach(function(row, i) {
+    var tr = document.createElement('tr');
+    var td1 = document.createElement('td');
+    td1.className = 'pronoun-cell';
+    td1.textContent = row.pronoun;
+    var td2 = document.createElement('td');
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'free-input';
+    inp.id = 'free5-' + i;
+    inp.placeholder = 'imparfait …';
+    inp.autocomplete = 'off';
+    inp.spellcheck = false;
+    td2.appendChild(inp);
+    tr.appendChild(td1); tr.appendChild(td2);
+    tbody.appendChild(tr);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// EVALUATION HELPERS
+// ═══════════════════════════════════════════════════════════════════
+var evaluated = {};
+
+function showFb(el, cls, html) {
+  el.className = 'feedback ' + cls + ' show';
+  el.innerHTML = html;
+}
+function lockBtn(id) {
+  var btn = document.querySelector('[data-task="' + id + '"]');
+  if (btn) btn.disabled = true;
+}
+function norm(s) {
+  return s.trim().toLowerCase().replace(/-$/, '');
+}
+
+// ── Task 1: Multiple Choice ──────────────────────────────────────
+function evalTask1() {
+  var correct = ['a','b','c','d','e','f','g'];
+  var all = document.querySelectorAll('input[name="q1"]');
+  var checked = [];
+  all.forEach(function(inp) { if (inp.checked) checked.push(inp.value); });
+  if (checked.length === 0) {
+    showFb(document.getElementById('fb-1'), 'wrong', '⚠️ Bitte wähle mindestens eine Antwort aus.');
+    return;
+  }
+  all.forEach(function(inp) {
+    var lbl = inp.closest('.option-label');
+    var isOk = correct.indexOf(inp.value) !== -1;
+    if (isOk && inp.checked)       lbl.classList.add('correct');
+    else if (!isOk && inp.checked) lbl.classList.add('wrong');
+    else if (isOk && !inp.checked) lbl.classList.add('missed');
+    inp.disabled = true;
+  });
+  var allRight = correct.every(function(v){ return checked.indexOf(v) !== -1; })
+              && checked.every(function(v){ return correct.indexOf(v) !== -1; });
+  var anyRight = checked.some(function(v){ return correct.indexOf(v) !== -1; });
+  var fb = document.getElementById('fb-1');
+  if (allRight) {
+    showFb(fb, 'correct', '✅ Richtig! Alle nous-Formen korrekt erkannt.');
+  } else if (anyRight) {
+    showFb(fb, 'partial', '⚠️ Nicht vollständig. Die korrekten nous-Formen sind: <em>avons, allons, faisons, cherchons, jouons, travaillons, regardons</em>. Formen wie <em>regardent</em> (3. Pl.) oder <em>jouez / allez</em> (2. Pl.) sind falsch.');
+  } else {
+    showFb(fb, 'wrong', '❌ Leider falsch. Die nous-Form endet immer auf <em>-ons</em>: <em>avons, allons, faisons, cherchons, jouons, travaillons, regardons</em>.');
+  }
+  evaluated[1] = allRight;
+  lockBtn(1);
+}
+
+// ── Task 2: Drag & Drop ──────────────────────────────────────────
+// Special: je and tu both get -ais, so we accept either chip in either slot
+function evalTask2() {
+  var zones  = ['dz2-1','dz2-2','dz2-3','dz2-4','dz2-5','dz2-6'];
+  // The display value of -ais is the same for je and tu; accept both
+  var displayCorrect = {
+    'dz2-1': '-ais',
+    'dz2-2': '-ais',
+    'dz2-3': '-ait',
+    'dz2-4': '-ions',
+    'dz2-5': '-iez',
+    'dz2-6': '-aient'
+  };
+  var allOk = true;
+  zones.forEach(function(zid) {
+    var zone = document.getElementById(zid);
+    var chips = zone.querySelectorAll('.chip');
+    var placed = [];
+    chips.forEach(function(c) { placed.push(c.dataset.val); });
+    // For dz2-1 and dz2-2, accept either -ais chip
+    var expected = displayCorrect[zid];
+    var zoneOk = false;
+    if (placed.length === 1) {
+      var placedDisplay = placed[0].replace(/2$/, ''); // strip disambiguation suffix
+      zoneOk = (placedDisplay === expected);
+    }
+    zone.classList.remove('over');
+    zone.classList.add(zoneOk ? 'correct' : 'wrong');
+    if (!zoneOk) allOk = false;
+    zone.querySelectorAll('.chip').forEach(function(c){ c.style.cursor = 'default'; });
+  });
+  // lock pool chips
+  document.querySelectorAll('#pool-2 .chip').forEach(function(c){
+    c.setAttribute('draggable','false'); c.style.cursor='default';
+  });
+  var fb = document.getElementById('fb-2');
+  if (allOk) {
+    showFb(fb, 'correct', '✅ Perfekt! Alle Endungen richtig zugeordnet: je/tu → <em>-ais</em> · il/elle → <em>-ait</em> · nous → <em>-ions</em> · vous → <em>-iez</em> · ils/elles → <em>-aient</em>.');
+  } else {
+    showFb(fb, 'wrong', '❌ Noch nicht ganz richtig. Die Endungen lauten: je <em>-ais</em> · tu <em>-ais</em> · il/elle <em>-ait</em> · nous <em>-ions</em> · vous <em>-iez</em> · ils/elles <em>-aient</em>.');
+  }
+  evaluated[2] = allOk;
+  lockBtn(2);
+}
+
+// ── Task 3: Stem inputs ──────────────────────────────────────────
+function evalTask3() {
+  var allOk = true;
+  var anyEmpty = false;
+  for (var i = 0; i < STEM_CORRECT.length; i++) {
+    var inp = document.getElementById('stem-' + (i+1));
+    var val = norm(inp.value);
+    if (val === '') { anyEmpty = true; continue; }
+    var ok = (val === STEM_CORRECT[i]);
+    inp.classList.remove('correct','wrong');
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    inp.disabled = true;
+    if (!ok) allOk = false;
+  }
+  if (anyEmpty) {
+    showFb(document.getElementById('fb-3'), 'wrong', '⚠️ Bitte fülle alle Felder aus.');
+    return;
+  }
+  var fb = document.getElementById('fb-3');
+  if (allOk) {
+    showFb(fb, 'correct', '✅ Alle Stämme korrekt! Zur Erinnerung: nous av<strong>ons</strong> → Stamm <em>av-</em> · nous all<strong>ons</strong> → <em>all-</em> · nous fais<strong>ons</strong> → <em>fais-</em> usw.');
+  } else {
+    showFb(fb, 'wrong', '❌ Nicht alle Stämme stimmen. Lösung: <em>av- · all- · fais- · cherch- · jou- · travaill- · regard-</em>');
+  }
+  evaluated[3] = allOk;
+  lockBtn(3);
+}
+
+// ── Task 4: Dropdowns ────────────────────────────────────────────
+function evalTask4() {
+  var allOk = true;
+  var anyEmpty = false;
+  ALLER_ROWS.forEach(function(row, i) {
+    var sel = document.getElementById('sel4-' + i);
+    if (!sel.value) { anyEmpty = true; return; }
+    var ok = (sel.value === row.correct);
+    sel.classList.remove('correct','wrong');
+    sel.classList.add(ok ? 'correct' : 'wrong');
+    sel.disabled = true;
+    if (!ok) allOk = false;
+  });
+  if (anyEmpty) {
+    showFb(document.getElementById('fb-4'), 'wrong', '⚠️ Bitte wähle für jede Form eine Endung aus.');
+    return;
+  }
+  var fb = document.getElementById('fb-4');
+  if (allOk) {
+    showFb(fb, 'correct', '✅ Super! <em>aller</em> im imparfait: j\'allais · tu allais · il allait · nous allions · vous alliez · ils allaient.');
+  } else {
+    showFb(fb, 'wrong', '❌ Noch Fehler dabei. Lösung: j\'all<em>ais</em> · tu all<em>ais</em> · il all<em>ait</em> · nous all<em>ions</em> · vous all<em>iez</em> · ils all<em>aient</em>.');
+  }
+  evaluated[4] = allOk;
+  lockBtn(4);
+}
+
+// ── Task 5: Free inputs ──────────────────────────────────────────
+function evalTask5() {
+  var allOk = true;
+  var anyEmpty = false;
+  CHERCHER_ROWS.forEach(function(row, i) {
+    var inp = document.getElementById('free5-' + i);
+    var val = inp.value.trim().toLowerCase();
+    if (val === '') { anyEmpty = true; return; }
+    var ok = (val === row.correct);
+    inp.classList.remove('correct','wrong');
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    if (!ok) {
+      // show correct answer next to input
+      var hint = inp.parentElement.querySelector('.correct-hint');
+      if (!hint) {
+        hint = document.createElement('span');
+        hint.className = 'correct-hint';
+        inp.parentElement.appendChild(hint);
+      }
+      hint.textContent = '→ ' + row.correct;
+    }
+    inp.disabled = true;
+    if (!ok) allOk = false;
+  });
+  if (anyEmpty) {
+    showFb(document.getElementById('fb-5'), 'wrong', '⚠️ Bitte fülle alle Felder aus.');
+    return;
+  }
+  var fb = document.getElementById('fb-5');
+  if (allOk) {
+    showFb(fb, 'correct', '✅ Ausgezeichnet! <em>chercher</em> im imparfait: je cherchais · tu cherchais · il cherchait · nous cherchions · vous cherchiez · ils cherchaient.');
+  } else {
+    showFb(fb, 'wrong', '❌ Einige Formen stimmen nicht. Lösung: je <em>cherchais</em> · tu <em>cherchais</em> · il <em>cherchait</em> · nous <em>cherchions</em> · vous <em>cherchiez</em> · ils <em>cherchaient</em>.');
+  }
+  evaluated[5] = allOk;
+  lockBtn(5);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DRAG & DROP ENGINE
+// ═══════════════════════════════════════════════════════════════════
+var dragging = null;
+var dragFrom = null;
+
+function setupDnd() {
+  document.querySelectorAll('.dnd-pool .chip').forEach(setupChipDrag);
+  document.querySelectorAll('.drop-zone').forEach(setupZone);
+}
+
+function setupChipDrag(chip) {
+  chip.addEventListener('dragstart', function(e) {
+    dragging = chip;
+    dragFrom = chip.parentElement.id;
+    setTimeout(function(){ chip.classList.add('dragging'); }, 0);
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  chip.addEventListener('dragend', function() {
+    chip.classList.remove('dragging');
+    dragging = null; dragFrom = null;
+  });
+}
+
+function setupZone(zone) {
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    zone.classList.add('over');
+  });
+  zone.addEventListener('dragleave', function() {
+    zone.classList.remove('over');
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('over');
+    if (!dragging) return;
+
+    // enforce max 1 per zone
+    var max = parseInt(zone.dataset.max || '99');
+    if (zone.querySelectorAll('.chip').length >= max) return;
+
+    // hide in pool or remove from other zone
+    if (dragFrom && dragFrom.startsWith('pool-')) {
+      dragging.style.display = 'none';
+    } else {
+      var origPool = document.getElementById(dragFrom);
+      if (origPool && origPool.classList.contains('dnd-pool')) {
+        dragging.style.display = 'none';
+      } else {
+        dragging.remove();
+      }
+    }
+
+    // create zone chip
+    var zc = document.createElement('div');
+    zc.className   = 'chip';
+    zc.draggable   = false;
+    zc.dataset.val = dragging.dataset.val;
+    zc.dataset.id  = dragging.dataset.id;
+    zc.textContent = dragging.textContent;
+    zc.style.cursor = 'pointer';
+    (function(captured, capturedZone) {
+      captured.addEventListener('click', function() {
+        // find task id
+        var taskEl = capturedZone.closest('.task');
+        var taskId = taskEl.id.replace('task-','');
+        var pool = document.getElementById('pool-' + taskId);
+        if (pool) {
+          var orig = pool.querySelector('[data-id="' + captured.dataset.id + '"]');
+          if (orig) orig.style.display = '';
+        }
+        captured.remove();
+      });
+    })(zc, zone);
+    zone.appendChild(zc);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// GLOBAL EVALUATE & RESET
+// ═══════════════════════════════════════════════════════════════════
+var evalFns = { 1: evalTask1, 2: evalTask2, 3: evalTask3, 4: evalTask4, 5: evalTask5 };
+
+document.querySelectorAll('.btn-check').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var id = parseInt(btn.dataset.task);
+    evalFns[id]();
+  });
+});
+
+document.getElementById('btn-submit').addEventListener('click', function() {
+  for (var id = 1; id <= 5; id++) {
+    if (!evaluated.hasOwnProperty(id)) evalFns[id]();
+  }
+  var score = 0;
+  for (var id = 1; id <= 5; id++) {
+    if (evaluated[id] === true) score++;
+  }
+  var box = document.getElementById('score-box');
+  box.style.display = 'block';
+  document.getElementById('score-num').textContent = score + ' von 5 Punkten';
+  var msgs = [
+    '💪 Noch etwas üben – du schaffst das!',
+    '🙂 Schon ganz gut – schau dir die Tipps nochmal an.',
+    '🙂 Nicht schlecht – weiter so!',
+    '😊 Sehr gut! Fast alles richtig.',
+    '😊 Sehr gut! Fast alles richtig.',
+    '🌟 Ausgezeichnet! Alles richtig!'
+  ];
+  document.getElementById('score-msg').textContent = msgs[score];
+  box.scrollIntoView({ behavior: 'smooth' });
+});
+
+document.getElementById('btn-reset').addEventListener('click', function() {
+  location.reload();
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+buildTable4();
+buildTable5();
+setupDnd();
+</script>
+</body>
+</html>
