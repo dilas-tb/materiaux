@@ -309,16 +309,16 @@
         Wähle alle korrekten <strong>nous-Formen</strong> aus der Liste aus.
       </div>
       <div class="options" id="opts-1">
-        <label class="option-label"><input type="checkbox" name="q1" value="a"> nous <em>avons</em> (avoir)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="b"> nous <em>allons</em> (aller)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="c"> nous <em>faisons</em> (faire)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="d"> nous <em>cherchons</em> (chercher)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="e"> nous <em>jouons</em> (jouer)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="f"> nous <em>travaillons</em> (travailler)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="g"> nous <em>regardons</em> (regarder)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="h"> nous <em>regardent</em> (regarder)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="i"> nous <em>jouez</em> (jouer)</label>
-        <label class="option-label"><input type="checkbox" name="q1" value="j"> nous <em>allez</em> (aller)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="a"> <em>avons</em> (avoir)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="b"> <em>allez</em> (aller)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="c"> <em>faisons</em> (faire)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="d"> <em>cherchent</em> (chercher)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="e"> <em>jouons</em> (jouer)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="f"> <em>travaillons</em> (travailler)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="g"> <em>regardons</em> (regarder)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="h"> <em>dansons</em> (regarder)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="i"> <em>jouez</em> (jouer)</label>
+        <label class="option-label"><input type="checkbox" name="q1" value="j"> <em>allons</em> (aller)</label>
       </div>
       <button class="btn btn-check" data-task="1">Auswerten</button>
       <div class="feedback" id="fb-1"></div>
@@ -337,12 +337,13 @@
         <small>Abgelegte Karten durch Anklicken zurücklegen.</small>
       </div>
       <div class="dnd-pool" id="pool-2">
-        <div class="chip" draggable="true" data-id="c2-1" data-val="-ais">-ais</div>
-        <div class="chip" draggable="true" data-id="c2-2" data-val="-ais2">-ais</div>
-        <div class="chip" draggable="true" data-id="c2-3" data-val="-ait">-ait</div>
-        <div class="chip" draggable="true" data-id="c2-4" data-val="-ions">-ions</div>
-        <div class="chip" draggable="true" data-id="c2-5" data-val="-iez">-iez</div>
-        <div class="chip" draggable="true" data-id="c2-6" data-val="-aient">-aient</div>
+       <div class="chip" draggable="true" data-id="c2-6" data-val="-aient">-aient</div> 
+       <div class="chip" draggable="true" data-id="c2-3" data-val="-ait">-ait</div>
+       <div class="chip" draggable="true" data-id="c2-4" data-val="-ions">-ions</div>
+       <div class="chip" draggable="true" data-id="c2-1" data-val="-ais">-ais</div> 
+       <div class="chip" draggable="true" data-id="c2-2" data-val="-ais2">-ais</div>
+       <div class="chip" draggable="true" data-id="c2-5" data-val="-iez">-iez</div>
+        
       </div>
       <div class="dnd-rows">
         <div class="dnd-row">
@@ -600,7 +601,7 @@ function norm(s) {
 
 // ── Task 1: Multiple Choice ──────────────────────────────────────
 function evalTask1() {
-  var correct = ['a','b','c','d','e','f','g'];
+  var correct = ['a','c','e','f','g','h','j'];
   var all = document.querySelectorAll('input[name="q1"]');
   var checked = [];
   all.forEach(function(inp) { if (inp.checked) checked.push(inp.value); });
