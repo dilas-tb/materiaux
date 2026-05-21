@@ -1,760 +1,599 @@
-html_content = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Verständnistest: L'imparfait</title>
+<title>Verständnistest: Imparfait</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: #f0f4f8;
-    color: #1a2e45;
-    min-height: 100vh;
+    color: #1a1a2e;
+    padding: 20px;
   }
-  header {
-    background: linear-gradient(135deg, #1a5276, #2e86c1);
-    color: white;
-    padding: 28px 40px 20px;
+  h1 {
     text-align: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  }
-  header h1 { font-size: 1.8em; margin-bottom: 6px; letter-spacing: 0.5px; }
-  header p { font-size: 0.95em; opacity: 0.85; }
-  .progress-bar-container {
-    background: #d0dce8;
-    height: 8px;
-    width: 100%;
-  }
-  .progress-bar {
-    background: #e8a000;
-    height: 8px;
-    width: 0%;
-    transition: width 0.4s ease;
-  }
-  main {
-    max-width: 780px;
-    margin: 30px auto;
-    padding: 0 20px 60px;
-  }
-  .section-label {
-    font-size: 0.78em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #e8a000;
-    margin-bottom: 6px;
-  }
-  .card {
-    background: white;
-    border-radius: 12px;
-    padding: 28px 32px;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    border-left: 5px solid #1a5276;
-    display: none;
-    animation: fadeIn 0.4s ease;
-  }
-  .card.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  .question-number {
-    font-size: 0.8em;
-    color: #888;
+    color: #1a5276;
     margin-bottom: 8px;
-    font-weight: 600;
+    font-size: 1.6em;
   }
-  .question-text {
-    font-size: 1.08em;
-    font-weight: 700;
-    margin-bottom: 18px;
-    line-height: 1.5;
-    color: #1a2e45;
+  .subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 30px;
+    font-size: 0.95em;
   }
-  .hint {
-    font-size: 0.88em;
-    color: #666;
-    font-style: italic;
-    margin-bottom: 16px;
-  }
-  /* Choice options */
-  .options { display: flex; flex-direction: column; gap: 10px; }
-  .option-btn {
-    background: #f5f8fc;
-    border: 2px solid #c8d8e8;
-    border-radius: 8px;
-    padding: 12px 16px;
-    cursor: pointer;
-    font-size: 0.97em;
-    text-align: left;
-    transition: all 0.2s;
-    color: #1a2e45;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .option-btn:hover:not(:disabled) { border-color: #2e86c1; background: #e8f1fa; }
-  .option-btn.selected { border-color: #2e86c1; background: #d6eaf8; }
-  .option-btn.correct { border-color: #27ae60; background: #d5f5e3; color: #1a5c2a; }
-  .option-btn.wrong { border-color: #e74c3c; background: #fde8e6; color: #7b241c; }
-  .option-btn:disabled { cursor: default; }
-  .option-letter {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: #2e86c1;
+  .section-title {
+    background: #1a5276;
     color: white;
-    font-size: 0.8em;
-    font-weight: 700;
-    flex-shrink: 0;
+    padding: 10px 16px;
+    border-radius: 8px 8px 0 0;
+    font-size: 1.05em;
+    font-weight: bold;
   }
-  .option-btn.correct .option-letter { background: #27ae60; }
-  .option-btn.wrong .option-letter { background: #e74c3c; }
-  /* Multi-select */
-  .multi-hint { font-size: 0.82em; color: #2e86c1; font-weight: 600; margin-bottom: 10px; }
-  /* Drag and Drop */
-  .drag-area {
+  .section {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .section-body { padding: 20px; }
+  .task {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .task:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .task-label {
+    font-weight: bold;
+    color: #1a5276;
+    margin-bottom: 6px;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .task-question {
+    font-size: 1em;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  /* Radio & Checkbox */
+  .options label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    border: 2px solid #d0dce8;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    font-size: 0.97em;
+    line-height: 1.4;
+  }
+  .options label:hover { background: #eaf2fb; border-color: #aac4de; }
+  .options input[type="radio"],
+  .options input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; }
+  .options label.correct { background: #d4efdf; border-color: #27ae60; }
+  .options label.wrong   { background: #fadbd8; border-color: #e74c3c; }
+  .options label.missed  { background: #fef9e7; border-color: #f39c12; }
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 9px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.2s;
+  }
+  .btn-check { background: #1a5276; color: white; }
+  .btn-check:hover { background: #154360; }
+  .btn-check:disabled { background: #aaa; cursor: default; }
+  /* Feedback */
+  .feedback {
+    display: none;
+    margin-top: 12px;
+    padding: 11px 15px;
+    border-radius: 6px;
+    font-size: 0.93em;
+    line-height: 1.5;
+  }
+  .feedback.correct { background: #d4efdf; border-left: 4px solid #27ae60; color: #1e8449; }
+  .feedback.wrong   { background: #fadbd8; border-left: 4px solid #e74c3c; color: #c0392b; }
+  .feedback.partial { background: #fef9e7; border-left: 4px solid #f39c12; color: #d35400; }
+
+  /* Drag & Drop */
+  .dnd-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .dnd-items {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
-    min-height: 50px;
-    padding: 10px;
-    background: #f0f7ff;
-    border-radius: 8px;
-    border: 2px dashed #a0bcd8;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+    align-content: flex-start;
   }
-  .drag-area p.drag-label {
-    font-size: 0.8em;
-    color: #888;
-    font-weight: 600;
-    width: 100%;
-    margin-bottom: 4px;
-  }
-  .drag-chip {
-    background: #2e86c1;
+  .dnd-item {
+    background: #1a5276;
     color: white;
     padding: 7px 14px;
     border-radius: 20px;
     cursor: grab;
     font-size: 0.9em;
-    font-weight: 600;
     user-select: none;
-    transition: transform 0.15s, box-shadow 0.15s;
-    touch-action: none;
+    transition: opacity 0.2s, transform 0.1s;
+    white-space: nowrap;
   }
-  .drag-chip:active { cursor: grabbing; transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-  .drag-chip.placed { background: #1a5276; }
-  .drop-zones { display: flex; flex-direction: column; gap: 14px; }
-  .drop-row {
+  .dnd-item:active { cursor: grabbing; transform: scale(1.05); }
+  .dnd-item.dragging { opacity: 0.4; }
+  .dnd-item.placed { display: none; }
+  .dnd-targets { display: flex; flex-direction: column; gap: 10px; flex: 2; min-width: 260px; }
+  .dnd-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 10px;
   }
-  .drop-label {
-    min-width: 200px;
-    font-size: 0.95em;
-    color: #1a2e45;
-    font-weight: 600;
-  }
-  .drop-zone {
+  .dnd-row-label {
     min-width: 160px;
-    min-height: 40px;
-    border: 2px dashed #a0bcd8;
-    border-radius: 8px;
-    padding: 6px 12px;
-    background: #f5f8fc;
+    font-weight: bold;
+    font-size: 0.92em;
+    color: #1a5276;
+  }
+  .dnd-drop {
+    min-height: 38px;
+    min-width: 160px;
+    border: 2px dashed #aac4de;
+    border-radius: 6px;
+    padding: 4px 8px;
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
     gap: 6px;
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .drop-zone.drag-over { background: #d6eaf8; border-color: #2e86c1; }
-  .drop-zone.correct-zone { background: #d5f5e3; border-color: #27ae60; }
-  .drop-zone.wrong-zone { background: #fde8e6; border-color: #e74c3c; }
-  .drop-zone .drag-chip { font-size: 0.85em; }
-  /* Feedback */
-  .feedback {
-    margin-top: 14px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 0.92em;
-    font-weight: 600;
-    display: none;
-  }
-  .feedback.correct-fb { background: #d5f5e3; color: #1a5c2a; border: 1px solid #27ae60; }
-  .feedback.wrong-fb { background: #fde8e6; color: #7b241c; border: 1px solid #e74c3c; }
-  /* Buttons */
-  .btn-row { display: flex; justify-content: flex-end; margin-top: 18px; gap: 10px; }
-  .btn {
-    padding: 10px 24px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-size: 0.95em;
-    font-weight: 700;
-    transition: all 0.2s;
-  }
-  .btn-check {
-    background: #e8a000;
-    color: white;
-  }
-  .btn-check:hover { background: #c87f00; }
-  .btn-check:disabled { background: #ccc; cursor: default; }
-  .btn-next {
-    background: #1a5276;
-    color: white;
-    display: none;
-  }
-  .btn-next:hover { background: #154460; }
-  /* Result */
-  #result-card {
-    background: white;
-    border-radius: 12px;
-    padding: 40px 32px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    display: none;
-    animation: fadeIn 0.5s ease;
-  }
-  #result-card h2 { font-size: 1.6em; color: #1a5276; margin-bottom: 12px; }
-  .score-circle {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #1a5276, #2e86c1);
-    color: white;
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin: 20px auto;
-    box-shadow: 0 4px 16px rgba(30,82,118,0.35);
+    transition: background 0.2s, border-color 0.2s;
+    background: #f7fbff;
   }
-  .score-circle .score-num { font-size: 2em; font-weight: 700; }
-  .score-circle .score-total { font-size: 0.8em; opacity: 0.85; }
-  .result-message { font-size: 1.05em; color: #555; margin: 14px 0 24px; line-height: 1.6; }
-  .btn-restart {
-    background: #e8a000;
-    color: white;
-    padding: 12px 32px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1em;
-    font-weight: 700;
+  .dnd-drop.drag-over { background: #d6eaf8; border-color: #1a5276; }
+  .dnd-drop .dnd-item {
+    background: #2980b9;
+    font-size: 0.85em;
+    padding: 5px 11px;
     cursor: pointer;
-    transition: background 0.2s;
   }
-  .btn-restart:hover { background: #c87f00; }
-  /* Nav dots */
-  .nav-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin: 10px 0 20px;
-    flex-wrap: wrap;
+  .dnd-drop .dnd-item:hover { background: #c0392b; }
+  .dnd-drop.correct-zone { border-color: #27ae60; background: #d4efdf; }
+  .dnd-drop.wrong-zone   { border-color: #e74c3c; background: #fadbd8; }
+
+  /* Score */
+  #score-section {
+    display: none;
+    background: white;
+    border-radius: 8px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
   }
-  .nav-dot {
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    background: #c8d8e8;
-    transition: background 0.3s;
+  #score-section h2 { color: #1a5276; margin-bottom: 12px; }
+  #score-text { font-size: 1.3em; font-weight: bold; margin-bottom: 10px; }
+  #score-msg  { font-size: 1em; color: #555; margin-bottom: 18px; }
+  .btn-reset { background: #27ae60; color: white; }
+  .btn-reset:hover { background: #1e8449; }
+
+  .submit-row {
+    text-align: center;
+    margin-top: 10px;
   }
-  .nav-dot.done { background: #27ae60; }
-  .nav-dot.current { background: #2e86c1; }
-  .nav-dot.wrong-dot { background: #e74c3c; }
+  #submit-all-btn {
+    background: #27ae60;
+    color: white;
+    padding: 12px 36px;
+    font-size: 1.05em;
+  }
+  #submit-all-btn:hover { background: #1e8449; }
 </style>
 </head>
 <body>
-<header>
-  <h1>🎯 Verständnistest: L'imparfait</h1>
-  <p>Teste dein Wissen zu den deutschen und französischen Vergangenheitsformen</p>
-</header>
-<div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
 
-<main>
-  <div class="nav-dots" id="navDots"></div>
+<h1>🇩🇪➡️🇫🇷 Verständnistest: Imparfait &amp; Vergangenheitsformen</h1>
+<p class="subtitle">Beantworte alle Aufgaben und klicke dann auf „Alle auswerten".</p>
 
-  <!-- FRAGE 1: Single Choice -->
-  <div class="card active" id="q1">
-    <div class="section-label">Abschnitt 1 – Deutsche Vergangenheitsformen</div>
-    <div class="question-number">Frage 1 von 8</div>
-    <div class="question-text">Was ist ein Partizip?</div>
-    <div class="hint">💡 Tipp: Denk an Beispiele wie „gewesen" oder „gemacht".</div>
-    <div class="options">
-      <button class="option-btn" onclick="selectSingle(1,'A')"><span class="option-letter">A</span> Ein konjugiertes Verb in der Gegenwart (z. B. „ich gehe")</button>
-      <button class="option-btn" onclick="selectSingle(1,'B')"><span class="option-letter">B</span> Eine unveränderliche Verbform, die z. B. im Perfekt als zweiter Verbteil verwendet wird (z. B. „gewesen", „gemacht")</button>
-      <button class="option-btn" onclick="selectSingle(1,'C')"><span class="option-letter">C</span> Ein Hilfsverb wie „haben" oder „sein"</button>
-      <button class="option-btn" onclick="selectSingle(1,'D')"><span class="option-letter">D</span> Ein Adjektiv, das ein Nomen beschreibt</button>
-    </div>
-    <div class="feedback" id="fb1"></div>
-    <div class="btn-row">
-      <button class="btn btn-check" id="check1" onclick="checkSingle(1,'B','Das Partizip ist eine unveränderliche Verbform (z. B. \"gewesen\", \"gemacht\"), die z. B. im Perfekt als zweiter Verbteil nach dem Hilfsverb steht.')" disabled>Auswerten</button>
-      <button class="btn btn-next" id="next1" onclick="goTo(2)">Weiter →</button>
-    </div>
-  </div>
+<!-- SECTION 1 -->
+<div class="section">
+  <div class="section-title">Teil 1: Deutsche Vergangenheitsformen</div>
+  <div class="section-body">
 
-  <!-- FRAGE 2: Single Choice -->
-  <div class="card" id="q2">
-    <div class="section-label">Abschnitt 1 – Deutsche Vergangenheitsformen</div>
-    <div class="question-number">Frage 2 von 8</div>
-    <div class="question-text">Wie wird das deutsche Perfekt gebildet?</div>
-    <div class="options">
-      <button class="option-btn" onclick="selectSingle(2,'A')"><span class="option-letter">A</span> Nur durch Veränderung des Verbs (z. B. „ich war")</button>
-      <button class="option-btn" onclick="selectSingle(2,'B')"><span class="option-letter">B</span> Mit einem Hilfsverb im Präteritum + Partizip</button>
-      <button class="option-btn" onclick="selectSingle(2,'C')"><span class="option-letter">C</span> Mit einem Hilfsverb (haben/sein) + Partizip (z. B. „ich bin gewesen", „wir haben gewusst")</button>
-      <button class="option-btn" onclick="selectSingle(2,'D')"><span class="option-letter">D</span> Nur mit dem Hilfsverb „werden"</button>
-    </div>
-    <div class="feedback" id="fb2"></div>
-    <div class="btn-row">
-      <button class="btn btn-check" id="check2" onclick="checkSingle(2,'C','Das Perfekt wird mit einem Hilfsverb (haben oder sein) + Partizip gebildet. Beispiele: ich bin gewesen, wir haben gewusst.')" disabled>Auswerten</button>
-      <button class="btn btn-next" id="next2" onclick="goTo(3)">Weiter →</button>
-    </div>
-  </div>
-
-  <!-- FRAGE 3: Multi Choice -->
-  <div class="card" id="q3">
-    <div class="section-label">Abschnitt 1 – Deutsche Vergangenheitsformen</div>
-    <div class="question-number">Frage 3 von 8</div>
-    <div class="question-text">Bei welchen Verben verwendet man im Deutschen das Präteritum statt des Perfekts?</div>
-    <div class="multi-hint">☑ Mehrere Antworten möglich!</div>
-    <div class="hint">💡 Im Deutschen wird das Präteritum nur bei einer bestimmten Gruppe von Verben bevorzugt.</div>
-    <div class="options" id="options3">
-      <button class="option-btn" data-val="A" onclick="toggleMulti(3,'A')"><span class="option-letter">A</span> spielen, laufen, tanzen</button>
-      <button class="option-btn" data-val="B" onclick="toggleMulti(3,'B')"><span class="option-letter">B</span> haben, sein, wissen</button>
-      <button class="option-btn" data-val="C" onclick="toggleMulti(3,'C')"><span class="option-letter">C</span> können, müssen, dürfen</button>
-      <button class="option-btn" data-val="D" onclick="toggleMulti(3,'D')"><span class="option-letter">D</span> heißen, denken, finden</button>
-    </div>
-    <div class="feedback" id="fb3"></div>
-    <div class="btn-row">
-      <button class="btn btn-check" id="check3" onclick="checkMulti(3,['B','C','D'],'Das Präteritum wird im Deutschen vor allem bei Hilfsverben (haben, sein), Modalverben (können, müssen, dürfen, mögen, sollen, wollen) sowie bei heißen, wissen, denken und finden verwendet – nicht bei regulären Verben wie spielen oder tanzen.')" disabled>Auswerten</button>
-      <button class="btn btn-next" id="next3" onclick="goTo(4)">Weiter →</button>
-    </div>
-  </div>
-
-  <!-- FRAGE 4: Drag and Drop – Zeitformen zuordnen -->
-  <div class="card" id="q4">
-    <div class="section-label">Abschnitt 2 – Analogien Deutsch / Französisch</div>
-    <div class="question-number">Frage 4 von 8</div>
-    <div class="question-text">Ordne die deutschen Zeitformen den entsprechenden französischen Zeitformen zu!</div>
-    <div class="hint">💡 Ziehe die deutschen Begriffe in die richtige Spalte.</div>
-    <div class="drag-area" id="dragPool4">
-      <p class="drag-label">Zum Ziehen:</p>
-      <div class="drag-chip" draggable="true" data-id="Perfekt" ondragstart="dragStart(event)">Perfekt</div>
-      <div class="drag-chip" draggable="true" data-id="Präteritum" ondragstart="dragStart(event)">Präteritum</div>
-      <div class="drag-chip" draggable="true" data-id="Plusquamperfekt" ondragstart="dragStart(event)">Plusquamperfekt</div>
-    </div>
-    <div class="drop-zones">
-      <div class="drop-row">
-        <div class="drop-label">le passé composé</div>
-        <div class="drop-zone" id="dz4-passe" data-answer="Perfekt" ondragover="dragOver(event)" ondrop="dropItem(event,'dz4-passe')" ondragleave="dragLeave(event)"></div>
+    <!-- Aufgabe 1 -->
+    <div class="task" id="task1">
+      <div class="task-label">Aufgabe 1 · Single Choice</div>
+      <div class="task-question">Was ist ein <strong>Partizip</strong>?</div>
+      <div class="options" id="opts1">
+        <label><input type="radio" name="q1" value="a"> Eine konjugierte Verbform, z.&nbsp;B. „ich gehe"</label>
+        <label><input type="radio" name="q1" value="b"> Eine unveränderliche Verbform, die z.&nbsp;B. im Perfekt verwendet wird (z.&nbsp;B. „gewesen", „gewusst")</label>
+        <label><input type="radio" name="q1" value="c"> Ein Hilfsverb wie „haben" oder „sein"</label>
+        <label><input type="radio" name="q1" value="d"> Ein Substantiv, das von einem Verb abgeleitet ist</label>
       </div>
-      <div class="drop-row">
-        <div class="drop-label">l'imparfait</div>
-        <div class="drop-zone" id="dz4-imparfait" data-answer="Präteritum" ondragover="dragOver(event)" ondrop="dropItem(event,'dz4-imparfait')" ondragleave="dragLeave(event)"></div>
+      <button class="btn btn-check" onclick="checkSingle('q1','b','opts1','fb1')">Auswerten</button>
+      <div class="feedback" id="fb1"></div>
+    </div>
+
+    <!-- Aufgabe 2 -->
+    <div class="task" id="task2">
+      <div class="task-label">Aufgabe 2 · Single Choice</div>
+      <div class="task-question">Wie wird das deutsche <strong>Perfekt</strong> gebildet?</div>
+      <div class="options" id="opts2">
+        <label><input type="radio" name="q2" value="a"> Nur durch Veränderung des Verbs (z.&nbsp;B. „ich war")</label>
+        <label><input type="radio" name="q2" value="b"> Mit dem Hilfsverb „haben"/"sein" im Präteritum + Partizip</label>
+        <label><input type="radio" name="q2" value="c"> Mit dem Hilfsverb „haben"/"sein" im Präsens + Partizip</label>
+        <label><input type="radio" name="q2" value="d"> Nur mit dem Hilfsverb „haben" + Infinitiv</label>
       </div>
-      <div class="drop-row">
-        <div class="drop-label">le plus-que-parfait</div>
-        <div class="drop-zone" id="dz4-pqp" data-answer="Plusquamperfekt" ondragover="dragOver(event)" ondrop="dropItem(event,'dz4-pqp')" ondragleave="dragLeave(event)"></div>
+      <button class="btn btn-check" onclick="checkSingle('q2','c','opts2','fb2')">Auswerten</button>
+      <div class="feedback" id="fb2"></div>
+    </div>
+
+    <!-- Aufgabe 3 -->
+    <div class="task" id="task3">
+      <div class="task-label">Aufgabe 3 · Multiple Choice</div>
+      <div class="task-question">Bei welchen Verben benutzt man im Deutschen das <strong>Präteritum</strong> statt des Perfekts? <em>(Mehrere Antworten möglich)</em></div>
+      <div class="options" id="opts3">
+        <label><input type="checkbox" name="q3" value="a"> spielen, laufen, essen</label>
+        <label><input type="checkbox" name="q3" value="b"> haben, sein, wissen</label>
+        <label><input type="checkbox" name="q3" value="c"> können, müssen, dürfen</label>
+        <label><input type="checkbox" name="q3" value="d"> denken, heißen, finden</label>
       </div>
+      <button class="btn btn-check" onclick="checkMulti('q3',['b','c','d'],'opts3','fb3')">Auswerten</button>
+      <div class="feedback" id="fb3"></div>
     </div>
-    <div class="feedback" id="fb4"></div>
-    <div class="btn-row">
-      <button class="btn btn-check" id="check4" onclick="checkDrag(4,['dz4-passe','dz4-imparfait','dz4-pqp'])" disabled>Auswerten</button>
-      <button class="btn btn-next" id="next4" onclick="goTo(5)">Weiter →</button>
-    </div>
-  </div>
 
-  <!-- FRAGE 5: Single Choice – Bildung -->
-  <div class="card" id="q5">
-    <div class="section-label">Abschnitt 2 – Analogien Deutsch / Französisch</div>
-    <div class="question-number">Frage 5 von 8</div>
-    <div class="question-text">Wie wird das passé composé im Französischen gebildet?</div>
-    <div class="options">
-      <button class="option-btn" onclick="selectSingle(5,'A')"><span class="option-letter">A</span> Nur durch Veränderung des Verbs (wie das Präteritum im Deutschen)</button>
-      <button class="option-btn" onclick="selectSingle(5,'B')"><span class="option-letter">B</span> Mit einem Hilfsverb (avoir/être) + Partizip, genau wie das Perfekt im Deutschen</button>
-      <button class="option-btn" onclick="selectSingle(5,'C')"><span class="option-letter">C</span> Mit dem Hilfsverb im imparfait + Partizip</button>
-      <button class="option-btn" onclick="selectSingle(5,'D')"><span class="option-letter">D</span> Es gibt im Französischen kein Hilfsverb</button>
-    </div>
-    <div class="feedback" id="fb5"></div>
-    <div class="btn-row">
-      <button class="btn btn-check" id="check5" onclick="checkSingle(5,'B','Das passé composé wird wie das deutsche Perfekt gebildet: Hilfsverb (avoir oder être) + Partizip. Beispiel: j\\'ai été, nous avons su.')" disabled>Auswerten</button>
-      <button class="btn btn-next" id="next5" onclick="goTo(6)">Weiter →</button>
-    </div>
   </div>
+</div>
 
-  <!-- FRAGE 6: Drag and Drop – Funktion zuordnen -->
-  <div class="card" id="q6">
-    <div class="section-label">Abschnitt 3 – Imparfait vs. passé composé</div>
-    <div class="question-number">Frage 6 von 8</div>
-    <div class="question-text">Ordne die Funktionen der richtigen Zeitform zu!</div>
-    <div class="drag-area" id="dragPool6">
-      <p class="drag-label">Zum Ziehen:</p>
-      <div class="drag-chip" draggable="true" data-id="einmaliges Ereignis" ondragstart="dragStart(event)">einmaliges Ereignis</div>
-      <div class="drag-chip" draggable="true" data-id="wiederholter Zustand" ondragstart="dragStart(event)">wiederholter Zustand</div>
-      <div class="drag-chip" draggable="true" data-id="andauernder Hintergrund" ondragstart="dragStart(event)">andauernder Hintergrund</div>
-    </div>
-    <div class="drop-zones">
-      <div class="drop-row">
-        <div class="drop-label">passé composé</div>
-        <div class="drop-zone" id="dz6-pc" data-answer="einmaliges Ereignis" ondragover="dragOver(event)" ondrop="dropItem(event,'dz6-pc')" ondragleave="dragLeave(event)"></div>
+<!-- SECTION 2 -->
+<div class="section">
+  <div class="section-title">Teil 2: Deutsch-französische Analogien</div>
+  <div class="section-body">
+
+    <!-- Aufgabe 4 – Drag & Drop -->
+    <div class="task" id="task4">
+      <div class="task-label">Aufgabe 4 · Drag &amp; Drop</div>
+      <div class="task-question">Ordne die <strong>deutschen Zeitformen</strong> den passenden <strong>französischen</strong> zu. Ziehe die Karten in die richtige Spalte.<br><small>(Bereits gesetzte Karten kannst du durch Klicken wieder entfernen.)</small></div>
+      <div class="dnd-container">
+        <div class="dnd-items" id="dnd4-pool">
+          <div class="dnd-item" draggable="true" data-val="Perfekt" id="di4-1">Perfekt</div>
+          <div class="dnd-item" draggable="true" data-val="Präteritum" id="di4-2">Präteritum</div>
+          <div class="dnd-item" draggable="true" data-val="Plusquamperfekt" id="di4-3">Plusquamperfekt</div>
+        </div>
+        <div class="dnd-targets">
+          <div class="dnd-row">
+            <div class="dnd-row-label">le passé composé</div>
+            <div class="dnd-drop" id="drop4-pc" data-accept="Perfekt"></div>
+          </div>
+          <div class="dnd-row">
+            <div class="dnd-row-label">l'imparfait</div>
+            <div class="dnd-drop" id="drop4-imp" data-accept="Präteritum"></div>
+          </div>
+          <div class="dnd-row">
+            <div class="dnd-row-label">le plus-que-parfait</div>
+            <div class="dnd-drop" id="drop4-pqp" data-accept="Plusquamperfekt"></div>
+          </div>
+        </div>
       </div>
-      <div class="drop-row">
-        <div class="drop-label">imparfait (1)</div>
-        <div class="drop-zone" id="dz6-imp1" data-answer="wiederholter Zustand" ondragover="dragOver(event)" ondrop="dropItem(event,'dz6-imp1')" ondragleave="dragLeave(event)"></div>
+      <button class="btn btn-check" onclick="checkDnd('dnd4',['drop4-pc','drop4-imp','drop4-pqp'],'fb4')">Auswerten</button>
+      <div class="feedback" id="fb4"></div>
+    </div>
+
+    <!-- Aufgabe 5 -->
+    <div class="task" id="task5">
+      <div class="task-label">Aufgabe 5 · Single Choice</div>
+      <div class="task-question">Das <strong>passé composé</strong> besteht aus …</div>
+      <div class="options" id="opts5">
+        <label><input type="radio" name="q5" value="a"> … einer veränderten Verbform (nur Stamm wird angepasst)</label>
+        <label><input type="radio" name="q5" value="b"> … einem Hilfsverb im imparfait + Partizip</label>
+        <label><input type="radio" name="q5" value="c"> … einem Hilfsverb im Präsens + Partizip</label>
+        <label><input type="radio" name="q5" value="d"> … zwei Hilfsverben + Partizip</label>
       </div>
-      <div class="drop-row">
-        <div class="drop-label">imparfait (2)</div>
-        <div class="drop-zone" id="dz6-imp2" data-answer="andauernder Hintergrund" ondragover="dragOver(event)" ondrop="dropItem(event,'dz6-imp2')" ondragleave="dragLeave(event)"></div>
+      <button class="btn btn-check" onclick="checkSingle('q5','c','opts5','fb5')">Auswerten</button>
+      <div class="feedback" id="fb5"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section">
+  <div class="section-title">Teil 3: Imparfait vs. passé composé</div>
+  <div class="section-body">
+
+    <!-- Aufgabe 6 – Drag & Drop -->
+    <div class="task" id="task6">
+      <div class="task-label">Aufgabe 6 · Drag &amp; Drop</div>
+      <div class="task-question">Ordne die <strong>Beschreibungen</strong> der richtigen Zeitform zu.</div>
+      <div class="dnd-container">
+        <div class="dnd-items" id="dnd6-pool">
+          <div class="dnd-item" draggable="true" data-val="einmalige Ereignisse" id="di6-1">einmalige Ereignisse</div>
+          <div class="dnd-item" draggable="true" data-val="wiederholte Handlungen / Zustände" id="di6-2">wiederholte Handlungen / Zustände</div>
+          <div class="dnd-item" draggable="true" data-val="Hilfsverb (Präsens) + Partizip" id="di6-3">Hilfsverb (Präsens) + Partizip</div>
+          <div class="dnd-item" draggable="true" data-val="Veränderung des Verbs" id="di6-4">Veränderung des Verbs</div>
+        </div>
+        <div class="dnd-targets">
+          <div class="dnd-row">
+            <div class="dnd-row-label">passé composé</div>
+            <div class="dnd-drop" id="drop6-pc" data-accept="einmalige Ereignisse|Hilfsverb (Präsens) + Partizip"></div>
+          </div>
+          <div class="dnd-row">
+            <div class="dnd-row-label">imparfait</div>
+            <div class="dnd-drop" id="drop6-imp" data-accept="wiederholte Handlungen / Zustände|Veränderung des Verbs"></div>
+          </div>
+        </div>
       </div>
+      <button class="btn btn-check" onclick="checkDnd('dnd6',['drop6-pc','drop6-imp'],'fb6')">Auswerten</button>
+      <div class="feedback" id="fb6"></div>
     </div>
-    <div class="feedback" id="fb6"></div>
-    <div class="btn-row">
-      <button class="btn btn-check" id="check6" onclick="checkDrag(6,['dz6-pc','dz6-imp1','dz6-imp2'])" disabled>Auswerten</button>
-      <button class="btn btn-next" id="next6" onclick="goTo(7)">Weiter →</button>
-    </div>
-  </div>
 
-  <!-- FRAGE 7: Single Choice – Satzbeispiel -->
-  <div class="card" id="q7">
-    <div class="section-label">Abschnitt 3 – Imparfait vs. passé composé</div>
-    <div class="question-number">Frage 7 von 8</div>
-    <div class="question-text">Welche Zeitform passt zum folgenden deutschen Satz?<br><em>„Jeden Morgen stand sie früh auf."</em></div>
-    <div class="hint">💡 Handelt es sich um ein einmaliges Ereignis oder eine Gewohnheit/Wiederholung?</div>
-    <div class="options">
-      <button class="option-btn" onclick="selectSingle(7,'A')"><span class="option-letter">A</span> passé composé – weil es eine abgeschlossene Handlung ist</button>
-      <button class="option-btn" onclick="selectSingle(7,'B')"><span class="option-letter">B</span> imparfait – weil es eine regelmäßige Gewohnheit ausdrückt</button>
-      <button class="option-btn" onclick="selectSingle(7,'C')"><span class="option-letter">C</span> plus-que-parfait – weil die Handlung vor einer anderen liegt</button>
-      <button class="option-btn" onclick="selectSingle(7,'D')"><span class="option-letter">D</span> présent – weil es sich um Gegenwart handelt</button>
+    <!-- Aufgabe 7 -->
+    <div class="task" id="task7">
+      <div class="task-label">Aufgabe 7 · Single Choice</div>
+      <div class="task-question">„Jeden Abend spielte Lucas Gitarre." – Welche französische Vergangenheitsform passt hier?</div>
+      <div class="options" id="opts7">
+        <label><input type="radio" name="q7" value="a"> le passé composé – es ist ein einmaliges Ereignis</label>
+        <label><input type="radio" name="q7" value="b"> l'imparfait – es ist eine wiederholte / andauernde Handlung</label>
+        <label><input type="radio" name="q7" value="c"> le plus-que-parfait – es liegt in der Vorvergangenheit</label>
+        <label><input type="radio" name="q7" value="d"> keine Vergangenheitsform nötig</label>
+      </div>
+      <button class="btn btn-check" onclick="checkSingle('q7','b','opts7','fb7')">Auswerten</button>
+      <div class="feedback" id="fb7"></div>
     </div>
-    <div class="feedback" id="fb7"></div>
-    <div class="btn-row">
-      <button class="btn btn-check" id="check7" onclick="checkSingle(7,'B','\"Jeden Morgen\" zeigt eine Gewohnheit oder Wiederholung – genau das ist der Bereich des imparfait. Das imparfait entspricht dem deutschen Präteritum für Zustände und Gewohnheiten.')" disabled>Auswerten</button>
-      <button class="btn btn-next" id="next7" onclick="goTo(8)">Weiter →</button>
-    </div>
-  </div>
 
-  <!-- FRAGE 8: Multi Choice – Sätze zuordnen -->
-  <div class="card" id="q8">
-    <div class="section-label">Abschnitt 3 – Imparfait vs. passé composé</div>
-    <div class="question-number">Frage 8 von 8</div>
-    <div class="question-text">Welche der folgenden Sätze würde man im Französischen mit dem <strong>imparfait</strong> ausdrücken?</div>
-    <div class="multi-hint">☑ Mehrere Antworten möglich!</div>
-    <div class="options" id="options8">
-      <button class="option-btn" data-val="A" onclick="toggleMulti(8,'A')"><span class="option-letter">A</span> „Gestern hat sie ihr Buch verloren." (einmaliges Ereignis)</button>
-      <button class="option-btn" data-val="B" onclick="toggleMulti(8,'B')"><span class="option-letter">B</span> „Als Kind spielte er immer im Park." (Gewohnheit)</button>
-      <button class="option-btn" data-val="C" onclick="toggleMulti(8,'C')"><span class="option-letter">C</span> „Es war dunkel und kalt." (andauernder Zustand)</button>
-      <button class="option-btn" data-val="D" onclick="toggleMulti(8,'D')"><span class="option-letter">D</span> „Plötzlich fiel das Glas herunter." (einmaliges, plötzliches Ereignis)</button>
+    <!-- Aufgabe 8 -->
+    <div class="task" id="task8">
+      <div class="task-label">Aufgabe 8 · Multiple Choice</div>
+      <div class="task-question">Welche deutschen Sätze würde man ins <strong>imparfait</strong> übersetzen? <em>(Mehrere Antworten möglich)</em></div>
+      <div class="options" id="opts8">
+        <label><input type="checkbox" name="q8" value="a"> „Gestern hat Emma ihr Buch vergessen." (einmaliges Ereignis)</label>
+        <label><input type="checkbox" name="q8" value="b"> „Als Kind mochte ich Schokolade." (andauernder Zustand)</label>
+        <label><input type="checkbox" name="q8" value="c"> „Jedes Wochenende fuhren wir ans Meer." (wiederholte Handlung)</label>
+        <label><input type="checkbox" name="q8" value="d"> „Plötzlich klingelte das Telefon." (einmaliges, abgeschlossenes Ereignis)</label>
+        <label><input type="checkbox" name="q8" value="e"> „Es regnete den ganzen Tag." (andauernder Zustand)</label>
+      </div>
+      <button class="btn btn-check" onclick="checkMulti('q8',['b','c','e'],'opts8','fb8')">Auswerten</button>
+      <div class="feedback" id="fb8"></div>
     </div>
-    <div class="feedback" id="fb8"></div>
-    <div class="btn-row">
-      <button class="btn btn-check" id="check8" onclick="checkMulti(8,['B','C'],'Das imparfait verwendet man für Gewohnheiten/Wiederholungen (\"Als Kind spielte er immer...\") und für andauernde Zustände/Hintergrundbeschreibungen (\"Es war dunkel und kalt.\"). Einmalige oder plötzliche Ereignisse stehen im passé composé.')" disabled>Auswerten</button>
-      <button class="btn btn-next" id="next8" onclick="showResult()">Ergebnis anzeigen 🏁</button>
-    </div>
-  </div>
 
-  <!-- ERGEBNIS -->
-  <div id="result-card">
-    <h2>🎉 Test abgeschlossen!</h2>
-    <div class="score-circle">
-      <span class="score-num" id="scoreNum">0</span>
-      <span class="score-total" id="scoreTotal">von 8</span>
-    </div>
-    <div class="result-message" id="resultMsg"></div>
-    <button class="btn-restart" onclick="restartQuiz()">🔄 Nochmal versuchen</button>
   </div>
+</div>
 
-</main>
+<!-- Submit all -->
+<div class="submit-row">
+  <button class="btn" id="submit-all-btn" onclick="showScore()">🏁 Alle auswerten &amp; Ergebnis anzeigen</button>
+</div>
+
+<!-- Score -->
+<div id="score-section">
+  <h2>Dein Ergebnis</h2>
+  <div id="score-text"></div>
+  <div id="score-msg"></div>
+  <button class="btn btn-reset" onclick="resetAll()">🔄 Nochmal versuchen</button>
+</div>
 
 <script>
-  const totalQuestions = 8;
-  let currentQ = 1;
-  let score = 0;
-  let results = new Array(totalQuestions + 1).fill(null); // null=unanswered, true, false
-  let multiSelections = {};
-  let dragData = {};
+// ── Drag & Drop setup ──────────────────────────────────────────────
+let draggedItem = null;
 
-  // Init nav dots
-  function initDots() {
-    const container = document.getElementById('navDots');
-    container.innerHTML = '';
-    for (let i = 1; i <= totalQuestions; i++) {
-      const d = document.createElement('div');
-      d.className = 'nav-dot' + (i === 1 ? ' current' : '');
-      d.id = 'dot' + i;
-      container.appendChild(d);
-    }
-  }
-
-  function updateDots(qNum, correct) {
-    const dot = document.getElementById('dot' + qNum);
-    if (correct) dot.className = 'nav-dot done';
-    else dot.className = 'nav-dot wrong-dot';
-    if (qNum < totalQuestions) {
-      const next = document.getElementById('dot' + (qNum + 1));
-      if (next) next.className = 'nav-dot current';
-    }
-  }
-
-  function updateProgress(qNum) {
-    const pct = ((qNum - 1) / totalQuestions) * 100;
-    document.getElementById('progressBar').style.width = pct + '%';
-  }
-
-  // Single choice
-  let singleSelections = {};
-  function selectSingle(qNum, val) {
-    singleSelections[qNum] = val;
-    const card = document.getElementById('q' + qNum);
-    card.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
-    const buttons = card.querySelectorAll('.option-btn');
-    buttons.forEach(btn => {
-      if (btn.querySelector('.option-letter').textContent === val) btn.classList.add('selected');
+function initDnd() {
+  document.querySelectorAll('.dnd-item').forEach(item => {
+    item.addEventListener('dragstart', e => {
+      draggedItem = item;
+      setTimeout(() => item.classList.add('dragging'), 0);
     });
-    document.getElementById('check' + qNum).disabled = false;
-  }
-
-  function checkSingle(qNum, correct, explanation) {
-    const selected = singleSelections[qNum];
-    const card = document.getElementById('q' + qNum);
-    const buttons = card.querySelectorAll('.option-btn');
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      const letter = btn.querySelector('.option-letter').textContent;
-      if (letter === correct) btn.classList.add('correct');
-      else if (letter === selected && selected !== correct) btn.classList.add('wrong');
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+      draggedItem = null;
     });
-    const isCorrect = selected === correct;
-    if (isCorrect) score++;
-    results[qNum] = isCorrect;
-    showFeedback(qNum, isCorrect, explanation);
-    document.getElementById('check' + qNum).disabled = true;
-    document.getElementById('next' + qNum).style.display = 'inline-block';
-    updateDots(qNum, isCorrect);
-  }
+  });
 
-  // Multi choice
-  function toggleMulti(qNum, val) {
-    if (!multiSelections[qNum]) multiSelections[qNum] = [];
-    const arr = multiSelections[qNum];
-    const idx = arr.indexOf(val);
-    if (idx > -1) arr.splice(idx, 1);
-    else arr.push(val);
-    const card = document.getElementById('q' + qNum);
-    card.querySelectorAll('.option-btn').forEach(btn => {
-      const v = btn.dataset.val;
-      if (arr.includes(v)) btn.classList.add('selected');
-      else btn.classList.remove('selected');
+  document.querySelectorAll('.dnd-drop').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      if (!draggedItem) return;
+      // Move item to this zone
+      const clone = draggedItem.cloneNode(true);
+      clone.classList.remove('dragging');
+      clone.removeAttribute('draggable');
+      clone.style.cursor = 'pointer';
+      clone.title = 'Klicken zum Entfernen';
+      clone.addEventListener('click', () => returnToPool(clone, draggedItem.id));
+      zone.appendChild(clone);
+      draggedItem.classList.add('placed');
     });
-    document.getElementById('check' + qNum).disabled = arr.length === 0;
+  });
+}
+
+function returnToPool(clone, originalId) {
+  clone.remove();
+  const original = document.getElementById(originalId);
+  if (original) original.classList.remove('placed');
+}
+
+// ── Single Choice ──────────────────────────────────────────────────
+const feedbackTexts = {
+  q1: {
+    correct: '✅ Richtig! Ein Partizip ist eine unveränderliche Verbform, die z.&nbsp;B. im Perfekt gebraucht wird – „gewesen" oder „gewusst".',
+    wrong:   '❌ Leider falsch. Ein Partizip ist eine <strong>unveränderliche Verbform</strong>, die für zusammengesetzte Zeiten gebraucht wird, z.&nbsp;B. „gewesen" (Partizip von „sein").'
+  },
+  q2: {
+    correct: '✅ Richtig! Perfekt = Hilfsverb (haben/sein) im <strong>Präsens</strong> + Partizip, z.&nbsp;B. „ich <em>bin</em> gegangen".',
+    wrong:   '❌ Nicht ganz. Das Perfekt wird mit dem Hilfsverb im <strong>Präsens</strong> (nicht Präteritum!) + Partizip gebildet.'
+  },
+  q5: {
+    correct: '✅ Genau! Das passé composé = Hilfsverb (<em>avoir</em>/<em>être</em>) im <strong>Präsens</strong> + Partizip – genau wie das deutsche Perfekt.',
+    wrong:   '❌ Nicht ganz. Das passé composé funktioniert wie das deutsche Perfekt: Hilfsverb im <strong>Präsens</strong> + Partizip.'
+  },
+  q7: {
+    correct: '✅ Richtig! „Jeden Abend" zeigt eine <strong>wiederholte</strong> Handlung → l'imparfait.',
+    wrong:   '❌ Leider falsch. „Jeden Abend" signalisiert eine <strong>Wiederholung</strong>. Das ist typisch für das <strong>imparfait</strong>.'
   }
+};
 
-  function checkMulti(qNum, correctArr, explanation) {
-    const selected = multiSelections[qNum] || [];
-    const card = document.getElementById('q' + qNum);
-    const buttons = card.querySelectorAll('.option-btn');
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      const v = btn.dataset.val;
-      if (correctArr.includes(v)) btn.classList.add('correct');
-      else if (selected.includes(v)) btn.classList.add('wrong');
-    });
-    const isCorrect = selected.length === correctArr.length &&
-      correctArr.every(v => selected.includes(v));
-    if (isCorrect) score++;
-    results[qNum] = isCorrect;
-    showFeedback(qNum, isCorrect, explanation);
-    document.getElementById('check' + qNum).disabled = true;
-    document.getElementById('next' + qNum).style.display = 'inline-block';
-    updateDots(qNum, isCorrect);
-  }
+function checkSingle(name, correct, optsId, fbId) {
+  const opts = document.getElementById(optsId);
+  const labels = opts.querySelectorAll('label');
+  const selected = opts.querySelector(`input[name="${name}"]:checked`);
+  const fb = document.getElementById(fbId);
 
-  // Drag and Drop
-  let draggingId = null;
-  let draggingFrom = null;
-
-  function dragStart(e) {
-    draggingId = e.target.dataset.id;
-    draggingFrom = e.target.parentElement.id;
-    e.dataTransfer.setData('text/plain', draggingId);
-  }
-
-  function dragOver(e) {
-    e.preventDefault();
-    e.currentTarget.classList.add('drag-over');
-  }
-
-  function dragLeave(e) {
-    e.currentTarget.classList.remove('drag-over');
-  }
-
-  function dropItem(e, zoneId) {
-    e.preventDefault();
-    e.currentTarget.classList.remove('drag-over');
-    const zone = document.getElementById(zoneId);
-    // Return existing chip in zone to pool if occupied
-    const existing = zone.querySelector('.drag-chip');
-    if (existing) {
-      const qNum = zoneId.replace('dz','').split('-')[0];
-      const pool = document.getElementById('dragPool' + qNum);
-      existing.ondragstart = dragStart;
-      pool.appendChild(existing);
-    }
-    // Move chip
-    const qNum = zoneId.replace('dz','').split('-')[0];
-    let chip;
-    // Find chip in pool or other zone
-    chip = document.querySelector('[data-id="' + draggingId + '"]');
-    if (chip) {
-      chip.classList.add('placed');
-      zone.appendChild(chip);
-    }
-    checkDragComplete(parseInt(qNum));
-  }
-
-  function checkDragComplete(qNum) {
-    // Find all drop zones for this question
-    const zones = document.querySelectorAll('[id^="dz' + qNum + '-"]');
-    let allFilled = true;
-    zones.forEach(z => { if (!z.querySelector('.drag-chip')) allFilled = false; });
-    if (allFilled) document.getElementById('check' + qNum).disabled = false;
-    else document.getElementById('check' + qNum).disabled = true;
-  }
-
-  function checkDrag(qNum, zoneIds) {
-    let allCorrect = true;
-    zoneIds.forEach(zid => {
-      const zone = document.getElementById(zid);
-      const chip = zone.querySelector('.drag-chip');
-      const answer = zone.dataset.answer;
-      if (chip && chip.dataset.id === answer) {
-        zone.classList.add('correct-zone');
-      } else {
-        zone.classList.add('wrong-zone');
-        allCorrect = false;
-      }
-      if (chip) chip.setAttribute('draggable', 'false');
-    });
-    // Disable pool
-    const pool = document.getElementById('dragPool' + qNum);
-    if (pool) pool.querySelectorAll('.drag-chip').forEach(c => c.setAttribute('draggable','false'));
-    if (allCorrect) score++;
-    results[qNum] = allCorrect;
-    const msg = allCorrect ? '' : getDragCorrection(qNum, zoneIds);
-    showFeedback(qNum, allCorrect, msg);
-    document.getElementById('check' + qNum).disabled = true;
-    document.getElementById('next' + qNum).style.display = 'inline-block';
-    updateDots(qNum, allCorrect);
-  }
-
-  function getDragCorrection(qNum, zoneIds) {
-    let txt = 'Richtige Zuordnung: ';
-    const map = {
-      'dz4-passe': 'passé composé → Perfekt',
-      'dz4-imparfait': "l'imparfait → Präteritum",
-      'dz4-pqp': 'plus-que-parfait → Plusquamperfekt',
-      'dz6-pc': 'passé composé → einmaliges Ereignis',
-      'dz6-imp1': "imparfait (1) → wiederholter Zustand",
-      'dz6-imp2': "imparfait (2) → andauernder Hintergrund"
-    };
-    return txt + zoneIds.map(z => map[z]).join(' | ');
-  }
-
-  function showFeedback(qNum, isCorrect, explanation) {
-    const fb = document.getElementById('fb' + qNum);
+  if (!selected) {
+    fb.className = 'feedback wrong';
     fb.style.display = 'block';
-    if (isCorrect) {
-      fb.className = 'feedback correct-fb';
-      fb.innerHTML = '✅ Richtig! ' + (explanation || '');
-    } else {
-      fb.className = 'feedback wrong-fb';
-      fb.innerHTML = '❌ Nicht ganz. ' + (explanation || '');
+    fb.innerHTML = '⚠️ Bitte wähle eine Antwort aus.';
+    return;
+  }
+
+  labels.forEach(lbl => {
+    const inp = lbl.querySelector('input');
+    lbl.classList.remove('correct','wrong','missed');
+    if (inp.value === correct) lbl.classList.add('correct');
+    else if (inp.checked) lbl.classList.add('wrong');
+    inp.disabled = true;
+  });
+
+  const isCorrect = selected.value === correct;
+  fb.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
+  fb.style.display = 'block';
+  const texts = feedbackTexts[name];
+  fb.innerHTML = texts ? (isCorrect ? texts.correct : texts.wrong) : (isCorrect ? '✅ Richtig!' : '❌ Leider falsch.');
+  opts.closest('.task').querySelector('.btn-check').disabled = true;
+}
+
+// ── Multiple Choice ────────────────────────────────────────────────
+const mcFeedback = {
+  q3: {
+    correct: '✅ Richtig! Das Präteritum nutzt man bei: <em>haben, sein, wissen, heißen, finden, denken</em> sowie den Modalverben.',
+    partial: '⚠️ Fast! Das Präteritum verwendet man bei <em>haben, sein, wissen, heißen, finden, denken</em> und den Modalverben. „Spielen, laufen, essen" gehören <strong>nicht</strong> dazu.',
+    wrong:   '❌ Leider falsch. Das Präteritum steht bei: <em>haben, sein, wissen, heißen, finden, denken</em> und den Modalverben (können, müssen, …).'
+  },
+  q8: {
+    correct: '✅ Sehr gut! Andauernde Zustände und wiederholte Handlungen → imparfait.',
+    partial: '⚠️ Nicht ganz vollständig. Imparfait steht für <strong>andauernde Zustände</strong> (b, e) und <strong>wiederholte Handlungen</strong> (c). Einmalige Ereignisse → passé composé.',
+    wrong:   '❌ Leider falsch. Das imparfait steht für andauernde Zustände (b, e) und wiederholte Handlungen (c).'
+  }
+};
+
+function checkMulti(name, correctVals, optsId, fbId) {
+  const opts = document.getElementById(optsId);
+  const labels = opts.querySelectorAll('label');
+  const checked = [...opts.querySelectorAll(`input[name="${name}"]:checked`)].map(i => i.value);
+  const fb = document.getElementById(fbId);
+
+  if (checked.length === 0) {
+    fb.className = 'feedback wrong';
+    fb.style.display = 'block';
+    fb.innerHTML = '⚠️ Bitte wähle mindestens eine Antwort aus.';
+    return;
+  }
+
+  labels.forEach(lbl => {
+    const inp = lbl.querySelector('input');
+    lbl.classList.remove('correct','wrong','missed');
+    const isCorrectOpt = correctVals.includes(inp.value);
+    if (isCorrectOpt && inp.checked)       lbl.classList.add('correct');
+    else if (!isCorrectOpt && inp.checked) lbl.classList.add('wrong');
+    else if (isCorrectOpt && !inp.checked) lbl.classList.add('missed');
+    inp.disabled = true;
+  });
+
+  const allCorrect = correctVals.every(v => checked.includes(v)) && checked.every(v => correctVals.includes(v));
+  const anyCorrect = checked.some(v => correctVals.includes(v));
+  const texts = mcFeedback[name];
+  let cls, msg;
+  if (allCorrect)       { cls = 'correct'; msg = texts.correct; }
+  else if (anyCorrect)  { cls = 'partial'; msg = texts.partial; }
+  else                  { cls = 'wrong';   msg = texts.wrong;   }
+
+  fb.className = 'feedback ' + cls;
+  fb.style.display = 'block';
+  fb.innerHTML = msg;
+  opts.closest('.task').querySelector('.btn-check').disabled = true;
+}
+
+// ── Drag & Drop check ──────────────────────────────────────────────
+const dndFeedback = {
+  dnd4: {
+    correct: '✅ Perfekt! Perfekt ↔ passé composé, Präteritum ↔ imparfait, Plusquamperfekt ↔ plus-que-parfait.',
+    wrong:   '❌ Noch nicht ganz richtig. Denk daran: Beide verwenden Hilfsverb + Partizip → Perfekt / passé composé. Das Präteritum verändert das Verb selbst → imparfait.'
+  },
+  dnd6: {
+    correct: '✅ Super! passé composé = einmalige Ereignisse + Hilfsverb+Partizip; imparfait = Zustände/Wiederholung + Verbveränderung.',
+    wrong:   '❌ Nicht ganz. passé composé: einmalige Ereignisse, Hilfsverb+Partizip. Imparfait: wiederholte/andauernde Zustände, Verbveränderung.'
+  }
+};
+
+function checkDnd(dndId, dropIds, fbId) {
+  const fb = document.getElementById(fbId);
+  let allCorrect = true;
+
+  dropIds.forEach(dropId => {
+    const zone = document.getElementById(dropId);
+    const accepted = zone.dataset.accept.split('|');
+    const placed = [...zone.querySelectorAll('.dnd-item')].map(i => i.dataset.val);
+    zone.classList.remove('correct-zone','wrong-zone');
+
+    const zoneCorrect = accepted.length === placed.length &&
+      accepted.every(a => placed.includes(a)) &&
+      placed.every(p => accepted.includes(p));
+
+    if (zoneCorrect) zone.classList.add('correct-zone');
+    else { zone.classList.add('wrong-zone'); allCorrect = false; }
+  });
+
+  const texts = dndFeedback[dndId];
+  fb.className = 'feedback ' + (allCorrect ? 'correct' : 'wrong');
+  fb.style.display = 'block';
+  fb.innerHTML = allCorrect ? texts.correct : texts.wrong;
+
+  // disable further dragging
+  document.querySelectorAll(`#${dndId}-pool .dnd-item`).forEach(i => i.setAttribute('draggable','false'));
+  document.querySelectorAll(`[id^="drop${dndId.replace('dnd','')}"] .dnd-item`).forEach(i => i.style.cursor='default');
+  const btn = fb.previousElementSibling;
+  if (btn && btn.classList.contains('btn-check')) btn.disabled = true;
+}
+
+// ── Score ──────────────────────────────────────────────────────────
+function showScore() {
+  // Auto-evaluate anything not yet evaluated
+  ['q1','q2','q5','q7'].forEach(name => {
+    const inp = document.querySelector(`input[name="${name}"]`);
+    if (inp && !inp.disabled) {
+      const map = {q1:'b',q2:'c',q5:'c',q7:'b'};
+      const optsMap = {q1:'opts1',q2:'opts2',q5:'opts5',q7:'opts7'};
+      const fbMap   = {q1:'fb1',q2:'fb2',q5:'fb5',q7:'fb7'};
+      checkSingle(name, map[name], optsMap[name], fbMap[name]);
     }
-  }
+  });
+  [['q3',['b','c','d'],'opts3','fb3'],['q8',['b','c','e'],'opts8','fb8']].forEach(([name,correct,optsId,fbId]) => {
+    const inp = document.querySelector(`input[name="${name}"]`);
+    if (inp && !inp.disabled) checkMulti(name, correct, optsId, fbId);
+  });
+  [['dnd4',['drop4-pc','drop4-imp','drop4-pqp'],'fb4'],['dnd6',['drop6-pc','drop6-imp'],'fb6']].forEach(([id,drops,fb]) => {
+    const fbEl = document.getElementById(fb);
+    if (fbEl.style.display === 'none' || fbEl.style.display === '') checkDnd(id, drops, fb);
+  });
 
-  function goTo(qNum) {
-    document.getElementById('q' + (qNum - 1)).classList.remove('active');
-    document.getElementById('q' + qNum).classList.add('active');
-    currentQ = qNum;
-    updateProgress(qNum);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function showResult() {
-    document.getElementById('q8').classList.remove('active');
-    document.getElementById('progressBar').style.width = '100%';
-    const rc = document.getElementById('result-card');
-    rc.style.display = 'block';
-    document.getElementById('scoreNum').textContent = score;
-    document.getElementById('scoreTotal').textContent = 'von ' + totalQuestions;
-    let msg = '';
-    const pct = score / totalQuestions;
-    if (pct >= 0.875) msg = '🌟 Hervorragend! Du hast alles perfekt verstanden. Super Vorbereitung auf das imparfait!';
-    else if (pct >= 0.625) msg = '👍 Gut gemacht! Du hast die wichtigsten Konzepte verstanden. Schau dir die falschen Antworten nochmal an.';
-    else if (pct >= 0.375) msg = '🙂 Du bist auf dem richtigen Weg! Lies die Erklärungen nochmal durch und probiere es erneut.';
-    else msg = '💪 Kein Problem! Die Vergangenheitsformen sind am Anfang tricky. Schau dir die Folien nochmal an und versuche es erneut!';
-    document.getElementById('resultMsg').textContent = msg;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function restartQuiz() {
-    score = 0;
-    results = new Array(totalQuestions + 1).fill(null);
-    singleSelections = {};
-    multiSelections = {};
-    currentQ = 1;
-    // Reset all cards
-    for (let i = 1; i <= totalQuestions; i++) {
-      const card = document.getElementById('q' + i);
-      card.classList.remove('active');
-      const fb = document.getElementById('fb' + i);
-      if (fb) { fb.style.display = 'none'; fb.textContent = ''; }
-      const check = document.getElementById('check' + i);
-      if (check) check.disabled = true;
-      const next = document.getElementById('next' + i);
-      if (next) next.style.display = 'none';
-      card.querySelectorAll('.option-btn').forEach(btn => {
-        btn.className = 'option-btn';
-        btn.disabled = false;
-      });
-    }
-    // Reset drag zones
-    resetDrag(4, ['dz4-passe','dz4-imparfait','dz4-pqp'], ['Perfekt','Präteritum','Plusquamperfekt']);
-    resetDrag(6, ['dz6-pc','dz6-imp1','dz6-imp2'], ['einmaliges Ereignis','wiederholter Zustand','andauernder Hintergrund']);
-    document.getElementById('result-card').style.display = 'none';
-    document.getElementById('q1').classList.add('active');
-    document.getElementById('progressBar').style.width = '0%';
-    initDots();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function resetDrag(qNum, zoneIds, chips) {
-    const pool = document.getElementById('dragPool' + qNum);
-    // Clear zones
-    zoneIds.forEach(zid => {
-      const zone = document.getElementById(zid);
-      zone.innerHTML = '';
-      zone.className = 'drop-zone';
-    });
-    // Rebuild pool
-    pool.innerHTML = '<p class="drag-label">Zum Ziehen:</p>';
-    chips.forEach(chipId => {
-      const chip = document.createElement('div');
-      chip.className = 'drag-chip';
-      chip.draggable = true;
-      chip.dataset.id = chipId;
-      chip.textContent = chipId;
-      chip.ondragstart = dragStart;
-      pool.appendChild(chip);
-    });
-  }
-
-  initDots();
-  updateProgress(1);
-</script>
-</body>
-</html>
+  // Count
+  let score = 0, total = 8;
+  const results = [
+    isSingleCorrect('q1','b'),
+    isSingleCorrect('q2','c'),
+    isMultiCorrect('q3',['b','c','d']),
+    isDndCorrect(['drop4-pc','drop4-imp','drop4-pqp']),
+    isSingleCorrect('q5','c'),
+    isDndCorrect(['drop6-pc','drop6-imp']),
