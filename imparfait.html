@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang=\"de\">
+<head>
+<meta charset=\"UTF-8\">
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+<title>Übersicht: Das imparfait</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a1a2e;
+    padding: 24px 16px 40px;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .header h1 {
+    font-size: 1.9em;
+    color: #1a5276;
+    margin-bottom: 4px;
+  }
+  .header p {
+    color: #666;
+    font-size: 0.95em;
+  }
+  /* ── Cards ── */
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    font-weight: bold;
+    font-size: 1.02em;
+    color: white;
+  }
+  .card-header .icon { font-size: 1.2em; }
+  .card-body { padding: 18px 20px; }
+
+  /* ── Colours per card ── */
+  .c-blue   .card-header { background: #1a5276; }
+  .c-teal   .card-header { background: #117a65; }
+  .c-purple .card-header { background: #6c3483; }
+  .c-orange .card-header { background: #b7490a; }
+  .c-red    .card-header { background: #922b21; }
+
+  /* ── Info text ── */
+  .info-text {
+    font-size: 0.95em;
+    line-height: 1.65;
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  .info-text:last-child { margin-bottom: 0; }
+  em { color: #1a5276; font-style: italic; }
+  strong { color: #1a1a2e; }
+
+  /* ── Pill list ── */
+  .pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .pill {
+    background: #eaf2fb;
+    border: 1.5px solid #aac4de;
+    color: #1a5276;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.91em;
+    font-style: italic;
+  }
+
+  /* ── Step boxes ── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .step-num {
+    background: #1a5276;
+    color: white;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.85em;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-text {
+    font-size: 0.94em;
+    line-height: 1.5;
+    color: #2c3e50;
+  }
+
+  /* ── Conjugation table ── */
+  .conj-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 6px;
+  }
+  .conj-block { flex: 1; min-width: 220px; }
+  .conj-block h4 {
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+  table.conj {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.91em;
+  }
+  table.conj td {
+    padding: 5px 10px;
+    border: 1px solid #d8e4ef;
+  }
+  table.conj tr:nth-child(even) td { background: #f7fbff; }
+  table.conj td:first-child {
+    font-weight: bold;
+    color: #1a5276;
+    white-space: nowrap;
+    width: 46%;
+  }
+  table.conj td:last-child { font-style: italic; }
+
+  /* ── Endungen table ── */
+  .end-table-wrap { overflow-x: auto; margin-top: 6px; }
+  table.end-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.91em;
+    min-width: 400px;
+  }
+  table.end-table th {
+    background: #d6eaf8;
+    color: #1a5276;
+    padding: 7px 12px;
+    text-align: center;
+    border: 1px solid #b8d4e8;
+    font-size: 0.87em;
+  }
+  table.end-table td {
+    padding: 6px 12px;
+    border: 1px solid #d8e4ef;
+    text-align: center;
+    font-style: italic;
+    color: #1a5276;
+  }
+  table.end-table tr:nth-child(even) td { background: #f7fbff; }
+  table.end-table td:first-child {
+    font-style: normal;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: left;
+  }
+
+  /* ── Comparison table ── */
+  table.cmp {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    margin-top: 6px;
+  }
+  table.cmp th {
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid #d8e4ef;
+    font-size: 0.87em;
+  }
+  table.cmp th:nth-child(2) { background: #d5f5e3; color: #117a65; }
+  table.cmp th:nth-child(3) { background: #fde8d8; color: #b7490a; }
+  table.cmp th:first-child  { background: #eaf2fb; color: #1a5276; }
+  table.cmp td {
+    padding: 7px 12px;
+    border: 1px solid #d8e4ef;
+    vertical-align: top;
+    line-height: 1.5;
+    font-size: 0.91em;
+  }
+  table.cmp tr:nth-child(even) td { background: #fafcff; }
+  .tag-imp {
+    display: inline-block;
+    background: #d5f5e3;
+    color: #117a65;
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-size: 0.83em;
+    font-weight: bold;
+    margin-right: 4px;
+  }
+  .tag-pc {
+    display: inline-block;
+    background: #fde8d8;
+    color: #b7490a;
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-size: 0.83em;
+    font-weight: bold;
+    margin-right: 4px;
+  }
+
+  /* ── Example sentences ── */
+  .example-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 6px;
+  }
+  .example {
+    background: #f7fbff;
+    border-left: 3px solid #1a5276;
+    border-radius: 0 6px 6px 0;
+    padding: 8px 14px;
+    font-size: 0.91em;
+    line-height: 1.5;
+  }
+  .example .fr { font-style: italic; color: #1a5276; font-weight: 600; }
+  .example .de { color: #555; font-size: 0.9em; margin-top: 2px; }
+
+  /* ── Merkhilfe ── */
+  .memo {
+    background: #fef9e7;
+    border: 2px solid #f0c040;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 0.92em;
+    line-height: 1.65;
+    color: #784212;
+    margin-top: 4px;
+  }
+  .memo strong { color: #6e2f0a; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: #aaa;
+    font-size: 0.8em;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class=\"header\">
+  <h1>🇫🇷 Das imparfait</h1>
+  <p>Kurze &amp; übersichtliche Zusammenfassung für die 9. Klasse</p>
+</div>
+
+<!-- ══ 1. WOFÜR ════════════════════════════════════════════════ -->
+<div class=\"card c-blue\">
+  <div class=\"card-header\"><span class=\"icon\">💡</span> Wofür benutze ich das imparfait?</div>
+  <div class=\"card-body\">
+    <div class=\"pill-list\">
+      <span class=\"pill\">🔁 Wiederholte / gewohnheitsmäßige Handlungen in der Vergangenheit</span>
+      <span class=\"pill\">🎨 Beschreibungen &amp; Zustände in der Vergangenheit</span>
+      <span class=\"pill\">⏳ Hintergrundgeschehen (was gerade lief)</span>
+    </div>
+    <div class=\"example-list\" style=\"margin-top:14px\">
+      <div class=\"example\">
+        <div class=\"fr\">Tous les jours, il regardait la télé.</div>
+        <div class=\"de\">Jeden Tag sah er fern. (Gewohnheit)</div>
+      </div>
+      <div class=\"example\">
+        <div class=\"fr\">Il faisait beau et les oiseaux chantaient.</div>
+        <div class=\"de\">Es war schönes Wetter und die Vögel sangen. (Beschreibung)</div>
+      </div>
+      <div class=\"example\">
+        <div class=\"fr\">Je jouais dehors quand il a téléphoné.</div>
+        <div class=\"de\">Ich spielte draußen, als er anrief. (Hintergrund)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 2. BILDUNG ══════════════════════════════════════════════ -->
+<div class=\"card c-teal\">
+  <div class=\"card-header\"><span class=\"icon\">🔧</span> Wie bilde ich das imparfait?</div>
+  <div class=\"card-body\">
+    <div class=\"steps\">
+      <div class=\"step\">
+        <div class=\"step-num\">1</div>
+        <div class=\"step-text\">
+          Nimm die <strong>nous-Form des présent indicatif</strong>:<br>
+          z.&nbsp;B. <em>nous regardons</em>, <em>nous faisons</em>, <em>nous avons</em>
+        </div>
+      </div>
+      <div class=\"step\">
+        <div class=\"step-num\">2</div>
+        <div class=\"step-text\">
+          Streiche die Endung <strong><em>-ons</em></strong> → das ist der <strong>Imparfait-Stamm</strong>:<br>
+          <em>regard-</em> &nbsp;|&nbsp; <em>fais-</em> &nbsp;|&nbsp; <em>av-</em>
+        </div>
+      </div>
+      <div class=\"step\">
+        <div class=\"step-num\">3</div>
+        <div class=\"step-text\">
+          Hänge die passende <strong>Imparfait-Endung</strong> an (→ Tabelle unten).
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 3. ENDUNGEN ════════════════════════════════════════════ -->
+<div class=\"card c-purple\">
+  <div class=\"card-header\"><span class=\"icon\">📋</span> Die Endungen des imparfait</div>
+  <div class=\"card-body\">
+    <div class=\"end-table-wrap\">
+      <table class=\"end-table\">
+        <thead>
+          <tr>
+            <th>Pronomen</th>
+            <th>Endung</th>
+            <th>Beispiel: <em>regarder</em> (Stamm: <em>regard-</em>)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>je</td>       <td>-ais</td>   <td>je regard<strong>ais</strong></td></tr>
+          <tr><td>tu</td>       <td>-ais</td>   <td>tu regard<strong>ais</strong></td></tr>
+          <tr><td>il / elle / on</td><td>-ait</td><td>il regard<strong>ait</strong></td></tr>
+          <tr><td>nous</td>     <td>-ions</td>  <td>nous regard<strong>ions</strong></td></tr>
+          <tr><td>vous</td>     <td>-iez</td>   <td>vous regard<strong>iez</strong></td></tr>
+          <tr><td>ils / elles</td><td>-aient</td><td>ils regard<strong>aient</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class=\"memo\" style=\"margin-top:14px\">
+      💡 <strong>Gut zu wissen:</strong> Diese Endungen gelten für <em>alle</em> Verben – egal ob <em>-er</em>, <em>-ir</em> oder <em>-re</em>!<br>
+      Nur der Stamm ändert sich (immer: nous-Form présent <strong>minus -ons</strong>).
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4. KONJUGATIONSBEISPIELE ═══════════════════════════════ -->
+<div class=\"card c-orange\">
+  <div class=\"card-header\"><span class=\"icon\">✍️</span> Konjugationsbeispiele</div>
+  <div class=\"card-body\">
+    <div class=\"conj-wrap\">
+      <div class=\"conj-block\">
+        <h4>avoir (Stamm: <em>av-</em>)</h4>
+        <table class=\"conj\">
+          <tr><td>j'</td><td>avais</td></tr>
+          <tr><td>tu</td><td>avais</td></tr>
+          <tr><td>il / elle</td><td>avait</td></tr>
+          <tr><td>nous</td><td>avions</td></tr>
+          <tr><td>vous</td><td>aviez</td></tr>
+          <tr><td>ils / elles</td><td>avaient</td></tr>
+        </table>
+      </div>
+      <div class=\"conj-block\">
+        <h4>aller (Stamm: <em>all-</em>)</h4>
+        <table class=\"conj\">
+          <tr><td>j'</td><td>allais</td></tr>
+          <tr><td>tu</td><td>allais</td></tr>
+          <tr><td>il / elle</td><td>allait</td></tr>
+          <tr><td>nous</td><td>allions</td></tr>
+          <tr><td>vous</td><td>alliez</td></tr>
+          <tr><td>ils / elles</td><td>allaient</td></tr>
+        </table>
+      </div>
+      <div class=\"conj-block\">
+        <h4>être (Stamm: <em>ét-</em> ⚠️)</h4>
+        <table class=\"conj\">
+          <tr><td>j'</td><td>étais</td></tr>
+          <tr><td>tu</td><td>étais</td></tr>
+          <tr><td>il / elle</td><td>était</td></tr>
+          <tr><td>nous</td><td>étions</td></tr>
+          <tr><td>vous</td><td>étiez</td></tr>
+          <tr><td>ils / elles</td><td>étaient</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class=\"memo\" style=\"margin-top:14px\">
+      ⚠️ <strong>Ausnahme:</strong> <em>être</em> hat den unregelmäßigen Stamm <em>ét-</em>
+      (nous sommes → <em>nicht</em> somm-!). Die Endungen bleiben aber gleich.
+    </div>
+  </div>
+</div>
+
+<!-- ══ 5. ABGRENZUNG ══════════════════════════════════════════ -->
+<div class=\"card c-red\">
+  <div class=\"card-header\"><span class=\"icon\">⚖️</span> imparfait vs. passé composé – der Unterschied</div>
+  <div class=\"card-body\">
+    <table class=\"cmp\">
+      <thead>
+        <tr>
+          <th></th>
+          <th>imparfait</th>
+          <th>passé composé</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Frage</strong></td>
+          <td>Wie war es? Was lief gerade?</td>
+          <td>Was ist passiert? Was hat jemand getan?</td>
+        </tr>
+        <tr>
+          <td><strong>Charakter</strong></td>
+          <td>Zustand, Dauer, Wiederholung</td>
+          <td>Abgeschlossene Einzelhandlung</td>
+        </tr>
+        <tr>
+          <td><strong>Signalwörter</strong></td>
+          <td><em>toujours, souvent, tous les jours, d'habitude, chaque …</em></td>
+          <td><em>soudain, tout à coup, un jour, hier, une fois</em></td>
+        </tr>
+        <tr>
+          <td><strong>Beispiel</strong></td>
+          <td><span class=\"tag-imp\">imparfait</span><em>Il pleuvait.</em><br><small>(Es regnete – Zustand)</small></td>
+          <td><span class=\"tag-pc\">p.c.</span><em>Il a pris son parapluie.</em><br><small>(Er nahm seinen Schirm – Handlung)</small></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class=\"memo\" style=\"margin-top:14px\">
+      🎬 <strong>Kino-Trick:</strong> Das imparfait ist wie die <em>Kulisse</em> (Hintergrund &amp; Atmosphäre)
+      – das passé composé ist wie die <em>Handlung</em> im Vordergrund!
+    </div>
+  </div>
+</div>
+
+<div class=\"footer\">Bonne chance ! 🍀</div>
+
+</body>
+</html>
