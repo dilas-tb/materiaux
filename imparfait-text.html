@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Nuit Mystérieuse 👻</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    padding: 30px 20px;
+    color: #e0e0e0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 50px 30px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+  }
+  .hero h1 {
+    font-size: 2.4em;
+    color: #fff;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(180,100,255,0.8);
+  }
+  .hero p {
+    color: #aaa;
+    font-size: 1em;
+  }
+
+  /* CONTROL BUTTONS */
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  .btn-pc {
+    background: linear-gradient(135deg, #f6c90e, #e0a800);
+    color: #1a1a2e;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(246,201,14,0.3);
+  }
+  .btn-pc:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(246,201,14,0.5); }
+  .btn-imp {
+    background: linear-gradient(135deg, #a855f7, #7c3aed);
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(168,85,247,0.3);
+  }
+  .btn-imp:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(168,85,247,0.5); }
+  .btn-reset {
+    background: rgba(255,255,255,0.1);
+    color: #ccc;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .btn-reset:hover { transform: translateY(-2px); background: rgba(255,255,255,0.15); }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+    color: #ccc;
+  }
+  .legend-dot {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+  }
+  .dot-pc { background: #f6c90e; }
+  .dot-imp { background: #a855f7; }
+
+  /* STORY CARD */
+  .story-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(8px);
+    position: relative;
+  }
+  .paragraph-num {
+    font-size: 0.75em;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .story-text {
+    font-size: 1.15em;
+    line-height: 1.9;
+    color: #dde;
+  }
+
+  /* HIGHLIGHTING */
+  .pc { 
+    background: rgba(246,201,14,0); 
+    color: inherit;
+    border-radius: 4px;
+    padding: 1px 3px;
+    transition: background 0.4s, color 0.4s;
+    font-weight: inherit;
+  }
+  .imp { 
+    background: rgba(168,85,247,0); 
+    color: inherit;
+    border-radius: 4px;
+    padding: 1px 3px;
+    transition: background 0.4s, color 0.4s;
+    font-weight: inherit;
+  }
+  .highlight-pc .pc {
+    background: rgba(246,201,14,0.35);
+    color: #ffe566;
+    font-weight: 700;
+  }
+  .highlight-imp .imp {
+    background: rgba(168,85,247,0.35);
+    color: #d8a8ff;
+    font-weight: 700;
+  }
+
+  /* LISTEN BUTTON */
+  .listen-btn {
+    margin-top: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #ccc;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .listen-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  .listen-btn.speaking {
+    background: rgba(100,200,100,0.2);
+    border-color: rgba(100,200,100,0.4);
+    color: #90ee90;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #fff;
+    margin: 40px 0 20px;
+    text-shadow: 0 0 10px rgba(168,85,247,0.5);
+  }
+
+  /* VOCAB TABLE */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .vocab-table thead {
+    background: linear-gradient(135deg, rgba(168,85,247,0.4), rgba(100,50,200,0.4));
+  }
+  .vocab-table thead th {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ddd;
+  }
+  .vocab-table tbody tr {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    transition: background 0.2s;
+  }
+  .vocab-table tbody tr:hover {
+    background: rgba(255,255,255,0.06);
+  }
+  .vocab-table td {
+    padding: 12px 18px;
+    font-size: 0.95em;
+    color: #ccc;
+    vertical-align: middle;
+  }
+  .vocab-table td:first-child {
+    color: #d8a8ff;
+    font-weight: 600;
+  }
+  .vocab-table td:nth-child(2) {
+    color: #ffe566;
+    font-size: 0.82em;
+    font-style: italic;
+  }
+  .speak-btn {
+    background: rgba(168,85,247,0.2);
+    border: 1px solid rgba(168,85,247,0.4);
+    color: #d8a8ff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .speak-btn:hover { background: rgba(168,85,247,0.4); }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    color: #555;
+    font-size: 0.8em;
+    margin-top: 40px;
+    padding-bottom: 20px;
+  }
+
+  /* NO-SUPPORT WARNING */
+  .no-support {
+    display: none;
+    background: rgba(255,100,100,0.1);
+    border: 1px solid rgba(255,100,100,0.3);
+    color: #ffaaaa;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.88em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>👻 La Nuit Mystérieuse</h1>
+    <p>Une histoire courte en français &nbsp;·&nbsp; Lese- und Übersetzungsübung</p>
+  </div>
+
+  <!-- NO SUPPORT WARNING -->
+  <div class="no-support" id="noSupport">
+    ⚠️ Dein Browser unterstützt leider keine Sprachausgabe (Web Speech API). Die Vorlese-Buttons sind deaktiviert.
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="btn-pc" onclick="toggleHighlight('pc')">🟡 passé composé anzeigen</button>
+    <button class="btn-imp" onclick="toggleHighlight('imp')">🟣 imparfait anzeigen</button>
+    <button class="btn-reset" onclick="resetAll()">✕ Markierungen entfernen</button>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-pc"></div> passé composé</div>
+    <div class="legend-item"><div class="legend-dot dot-imp"></div> imparfait</div>
+  </div>
+
+  <!-- STORY -->
+  <div id="story">
+
+    <!-- Paragraph 1 -->
+    <div class="story-card">
+      <div class="paragraph-num">Absatz 1</div>
+      <div class="story-text" id="p1">
+        Il <span class="imp">était</span> minuit. La maison <span class="imp">était</span> silencieuse et tous les lumières <span class="imp">étaient</span> éteintes. Léo, un garçon de douze ans, <span class="imp">dormait</span> dans son lit. Il <span class="imp">faisait</span> froid et le vent <span class="imp">soufflait</span> dehors.
+      </div>
+      <button class="listen-btn" onclick="speak('p1', this)">🔊 Vorlesen</button>
+    </div>
+
+    <!-- Paragraph 2 -->
+    <div class="story-card">
+      <div class="paragraph-num">Absatz 2</div>
+      <div class="story-text" id="p2">
+        Soudain, Léo <span class="pc">s'est réveillé</span>. Il <span class="pc">a entendu</span> un bruit étrange. Le bruit <span class="imp">venait</span> du couloir. Léo <span class="imp">avait</span> très peur. Son cœur <span class="imp">battait</span> vite.
+      </div>
+      <button class="listen-btn" onclick="speak('p2', this)">🔊 Vorlesen</button>
+    </div>
+
+    <!-- Paragraph 3 -->
+    <div class="story-card">
+      <div class="paragraph-num">Absatz 3</div>
+      <div class="story-text" id="p3">
+        Il <span class="pc">est sorti</span> lentement de son lit. Il <span class="pc">a pris</span> sa lampe de poche et il <span class="pc">a ouvert</span> la porte de sa chambre. Le couloir <span class="imp">était</span> sombre. Léo <span class="imp">regardait</span> dans tous les sens.
+      </div>
+      <button class="listen-btn" onclick="speak('p3', this)">🔊 Vorlesen</button>
+    </div>
+
+    <!-- Paragraph 4 -->
+    <div class="story-card">
+      <div class="paragraph-num">Absatz 4</div>
+      <div class="story-text" id="p4">
+        Tout à coup, il <span class="pc">a vu</span> une ombre sur le mur. Il <span class="pc">a crié</span> : « Qui est là ? » Personne <span class="imp">ne répondait</span>. Léo <span class="imp">tremblait</span> de peur. Puis il <span class="pc">a allumé</span> la lumière du couloir.
+      </div>
+      <button class="listen-btn" onclick="speak('p4', this)">🔊 Vorlesen</button>
+    </div>
+
+    <!-- Paragraph 5 -->
+    <div class="story-card">
+      <div class="paragraph-num">Absatz 5</div>
+      <div class="story-text" id="p5">
+        Et là, il <span class="pc">a vu</span> son chat Minou. Le chat <span class="imp">jouait</span> avec une balle dans le couloir ! Léo <span class="pc">a souri</span> et il <span class="pc">a ri</span>. Il <span class="pc">est retourné</span> dans son lit et il <span class="pc">s'est endormi</span> très vite.
+      </div>
+      <button class="listen-btn" onclick="speak('p5', this)">🔊 Vorlesen</button>
+    </div>
+
+  </div><!-- /story -->
+
+  <!-- VOCAB -->
+  <div class="section-title">📖 Vokabelliste</div>
+
+  <table class="vocab-table">
+    <thead>
+      <tr>
+        <th>Französisch</th>
+        <th>Aussprache</th>
+        <th>Deutsch</th>
+        <th>🔊</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>la nuit</td>
+        <td>[la nɥi]</td>
+        <td>die Nacht</td>
+        <td><button class="speak-btn" onclick="speakWord('la nuit')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>minuit</td>
+        <td>[minɥi]</td>
+        <td>Mitternacht</td>
+        <td><button class="speak-btn" onclick="speakWord('minuit')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>silencieux / silencieuse</td>
+        <td>[silɑ̃sjø]</td>
+        <td>still, ruhig</td>
+        <td><button class="speak-btn" onclick="speakWord('silencieux')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>éteint(e)</td>
+        <td>[etɛ̃]</td>
+        <td>ausgeschaltet, dunkel</td>
+        <td><button class="speak-btn" onclick="speakWord('éteint')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>dormir</td>
+        <td>[dɔʁmiʁ]</td>
+        <td>schlafen</td>
+        <td><button class="speak-btn" onclick="speakWord('dormir')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>le vent</td>
+        <td>[lə vɑ̃]</td>
+        <td>der Wind</td>
+        <td><button class="speak-btn" onclick="speakWord('le vent')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>souffler</td>
+        <td>[sufle]</td>
+        <td>wehen, blasen</td>
+        <td><button class="speak-btn" onclick="speakWord('souffler')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>soudain</td>
+        <td>[sudɛ̃]</td>
+        <td>plötzlich</td>
+        <td><button class="speak-btn" onclick="speakWord('soudain')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>se réveiller</td>
+        <td>[sə ʁeveje]</td>
+        <td>aufwachen</td>
+        <td><button class="speak-btn" onclick="speakWord('se réveiller')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>entendre</td>
+        <td>[ɑ̃tɑ̃dʁ]</td>
+        <td>hören</td>
+        <td><button class="speak-btn" onclick="speakWord('entendre')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>un bruit</td>
+        <td>[œ̃ bʁɥi]</td>
+        <td>ein Geräusch</td>
+        <td><button class="speak-btn" onclick="speakWord('un bruit')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>étrange</td>
+        <td>[etʁɑ̃ʒ]</td>
+        <td>seltsam, merkwürdig</td>
+        <td><button class="speak-btn" onclick="speakWord('étrange')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>le couloir</td>
+        <td>[lə kulwaʁ]</td>
+        <td>der Flur, der Korridor</td>
+        <td><button class="speak-btn" onclick="speakWord('le couloir')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>avoir peur</td>
+        <td>[avwaʁ pœʁ]</td>
+        <td>Angst haben</td>
+        <td><button class="speak-btn" onclick="speakWord('avoir peur')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>le cœur</td>
+        <td>[lə kœʁ]</td>
+        <td>das Herz</td>
+        <td><button class="speak-btn" onclick="speakWord('le cœur')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>battre</td>
+        <td>[batʁ]</td>
+        <td>schlagen (Herz)</td>
+        <td><button class="speak-btn" onclick="speakWord('battre')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>lentement</td>
+        <td>[lɑ̃tmɑ̃]</td>
+        <td>langsam</td>
+        <td><button class="speak-btn" onclick="speakWord('lentement')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>la lampe de poche</td>
+        <td>[la lɑ̃p də pɔʃ]</td>
+        <td>die Taschenlampe</td>
+        <td><button class="speak-btn" onclick="speakWord('la lampe de poche')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>sombre</td>
+        <td>[sɔ̃bʁ]</td>
+        <td>dunkel, düster</td>
+        <td><button class="speak-btn" onclick="speakWord('sombre')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>une ombre</td>
+        <td>[yn ɔ̃bʁ]</td>
+        <td>ein Schatten</td>
+        <td><button class="speak-btn" onclick="speakWord('une ombre')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>crier</td>
+        <td>[kʁije]</td>
+        <td>rufen, schreien</td>
+        <td><button class="speak-btn" onclick="speakWord('crier')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>trembler</td>
+        <td>[tʁɑ̃ble]</td>
+        <td>zittern</td>
+        <td><button class="speak-btn" onclick="speakWord('trembler')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>allumer</td>
+        <td>[alyme]</td>
+        <td>anschalten, anmachen</td>
+        <td><button class="speak-btn" onclick="speakWord('allumer')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>sourire</td>
+        <td>[suʁiʁ]</td>
+        <td>lächeln</td>
+        <td><button class="speak-btn" onclick="speakWord('sourire')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>rire</td>
+        <td>[ʁiʁ]</td>
+        <td>lachen</td>
+        <td><button class="speak-btn" onclick="speakWord('rire')">▶ hören</button></td>
+      </tr>
+      <tr>
+        <td>s'endormir</td>
+        <td>[sɑ̃dɔʁmiʁ]</td>
+        <td>einschlafen</td>
+        <td><button class="speak-btn" onclick="speakWord('s\'endormir')">▶ hören</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    👻 La Nuit Mystérieuse &nbsp;·&nbsp; Französisch Klasse &nbsp;·&nbsp; Imparfait & Passé composé
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  // ── Speech support check ──────────────────────────────────────────
+  const hasSpeech = 'speechSynthesis' in window;
+  if (!hasSpeech) {
+    document.getElementById('noSupport').style.display = 'block';
+    document.querySelectorAll('.listen-btn, .speak-btn').forEach(b => {
+      b.disabled = true;
+      b.style.opacity = '0.4';
+      b.style.cursor = 'not-allowed';
+    });
+  }
+
+  // ── Highlight state ────────────────────────────────────────────────
+  let pcActive = false;
+  let impActive = false;
+
+  function toggleHighlight(type) {
+    const story = document.getElementById('story');
+    if (type === 'pc') {
+      pcActive = !pcActive;
+      story.classList.toggle('highlight-pc', pcActive);
+    } else {
+      impActive = !impActive;
+      story.classList.toggle('highlight-imp', impActive);
+    }
+  }
+
+  function resetAll() {
+    pcActive = false;
+    impActive = false;
+    const story = document.getElementById('story');
+    story.classList.remove('highlight-pc', 'highlight-imp');
+  }
+
+  // ── Paragraph reading ─────────────────────────────────────────────
+  let currentBtn = null;
+
+  function speak(paragraphId, btn) {
+    if (!hasSpeech) return;
+
+    // If already speaking this paragraph → stop
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      if (currentBtn) {
+        currentBtn.classList.remove('speaking');
+        currentBtn.textContent = '🔊 Vorlesen';
+      }
+      if (currentBtn === btn) {
+        currentBtn = null;
+        return;
+      }
+    }
+
+    // Get plain text from the paragraph
+    const el = document.getElementById(paragraphId);
+    const text = el.innerText || el.textContent;
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'fr-FR';
+    utter.rate = 0.88;
+
+    btn.classList.add('speaking');
+    btn.textContent = '⏹ Stoppen';
+    currentBtn = btn;
+
+    utter.onend = () => {
+      btn.classList.remove('speaking');
+      btn.textContent = '🔊 Vorlesen';
+      currentBtn = null;
+    };
+    utter.onerror = () => {
+      btn.classList.remove('speaking');
+      btn.textContent = '🔊 Vorlesen';
+      currentBtn = null;
+    };
+
+    window.speechSynthesis.speak(utter);
+  }
+
+  // ── Vocab word reading ────────────────────────────────────────────
+  function speakWord(word) {
+    if (!hasSpeech) return;
+    if (window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(word);
+    utter.lang = 'fr-FR';
+    utter.rate = 0.82;
+    window.speechSynthesis.speak(utter);
+  }
+</script>
+</body>
+</html>
