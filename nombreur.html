@@ -152,15 +152,27 @@ const ZEHNER = {20:"vingt",30:"trente",40:"quarante",50:"cinquante",60:"soixante
 
 function zahlBis99(n) {
   if (n <= 16) return EINER[n];
+
+  // 17-69: Zehner + (et-un | -Einer)
   if (n < 70) {
-    const z = Math.floor(n/10)*10, e = n%10;
+    const z = Math.floor(n / 10) * 10;
+    const e = n % 10;
     if (e === 0) return ZEHNER[z];
     if (e === 1) return ZEHNER[z] + "-et-un";
     return ZEHNER[z] + "-" + EINER[e];
   }
-  if (n < 80) return "soixante-" + EINER[n-60];
-  if (n === 80) return "quatre-vingts";
-  return "quatre-vingt-" + EINER[n-80];
+
+  // 70-79: soixante-dix ... soixante-dix-neuf  (= soixante + 10..19)
+  if (n < 80) {
+    const e = n - 60;                 // 10..19
+    if (e === 11) return "soixante-et-onze";   // 71 Sonderfall
+    return "soixante-" + zahlBis99(e); // nutzt 10..16 bzw. baut 17..19
+  }
+
+  // 80-99
+  const e = n - 80;                  // 0..19
+  if (e === 0) return "quatre-vingts";
+  return "quatre-vingt-" + zahlBis99(e); // 81..99, e=1..19
 }
 
 function zahlBis999(n) {
@@ -173,29 +185,33 @@ function zahlBis999(n) {
   }
   return wort + "-" + zahlBis99(rest);
 }
-
+  
 function zahlInFranzoesisch(n) {
   if (n === 0) return "zéro";
+
   const teile = [];
 
-  const milliarden = Math.floor(n / 1000000000); n %= 1000000000;
+  const milliarden = Math.floor(n / 1_000_000_000); n %= 1_000_000_000;
   if (milliarden > 0)
-    teile.push(milliarden === 1 ? "un milliard"
-                                 : zahlBis999(milliarden) + " milliards");
+    teile.push(zahlBis999(milliarden) + (milliarden === 1 ? " milliard" : " milliards"));
 
-  const millionen = Math.floor(n / 1000000); n %= 1000000;
+  const millionen = Math.floor(n / 1_000_000); n %= 1_000_000;
   if (millionen > 0)
-    teile.push(millionen === 1 ? "un million"
-                                : zahlBis999(millionen) + " millions");
+    teile.push(zahlBis999(millionen) + (millionen === 1 ? " million" : " millions"));
 
-  const tausender = Math.floor(n / 1000); n %= 1000;
-  if (tausender > 0)
-    teile.push(tausender === 1 ? "mille"
-                                : zahlBis999(tausender) + "-mille");
+  // ----- Tausender + Hunderter-Rest als EIN durchgekoppeltes Wort -----
+  const tausender = Math.floor(n / 1000);
+  const rest = n % 1000;
 
-  if (n > 0) teile.push(zahlBis999(n));
+  let tausenderWort = "";
+  if (tausender > 0) {
+    tausenderWort = (tausender === 1 ? "mille" : zahlBis999(tausender) + "-mille");
+    if (rest > 0) tausenderWort += "-" + zahlBis999(rest);
+  } else if (rest > 0) {
+    tausenderWort = zahlBis999(rest);
+  }
+  if (tausenderWort) teile.push(tausenderWort);
 
-  // mille/million/milliard sind Substantive -> Leerzeichen, sonst Bindestrich
   return teile.join(" ");
 }
 
