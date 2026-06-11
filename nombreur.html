@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les nombres</title>
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --accent: #4f6df5;
+    --accent-hover: #3b58df;
+    --text: #1d1d1f;
+    --muted: #86868b;
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .card {
+    background: var(--card);
+    width: 100%;
+    max-width: 460px;
+    padding: 32px 28px;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 16px 18px;
+    font-size: 1.3rem;
+    border: 1.5px solid #e2e2e6;
+    border-radius: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input[type="text"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(79, 109, 245, 0.12);
+  }
+
+  .hint {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 8px;
+  }
+
+  .result {
+    margin-top: 24px;
+    min-height: 40px;
+    display: none;
+    align-items: flex-start;
+    gap: 12px;
+    background: #f7f8fa;
+    border-radius: 14px;
+    padding: 18px;
+    animation: fade 0.25s ease;
+  }
+
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .word {
+    font-size: 1.15rem;
+    line-height: 1.45;
+    flex: 1;
+    word-break: break-word;
+  }
+
+  .speak-btn {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .speak-btn:hover { background: var(--accent-hover); }
+  .speak-btn:active { transform: scale(0.92); }
+  .speak-btn svg { width: 22px; height: 22px; fill: #fff; }
+
+  .error { color: #d33; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Le nombreur</h1>
+    <p class="subtitle">Um Zahlwort anzuzeigen, Ziffern eingeben und Enter drücken</p>
+
+    <input
+      type="text"
+      id="numberInput"
+      inputmode="numeric"
+      placeholder="z. B. 1.234"
+      autocomplete="off"
+      autofocus
+    >
+    <p class="hint">Nur Ziffern – Tausenderpunkte werden automatisch gesetzt.</p>
+
+    <div class="result" id="result">
+      <span class="word" id="word"></span>
+      <button class="speak-btn" id="speakBtn" title="Vorlesen" aria-label="Vorlesen">
+        <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06a9 9 0 0 0 0-17.54z"/></svg>
+      </button>
+    </div>
+  </div>
+
+<script>
+// =====================================================================
+//  Zahl -> französisches Zahlwort  (Regeln aus dem Merkblatt)
+// =====================================================================
+const EINER = ["zéro","un","deux","trois","quatre","cinq","six","sept",
+  "huit","neuf","dix","onze","douze","treize","quatorze","quinze","seize"];
+
+const ZEHNER = {20:"vingt",30:"trente",40:"quarante",50:"cinquante",60:"soixante"};
+
+function zahlBis99(n) {
+  if (n <= 16) return EINER[n];
+  if (n < 70) {
+    const z = Math.floor(n/10)*10, e = n%10;
+    if (e === 0) return ZEHNER[z];
+    if (e === 1) return ZEHNER[z] + "-et-un";
+    return ZEHNER[z] + "-" + EINER[e];
+  }
+  if (n < 80) return "soixante-" + EINER[n-60];
+  if (n === 80) return "quatre-vingts";
+  return "quatre-vingt-" + EINER[n-80];
+}
+
+function zahlBis999(n) {
+  if (n < 100) return zahlBis99(n);
+  const h = Math.floor(n/100), rest = n%100;
+  let wort = (h === 1) ? "cent" : EINER[h] + "-cent";
+  if (rest === 0) {
+    if (h > 1) wort += "s";       // glatte Hunderter: deux-cents
+    return wort;
+  }
+  return wort + "-" + zahlBis99(rest);
+}
+
+function zahlInFranzoesisch(n) {
+  if (n === 0) return "zéro";
+  const teile = [];
+
+  const milliarden = Math.floor(n / 1000000000); n %= 1000000000;
+  if (milliarden > 0)
+    teile.push(milliarden === 1 ? "un milliard"
+                                 : zahlBis999(milliarden) + " milliards");
+
+  const millionen = Math.floor(n / 1000000); n %= 1000000;
+  if (millionen > 0)
+    teile.push(millionen === 1 ? "un million"
+                                : zahlBis999(millionen) + " millions");
+
+  const tausender = Math.floor(n / 1000); n %= 1000;
+  if (tausender > 0)
+    teile.push(tausender === 1 ? "mille"
+                                : zahlBis999(tausender) + "-mille");
+
+  if (n > 0) teile.push(zahlBis999(n));
+
+  // mille/million/milliard sind Substantive -> Leerzeichen, sonst Bindestrich
+  return teile.join(" ");
+}
+
+// =====================================================================
+//  Eingabe-Logik
+// =====================================================================
+const input    = document.getElementById("numberInput");
+const result   = document.getElementById("result");
+const wordEl    = document.getElementById("word");
+const speakBtn  = document.getElementById("speakBtn");
+
+const MAX = 999999999999; // bis knapp unter 1 Billion sinnvoll abgedeckt
+
+// Nur Ziffern zulassen + deutsche Tausenderpunkte live setzen
+input.addEventListener("input", () => {
+  const cleaned = input.value.replace(/\D/g, "");           // nur Ziffern
+  input.value = cleaned ? formatThousands(cleaned) : "";
+});
+
+function formatThousands(digits) {
+  return digits.replace(/^0+(?=\d)/, "")                    // führende Nullen weg
+               .replace(/\B(?=(\d{3})+(?!\d))/g, ".");       // Punkte alle 3 Stellen
+}
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") convert();
+});
+
+function convert() {
+  const digits = input.value.replace(/\D/g, "");
+  if (!digits) { result.style.display = "none"; return; }
+
+  const n = Number(digits);
+  result.style.display = "flex";
+
+  if (n > MAX) {
+    wordEl.innerHTML = '<span class="error">Zahl ist zu groß (max. 999.999.999.999).</span>';
+    speakBtn.style.display = "none";
+    return;
+  }
+
+  speakBtn.style.display = "flex";
+  wordEl.textContent = zahlInFranzoesisch(n);
+}
+
+// =====================================================================
+//  Aussprache (Web Speech API)
+// =====================================================================
+speakBtn.addEventListener("click", () => {
+  const text = wordEl.textContent;
+  if (!text || !("speechSynthesis" in window)) return;
+
+  speechSynthesis.cancel(); // evtl. laufende Ausgabe stoppen
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "fr-FR";
+  utter.rate = 0.65;
+
+  // Falls eine französische Stimme verfügbar ist, gezielt wählen
+  const frVoice = speechSynthesis.getVoices().find(v => v.lang.startsWith("fr"));
+  if (frVoice) utter.voice = frVoice;
+
+  speechSynthesis.speak(utter);
+});
+
+// Stimmen ggf. asynchron nachladen (manche Browser)
+speechSynthesis.onvoiceschanged = () => {};
+</script>
+</body>
+</html>
