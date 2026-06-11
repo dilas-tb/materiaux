@@ -269,7 +269,7 @@ speakBtn.addEventListener("click", () => {
   speechSynthesis.cancel(); // evtl. laufende Ausgabe stoppen
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = "fr-FR";
-  utter.rate = 0.65;
+  utter.rate = 0.75;
 
   // Falls eine französische Stimme verfügbar ist, gezielt wählen
   const frVoice = speechSynthesis.getVoices().find(v => v.lang.startsWith("fr"));
