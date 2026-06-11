@@ -153,7 +153,10 @@ const ZEHNER = {20:"vingt",30:"trente",40:"quarante",50:"cinquante",60:"soixante
 function zahlBis99(n) {
   if (n <= 16) return EINER[n];
 
-  // 17-69: Zehner + (et-un | -Einer)
+  // 17, 18, 19  ->  dix-sept, dix-huit, dix-neuf
+  if (n <= 19) return "dix-" + EINER[n - 10];
+
+  // 20-69
   if (n < 70) {
     const z = Math.floor(n / 10) * 10;
     const e = n % 10;
@@ -162,17 +165,16 @@ function zahlBis99(n) {
     return ZEHNER[z] + "-" + EINER[e];
   }
 
-  // 70-79: soixante-dix ... soixante-dix-neuf  (= soixante + 10..19)
+  // 70-79: soixante + 10..19
   if (n < 80) {
-    const e = n - 60;                 // 10..19
-    if (e === 11) return "soixante-et-onze";   // 71 Sonderfall
-    return "soixante-" + zahlBis99(e); // nutzt 10..16 bzw. baut 17..19
+    if (n === 71) return "soixante-et-onze";
+    return "soixante-" + zahlBis99(n - 60);   // 70->dix, 79->dix-neuf
   }
 
-  // 80-99
-  const e = n - 80;                  // 0..19
+  // 80-99: quatre-vingt(s) + 0..19
+  const e = n - 80;
   if (e === 0) return "quatre-vingts";
-  return "quatre-vingt-" + zahlBis99(e); // 81..99, e=1..19
+  return "quatre-vingt-" + zahlBis99(e);       // 81..99
 }
 
 function zahlBis999(n) {
