@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le futur composé – Übungen</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+    margin: 0;
+    padding: 0;
+    color: #1e293b;
+  }
+  header {
+    background: #2563eb;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  header h1 { margin: 0; font-size: 1.6em; }
+  header p { margin: 6px 0 0; opacity: 0.9; }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tab-btn {
+    flex: 1;
+    min-width: 110px;
+    padding: 10px;
+    border: none;
+    background: #cbd5e1;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: 0.2s;
+  }
+  .tab-btn.active { background: #2563eb; color: white; }
+  .tab-btn:hover { background: #94a3b8; }
+  .tab-btn.active:hover { background: #1d4ed8; }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+  }
+  .hidden { display: none; }
+  h2 { color: #2563eb; margin-top: 0; }
+  .explain {
+    background: #fef9c3;
+    border-left: 5px solid #facc15;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+  .formula {
+    text-align: center;
+    font-size: 1.2em;
+    background: #dbeafe;
+    padding: 16px;
+    border-radius: 10px;
+    margin: 14px 0;
+    font-weight: bold;
+  }
+  .formula span { color: #dc2626; }
+  .sentence {
+    font-size: 1.2em;
+    line-height: 2;
+    margin: 16px 0;
+  }
+  .word {
+    cursor: pointer;
+    padding: 3px 6px;
+    border-radius: 6px;
+    transition: 0.15s;
+  }
+  .word:hover { background: #e2e8f0; }
+  .word.correct { background: #86efac; }
+  .word.wrong { background: #fca5a5; }
+  button.action {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  button.action:hover { background: #1d4ed8; }
+  .feedback {
+    margin-top: 14px;
+    font-weight: bold;
+    min-height: 24px;
+  }
+  .ok { color: #16a34a; }
+  .no { color: #dc2626; }
+  /* Drag and drop */
+  .dropzone {
+    display: inline-block;
+    min-width: 90px;
+    min-height: 38px;
+    border: 2px dashed #94a3b8;
+    border-radius: 8px;
+    margin: 0 4px;
+    vertical-align: middle;
+    padding: 4px 8px;
+    background: #f8fafc;
+  }
+  .dropzone.over { background: #dbeafe; }
+  .bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 18px 0;
+    justify-content: center;
+  }
+  .chip {
+    background: #2563eb;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: grab;
+    font-weight: bold;
+    user-select: none;
+  }
+  .chip.used { opacity: 0.35; pointer-events: none; }
+  .dd-sentence { font-size: 1.15em; line-height: 2.4; margin: 16px 0; }
+  input.gap {
+    border: 2px solid #94a3b8;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 1em;
+    width: 130px;
+  }
+  .write-item { margin-bottom: 22px; }
+  .write-item p { margin: 4px 0; font-size: 1.05em; }
+  .hint { font-size: 0.9em; color: #64748b; }
+  .progress {
+    font-size: 0.95em;
+    color: #475569;
+    text-align: right;
+    margin-bottom: 8px;
+  }
+  .star { font-size: 1.4em; }
+  .nav-tip {
+    text-align:center;
+    color:#475569;
+    font-size:0.9em;
+    margin-top:10px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🇫🇷 Le futur composé</h1>
+  <p>Über die Zukunft sprechen – Schritt für Schritt</p>
+</header>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab(0)">1. Erklärung</button>
+    <button class="tab-btn" onclick="showTab(1)">2. Erkennen</button>
+    <button class="tab-btn" onclick="showTab(2)">3. Zuordnen</button>
+    <button class="tab-btn" onclick="showTab(3)">4. Lücken</button>
+    <button class="tab-btn" onclick="showTab(4)">5. Schreiben</button>
+  </div>
+
+  <!-- TAB 0: ERKLÄRUNG -->
+  <div class="card tab" id="tab0">
+    <h2>Was ist das futur composé?</h2>
+    <div class="explain">
+      Mit dem <b>futur composé</b> sagst du, dass etwas <b>bald / in der Zukunft</b> passiert.
+      Auf Deutsch: <i>„Ich werde … machen“</i> oder <i>„Ich gehe gleich … machen“</i>.
+    </div>
+
+    <p>Du brauchst nur <b>zwei</b> Dinge:</p>
+    <div class="formula">
+      Form von <span>aller</span> + Infinitiv (Grundform)
+    </div>
+
+    <p><b>So wird „aller“ konjugiert:</b></p>
+    <table style="width:100%; border-collapse:collapse; text-align:center;">
+      <tr style="background:#dbeafe;">
+        <th style="padding:8px;">Person</th><th>aller</th>
+      </tr>
+      <tr><td style="padding:6px;">je</td><td><b>vais</b></td></tr>
+      <tr style="background:#f1f5f9;"><td style="padding:6px;">tu</td><td><b>vas</b></td></tr>
+      <tr><td style="padding:6px;">il / elle / on</td><td><b>va</b></td></tr>
+      <tr style="background:#f1f5f9;"><td style="padding:6px;">nous</td><td><b>allons</b></td></tr>
+      <tr><td style="padding:6px;">vous</td><td><b>allez</b></td></tr>
+      <tr style="background:#f1f5f9;"><td style="padding:6px;">ils / elles</td><td><b>vont</b></td></tr>
+    </table>
+
+    <p style="margin-top:18px;"><b>Beispiele:</b></p>
+    <div class="sentence" style="font-size:1.1em;">
+      Je <span style="color:#dc2626;font-weight:bold;">vais</span> manger une pizza. → Ich werde eine Pizza essen.<br>
+      Tu <span style="color:#dc2626;font-weight:bold;">vas</span> jouer au foot. → Du wirst Fußball spielen.<br>
+      Nous <span style="color:#dc2626;font-weight:bold;">allons</span> regarder un film. → Wir werden einen Film schauen.
+    </div>
+    <div class="nav-tip">➡️ Klicke oben auf <b>„2. Erkennen“</b>, um zu starten.</div>
+  </div>
+
+  <!-- TAB 1: ERKENNEN -->
+  <div class="card tab hidden" id="tab1">
+    <h2>Übung 1: Finde die Form von „aller“</h2>
+    <div class="explain">
+      Klicke in jedem Satz auf die <b>konjugierte Form von „aller“</b> (vais, vas, va, allons, allez, vont).
+    </div>
+    <div class="progress">Punkte: <span id="score1">0</span> / <span id="total1">0</span> <span class="star" id="stars1"></span></div>
+    <div id="recogArea"></div>
+    <div class="feedback" id="fb1"></div>
+    <button class="action" id="next1" onclick="nextRecog()">Nächster Satz ➡️</button>
+  </div>
+
+  <!-- TAB 2: ZUORDNEN -->
+  <div class="card tab hidden" id="tab2">
+    <h2>Übung 2: Ziehe die richtige Form von „aller“</h2>
+    <div class="explain">
+      Ziehe die passende Form (<b>vais, vas, va, allons, allez, vont</b>) in die Lücke.
+    </div>
+    <div class="progress">Satz <span id="ddIndex">1</span> / <span id="ddTotal">0</span> <span class="star" id="stars2"></span></div>
+    <div class="dd-sentence" id="ddSentence"></div>
+    <div class="bank" id="ddBank"></div>
+    <div class="feedback" id="fb2"></div>
+    <button class="action" id="checkDD" onclick="checkDD()">Prüfen ✓</button>
+    <button class="action hidden" id="nextDD" onclick="nextDD()" style="background:#16a34a;">Weiter ➡️</button>
+  </div>
+
+  <!-- TAB 3: LÜCKEN -->
+  <div class="card tab hidden" id="tab3">
+    <h2>Übung 3: Schreibe die Form von „aller“</h2>
+    <div class="explain">
+      Tippe die <b>richtige Form von „aller“</b> in die Lücke. Tipp-Tabelle steht in Tab 1! 😉
+    </div>
+    <div id="gapArea"></div>
+    <button class="action" onclick="checkGaps()">Alles prüfen ✓</button>
+    <div class="feedback" id="fb3"></div>
+  </div>
+
+  <!-- TAB 4: SCHREIBEN -->
+  <div class="card tab hidden" id="tab4">
+    <h2>Übung 4: Schreibe ganze Sätze</h2>
+    <div class="explain">
+      Bilde einen Satz im <b>futur composé</b>. Denke an: <b>Person + Form von aller + Infinitiv</b>.
+    </div>
+    <div id="writeArea"></div>
+    <button class="action" onclick="checkWrite()">Lösung anzeigen ✓</button>
+    <div class="feedback" id="fb4"></div>
+  </div>
+
+</div>
+
+<script>
+/* ---------- TAB-NAVIGATION ---------- */
+function showTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('hidden', i!==n));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active', i===n));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ===========================================================
+   ÜBUNG 1 – PATTERN RECOGNITION
+=========================================================== */
+const recogSentences = [
+  {words:["Je","vais","manger","une","glace","."], target:"vais"},
+  {words:["Tu","vas","jouer","au","foot","."], target:"vas"},
+  {words:["Il","va","regarder","la","télé","."], target:"va"},
+  {words:["Nous","allons","visiter","Paris","."], target:"allons"},
+  {words:["Vous","allez","danser","ce","soir","."], target:"allez"},
+  {words:["Elles","vont","acheter","un","gâteau","."], target:"vont"},
+  {words:["On","va","faire","les","devoirs","."], target:"va"},
+  {words:["Marie","va","téléphoner","à","Paul","."], target:"va"}
+];
+let recogIndex = 0, recogScore = 0, recogAnswered = false;
+document.getElementById('total1').textContent = recogSentences.length;
+
+function loadRecog(){
+  recogAnswered = false;
+  const s = recogSentences[recogIndex];
+  const area = document.getElementById('recogArea');
+  area.innerHTML = '<div class="sentence">' +
+    s.words.map((w,i)=>{
+      const sep = (w==='.')?'':' ';
+      return `<span class="word" onclick="pickWord(this,'${w}')">${w}</span>${sep}`;
+    }).join('') + '</div>';
+  document.getElementById('fb1').textContent = '';
+  document.getElementById('fb1').className = 'feedback';
+}
+function pickWord(el, w){
+  if(recogAnswered) return;
+  const s = recogSentences[recogIndex];
+  if(w === s.target){
+    el.classList.add('correct');
+    recogAnswered = true;
+    recogScore++;
+    document.getElementById('score1').textContent = recogScore;
+    updateStars('stars1', recogScore, recogSentences.length);
+    document.getElementById('fb1').textContent = '✅ Super! "'+w+'" ist die Form von aller.';
+    document.getElementById('fb1').className = 'feedback ok';
+  } else {
+    el.classList.add('wrong');
+    document.getElementById('fb1').textContent = '❌ Das ist nicht die Form von aller. Versuch es nochmal!';
+    document.getElementById('fb1').className = 'feedback no';
+  }
+}
+function nextRecog(){
+  recogIndex = (recogIndex+1) % recogSentences.length;
+  loadRecog();
+}
+
+/* ===========================================================
+   ÜBUNG 2 – DRAG & DROP
+=========================================================== */
+const ddData = [
+  {before:"Je", after:"manger une pomme.", answer:"vais"},
+  {before:"Tu", after:"regarder un film.", answer:"vas"},
+  {before:"Il", after:"jouer au tennis.", answer:"va"},
+  {before:"Nous", after:"visiter le musée.", answer:"allons"},
+  {before:"Vous", after:"écouter de la musique.", answer:"allez"},
+  {before:"Elles", after:"préparer le dîner.", answer:"vont"}
+];
+const allForms = ["vais","vas","va","allons","allez","vont"];
+let ddIndex = 0, ddDropped = null;
+document.getElementById('ddTotal').textContent = ddData.length;
+
+function loadDD(){
+  ddDropped = null;
+  const d = ddData[ddIndex];
+  document.getElementById('ddIndex').textContent = ddIndex+1;
+  document.getElementById('ddSentence').innerHTML =
+    `${d.before} <span class="dropzone" id="dz"
+       ondragover="ddOver(event)" ondragleave="ddLeave(event)"
+       ondrop="ddDrop(event)"></span> ${d.after}`;
+  const bank = document.getElementById('ddBank');
+  // shuffle forms
+  const forms = [...allForms].sort(()=>Math.random()-0.5);
+  bank.innerHTML = forms.map(f=>
+    `<span class="chip" draggable="true" id="chip-${f}"
+       ondragstart="ddStart(event,'${f}')"
+       onclick="ddTap('${f}')">${f}</span>`).join('');
+  document.getElementById('fb2').textContent='';
+  document.getElementById('fb2').className='feedback';
+  document.getElementById('checkDD').classList.remove('hidden');
+  document.getElementById('nextDD').classList.add('hidden');
+}
+let dragged = null;
+function ddStart(e,f){ dragged = f; }
+function ddOver(e){ e.preventDefault(); e.target.classList.add('over'); }
+function ddLeave(e){ e.target.classList.remove('over'); }
+function ddDrop(e){
+  e.preventDefault();
+  const dz = document.getElementById('dz');
+  dz.classList.remove('over');
+  placeForm(dragged);
+}
+/* Tap-Alternative für Touch */
+function ddTap(f){ placeForm(f); }
+function placeForm(f){
+  if(!f) return;
+  // reset previous chip
+  if(ddDropped){
+    const prev = document.getElementById('chip-'+ddDropped);
+    if(prev) prev.classList.remove('used');
+  }
+  ddDropped = f;
+  const dz = document.getElementById('dz');
+  dz.textContent = f;
+  dz.style.background = '#dbeafe';
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('used'));
+  document.getElementById('chip-'+f).classList.add('used');
+}
+let ddScore = 0;
+function checkDD(){
+  if(!ddDropped){
+    document.getElementById('fb2').textContent='➡️ Ziehe oder tippe zuerst eine Form in die Lücke.';
+    document.getElementById('fb2').className='feedback no';
+    return;
+  }
+  const d = ddData[ddIndex];
+  const dz = document.getElementById('dz');
+  if(ddDropped === d.answer){
+    dz.style.background = '#86efac';
+    ddScore++;
+    updateStars('stars2', ddScore, ddData.length);
+    document.getElementById('fb2').textContent='✅ Richtig! '+d.before+' '+d.answer+' ...';
+    document.getElementById('fb2').className='feedback ok';
+    document.getElementById('checkDD').classList.add('hidden');
+    document.getElementById('nextDD').classList.remove('hidden');
+  } else {
+    dz.style.background = '#fca5a5';
+    document.getElementById('fb2').textContent='❌ Nicht ganz. Schau in die Tabelle (Tab 1) und versuch es nochmal!';
+    document.getElementById('fb2').className='feedback no';
+  }
+}
+function nextDD(){
+  ddIndex = (ddIndex+1) % ddData.length;
+  loadDD();
+}
+
+/* ===========================================================
+   ÜBUNG 3 – LÜCKEN TEXT (tippen)
+=========================================================== */
+const gapData = [
+  {before:"Je", after:"manger.", answer:["vais"]},
+  {before:"Tu", after:"chanter.", answer:["vas"]},
+  {before:"Elle", after:"dormir.", answer:["va"]},
+  {before:"Nous", after:"partir.", answer:["allons"]},
+  {before:"Vous", after:"travailler.", answer:["allez"]},
+  {before:"Ils", after:"arriver.", answer:["vont"]}
+];
+function loadGaps(){
+  document.getElementById('gapArea').innerHTML = gapData.map((g,i)=>
+    `<div class="dd-sentence">${g.before}
+      <input class="gap" id="gap${i}" placeholder="aller?"> ${g.after}</div>`
+  ).join('');
+}
+function checkGaps(){
+  let correct = 0;
+  gapData.forEach((g,i)=>{
+    const inp = document.getElementById('gap'+i);
+    const val = inp.value.trim().toLowerCase();
+    if(g.answer.includes(val)){
+      inp.style.background='#86efac'; correct++;
+    } else {
+      inp.style.background='#fca5a5';
+    }
+  });
+  const fb = document.getElementById('fb3');
+  if(correct === gapData.length){
+    fb.textContent = '🎉 Perfekt! Alle '+correct+' Sätze richtig!';
+    fb.className='feedback ok';
+  } else {
+    fb.textContent = '👍 '+correct+' von '+gapData.length+' richtig. Verbessere die roten Felder!';
+    fb.className='feedback no';
+  }
+}
+
+/* ===========================================================
+   ÜBUNG 4 – FREIES SCHREIBEN
+=========================================================== */
+const writeData = [
+  {de:"Ich werde Fußball spielen.", sol:"Je vais jouer au foot.", words:"jouer au foot"},
+  {de:"Du wirst einen Film schauen.", sol:"Tu vas regarder un film.", words:"regarder un film"},
+  {de:"Wir werden Paris besuchen.", sol:"Nous allons visiter Paris.", words:"visiter Paris"},
+  {de:"Sie (Plural) werden tanzen.", sol:"Ils/Elles vont danser.", words:"danser"}
+];
+function loadWrite(){
+  document.getElementById('writeArea').innerHTML = writeData.map((w,i)=>
+    `<div class="write-item">
+       <p>🇩🇪 <b>${w.de}</b></p>
+       <p class="hint">Verben/Wörter: ${w.words}</p>
+       <input class="gap" style="width:90%;" id="write${i}" placeholder="Schreibe den Satz auf Französisch...">
+       <p class="hint" id="sol${i}" style="display:none;">✅ Lösung: <b>${w.sol}</b></p>
+     </div>`
+  ).join('');
+}
+function checkWrite(){
+  writeData.forEach((w,i)=>{
+    document.getElementById('sol'+i).style.display='block';
+  });
+  document.getElementById('fb4').textContent='💡 Vergleiche deine Sätze mit den Lösungen. Hast du an "aller" + Infinitiv gedacht?';
+  document.getElementById('fb4').className='feedback ok';
+}
+
+/* ---------- STERNE ---------- */
+function updateStars(id, score, total){
+  const ratio = score/total;
+  let s = '';
+  if(ratio>0) s='⭐';
+  if(ratio>=0.5) s='⭐⭐';
+  if(ratio>=0.99) s='⭐⭐⭐';
+  document.getElementById(id).textContent = s;
+}
+
+/* ---------- INIT ---------- */
+loadRecog();
+loadDD();
+loadGaps();
+loadWrite();
+</script>
+</body>
+</html>
