@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Labo des Nombres – Zahlen-Baukasten</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-glow: rgba(108, 92, 231, 0.3);
+            --secondary: #0d1117;
+            --surface: #161b22;
+            --surface2: #21262d;
+            --surface3: #2a313a;
+            --accent: #e74c3c;
+            --accent-soft: rgba(231, 76, 60, 0.15);
+            --success: #2ecc71;
+            --success-soft: rgba(46, 204, 113, 0.15);
+            --gold: #f1c40f;
+            --blue: #3498db;
+            --blue-soft: rgba(52, 152, 219, 0.15);
+            --orange: #e67e22;
+            --orange-soft: rgba(230, 126, 34, 0.15);
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --border: #30363d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        #game-container {
+            background-color: var(--surface);
+            width: 94%;
+            max-width: 580px;
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .flag-strip {
+            height: 4px;
+            width: 100%;
+            background: linear-gradient(to right, #002395 33%, #fff 33%, #fff 66%, #ed2939 66%);
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        h1 { font-size: 1.5em; margin: 14px 0 4px; }
+        .subtitle { color: var(--text-muted); font-size: 0.88em; margin-bottom: 18px; }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ============ START ============ */
+        .level-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 18px 0 22px;
+        }
+
+        .level-card {
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .level-card:hover {
+            border-color: var(--primary);
+            background: var(--surface3);
+        }
+
+        .level-card.locked {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .level-card .level-icon {
+            font-size: 1.6em;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .level-card .level-info { flex: 1; }
+        .level-card .level-name { font-weight: 700; font-size: 1em; margin-bottom: 2px; }
+        .level-card .level-desc { font-size: 0.8em; color: var(--text-muted); }
+        .level-card .level-badge {
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .level-card .stars-earned { font-size: 1em; flex-shrink: 0; }
+
+        .l1 .level-icon { background: var(--success-soft); }
+        .l2 .level-icon { background: var(--blue-soft); }
+        .l3 .level-icon { background: var(--orange-soft); }
+        .l4 .level-icon { background: var(--accent-soft); }
+        .l5 .level-icon { background: var(--primary-glow); }
+
+        /* ============ TUTORIAL OVERLAY ============ */
+        .tutorial-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(13, 17, 23, 0.95);
+            z-index: 200;
+            padding: 30px 24px;
+            overflow-y: auto;
+            text-align: left;
+            border-radius: 16px;
+        }
+
+        .tutorial-overlay.active { display: block; }
+
+        .tutorial-overlay h2 { font-size: 1.2em; margin-bottom: 14px; text-align: center; }
+
+        .rule-box {
+            background: var(--surface2);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .rule-box .rule-title { font-weight: 700; font-size: 0.95em; margin-bottom: 6px; }
+        .rule-box .rule-example { color: var(--text-muted); font-size: 0.85em; line-height: 1.5; }
+        .rule-box .rule-example em { color: var(--primary); font-style: normal; font-weight: 600; }
+
+        .tut-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 18px auto 0;
+            transition: all 0.2s;
+        }
+
+        .tut-btn:hover { transform: scale(1.04); box-shadow: 0 4px 20px var(--primary-glow); }
+
+        /* ============ GAME ============ */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 9px 13px;
+            background: var(--surface2);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 0.85em;
+        }
+
+        .stat { display: flex; align-items: center; gap: 4px; }
+        .stat-val { font-weight: bold; color: var(--primary); }
+
+        .progress-track {
+            width: 100%;
+            height: 5px;
+            background: var(--surface3);
+            border-radius: 3px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* Zahl oben */
+        .target-number {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0 5px;
+            letter-spacing: 2px;
+        }
+
+        .target-hint {
+            color: var(--text-muted);
+            font-size: 0.82em;
+            margin-bottom: 18px;
+        }
+
+        /* Baufeld */
+        .build-zone {
+            min-height: 62px;
+            background: var(--surface2);
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s, background 0.2s;
+            cursor: pointer;
+        }
+
+        .build-zone.has-items { border-style: solid; border-color: var(--primary); }
+
+        .build-zone .placeholder {
+            color: var(--text-muted);
+            font-size: 0.88em;
+            font-style: italic;
+        }
+
+        /* Bausteine */
+        .block {
+            display: inline-flex;
+            align-items: center;
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .block:active { transform: scale(0.95); }
+
+        .block.tens-block {
+            background: var(--blue-soft);
+            color: var(--blue);
+            border-color: rgba(52, 152, 219, 0.3);
+        }
+
+        .block.ones-block {
+            background: var(--success-soft);
+            color: var(--success);
+            border-color: rgba(46, 204, 113, 0.3);
+        }
+
+        .block.special-block {
+            background: var(--orange-soft);
+            color: var(--orange);
+            border-color: rgba(230, 126, 34, 0.3);
+        }
+
+        .block.connector-block {
+            background: var(--primary-glow);
+            color: var(--primary);
+            border-color: rgba(108, 92, 231, 0.3);
+            font-size: 0.9em;
+            padding: 8px 12px;
+        }
+
+        .block:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+
+        .block.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .block.in-zone {
+            border-style: solid;
+            cursor: pointer;
+        }
+
+        .block.in-zone::after {
+            content: '✕';
+            font-size: 0.65em;
+            margin-left: 6px;
+            opacity: 0.6;
+        }
+
+        /* Baustein-Bereiche */
+        .block-section {
+            margin-bottom: 12px;
+        }
+
+        .block-section-label {
+            font-size: 0.72em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 7px;
+        }
+
+        .block-tray {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            justify-content: center;
+        }
+
+        /* Buttons */
+        .action-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        .check-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .check-btn:hover { transform: scale(1.03); box-shadow: 0 4px 20px var(--primary-glow); }
+        .check-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+        .clear-btn {
+            background: var(--surface3);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .clear-btn:hover { color: var(--text); border-color: var(--text-muted); }
+
+        /* Feedback */
+        .feedback-bar {
+            margin-top: 14px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.92em;
+            font-weight: 600;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .feedback-bar.show { display: block; }
+
+        .feedback-bar.correct-fb {
+            background: var(--success-soft);
+            color: var(--success);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .feedback-bar.wrong-fb {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .feedback-bar .correct-word {
+            display: block;
+            margin-top: 5px;
+            color: var(--text);
+            font-weight: 400;
+            font-size: 0.95em;
+        }
+
+        .feedback-bar .explain {
+            display: block;
+            margin-top: 6px;
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.82em;
+        }
+
+        /* ============ END SCREEN ============ */
+        .result-box {
+            background: var(--surface2);
+            border-radius: 14px;
+            padding: 22px;
+            margin: 18px 0;
+            border: 1px solid var(--border);
+        }
+
+        .result-box .big-number {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .result-box .label {
+            color: var(--text-muted);
+            font-size: 0.88em;
+            margin-top: 4px;
+        }
+
+        .star-row { margin: 14px 0; font-size: 1.8em; }
+
+        .btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+
+        .restart-btn, .back-btn {
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .restart-btn { background: var(--primary); }
+        .restart-btn:hover { transform: scale(1.04); box-shadow: 0 4px 20px var(--primary-glow); }
+        .back-btn { background: var(--surface3); border: 1px solid var(--border); }
+        .back-btn:hover { border-color: var(--text-muted); }
+
+        /* ============ CONFETTI ============ */
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
+        }
+
+        .confetti-piece {
+            position: absolute;
+            top: 0;
+            border-radius: 2px;
+            animation: confetti-fall ease-out forwards;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up { animation: fadeUp 0.3s ease-out both; }
+
+        @media (max-width: 500px) {
+            #game-container { padding: 20px 14px; }
+            h1 { font-size: 1.3em; }
+            .target-number { font-size: 2.8em; }
+            .block { padding: 8px 12px; font-size: 0.88em; }
+            .level-card { padding: 11px 13px; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="flag-strip"></div>
+
+    <!-- =========== START SCREEN =========== -->
+    <div id="start-screen" class="screen active">
+        <h1>🧪 Le Labo des Nombres</h1>
+        <p class="subtitle">Baue französische Zahlwörter aus ihren Bestandteilen zusammen!</p>
+
+        <div class="level-grid" id="level-grid"></div>
+    </div>
+
+    <!-- =========== TUTORIAL OVERLAY =========== -->
+    <div class="tutorial-overlay" id="tutorial-overlay">
+        <h2 id="tut-title"></h2>
+        <div id="tut-content"></div>
+        <button class="tut-btn" onclick="closeTutorialAndStart()">Los geht's! 🚀</button>
+    </div>
+
+    <!-- =========== GAME SCREEN =========== -->
+    <div id="game-screen" class="screen">
+        <div class="stats-bar">
+            <div class="stat">📋 <span class="stat-val" id="round-display">1/10</span></div>
+            <div class="stat">✅ <span class="stat-val" id="correct-display">0</span></div>
+            <div class="stat">🏆 <span class="stat-val" id="streak-display">0</span></div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+        <div class="target-number" id="target-number">47</div>
+        <div class="target-hint" id="target-hint"></div>
+
+        <div class="build-zone" id="build-zone">
+            <span class="placeholder">Klicke unten auf die Bausteine…</span>
+        </div>
+
+        <div id="block-tray-container"></div>
+
+        <div class="action-row">
+            <button class="clear-btn" onclick="clearBuildZone()">↩ Leeren</button>
+            <button class="check-btn" id="check-btn" onclick="checkAnswer()">Vérifier ✓</button>
+        </div>
+
+        <div class="feedback-bar" id="feedback"></div>
+    </div>
+
+    <!-- =========== END SCREEN =========== -->
+    <div id="end-screen" class="screen">
+        <h1>🏁 Niveau terminé !</h1>
+        <div class="result-box">
+            <div class="big-number" id="final-score">0/10</div>
+            <div class="label">richtig zusammengebaut</div>
+        </div>
+        <div class="star-row" id="star-row"></div>
+        <div class="btn-row">
+            <button class="back-btn" onclick="backToMenu()">← Übersicht</button>
+            <button class="restart-btn" id="retry-btn" onclick="retryLevel()">Nochmal 🔄</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// =================== DATA ===================
+const NOMBRES = {
+    0:"zéro",1:"un",2:"deux",3:"trois",4:"quatre",5:"cinq",6:"six",7:"sept",8:"huit",9:"neuf",
+    10:"dix",11:"onze",12:"douze",13:"treize",14:"quatorze",15:"quinze",16:"seize",
+    17:"dix-sept",18:"dix-huit",19:"dix-neuf",20:"vingt",
+    21:"vingt-et-un",22:"vingt-deux",23:"vingt-trois",24:"vingt-quatre",25:"vingt-cinq",
+    26:"vingt-six",27:"vingt-sept",28:"vingt-huit",29:"vingt-neuf",
+    30:"trente",31:"trente-et-un",32:"trente-deux",33:"trente-trois",34:"trente-quatre",
+    35:"trente-cinq",36:"trente-six",37:"trente-sept",38:"trente-huit",39:"trente-neuf",
+    40:"quarante",41:"quarante-et-un",42:"quarante-deux",43:"quarante-trois",
+    44:"quarante-quatre",45:"quarante-cinq",46:"quarante-six",47:"quarante-sept",
+    48:"quarante-huit",49:"quarante-neuf",
+    50:"cinquante",51:"cinquante-et-un",52:"cinquante-deux",53:"cinquante-trois",
+    54:"cinquante-quatre",55:"cinquante-cinq",56:"cinquante-six",57:"cinquante-sept",
+    58:"cinquante-huit",59:"cinquante-neuf",
+    60:"soixante",61:"soixante-et-un",62:"soixante-deux",63:"soixante-trois",
+    64:"soixante-quatre",65:"soixante-cinq",66:"soixante-six",67:"soixante-sept",
+    68:"soixante-huit",69:"soixante-neuf",
+    70:"soixante-dix",71:"soixante-et-onze",72:"soixante-douze",73:"soixante-treize",
+    74:"soixante-quatorze",75:"soixante-quinze",76:"soixante-seize",
+    77:"soixante-dix-sept",78:"soixante-dix-huit",79:"soixante-dix-neuf",
+    80:"quatre-vingts",81:"quatre-vingt-un",82:"quatre-vingt-deux",
+    83:"quatre-vingt-trois",84:"quatre-vingt-quatre",85:"quatre-vingt-cinq",
+    86:"quatre-vingt-six",87:"quatre-vingt-sept",88:"quatre-vingt-huit",
+    89:"quatre-vingt-neuf",
+    90:"quatre-vingt-dix",91:"quatre-vingt-onze",92:"quatre-vingt-douze",
+    93:"quatre-vingt-treize",94:"quatre-vingt-quatorze",95:"quatre-vingt-quinze",
+    96:"quatre-vingt-seize",97:"quatre-vingt-dix-sept",98:"quatre-vingt-dix-huit",
+    99:"quatre-vingt-dix-neuf"
+};
+
+// Levels
+const LEVELS = [
+    {
+        id: 1,
+        name: "Die Regulären",
+        desc: "20–69 · Zehner + Einer",
+        icon: "🟢",
+        range: () => {
+            const tens = [20,30,40,50,60];
+            const t = tens[Math.floor(Math.random()*tens.length)];
+            return t + Math.floor(Math.random()*10);
+        },
+        tutorial: {
+            title: "Stufe 1: Die Regulären (20–69)",
+            rules: [
+                { title: "Grundprinzip", example: "Zehner + Einer<br><em>quarante</em> + <em>sept</em> → quarante-sept (47)" },
+                { title: "Sonderfall: …-et-un", example: "Bei 21, 31, 41, 51, 61 steht <em>et</em> dazwischen:<br><em>trente</em> + <em>et</em> + <em>un</em> → trente-et-un (31)" },
+                { title: "Runde Zehner", example: "Stehen allein, ohne Einer:<br><em>cinquante</em> → cinquante (50)" }
+            ]
+        }
+    },
+    {
+        id: 2,
+        name: "Die 70er – Kopfrechnen!",
+        desc: "70–79 · soixante + (10–19)",
+        icon: "🔵",
+        range: () => 70 + Math.floor(Math.random()*10),
+        tutorial: {
+            title: "Stufe 2: Die 70er (70–79)",
+            rules: [
+                { title: "Das Prinzip: 60 + 10er", example: "Frankreich sagt <em>soixante</em> (60) + eine Zahl von 10–19:<br>70 = <em>soixante</em> + <em>dix</em> → soixante-dix" },
+                { title: "Beispiel: 73", example: "73 = 60 + 13<br><em>soixante</em> + <em>treize</em> → soixante-treize" },
+                { title: "Sonderfall: 71", example: "71 = 60 + 11<br><em>soixante</em> + <em>et</em> + <em>onze</em> → soixante-et-onze" }
+            ]
+        }
+    },
+    {
+        id: 3,
+        name: "Die 80er – Mal vier!",
+        desc: "80–89 · quatre-vingt(s) + Einer",
+        icon: "🟠",
+        range: () => 80 + Math.floor(Math.random()*10),
+        tutorial: {
+            title: "Stufe 3: Die 80er (80–89)",
+            rules: [
+                { title: "Das Prinzip: 4 × 20", example: "80 = 4 × 20 → <em>quatre-vingts</em> (mit s!)" },
+                { title: "81–89: ohne s!", example: "Sobald ein Einer folgt, fällt das <em>s</em> weg:<br>83 = <em>quatre-vingt</em> + <em>trois</em> → quatre-vingt-trois" },
+                { title: "Kein „et" bei 81!", example: "Anders als bei 21/31… heißt es:<br><em>quatre-vingt-un</em> (nicht *quatre-vingt-et-un)" }
+            ]
+        }
+    },
+    {
+        id: 4,
+        name: "Die 90er – Doppelt knifflig",
+        desc: "90–99 · quatre-vingt + (10–19)",
+        icon: "🔴",
+        range: () => 90 + Math.floor(Math.random()*10),
+        tutorial: {
+            title: "Stufe 4: Die 90er (90–99)",
+            rules: [
+                { title: "Das Prinzip: 80 + 10er", example: "90 = 80 + 10 → <em>quatre-vingt</em> + <em>dix</em> → quatre-vingt-dix" },
+                { title: "Beispiel: 96", example: "96 = 80 + 16<br><em>quatre-vingt</em> + <em>seize</em> → quatre-vingt-seize" },
+                { title: "Immer ohne s", example: "<em>quatre-vingt</em> (ohne s) + Zahl von 10–19" }
+            ]
+        }
+    },
+    {
+        id: 5,
+        name: "Alles gemischt!",
+        desc: "0–99 · Der ultimative Test",
+        icon: "🟣",
+        range: () => Math.floor(Math.random()*100),
+        tutorial: {
+            title: "Stufe 5: Alles gemischt (0–99)",
+            rules: [
+                { title: "Jetzt kommt alles zusammen!", example: "Du bekommst Zahlen aus dem gesamten Bereich 0–99." },
+                { title: "Tipp", example: "Überlege zuerst: In welchem Zehnerbereich liegt die Zahl?<br>→ Dann weißt du, welchen Baustein du zuerst brauchst." },
+                { title: "Besondere Zahlen", example: "0–16 sind Einzelwörter. Ab 17 wird zusammengesetzt." }
+            ]
+        }
+    }
+];
+
+const ROUNDS_PER_LEVEL = 10;
+
+// =================== STATE ===================
+let currentLevel = null;
+let currentRound = 0;
+let correctCount = 0;
+let streak = 0;
+let targetNum = 0;
+let buildBlocks = []; // blocks in build zone
+let roundLocked = false;
+let levelStars = {}; // levelId -> stars
+
+// Load saved stars
+try {
+    const saved = localStorage.getItem('labo-nombres-stars');
+    if (saved) levelStars = JSON.parse(saved);
+} catch(e) {}
+
+// =================== DOM ===================
+const startScreen = document.getElementById('start-screen');
+const gameScreen = document.getElementById('game-screen');
+const endScreen = document.getElementById('end-screen');
+const tutOverlay = document.getElementById('tutorial-overlay');
+const buildZone = document.getElementById('build-zone');
+const feedbackEl = document.getElementById('feedback');
+const checkBtn = document.getElementById('check-btn');
+
+function showScreen(s) {
+    [startScreen, gameScreen, endScreen].forEach(x => x.classList.remove('active'));
+    s.classList.add('active');
+    tutOverlay.classList.remove('active');
+}
+
+// =================== LEVEL GRID ===================
+function renderLevelGrid() {
+    const grid = document.getElementById('level-grid');
+    grid.innerHTML = '';
+    LEVELS.forEach((lvl, i) => {
+        const card = document.createElement('div');
+        card.className = `level-card l${lvl.id} fade-up`;
+        card.style.animationDelay = `${i * 0.07}s`;
+
+        const stars = levelStars[lvl.id] || 0;
+        const starsStr = stars > 0 ? '⭐'.repeat(stars) + '☆'.repeat(3 - stars) : '';
+
+        card.innerHTML = `
+            <div class="level-icon">${lvl.icon}</div>
+            <div class="level-info">
+                <div class="level-name">${lvl.name}</div>
+                <div class="level-desc">${lvl.desc}</div>
+            </div>
+            <div class="stars-earned">${starsStr}</div>
+        `;
+
+        card.addEventListener('click', () => selectLevel(lvl));
+        grid.appendChild(card);
+    });
+}
+
+renderLevelGrid();
+
+// =================== TUTORIAL ===================
+let pendingLevel = null;
+
+function selectLevel(lvl) {
+    pendingLevel = lvl;
+    const tut = lvl.tutorial;
+    document.getElementById('tut-title').textContent = tut.title;
+    const content = document.getElementById('tut-content');
+    content.innerHTML = tut.rules.map(r => `
+        <div class="rule-box">
+            <div class="rule-title">${r.title}</div>
+            <div class="rule-example">${r.example}</div>
+        </div>
+    `).join('');
+    tutOverlay.classList.add('active');
+}
+
+function closeTutorialAndStart() {
+    tutOverlay.classList.remove('active');
+    if (pendingLevel) startLevel(pendingLevel);
+}
+
+// =================== START LEVEL ===================
+function startLevel(lvl) {
+    currentLevel = lvl;
+    currentRound = 0;
+    correctCount = 0;
+    streak = 0;
+    showScreen(gameScreen);
+    nextRound();
+}
+
+// =================== BLOCK DECOMPOSITION ===================
+function decomposeNumber(n) {
+    // Returns the correct blocks for a number
+    if (n <= 16) return [NOMBRES[n]];
+    if (n <= 19) return ["dix", NOMBRES[n - 10]]; // dix-sept = dix + sept
+    if (n <= 69) {
+        const tens = Math.floor(n / 10) * 10;
+        const ones = n % 10;
+        if (ones === 0) return [NOMBRES[tens]];
+        if (ones === 1) return [NOMBRES[tens], "et", "un"];
+        return [NOMBRES[tens], NOMBRES[ones]];
+    }
+    if (n <= 79) {
+        // soixante + (10-19 part)
+        const remainder = n - 60;
+        if (n === 71) return ["soixante", "et", "onze"];
+        if (remainder <= 16) return ["soixante", NOMBRES[remainder]];
+        return ["soixante", "dix", NOMBRES[remainder - 10]]; // 77 = soixante + dix + sept
+    }
+    if (n <= 89) {
+        const ones = n - 80;
+        if (ones === 0) return ["quatre-vingts"];
+        return ["quatre-vingt", NOMBRES[ones]];
+    }
+    // 90-99
+    const remainder = n - 80;
+    if (remainder <= 16) return ["quatre-vingt", NOMBRES[remainder]];
+    return ["quatre-vingt", "dix", NOMBRES[remainder - 10]]; // 97 = quatre-vingt + dix + sept
+}
+
+function getCorrectWord(n) {
+    return NOMBRES[n];
+}
+
+function getExplanation(n) {
+    if (n <= 16) return `${n} ist ein eigenständiges Wort.`;
+    if (n <= 19) return `${n} = 10 + ${n-10} → dix-${NOMBRES[n-10]}`;
+    if (n <= 69) {
+        const t = Math.floor(n/10)*10, o = n%10;
+        if (o === 0) return `${n} = Runder Zehner`;
+        if (o === 1) return `${n} = ${t} + 1 → ${NOMBRES[t]}-et-un`;
+        return `${n} = ${t} + ${o} → ${NOMBRES[t]}-${NOMBRES[o]}`;
+    }
+    if (n <= 79) {
+        const r = n - 60;
+        if (n === 71) return `71 = 60 + 11 → soixante-et-onze`;
+        return `${n} = 60 + ${r} → soixante-${NOMBRES[r]}`;
+    }
+    if (n <= 89) {
+        const o = n - 80;
+        if (o === 0) return `80 = 4 × 20 → quatre-vingts (mit s!)`;
+        return `${n} = 4×20 + ${o} → quatre-vingt-${NOMBRES[o]} (ohne s!)`;
+    }
+    const r = n - 80;
+    return `${n} = 4×20 + ${r} → quatre-vingt-${NOMBRES[r]}`;
+}
+
+// =================== GENERATE DISTRACTORS ===================
+function generateBlocks(n) {
+    const correct = decomposeNumber(n);
+    const allBlocks = new Set(correct);
+
+    // Add distractors based on level
+    const tensWords = ["vingt", "trente", "quarante", "cinquante", "soixante"];
+    const onesWords = ["un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"];
+    const teensWords = ["dix", "onze", "douze", "treize", "quatorze", "quinze", "seize"];
+    const specialWords = ["quatre-vingts", "quatre-vingt", "et"];
+    const allPool = [...tensWords, ...onesWords, ...teensWords, ...specialWords];
+
+    // Add 3-5 distractors
+    const numDistractors = 3 + Math.floor(Math.random() * 3);
+    let attempts = 0;
+    while (allBlocks.size < correct.length + numDistractors && attempts < 50) {
+        const w = allPool[Math.floor(Math.random() * allPool.length)];
+        if (!allBlocks.has(w)) allBlocks.add(w);
+        attempts++;
+    }
+
+    // Categorize
+    const blocks = Array.from(allBlocks).map(word => {
+        let type = 'ones-block';
+        if (tensWords.includes(word)) type = 'tens-block';
+        else if (teensWords.includes(word) || word.startsWith('dix')) type = 'tens-block';
+        else if (word === 'quatre-vingts' || word === 'quatre-vingt') type = 'special-block';
+        else if (word === 'et') type = 'connector-block';
+        return { word, type, isCorrect: correct.includes(word) };
+    });
+
+    // Shuffle
+    blocks.sort(() => Math.random() - 0.5);
+
+    return { correct, blocks };
+}
+
+// =================== NEXT ROUND ===================
+function nextRound() {
+    currentRound++;
+    roundLocked = false;
+    feedbackEl.classList.remove('show');
+    feedbackEl.className = 'feedback-bar';
+    checkBtn.disabled = false;
+    buildBlocks = [];
+
+    if (currentRound > ROUNDS_PER_LEVEL) {
+        endLevel();
+        return;
+    }
+
+    document.getElementById('round-display').textContent = `${currentRound}/${ROUNDS_PER_LEVEL}`;
+    document.getElementById('correct-display').textContent = correctCount;
+    document.getElementById('streak-display').textContent = streak;
+    document.getElementById('progress-fill').style.width = `${((currentRound - 1) / ROUNDS_PER_LEVEL) * 100}%`;
+
+    // Generate number
+    targetNum = currentLevel.range();
+    document.getElementById('target-number').textContent = targetNum;
+
+    // Hint
+    const hint = document.getElementById('target-hint');
+    if (targetNum >= 70 && targetNum <= 79) hint.textContent = '💡 Denk dran: 60 + …';
+    else if (targetNum >= 80 && targetNum <= 89) hint.textContent = '💡 Denk dran: 4 × 20 + …';
+    else if (targetNum >= 90 && targetNum <= 99) hint.textContent = '💡 Denk dran: 4 × 20 + …';
+    else if (targetNum % 10 === 1 && targetNum >= 20 && targetNum <= 69) hint.textContent = '💡 Vergiss „et" nicht!';
+    else hint.textContent = '';
+
+    const { correct, blocks } = generateBlocks(targetNum);
+
+    renderBlockTray(blocks);
+    renderBuildZone();
+}
+
+// =================== RENDER BLOCK TRAY ===================
+function renderBlockTray(blocks) {
+    const container = document.getElementById('block-tray-container');
+
+    // Group by type
+    const groups = {
+        'tens-block': { label: 'Zehner', items: [] },
+        'special-block': { label: 'Spezial', items: [] },
+        'connector-block': { label: 'Verbinder', items: [] },
+        'ones-block': { label: 'Einer', items: [] }
+    };
+
+    blocks.forEach(b => {
+        if (groups[b.type]) groups[b.type].items.push(b);
+    });
+
+    container.innerHTML = '';
+    for (const [type, group] of Object.entries(groups)) {
+        if (group.items.length === 0) continue;
+        const section = document.createElement('div');
+        section.className = 'block-section';
+        section.innerHTML = `<div class="block-section-label">${group.label}</div>`;
+        const tray = document.createElement('div');
+        tray.className = 'block-tray';
+        group.items.forEach(b => {
+            const el = document.createElement('div');
+            el.className = `block ${b.type}`;
+            el.textContent = b.word;
+            el.dataset.word = b.word;
+            el.addEventListener('click', () => addBlock(b.word, el));
+            tray.appendChild(el);
+        });
+        section.appendChild(tray);
+        container.appendChild(section);
+    }
+}
+
+// =================== BUILD ZONE ===================
+function addBlock(word, sourceEl) {
+    if (roundLocked) return;
+    if (sourceEl.classList.contains('used')) return;
+
+    sourceEl.classList.add('used');
+    buildBlocks.push({ word, sourceEl });
+    renderBuildZone();
+}
+
+function removeBlock(index) {
+    if (roundLocked) return;
+    const removed = buildBlocks.splice(index, 1)[0];
+    if (removed && removed.sourceEl) removed.sourceEl.classList.remove('used');
+    renderBuildZone();
+}
+
+function clearBuildZone() {
+    if (roundLocked) return;
+    buildBlocks.forEach(b => {
+        if (b.sourceEl) b.sourceEl.classList.remove('used');
+    });
+    buildBlocks = [];
+    renderBuildZone();
+}
+
+function renderBuildZone() {
+    buildZone.innerHTML = '';
+    if (buildBlocks.length === 0) {
+        buildZone.classList.remove('has-items');
+        buildZone.innerHTML = '<span class="placeholder">Klicke unten auf die Bausteine…</span>';
+        return;
+    }
+    buildZone.classList.add('has-items');
+    buildBlocks.forEach((b, i) => {
+        const el = document.createElement('div');
+        // Determine type
+        let type = 'ones-block';
+        const tensWords = ["vingt","trente","quarante","cinquante","soixante","dix","onze","douze","treize","quatorze","quinze","seize"];
+        if (tensWords.includes(b.word)) type = 'tens-block';
+        if (b.word === 'quatre-vingts' || b.word === 'quatre-vingt') type = 'special-block';
+        if (b.word === 'et') type = 'connector-block';
+
+        el.className = `block ${type} in-zone`;
+        el.textContent = b.word;
+        el.addEventListener('click', () => removeBlock(i));
+        buildZone.appendChild(el);
+
+        // Add hyphen/connector visualization between blocks
+        if (i < buildBlocks.length - 1) {
+            const sep = document.createElement('span');
+            sep.style.color = 'var(--text-muted)';
+            sep.style.fontSize = '1.2em';
+            sep.style.margin = '0 2px';
+            sep.textContent = '-';
+            buildZone.appendChild(sep);
+        }
+    });
+}
+
+// =================== CHECK ANSWER ===================
+function checkAnswer() {
+    if (roundLocked || buildBlocks.length === 0) return;
+    roundLocked = true;
+    checkBtn.disabled = true;
+
+    const userWords = buildBlocks.map(b => b.word);
+    const userStr = userWords.join('-');
+    const correctStr = getCorrectWord(targetNum);
+
+    // Normalize for comparison (handle et)
+    const normalize = s => s.replace(/\s+/g, '-').toLowerCase();
+
+    if (normalize(userStr) === normalize(correctStr)) {
+        correctCount++;
+        streak++;
+        document.getElementById('correct-display').textContent = correctCount;
+        document.getElementById('streak-display').textContent = streak;
+
+        feedbackEl.innerHTML = streak >= 3
+            ? `🔥 Excellent ! Série de ${streak} !`
+            : '🎉 Parfait !';
+        feedbackEl.className = 'feedback-bar correct-fb show';
+
+        setTimeout(nextRound, 1100);
+    } else {
+        streak = 0;
+        document.getElementById('streak-display').textContent = streak;
+
+        feedbackEl.innerHTML = `
+            ❌ Pas tout à fait…
+            <span class="correct-word">✓ ${correctStr}</span>
+            <span class="explain">${getExplanation(targetNum)}</span>
+        `;
+        feedbackEl.className = 'feedback-bar wrong-fb show';
+
+        setTimeout(nextRound, 3200);
+    }
+}
+
+// =================== END LEVEL ===================
+function endLevel() {
+    showScreen(endScreen);
+    document.getElementById('final-score').textContent = `${correctCount}/${ROUNDS_PER_LEVEL}`;
+    document.getElementById('progress-fill').style.width = '100%';
+
+    const pct = correctCount / ROUNDS_PER_LEVEL;
+    const stars = pct >= 0.9 ? 3 : pct >= 0.7 ? 2 : pct >= 0.4 ? 1 : 0;
+
+    document.getElementById('star-row').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+
+    // Save stars
+    if (!levelStars[currentLevel.id] || stars > levelStars[currentLevel.id]) {
+        levelStars[currentLevel.id] = stars;
+        try { localStorage.setItem('labo-nombres-stars', JSON.stringify(levelStars)); } catch(e) {}
+    }
+
+    if (pct >= 0.8) spawnConfetti();
+}
+
+function retryLevel() {
+    if (currentLevel) startLevel(currentLevel);
+}
+
+function backToMenu() {
+    renderLevelGrid();
+    showScreen(startScreen);
+}
+
+// =================== CONFETTI ===================
+function spawnConfetti() {
+    const container = document.getElementById('game-container');
+    const colors = ['#6c5ce7','#e74c3c','#2ecc71','#f1c40f','#3498db','#e67e22','#fd79a8'];
+    for (let i = 0; i < 55; i++) {
+        const piece = document.createElement('div');
+        piece.classList.add('confetti-piece');
+        piece.style.left = Math.random()*100 + '%';
+        piece.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+        piece.style.animationDuration = (1.5 + Math.random()*2) + 's';
+        piece.style.animationDelay = (Math.random()*0.8) + 's';
+        piece.style.width = (5 + Math.random()*6) + 'px';
+        piece.style.height = (5 + Math.random()*6) + 'px';
+        container.appendChild(piece);
+        setTimeout(() => piece.remove(), 4000);
+    }
+}
+</script>
+
+</body>
+</html>
