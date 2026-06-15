@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les verbes irréguliers</title>
+<style>
+  :root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --accent: #f59e0b;
+    --accent-dark: #d97706;
+    --success: #10b981;
+    --danger: #ef4444;
+    --cell-h: 64px;
+    --cell-w: 150px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(circle at 20% 20%, #eef2ff, transparent 40%),
+                radial-gradient(circle at 80% 80%, #fdf2f8, transparent 40%),
+                linear-gradient(135deg, #f8fafc, #eef2ff);
+    min-height: 100vh;
+    padding: 30px 20px 60px;
+    color: #1e293b;
+  }
+  header { text-align: center; margin-bottom: 30px; }
+  h1 {
+    font-size: 2.4em;
+    font-weight: 800;
+    background: linear-gradient(90deg, #6366f1, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .intro {
+    max-width: 720px;
+    margin: 14px auto 0;
+    font-size: 1.05em;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  /* ---------- Wortbank ---------- */
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 980px;
+    margin: 0 auto 35px;
+    padding: 22px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(99,102,241,0.12);
+    min-height: 90px;
+  }
+  .bank-label {
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 4px;
+    font-size: 0.95em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ---------- Drag-Elemente ---------- */
+  .word {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 48px;
+    min-width: 118px;
+    padding: 0 14px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #422006;
+    border-radius: 14px;
+    cursor: grab;
+    font-weight: 700;
+    font-size: 1.05em;
+    user-select: none;
+    box-shadow: 0 4px 10px rgba(245,158,11,0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .word:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(245,158,11,0.45); }
+  .word.dragging { opacity: 0.5; transform: scale(0.95); }
+  .word-text { pointer-events: none; }
+
+  /* Element in einer Zelle: passt sich der Zellengröße an */
+  .dropzone .word {
+    height: calc(var(--cell-h) - 14px);
+    width: 100%;
+    min-width: 0;
+    border-radius: 10px;
+    font-size: 1em;
+  }
+  .word.in-cell.correct {
+    background: linear-gradient(135deg, #34d399, #10b981);
+    color: #022c22;
+    box-shadow: 0 4px 10px rgba(16,185,129,0.4);
+  }
+  .word.in-cell.wrong {
+    background: linear-gradient(135deg, #f87171, #ef4444);
+    color: #450a0a;
+    box-shadow: 0 4px 10px rgba(239,68,68,0.4);
+  }
+
+  /* ---------- Aussprache-Buttons ---------- */
+  .speak-btn {
+    border: none;
+    background: rgba(255,255,255,0.55);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 0.95em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, transform 0.15s;
+    flex-shrink: 0;
+  }
+  .speak-btn:hover { background: #fff; transform: scale(1.12); }
+
+  /* ---------- Tabelle ---------- */
+  .table-wrap { overflow-x: auto; }
+  table {
+    border-collapse: separate;
+    border-spacing: 8px;
+    margin: 0 auto 30px;
+  }
+  th, td {
+    height: var(--cell-h);
+    min-width: var(--cell-w);
+    text-align: center;
+    border-radius: 14px;
+  }
+  thead th {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    font-size: 1.25em;
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(99,102,241,0.3);
+  }
+  thead th.corner { background: transparent; box-shadow: none; }
+  .th-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+  td.pronoun {
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 1.2em;
+    color: #3730a3;
+  }
+  .dropzone {
+    background: rgba(255,255,255,0.65);
+    border: 2px dashed #c7d2fe;
+    padding: 7px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .dropzone.over {
+    background: #dcfce7;
+    border-color: var(--success);
+  }
+  .dropzone.filled { border-style: solid; border-color: #a5b4fc; }
+
+  /* ---------- Buttons ---------- */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .btn {
+    border: none;
+    padding: 14px 26px;
+    border-radius: 14px;
+    font-size: 1.05em;
+    font-weight: 700;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-check { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 6px 16px rgba(16,185,129,0.35); }
+  .btn-solution { background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 6px 16px rgba(99,102,241,0.35); }
+  .btn-reset { background: linear-gradient(135deg, #94a3b8, #64748b); box-shadow: 0 6px 16px rgba(100,116,139,0.35); }
+
+  .result {
+    text-align: center;
+    font-size: 1.25em;
+    font-weight: 700;
+    min-height: 30px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Les verbes irréguliers</h1>
+  <p class="intro">
+    Ziehe die richtigen Verbformen per Drag-and-Drop in die Tabelle. 🔊 Mit dem Lautsprecher-Knopf
+    kannst du dir jede Form auf Französisch anhören. Wenn du fertig bist, klicke auf <strong>Prüfen</strong>.
+  </p>
+</header>
+
+<div class="word-bank" id="wordBank">
+  <div class="bank-label">Wortbank – ziehe die Formen in die Tabelle</div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th class="corner"></th>
+        <th data-verb="être">être</th>
+        <th data-verb="avoir">avoir</th>
+        <th data-verb="aller">aller</th>
+        <th data-verb="faire">faire</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div class="controls">
+  <button class="btn btn-check" onclick="checkAnswers()">✓ Prüfen</button>
+  <button class="btn btn-solution" onclick="showSolution()">💡 Lösung anzeigen</button>
+  <button class="btn btn-reset" onclick="resetAll()">↺ Zurücksetzen</button>
+</div>
+
+<div class="result" id="result"></div>
+
+<script>
+const pronouns = ["je / j'", "tu", "il / elle", "nous", "vous", "ils / elles"];
+
+// Spaltenreihenfolge: être, avoir, aller, faire
+const solution = {
+  "je / j'":   ["suis", "ai",    "vais",   "fais"],
+  "tu":        ["es",   "as",    "vas",    "fais"],
+  "il / elle": ["est",  "a",     "va",     "fait"],
+  "nous":      ["sommes","avons","allons", "faisons"],
+  "vous":      ["êtes", "avez",  "allez",  "faites"],
+  "ils / elles":["sont","ont",   "vont",   "font"]
+};
+
+let idCounter = 0;
+
+/* ---------- Sprachausgabe ---------- */
+function speak(text) {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "fr-FR";
+  const voices = window.speechSynthesis.getVoices();
+  const fr = voices.find(v => v.lang && v.lang.toLowerCase().startsWith("fr"));
+  if (fr) u.voice = fr;
+  window.speechSynthesis.speak(u);
+}
+// Stimmen vorladen
+if ("speechSynthesis" in window) {
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
+
+/* ---------- Aussprache-Button (sicher per createElement) ---------- */
+function makeSpeakBtn(text) {
+  const btn = document.createElement("button");
+  btn.className = "speak-btn";
+  btn.title = "Vorlesen";
+  btn.textContent = "🔊";
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    speak(text);
+  });
+  return btn;
+}
+
+/* ---------- Kopfzeile mit Aussprache-Buttons füllen ---------- */
+document.querySelectorAll("table thead th[data-verb]").forEach(th => {
+  const verb = th.dataset.verb;
+  const span = document.createElement("span");
+  span.className = "th-inner";
+  span.appendChild(document.createTextNode(verb + " "));
+  span.appendChild(makeSpeakBtn(verb));
+  th.innerHTML = "";
+  th.appendChild(span);
+});
+
+/* ---------- Tabellenkörper aufbauen ---------- */
+const tbody = document.getElementById("tbody");
+pronouns.forEach(p => {
+  const tr = document.createElement("tr");
+
+  const tdP = document.createElement("td");
+  tdP.className = "pronoun";
+  tdP.textContent = p;
+  tr.appendChild(tdP);
+
+  for (let col = 0; col < 4; col++) {
+    const td = document.createElement("td");
+    td.className = "dropzone";
+    td.dataset.row = pronouns.indexOf(p);
+    td.dataset.col = col;
+    addDropEvents(td);
+    tr.appendChild(td);
+  }
+  tbody.appendChild(tr);
+});
+
+/* ---------- Drag-Element erzeugen (sicher per createElement) ---------- */
+function createWord(text) {
+  const w = document.createElement("div");
+  w.className = "word";
+  w.dataset.text = text;
+  w.draggable = true;
+  w.id = "word-" + (idCounter++);
+
+  const span = document.createElement("span");
+  span.className = "word-text";
+  span.textContent = text;
+
+  w.appendChild(span);
+  w.appendChild(document.createTextNode(" "));
+  w.appendChild(makeSpeakBtn(text));
+
+  w.addEventListener("dragstart", e => {
+    e.dataTransfer.setData("text/plain", w.id);
+    w.classList.add("dragging");
+  });
+  w.addEventListener("dragend", () => w.classList.remove("dragging"));
+  return w;
+}
+
+/* ---------- Wortbank befüllen (gemischt) ---------- */
+const bank = document.getElementById("wordBank");
+let allForms = [];
+pronouns.forEach(p => solution[p].forEach(f => allForms.push(f)));
+// mischen
+for (let i = allForms.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [allForms[i], allForms[j]] = [allForms[j], allForms[i]];
+}
+allForms.forEach(f => bank.appendChild(createWord(f)));
+
+/* ---------- Drop-Logik ---------- */
+function addDropEvents(zone) {
+  zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("over"); });
+  zone.addEventListener("dragleave", () => zone.classList.remove("over"));
+  zone.addEventListener("drop", e => {
+    e.preventDefault();
+    zone.classList.remove("over");
+    const id = e.dataTransfer.getData("text/plain");
+    const word = document.getElementById(id);
+    if (!word) return;
+
+    // Falls schon ein Wort in der Zelle ist -> zurück in die Bank
+    const existing = zone.querySelector(".word");
+    if (existing && existing !== word) {
+      existing.classList.remove("in-cell", "correct", "wrong");
+      bank.appendChild(existing);
+    }
+    word.classList.remove("correct", "wrong");
+    word.classList.add("in-cell");
+    zone.appendChild(word);
+    zone.classList.add("filled");
+  });
+}
+
+// Wortbank als Ablageziel (zurücklegen)
+bank.addEventListener("dragover", e => e.preventDefault());
+bank.addEventListener("drop", e => {
+  e.preventDefault();
+  const id = e.dataTransfer.getData("text/plain");
+  const word = document.getElementById(id);
+  if (!word) return;
+  const parentZone = word.closest(".dropzone");
+  if (parentZone) parentZone.classList.remove("filled");
+  word.classList.remove("in-cell", "correct", "wrong");
+  bank.appendChild(word);
+});
+
+/* ---------- Prüfen ---------- */
+function checkAnswers() {
+  let correct = 0, total = 24, filled = 0;
+  document.querySelectorAll(".dropzone").forEach(dz => {
+    const word = dz.querySelector(".word");
+    if (!word) return;
+    filled++;
+    const row = pronouns[dz.dataset.row];
+    const col = parseInt(dz.dataset.col);
+    word.classList.remove("correct", "wrong");
+    if (word.dataset.text.trim() === solution[row][col]) {
+      word.classList.add("correct");
+      correct++;
+    } else {
+      word.classList.add("wrong");
+    }
+  });
+  const res = document.getElementById("result");
+  if (filled < total) {
+    res.style.color = "#d97706";
+    res.textContent = "⏳ Es fehlen noch " + (total - filled) + " Formen.";
+  } else if (correct === total) {
+    res.style.color = "#059669";
+    res.textContent = "🎉 Super! Alle " + total + " Formen sind richtig!";
+  } else {
+    res.style.color = "#4f46e5";
+    res.textContent = "Du hast " + correct + " von " + total + " richtig. Die roten Felder stimmen noch nicht.";
+  }
+}
+
+/* ---------- Lösung anzeigen ---------- */
+function showSolution() {
+  document.querySelectorAll(".word").forEach(w => {
+    w.classList.remove("in-cell", "correct", "wrong");
+    delete w.dataset.used;
+  });
+  document.querySelectorAll(".dropzone").forEach(dz => {
+    dz.innerHTML = "";
+    dz.classList.remove("filled");
+    const row = pronouns[dz.dataset.row];
+    const col = parseInt(dz.dataset.col);
+    const correctForm = solution[row][col];
+    const words = Array.from(document.querySelectorAll("#wordBank .word"));
+    let match = words.find(w => w.dataset.text.trim() === correctForm && !w.dataset.used);
+    if (!match) match = createWord(correctForm);
+    match.dataset.used = "true";
+    match.classList.add("in-cell", "correct");
+    dz.appendChild(match);
+    dz.classList.add("filled");
+  });
+  document.querySelectorAll(".word").forEach(w => delete w.dataset.used);
+  const res = document.getElementById("result");
+  res.style.color = "#4f46e5";
+  res.textContent = "💡 Hier ist die richtige Lösung. Lies sie dir laut vor!";
+}
+
+/* ---------- Zurücksetzen ---------- */
+function resetAll() { location.reload(); }
+</script>
+
+</body>
+</html>
