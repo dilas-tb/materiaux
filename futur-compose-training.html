@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Futur Composé 🇫🇷</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #ffe29f 0%, #ffa99f 50%, #ff719a 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    color: #333;
+  }
+  .app {
+    background: #fff;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 600px;
+    padding: 25px;
+    margin: 10px 0;
+  }
+  h1 { text-align: center; color: #e84393; font-size: 1.8em; margin-bottom: 5px; }
+  .sub { text-align: center; color: #777; margin-bottom: 15px; }
+  .progress-wrap {
+    background: #eee; border-radius: 20px; height: 26px;
+    overflow: hidden; margin-bottom: 5px;
+  }
+  .progress-bar {
+    background: linear-gradient(90deg, #00b894, #55efc4);
+    height: 100%; width: 0%;
+    transition: width 0.5s ease;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: bold; font-size: 0.8em;
+  }
+  .stars { text-align: center; font-size: 1.2em; margin-bottom: 15px; }
+  .card {
+    background: #fffdf7; border: 3px solid #ffd6e0;
+    border-radius: 18px; padding: 20px; margin-bottom: 15px;
+  }
+  .intro-box { line-height: 1.6; }
+  .intro-box .formula {
+    background: #ffeaa7; padding: 12px; border-radius: 12px;
+    text-align: center; font-size: 1.1em; margin: 12px 0; font-weight: bold;
+  }
+  .intro-box .ex { background:#dff9fb; padding:8px 12px; border-radius:10px; margin:6px 0; }
+  button {
+    cursor: pointer; border: none; border-radius: 15px;
+    font-size: 1em; font-family: inherit; transition: transform 0.1s;
+  }
+  button:active { transform: scale(0.96); }
+  .btn-main {
+    background: linear-gradient(90deg,#fd79a8,#e84393);
+    color: #fff; padding: 14px 30px; font-size: 1.2em; font-weight: bold;
+    display: block; margin: 15px auto; box-shadow: 0 4px 12px rgba(232,67,147,0.4);
+  }
+  .btn-next {
+    background: linear-gradient(90deg,#00b894,#00cec9);
+    color: #fff; padding: 12px 26px; font-weight: bold; margin: 10px auto 0; display:block;
+  }
+  .btn-check {
+    background: linear-gradient(90deg,#0984e3,#74b9ff);
+    color:#fff; padding: 12px 26px; font-weight: bold; margin: 10px auto 0; display:block;
+  }
+  .sentence { font-size: 1.15em; line-height: 2.2; margin: 10px 0; }
+  .word {
+    display: inline-block; padding: 3px 8px; margin: 2px; border-radius: 8px;
+    background: #f1f2f6; cursor: pointer; border: 2px solid transparent;
+  }
+  .word.selected { background: #ffeaa7; border-color: #fdcb6e; }
+  .word.correct { background: #55efc4 !important; border-color:#00b894; }
+  .word.wrong { background: #ff7675 !important; border-color:#d63031; color:#fff;}
+  .task-title { font-size:1.3em; color:#e84393; font-weight:bold; margin-bottom:5px;}
+  .task-instr { color:#555; margin-bottom:12px; }
+  .choice {
+    display:block; width:100%; text-align:left; background:#f1f2f6;
+    padding:12px; margin:7px 0; border:2px solid #ddd; border-radius:12px; font-size:1em;
+  }
+  .choice:hover { background:#e8f4fd; }
+  .choice.correct { background:#55efc4; border-color:#00b894; }
+  .choice.wrong { background:#ff7675; border-color:#d63031; color:#fff; }
+  .feedback { text-align:center; font-weight:bold; margin:12px 0; font-size:1.1em; min-height:24px;}
+  .help-box {
+    background:#dfe6e9; border-left:6px solid #0984e3; padding:14px;
+    border-radius:10px; margin:12px 0; line-height:1.6;
+  }
+  table { width:100%; border-collapse:collapse; margin:10px 0; background:#fff;}
+  th,td { border:1px solid #b2bec3; padding:7px; text-align:center; }
+  th { background:#74b9ff; color:#fff; }
+  .qblock { background:#fff; border-radius:12px; padding:12px; margin:10px 0; border:2px solid #ffeaa7;}
+  .qde { font-weight:bold; color:#2d3436; margin-bottom:8px; }
+  .voc { font-size:0.85em; color:#777; }
+  .drop-zones { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .dropzone {
+    flex:1; min-width:140px; min-height:90px; background:#f1f2f6;
+    border:3px dashed #b2bec3; border-radius:14px; padding:8px;
+  }
+  .dropzone h4 { text-align:center; color:#636e72; margin-bottom:6px; }
+  .dropzone.over { background:#ffeaa7; border-color:#fdcb6e; }
+  .drag-item {
+    background:#fff; border:2px solid #fd79a8; border-radius:10px;
+    padding:8px 10px; margin:5px 0; cursor:grab; font-size:0.95em;
+  }
+  .drag-item.dragging { opacity:0.5; }
+  .pool { background:#ffe9f0; border-radius:14px; padding:10px; margin:10px 0; min-height:50px;}
+  .pool h4 { color:#e84393; margin-bottom:6px; text-align:center;}
+  .gap {
+    display:inline-block; min-width:90px; min-height:34px; vertical-align:middle;
+    background:#fff; border:2px dashed #fd79a8; border-radius:8px; margin:2px; padding:3px 6px;
+  }
+  .gap.over { background:#ffeaa7; }
+  input.gapinput {
+    width:110px; padding:6px; border:2px solid #fd79a8; border-radius:8px;
+    font-size:1em; text-align:center; font-family:inherit;
+  }
+  .final {
+    text-align:center; padding:20px;
+  }
+  .keyword {
+    font-size:2.5em; margin:15px 0; padding:20px;
+    background:#ffeaa7; border-radius:20px; font-weight:bold;
+  }
+  .vocab-list {
+    margin-top:25px; background:#f8f9fa; border-radius:15px; padding:15px;
+  }
+  .vocab-list h3 { color:#e84393; margin-bottom:10px; text-align:center;}
+  .vocab-list td { text-align:left; padding:5px 10px; }
+  .hidden { display:none; }
+  .badge { font-size:0.8em; background:#00b894; color:#fff; padding:3px 8px; border-radius:10px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>🇫🇷 Le Futur Composé 🚀</h1>
+  <div class="sub">Was passiert in der Zukunft? Auf geht's! ✨</div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="pbar">0%</div></div>
+  <div class="stars" id="stars">⭐ Sammle Punkte! ⭐</div>
+
+  <!-- INTRO -->
+  <div class="card" id="intro">
+    <div class="intro-box">
+      <h2 style="color:#e84393;text-align:center;">Salut! 👋</h2>
+      <p style="margin-top:10px;">Mit dem <b>futur composé</b> sagst du, was du <b>bald</b> oder <b>in der Zukunft</b> machen <b>wirst</b>. 🔮</p>
+      <div class="formula">aller (konjugiert) ➕ Infinitiv</div>
+      <p>👉 Du nimmst das Verb <b>aller</b> (= gehen / "werden") in der passenden Form und dahinter das Verb im <b>Infinitiv</b> (Grundform).</p>
+      <div class="ex">🟢 Je <b>vais manger</b>. = Ich <b>werde essen</b>.</div>
+      <div class="ex">🟢 Tu <b>vas jouer</b>. = Du <b>wirst spielen</b>.</div>
+      <div class="ex">🟢 Nous <b>allons parler</b>. = Wir <b>werden sprechen</b>.</div>
+      <p style="margin-top:10px;">Hier sind die Formen von <b>aller</b>:</p>
+      <table>
+        <tr><th>Person</th><th>aller</th><th>deutsch</th></tr>
+        <tr><td>je</td><td>vais</td><td>werde</td></tr>
+        <tr><td>tu</td><td>vas</td><td>wirst</td></tr>
+        <tr><td>il/elle</td><td>va</td><td>wird</td></tr>
+        <tr><td>nous</td><td>allons</td><td>werden</td></tr>
+        <tr><td>vous</td><td>allez</td><td>werdet</td></tr>
+        <tr><td>ils/elles</td><td>vont</td><td>werden</td></tr>
+      </table>
+    </div>
+    <button class="btn-main" onclick="startGame()">START 🎮</button>
+  </div>
+
+  <!-- TASK CONTAINER -->
+  <div id="taskArea"></div>
+
+  <!-- VOCAB -->
+  <div class="vocab-list" id="vocab">
+    <h3>📒 Vokabelliste</h3>
+    <table>
+      <tr><td>chercher</td><td>suchen</td></tr>
+      <tr><td>arriver</td><td>ankommen</td></tr>
+      <tr><td>trouver</td><td>finden</td></tr>
+      <tr><td>habiter</td><td>wohnen</td></tr>
+      <tr><td>travailler</td><td>arbeiten</td></tr>
+      <tr><td>manger</td><td>essen</td></tr>
+      <tr><td>jouer</td><td>spielen</td></tr>
+      <tr><td>écouter</td><td>hören</td></tr>
+      <tr><td>parler</td><td>sprechen</td></tr>
+      <tr><td>avoir</td><td>haben</td></tr>
+      <tr><td>aller</td><td>gehen</td></tr>
+      <tr><td>être</td><td>sein</td></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+// ====================== STATUS ======================
+let score = 0;          // Differenzierungspunkte (kumulativ)
+let maxScore = 0;       // maximal mögliche Punkte bisher
+const MAX_TOTAL = 24;   // ungefähr für Fortschrittsbalken
+let currentTask = 0;
+
+function updateUI(){
+  let pct = Math.min(100, Math.round((maxScore===0?0:(score/MAX_TOTAL))*100));
+  let bar = document.getElementById('pbar');
+  bar.style.width = pct + '%';
+  bar.textContent = pct + '%';
+  let s = Math.round(score);
+  document.getElementById('stars').textContent = '⭐ ' + s + ' Punkte gesammelt!';
+}
+
+function addScore(p){ score += p; updateUI(); }
+
+const praise = ['Super! 🎉','Bravo! 🌟','Génial! 🥳','Toll gemacht! 💪','Magnifique! ✨','Weiter so! 🚀'];
+function randPraise(){ return praise[Math.floor(Math.random()*praise.length)]; }
+
+function startGame(){
+  document.getElementById('intro').classList.add('hidden');
+  loadTask1();
+}
+
+// helper
+function el(html){ let d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild; }
+function clearTask(){ document.getElementById('taskArea').innerHTML=''; }
+
+// ====================== AUFGABE 1 ======================
+// Anklicken der konjugierten Form von aller in 6 Sätzen
+const task1Data = [
+  { words:['Je','vais','chercher','mon','livre.'], target:1 },
+  { words:['Tu','vas','manger','une','pizza.'], target:1 },
+  { words:['Elle','va','jouer','au','foot.'], target:1 },
+  { words:['Nous','allons','parler','français.'], target:1 },
+  { words:['Vous','allez','travailler','beaucoup.'], target:1 },
+  { words:['Ils','vont','écouter','la','musique.'], target:1 },
+];
+
+function loadTask1(){
+  currentTask=1;
+  clearTask();
+  let t1correct = 0;
+  let answered = 0;
+  let html = `<div class="card">
+    <div class="task-title">Aufgabe 1 🔍</div>
+    <div class="task-instr">Klicke in jedem Satz die <b>Form von « aller »</b> an (vais, vas, va, allons, allez, vont).</div>
+    <div id="t1sentences"></div>
+    <div class="feedback" id="t1fb"></div>
+    <div id="t1help"></div>
+  </div>`;
+  document.getElementById('taskArea').appendChild(el(html));
+  let cont = document.getElementById('t1sentences');
+
+  task1Data.forEach((s, si)=>{
+    let sd = document.createElement('div');
+    sd.className='sentence';
+    s.words.forEach((w, wi)=>{
+      let span = document.createElement('span');
+      span.className='word';
+      span.textContent=w;
+      span.onclick=()=>{
+        if(sd.dataset.done) return;
+        if(wi===s.target){
+          span.classList.add('correct');
+          sd.dataset.done='1';
+          t1correct++; answered++;
+          addScore(1);
+          checkT1End();
+        } else {
+          span.classList.add('wrong');
+          setTimeout(()=>span.classList.remove('wrong'),600);
+        }
+      };
+      sd.appendChild(span);
+    });
+    cont.appendChild(sd);
+  });
+
+  function checkT1End(){
+    if(t1correct===6){
+      maxScore += 6;
+      document.getElementById('t1fb').textContent = randPraise()+' Alle 6 gefunden!';
+      // Differenzierung: bei <4 wäre Hilfetabelle gekommen – hier alle richtig
+      showT1Next(t1correct);
+    }
+  }
+
+  // Sicherheits-Button, falls Schüler stecken bleibt -> blendet Hilfe ein bei <4
+  // Wir zeigen nach kurzer Inaktivität KEINE auto-hilfe, sondern via "Ich brauche Hilfe"
+  let helpBtn = el('<button class="btn-check" id="t1helpbtn">🆘 Tipp anzeigen</button>');
+  helpBtn.onclick=()=>{ showT1Help(); };
+  document.getElementById('taskArea').firstChild.appendChild(helpBtn);
+
+  function showT1Help(){
+    if(document.getElementById('t1helptable')) return;
+    document.getElementById('t1help').appendChild(el(`
+      <div class="help-box" id="t1helptable">
+        <b>💡 So geht's:</b> Suche das kleine Wort direkt nach dem Personalpronomen (je, tu, il...).
+        Es ist eine Form von <b>aller</b> = "werden".
+        <table>
+          <tr><th>Person</th><th>aller</th><th>deutsch</th></tr>
+          <tr><td>je</td><td><b>vais</b></td><td>werde</td></tr>
+          <tr><td>tu</td><td><b>vas</b></td><td>wirst</td></tr>
+          <tr><td>il/elle</td><td><b>va</b></td><td>wird</td></tr>
+          <tr><td>nous</td><td><b>allons</b></td><td>werden</td></tr>
+          <tr><td>vous</td><td><b>allez</b></td><td>werdet</td></tr>
+          <tr><td>ils/elles</td><td><b>vont</b></td><td>werden</td></tr>
+        </table>
+      </div>`));
+  }
+
+  function showT1Next(correct){
+    document.getElementById('t1helpbtn').classList.add('hidden');
+    let nb = el('<button class="btn-next">Weiter ➡️</button>');
+    nb.onclick=()=>loadTask2(correct);
+    document.getElementById('taskArea').firstChild.appendChild(nb);
+  }
+}
+
+// ====================== AUFGABE 2 ======================
+// Single Choice Übersetzung. Differenzierung nach Leistung aus T1.
+const task2Data = [
+  { de:'Ich werde meinen Schlüssel suchen.', voc:'(chercher – ma clé)',
+    fr_present:'Je cherche ma clé.',
+    options:['Je vais chercher ma clé.','Tu vas chercher ma clé.','Je chercher ma clé.','Je vais cherche ma clé.'],
+    correct:0,
+    expl:['richtig!','falsches Pronomen: "Tu" = du, nicht ich.','Hilfsverb "vais" fehlt!','Nach "vais" steht der Infinitiv "chercher", nicht "cherche".'] },
+  { de:'Du wirst in Paris wohnen.', voc:'(habiter – à Paris)',
+    fr_present:'Tu habites à Paris.',
+    options:['Tu vas habiter à Paris.','Tu habiter à Paris.','Tu vas habites à Paris.','Il va habiter à Paris.'],
+    correct:0,
+    expl:['richtig!','Hilfsverb "vas" fehlt!','Nach "vas" steht der Infinitiv "habiter".','falsches Pronomen: "Il" = er.'] },
+  { de:'Er wird Fußball spielen.', voc:'(jouer – au foot)',
+    fr_present:'Il joue au foot.',
+    options:['Il va jouer au foot.','Il vas jouer au foot.','Il va joue au foot.','Je vais jouer au foot.'],
+    correct:0,
+    expl:['richtig!','falsche Form: bei "il" heißt es "va", nicht "vas".','Nach "va" steht der Infinitiv "jouer".','falsches Pronomen: "Je" = ich.'] },
+  { de:'Wir werden Musik hören.', voc:'(écouter – la musique)',
+    fr_present:'Nous écoutons la musique.',
+    options:['Nous allons écouter la musique.','Nous allez écouter la musique.','Nous écouter la musique.','Nous allons écoutons la musique.'],
+    correct:0,
+    expl:['richtig!','falsche Form: bei "nous" heißt es "allons".','Hilfsverb "allons" fehlt!','Nach "allons" steht der Infinitiv "écouter".'] },
+  { de:'Ihr werdet viel arbeiten.', voc:'(travailler – beaucoup)',
+    fr_present:'Vous travaillez beaucoup.',
+    options:['Vous allez travailler beaucoup.','Vous allons travailler beaucoup.','Vous allez travaillez beaucoup.','Vous travailler beaucoup.'],
+    correct:0,
+    expl:['richtig!','falsche Form: bei "vous" heißt es "allez".','Nach "allez" steht der Infinitiv "travailler".','Hilfsverb "allez" fehlt!'] },
+  { de:'Sie werden ankommen.', voc:'(arriver)',
+    fr_present:'Ils arrivent.',
+    options:['Ils vont arriver.','Ils vous arriver.','Ils vont arrivent.','Elle va arriver.'],
+    correct:0,
+    expl:['richtig!','"vous" ist kein Hilfsverb hier; richtig ist "vont".','Nach "vont" steht der Infinitiv "arriver".','falsches Pronomen/Form: "Elle va" = sie (Einzahl).'] },
+];
+
+// Differenzierung nach oben: présent vs futur composé (mit aller-Stolperfallen)
+const task2UpData = [
+  { fr:'Je vais manger une pizza.', answer:'futur' },
+  { fr:'Tu vas à l\'école.', answer:'present', note:'Achtung: "vas à" = présent (gehen nach), kein Infinitiv dahinter!' },
+  { fr:'Nous allons jouer au foot.', answer:'futur' },
+  { fr:'Il va au cinéma.', answer:'present', note:'"va au" = er geht ins... (présent).' },
+  { fr:'Vous allez travailler.', answer:'futur' },
+  { fr:'Elles vont parler français.', answer:'futur' },
+];
+
+function loadTask2(t1correct){
+  currentTask=2;
+  clearTask();
+  // Entscheidung: nach oben wenn t1correct>=5 (also sehr gut), nach unten wenn schwach gestartet
+  let mode = 'normal';
+  if(t1correct>=6 && score>=6) mode='up';
+  // nach unten entscheiden wir dynamisch bei Falschantworten
+
+  if(mode==='up'){ return loadTask2Up(); }
+
+  let html = `<div class="card">
+    <div class="task-title">Aufgabe 2 ✅</div>
+    <div class="task-instr">Welche Übersetzung ist <b>richtig</b>? Klicke die korrekte Antwort im futur composé an.</div>
+    <div id="t2container"></div>
+    <div class="feedback" id="t2fb"></div>
+  </div>`;
+  document.getElementById('taskArea').appendChild(el(html));
+
+  let idx = 0;
+  let correctCount = 0;
+  let wrongStreak = 0;
+  let helpMode = false; // Differenzierung nach unten aktiv
+
+  showQ2();
+
+  function showQ2(){
+    let c = document.getElementById('t2container');
+    c.innerHTML='';
+    if(idx>=task2Data.length){
+      document.getElementById('t2fb').textContent = '🎉 Aufgabe 2 geschafft!';
+      let nb = el('<button class="btn-next">Weiter ➡️</button>');
+      nb.onclick=()=>loadTask3(correctCount, helpMode);
+      document.getElementById('taskArea').firstChild.appendChild(nb);
+      return;
+    }
+    let q = task2Data[idx];
+    let block = document.createElement('div');
+    block.className='qblock';
+    block.innerHTML = `<div class="qde">${idx+1}. „${q.de}"</div><div class="voc">${q.voc}</div>`;
+    if(helpMode){
+      block.innerHTML += `<div class="help-box">💡 So heißt der Satz im <b>présent</b>: <b>${q.fr_present}</b><br>
+        Bilde nun das futur composé: Pronomen + Form von <b>aller</b> + <b>Infinitiv</b>.</div>`;
+    }
+    q.options.forEach((opt, oi)=>{
+      let b = document.createElement('button');
+      b.className='choice';
+      b.textContent=opt;
+      b.onclick=()=>{
+        if(block.dataset.done) return;
+        if(oi===q.correct){
+          b.classList.add('correct');
+          block.dataset.done='1';
+          correctCount += helpMode?0.5:1;
+          addScore(helpMode?0.5:1);
+          maxScore += 1;
+          wrongStreak=0;
+          document.getElementById('t2fb').textContent=randPraise();
+          idx++;
+          setTimeout(showQ2, 800);
+        } else {
+          b.classList.add('wrong');
+          wrongStreak++;
+          if(helpMode){
+            document.getElementById('t2fb').textContent='❌ '+q.expl[oi];
+          } else {
+            document.getElementById('t2fb').textContent='❌ Versuch es nochmal!';
+          }
+          // Differenzierung nach unten ab 2 Fehlern in Folge
+          if(wrongStreak>=2 && !helpMode){
+            helpMode=true;
+            document.getElementById('t2fb').textContent='💡 Hier kommt etwas Hilfe!';
+            setTimeout(showQ2, 900);
+          }
+        }
+      };
+      block.appendChild(b);
+    });
+    c.appendChild(block);
+  }
+}
+
+function loadTask2Up(){
+  clearTask();
+  let html = `<div class="card">
+    <div class="task-title">Aufgabe 2 ⚡ <span class="badge">Profi</span></div>
+    <div class="task-instr">Steht der Satz im <b>présent</b> (jetzt) oder im <b>futur composé</b> (Zukunft)? Achtung, Stolperfallen mit « aller »!</div>
+    <div id="t2container"></div>
+    <div class="feedback" id="t2fb"></div>
+  </div>`;
+  document.getElementById('taskArea').appendChild(el(html));
+  let idx=0, correctCount=0;
+  showQ();
+  function showQ(){
+    let c=document.getElementById('t2container'); c.innerHTML='';
+    if(idx>=task2UpData.length){
+      document.getElementById('t2fb').textContent='🎉 Stark gemeistert!';
+      let nb=el('<button class="btn-next">Weiter ➡️</button>');
+      nb.onclick=()=>loadTask3(correctCount, false, true);
+      document.getElementById('taskArea').firstChild.appendChild(nb);
+      return;
+    }
+    let q=task2UpData[idx];
+    let block=document.createElement('div'); block.className='qblock';
+    block.innerHTML=`<div class="qde">${idx+1}. ${q.fr}</div>`;
+    [['present','🕐 présent'],['futur','🔮 futur composé']].forEach(([val,label])=>{
+      let b=document.createElement('button'); b.className='choice'; b.textContent=label;
+      b.onclick=()=>{
+        if(block.dataset.done) return;
+        if(val===q.answer){
+          b.classList.add('correct'); block.dataset.done='1';
+          correctCount++; addScore(1); maxScore+=1;
+          document.getElementById('t2fb').textContent=randPraise();
+          idx++; setTimeout(showQ,800);
+        } else {
+          b.classList.add('wrong');
+          document.getElementById('t2fb').textContent='❌ '+(q.note||'Schau genau hin: Folgt ein Infinitiv?');
+        }
+      };
+      block.appendChild(b);
+    });
+    c.appendChild(block);
+  }
+}
+
+// ====================== AUFGABE 3 ======================
+// Zuordnen présent / futur composé
+const task3Sentences = [
+  { fr:'Je vais manger.', de:'Ich werde essen.', type:'futur' },
+  { fr:'Tu joues au foot.', de:'Du spielst Fußball.', type:'present' },
+  { fr:'Nous allons parler.', de:'Wir werden sprechen.', type:'futur' },
+  { fr:'Il habite à Paris.', de:'Er wohnt in Paris.', type:'present' },
+  { fr:'Vous allez travailler.', de:'Ihr werdet arbeiten.', type:'futur' },
+  { fr:'Elles écoutent la musique.', de:'Sie hören Musik.', type:'present' },
+];
+const task3Pace = [ // passé composé Distraktoren (nur nach oben)
+  { fr:'J\'ai mangé.', de:'Ich habe gegessen.', type:'autre' },
+  { fr:'Tu as joué.', de:'Du hast gespielt.', type:'autre' },
+];
+
+function loadTask3(prevCorrect, downMode=false, upMode=false){
+  currentTask=3;
+  clearTask();
+  // Differenzierung: nach unten = deutsche Übersetzung anzeigen; nach oben = 3. Feld
+  let showDe = downMode || (score < maxScore*0.5);
+  let withPace = upMode || (score >= maxScore*0.8 && maxScore>0);
+
+  let items = task3Sentences.slice();
+  if(withPace) items = items.concat(task3Pace);
+  // shuffle
+  items = items.sort(()=>Math.random()-0.5);
+
+  let zones = withPace
+    ? [['present','🕐 présent'],['futur','🔮 futur composé'],['autre','⏳ Andere Zeitform']]
+    : [['present','🕐 présent'],['futur','🔮 futur composé']];
+
+  let html = `<div class="card">
+    <div class="task-title">Aufgabe 3 🗂️ ${withPace?'<span class="badge">Profi</span>':''}</div>
+    <div class="task-instr">Ziehe jeden Satz in das richtige Feld!</div>
+    <div class="pool" id="t3pool"><h4>Sätze ziehen 👇</h4></div>
+    <div class="drop-zones" id="t3zones"></div>
+    <button class="btn-check" id="t3check">Prüfen ✅</button>
+    <div class="feedback" id="t3fb"></div>
+  </div>`;
+  document.getElementById('taskArea').appendChild(el(html));
+
+  let pool = document.getElementById('t3pool');
+  items.forEach((it,i)=>{
+    let d=document.createElement('div'); d.className='drag-item'; d.draggable=true;
+    d.id='t3item'+i; d.dataset.type=it.type;
+    d.innerHTML = it.fr + (showDe?`<br><span class="voc">${it.de}</span>`:'');
+    addDrag(d);
+    pool.appendChild(d);
+  });
+
+  let zc = document.getElementById('t3zones');
+  zones.forEach(([t,label])=>{
+    let z=document.createElement('div'); z.className='dropzone'; z.dataset.zone=t;
+    z.innerHTML=`<h4>${label}</h4>`;
+    addDrop(z);
+    zc.appendChild(z);
+  });
+
+  document.getElementById('t3check').onclick=()=>{
+    let allItems = document.querySelectorAll('#t3zones .drag-item');
+    let total = items.length, right=0;
+    document.querySelectorAll('#t3zones .dropzone').forEach(z=>{
+      z.querySelectorAll('.drag-item').forEach(it=>{
+        if(it.dataset.type===z.dataset.zone){ it.style.borderColor='#00b894'; right++; }
+        else { it.style.borderColor='#d63031'; }
+      });
+    });
+    maxScore += total;
+    addScore(right);
+    if(right===total){
+      document.getElementById('t3fb').textContent='🎉 Alles richtig zugeordnet! '+randPraise();
+    } else {
+      document.getElementById('t3fb').textContent='✅ '+right+' von '+total+' richtig! Rot = nochmal anschauen.';
+    }
+    let nb=el('<button class="btn-next">Weiter ➡️</button>');
+    nb.onclick=()=>loadTask4(right, total);
+    document.getElementById('taskArea').firstChild.appendChild(nb);
+    document.getElementById('t3check').classList.add('hidden');
+  };
+}
+
+// Drag & Drop helpers
+let dragged=null;
+function addDrag(d){
+  d.addEventListener('dragstart',()=>{dragged=d; d.classList.add('dragging');});
+  d.addEventListener('dragend',()=>{d.classList.remove('dragging'); dragged=null;});
+}
+function addDrop(z){
+  z.addEventListener('dragover',e=>{e.preventDefault(); z.classList.add('over');});
+  z.addEventListener('dragleave',()=>z.classList.remove('over'));
+  z.addEventListener('drop',e=>{
+    e.preventDefault(); z.classList.remove('over');
+    if(dragged) z.appendChild(dragged);
+  });
+}
+
+// ====================== AUFGABE 4 ======================
+function loadTask4(t3right, t3total){
+  currentTask=4;
+  clearTask();
+  let ratio = maxScore>0 ? score/maxScore : 0.5;
+  if(ratio>=0.78) return loadTask4Up();
+  if(ratio<0.5) return loadTask4Down();
+  return loadTask4Normal();
+}
+
+// NORMAL: Form von aller eintippen + Infinitiv per Drag in Lücken (mehrere Lücken)
+function loadTask4Normal(){
+  let data = [
+    { before:'Je ', inf:'manger', after:' une pizza.', form:'vais', infw:'manger', de:'Ich werde eine Pizza essen.'},
+    { before:'Nous ', inf:'parler', after:' français.', form:'allons', infw:'parler', de:'Wir werden Französisch sprechen.'},
+    { before:'Ils ', inf:'jouer', after:' au foot.', form:'vont', infw:'jouer', de:'Sie werden Fußball spielen.'},
+  ];
+  let html=`<div class="card">
+    <div class="task-title">Aufgabe 4 ✍️</div>
+    <div class="task-instr">Tippe die richtige Form von <b>aller</b> in die erste Lücke und ziehe den passenden <b>Infinitiv</b> in die zweite Lücke!</div>
+    <div class="pool" id="t4pool"><h4>Infinitive ziehen 👇</h4></div>
+    <div id="t4sentences"></div>
+    <button class="btn-check" id="t4check">Prüfen ✅</button>
+    <div class="feedback" id="t4fb"></div>
+  </div>`;
+  document.getElementById('taskArea').appendChild(el(html));
+
+  let infs = data.map(d=>d.infw).sort(()=>Math.random()-0.5);
+  let pool=document.getElementById('t4pool');
+  infs.forEach((w,i)=>{
+    let d=document.createElement('div'); d.className='drag-item'; d.draggable=true;
+    d.textContent=w; d.dataset.inf=w; addDrag(d); pool.appendChild(d);
+  });
+
+  let sc=document.getElementById('t4sentences');
+  data.forEach((d,i)=>{
+    let row=document.createElement('div'); row.className='qblock';
+    row.innerHTML=`<div class="qde">${d.before}<input class="gapinput" data-form="${d.form}" placeholder="aller?"> <span class="gap" data-inf="${d.infw}"></span>${d.after}</div>
+      <div class="voc">${d.de}</div>`;
+    sc.appendChild(row);
+    addDrop(row.querySelector('.gap'));
+  });
+
+  document.getElementById('t4check').onclick=()=>{
+    let total=data.length*2, right=0;
+    document.querySelectorAll('#t4sentences .qblock').forEach(row=>{
+      let inp=row.querySelector('.gapinput');
+      if(inp.value.trim().toLowerCase()===inp.dataset.form){ inp.style.borderColor='#00b894'; right++; }
+      else { inp.style.borderColor='#d63031'; }
+      let gap=row.querySelector('.gap');
+      let item=gap.querySelector('.drag-item');
+      if(item && item.dataset.inf===gap.dataset.inf){ gap.style.borderColor='#00b894'; right++; }
+      else { gap.style.borderColor='#d63031'; }
+    });
+    maxScore+=total; addScore(right);
+    finishTask4(right,total);
+  };
+}
+
+// NACH UNTEN: Drag form + infinitiv, nur 2 Lücken
+function loadTask4Down(){
+  let data = [
+    { before:'Je ', mid:' ', after:' une pizza.', form:'vais', infw:'manger', de:'Ich werde eine Pizza essen.'},
+    { before:'Tu ', mid:' ', after:' au foot.', form:'vas', infw:'jouer', de:'Du wirst Fußball spielen.'},
+  ];
+  let html=`<div class="card">
+    <div class="task-title">Aufgabe 4 🧩</div>
+    <div class="task-instr">Ziehe in jeden Satz die richtige <b>Form von aller</b> und den <b>Infinitiv</b>!</div>
+    <div class="pool" id="t4pool"><h4>Wörter ziehen 👇</h4></div>
+    <div id="t4sentences"></div>
+    <button class="btn-check" id="t4check">Prüfen ✅</button>
+    <div class="feedback" id="t4fb"></div>
+  </div>`;
+  document.getElementById('taskArea').appendChild(el(html));
+
+  let pieces=[];
+  data.forEach(d=>{ pieces.push({w:d.form,t:'form'+'-'+d.form}); pieces.push({w:d.infw,t:'inf-'+d.infw}); });
+  pieces.sort(()=>Math.random()-0.5);
+  let pool=document.getElementById('t4pool');
+  pieces.forEach(p=>{
+    let d=document.createElement('div'); d.className='drag-item'; d.draggable=true;
+    d.textContent=p.w; d.dataset.val=p.w; addDrag(d); pool.appendChild(d);
+  });
+
+  let sc=document.getElementById('t4sentences');
+  data.forEach(d=>{
+    let row=document.createElement('div'); row.className='qblock';
+    row.innerHTML=`<div class="qde">${d.before}<span class="gap" data-val="${d.form}"></span> <span class="gap" data-val="${d.infw}"></span>${d.after}</div>
+      <div class="voc">${d.de}</div>`;
+    sc.appendChild(row);
+    row.querySelectorAll('.gap').forEach(g=>addDrop(g));
+  });
+
+  document.getElementById('t4check').onclick=()=>{
+    let total=data.length*2, right=0;
+    document.querySelectorAll('#t4sentences .gap').forEach(g=>{
+      let item=g.querySelector('.drag-item');
+      if(item && item.dataset.val===g.dataset.val){ g.style.borderColor='#00b894'; right++; }
+      else { g.style.borderColor='#d63031'; }
+    });
+    maxScore+=total; addScore(right);
+    finishTask4(right,total);
+  };
+}
+
+// NACH OBEN: Übersetzen mit Vokabelhilfe (Texteingabe)
+function loadTask4Up(){
+  let data = [
+    { de:'Ich werde eine Pizza essen.', voc:'(manger – une pizza)', sol:['je vais manger une pizza']},
+    { de:'Wir werden Französisch sprechen.', voc:'(parler – français)', sol:['nous allons parler français']},
+    { de:'Sie (pl.) werden Fußball spielen.', voc:'(jouer – au foot)', sol:['ils vont jouer au foot','elles vont jouer au foot']},
+  ];
+  let html=`<div class="card">
+    <div class="task-title">Aufgabe 4 🏆 <span class="badge">Profi</span></div>
+    <div class="task-instr">Übersetze die Sätze ins Französische (futur composé). Nutze die Vokabelhilfe!</div>
+    <div id="t4sentences"></div>
+    <button class="btn-check" id="t4check">Prüfen ✅</button>
+    <div class="feedback" id="t4fb"></div>
+  </div>`;
+  document.getElementById('taskArea').appendChild(el(html));
+  let sc=document.getElementById('t4sentences');
+  data.forEach((d,i)=>{
+    let row=document.createElement('div'); row.className='qblock';
+    row.innerHTML=`<div class="qde">${i+1}. „${d.de}"</div><div class="voc">${d.voc}</div>
+      <input class="gapinput" style="width:90%;text-align:left;" data-i="${i}" placeholder="Tippe hier...">`;
+    sc.appendChild(row);
+  });
+  document.getElementById('t4check').onclick=()=>{
+    let total=data.length, right=0;
+    document.querySelectorAll('#t4sentences .gapinput').forEach(inp=>{
+      let i=+inp.dataset.i;
+      let val=inp.value.trim().toLowerCase().replace(/[.!]/g,'').replace(/\s+/g,' ');
+      if(data[i].sol.some(s=>s.replace(/[.!]/g,'')===val)){ inp.style.borderColor='#00b894'; right++; }
+      else { inp.style.borderColor='#d63031'; }
+    });
+    maxScore+=total; addScore(right);
+    finishTask4(right,total);
+  };
+}
+
+function finishTask4(right,total){
+  document.getElementById('t4fb').textContent = right===total
+    ? '🎉 Perfekt! '+randPraise()
+    : '✅ '+right+' von '+total+' richtig!';
+  document.getElementById('t4check').classList.add('hidden');
+  let nb=el('<button class="btn-next">Ergebnis ansehen 🏁</button>');
+  nb.onclick=showFinal;
+  document.getElementById('taskArea').firstChild.appendChild(nb);
+}
+
+// ====================== FINALE / SCHLÜSSELWORT ======================
+function showFinal(){
+  clearTask();
+  let ratio = maxScore>0 ? score/maxScore : 0;
+  let keyword, emoji, msg;
+  if(ratio>=0.75){ keyword='croissant'; emoji='🥐'; msg='Wow, du bist ein futur-composé-Profi! Magnifique! 🌟'; }
+  else if(ratio>=0.4){ keyword='baguette'; emoji='🥖'; msg='Sehr gut gemacht! Du hast das futur composé super drauf! 💪'; }
+  else { keyword='crêpe'; emoji='🥞'; msg='Toll, dass du dran geblieben bist! Du machst große Fortschritte! 🌈'; }
+
+  document.getElementById('pbar').style.width='100%';
+  document.getElementById('pbar').textContent='Fertig!';
+
+  document.getElementById('taskArea').appendChild(el(`
+    <div class="card final">
+      <h2 style="color:#e84393;">🎉 Bravo! 🎉</h2>
+      <p style="margin:12px 0;font-size:1.1em;">${msg}</p>
+      <p style="margin-top:15px;">Dein Codewort für die nächste Aufgabe lautet:</p>
+      <div class="keyword">${emoji} ${keyword}</div>
+      <p class="voc">Sag deiner Lehrerin / deinem Lehrer dein Codewort! 😊</p>
+      <p style="margin-top:15px;font-size:1.3em;">Du hast <b>${Math.round(score)}</b> Punkte gesammelt! 🌟</p>
+      <button class="btn-main" onclick="location.reload()">Nochmal spielen 🔁</button>
+    </div>
+  `));
+}
+</script>
+</body>
+</html>
