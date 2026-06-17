@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚀 Le futur composé – Abenteuer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 40%, #a1c4fd 100%);
+    min-height: 100vh;
+    color: #333;
+    padding: 12px;
+  }
+  .app {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fffdf7;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 20px;
+    overflow: hidden;
+  }
+  h1 { text-align: center; font-size: 1.6em; color: #ff6b6b; margin-bottom: 8px; }
+  h2 { color: #5f27cd; font-size: 1.25em; margin-bottom: 10px; }
+  .subtitle { text-align:center; color:#777; margin-bottom: 12px; font-size:0.95em;}
+
+  /* Fortschrittsbalken */
+  .progress-wrap {
+    background: #eee; border-radius: 20px; height: 22px; margin: 14px 0; overflow:hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .progress-bar {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg,#56ab2f,#a8e063);
+    border-radius: 20px; transition: width 0.6s ease;
+    text-align:center; color:white; font-size:0.8em; line-height:22px;
+  }
+
+  /* Screens / Übergänge */
+  .screen { display: none; animation: fadeIn 0.6s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pop {
+    0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); }
+  }
+
+  .card {
+    background: #fff; border-radius: 18px; padding: 16px; margin: 12px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .info-box {
+    background: #fff3cd; border-left: 6px solid #ffce54; border-radius: 10px;
+    padding: 12px; margin: 10px 0; font-size: 0.95em;
+  }
+  .example { background:#e3f2fd; border-radius:10px; padding:8px 12px; margin:6px 0; font-size:1em;}
+  .fr { color:#0066cc; font-weight:bold; }
+
+  button {
+    font-family: inherit; cursor: pointer; border: none; border-radius: 30px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  button:active { transform: scale(0.96); }
+  .btn-start, .btn-next {
+    display:block; width: 80%; margin: 18px auto; padding: 14px;
+    font-size: 1.2em; color:white;
+    background: linear-gradient(90deg,#ff6b6b,#feca57);
+    box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+  }
+  .btn-next { background: linear-gradient(90deg,#5f27cd,#48dbfb); box-shadow:0 5px 15px rgba(95,39,205,0.4);}
+  .btn-check {
+    display:block; width: 60%; margin: 14px auto; padding: 12px; font-size:1.05em;
+    color:white; background: linear-gradient(90deg,#10ac84,#1dd1a1);
+    box-shadow:0 4px 12px rgba(16,172,132,0.4);
+  }
+
+  /* Klickbare Wörter (Aufgabe 1) */
+  .sentence { font-size: 1.15em; line-height: 2; margin: 8px 0; }
+  .word {
+    display:inline-block; padding: 3px 8px; margin: 2px; border-radius: 10px;
+    background:#f1f2f6; cursor:pointer; transition: all 0.15s;
+  }
+  .word:hover { background:#dfe4ea; }
+  .word.selected { background:#48dbfb; color:white; animation: pop 0.3s; }
+  .word.correct { background:#1dd1a1 !important; color:white; }
+  .word.wrong { background:#ff6b6b !important; color:white; }
+
+  /* Single Choice (Aufgabe 2) */
+  .choice {
+    display:block; width:100%; text-align:left; padding:12px; margin:8px 0;
+    background:#f1f2f6; border-radius:14px; font-size:1em; color:#333;
+  }
+  .choice:hover { background:#dfe4ea; }
+  .choice.selected { background:#48dbfb; color:white; }
+  .choice.correct { background:#1dd1a1; color:white; }
+  .choice.wrong { background:#ff6b6b; color:white; }
+
+  /* Drag & Drop & Sortieren */
+  .drop-zones { display:flex; gap:10px; flex-wrap:wrap; margin:12px 0; }
+  .drop-zone {
+    flex:1; min-width:140px; min-height:90px; background:#eef6ff;
+    border:3px dashed #48dbfb; border-radius:14px; padding:8px;
+  }
+  .drop-zone h3 { font-size:0.95em; text-align:center; color:#0066cc; margin-bottom:6px; }
+  .drop-zone.over { background:#d6f5ff; border-color:#0066cc; }
+  .token-pool { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:12px 0; }
+  .token {
+    padding:8px 12px; background:#feca57; border-radius:12px; cursor:grab;
+    font-size:0.95em; box-shadow:0 3px 6px rgba(0,0,0,0.15); user-select:none;
+  }
+  .token.placed { background:#a8e063; }
+  .token.correct { background:#1dd1a1; color:white; }
+  .token.wrong { background:#ff6b6b; color:white; }
+
+  /* Lücken (Aufgabe 4 Mitte) */
+  .gap-input {
+    font-family:inherit; font-size:1em; width:90px; padding:6px; border:2px solid #48dbfb;
+    border-radius:8px; text-align:center; margin:0 4px;
+  }
+  .gap-slot {
+    display:inline-block; min-width:80px; min-height:30px; border-bottom:3px dashed #ff6b6b;
+    margin:0 4px; vertical-align:middle; padding:2px 6px;
+  }
+  .gap-slot.over { background:#ffe0e0; }
+
+  .feedback { padding:10px; border-radius:12px; margin:10px 0; font-size:0.95em; display:none; }
+  .feedback.show { display:block; animation: fadeIn 0.4s; }
+  .feedback.good { background:#d4f8e8; color:#0a8754; }
+  .feedback.help { background:#fff3cd; color:#8a6d00; }
+  .feedback.bad  { background:#ffe0e0; color:#c0392b; }
+
+  /* Vokabelliste */
+  .vocab { margin-top:25px; border-top:3px dotted #ccc; padding-top:15px; }
+  .vocab table { width:100%; border-collapse:collapse; }
+  .vocab td { padding:6px 8px; border-bottom:1px solid #eee; font-size:0.95em; }
+  .vocab td:first-child { font-weight:bold; color:#0066cc; }
+
+  .secret {
+    text-align:center; font-size:1.3em; padding:20px; margin:18px 0;
+    background:linear-gradient(135deg,#ffeaa7,#fab1a0); border-radius:20px;
+    animation: pop 0.6s;
+  }
+  .secret .word-big { font-size:2.2em; display:block; margin-top:10px; }
+  .hint-small { font-size:0.85em; color:#888; }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>🚀 Le futur composé 🎉</h1>
+  <div class="subtitle">Dein Sprach-Abenteuer in die Zukunft!</div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar">0%</div>
+  </div>
+
+  <!-- ===== INTRO ===== -->
+  <div class="screen active" id="screen-intro">
+    <div class="card">
+      <h2>👋 Salut! Was ist das « futur composé »?</h2>
+      <div class="info-box">
+        Mit dem <b>futur composé</b> sprichst du über die <b>Zukunft</b> –
+        über das, was du <b>bald machen wirst</b>. 🔮
+      </div>
+      <p style="margin:10px 0;">So baust du es ganz einfach zusammen:</p>
+      <div class="example">
+        👤 Person + 🛟 <b>aller</b> (im Präsens) + 🎯 Verb im <b>Infinitif</b>
+      </div>
+      <p style="margin:10px 0;">Das Hilfsverb <b>aller</b> sieht so aus:</p>
+      <div class="example">
+        je <span class="fr">vais</span> · tu <span class="fr">vas</span> · il/elle <span class="fr">va</span><br>
+        nous <span class="fr">allons</span> · vous <span class="fr">allez</span> · ils/elles <span class="fr">vont</span>
+      </div>
+      <div class="info-box">
+        <b>Vergleiche:</b><br>
+        🕐 Présent (jetzt): <span class="fr">Je joue au foot.</span> – Ich spiele Fußball.<br>
+        🔮 Futur composé (bald): <span class="fr">Je vais jouer au foot.</span> – Ich werde Fußball spielen.
+      </div>
+      <p style="text-align:center;margin-top:10px;">Bereit? Dann los! 💪</p>
+    </div>
+    <button class="btn-start" onclick="startGame()">▶️ START</button>
+  </div>
+  <!-- ===== AUFGABE 1 ===== -->
+  <div class="screen" id="screen-1">
+    <div class="card">
+      <h2>🎯 Aufgabe 1 von 4</h2>
+      <p>Klicke in jedem Satz die Form von <b>« aller »</b> (vais, vas, va, allons, allez, vont) an! 👆</p>
+      <div id="task1-container"></div>
+      <div class="feedback" id="fb1"></div>
+      <button class="btn-check" id="check1" onclick="checkTask1()">✅ Prüfen</button>
+    </div>
+    <button class="btn-next" id="next1" style="display:none" onclick="goToScreen('screen-2')">Weiter ➡️</button>
+  </div>
+
+  <!-- ===== AUFGABE 2 ===== -->
+  <div class="screen" id="screen-2">
+    <div class="card">
+      <h2>🎯 Aufgabe 2 von 4</h2>
+      <p>Welche französische Übersetzung ist <b>richtig</b>? Klicke sie an! 🇫🇷</p>
+      <div id="task2-container"></div>
+      <div class="feedback" id="fb2"></div>
+      <button class="btn-check" id="check2" onclick="checkTask2()">✅ Prüfen</button>
+    </div>
+    <button class="btn-next" id="next2" style="display:none" onclick="goToScreen('screen-3')">Weiter ➡️</button>
+  </div>
+
+  <!-- ===== AUFGABE 3 ===== -->
+  <div class="screen" id="screen-3">
+    <div class="card">
+      <h2>🎯 Aufgabe 3 von 4</h2>
+      <p id="task3-instr">Ziehe jeden Satz in das richtige Feld: <b>Présent</b> (jetzt) oder <b>Futur composé</b> (Zukunft)! 🧲</p>
+      <div class="token-pool" id="task3-pool"></div>
+      <div class="drop-zones" id="task3-zones"></div>
+      <div class="feedback" id="fb3"></div>
+      <button class="btn-check" id="check3" onclick="checkTask3()">✅ Prüfen</button>
+    </div>
+    <button class="btn-next" id="next3" style="display:none" onclick="branchToTask4()">Weiter ➡️</button>
+  </div>
+
+  <!-- ===== AUFGABE 4 (wird dynamisch gefüllt) ===== -->
+  <div class="screen" id="screen-4">
+    <div class="card">
+      <h2>🎯 Aufgabe 4 von 4</h2>
+      <div id="task4-intro"></div>
+      <div id="task4-container"></div>
+      <div class="feedback" id="fb4"></div>
+      <button class="btn-check" id="check4" onclick="checkTask4()">✅ Prüfen</button>
+    </div>
+    <button class="btn-next" id="next4" style="display:none" onclick="showEnd()">Fertig! 🏁</button>
+  </div>
+
+  <!-- ===== ENDE ===== -->
+  <div class="screen" id="screen-end">
+    <div class="card" style="text-align:center;">
+      <h2>🎉 Bravo! Super gemacht!</h2>
+      <p>Du hast alle Aufgaben geschafft! 🌟</p>
+      <div class="secret">
+        🔐 Dein Geheimwort für heute:
+        <span class="word-big" id="secretWord">🥖</span>
+      </div>
+      <p class="hint-small">Merke dir dein Geheimwort und sag es deiner Lehrerin / deinem Lehrer! 😊</p>
+    </div>
+  </div>
+
+  <!-- ===== VOKABELLISTE (immer sichtbar) ===== -->
+  <div class="vocab">
+    <h2>📒 Vokabelliste</h2>
+    <table>
+      <tr><td>chercher</td><td>suchen</td></tr>
+      <tr><td>arriver</td><td>ankommen</td></tr>
+      <tr><td>trouver</td><td>finden</td></tr>
+      <tr><td>habiter</td><td>wohnen</td></tr>
+      <tr><td>travailler</td><td>arbeiten</td></tr>
+      <tr><td>manger</td><td>essen</td></tr>
+      <tr><td>jouer</td><td>spielen</td></tr>
+      <tr><td>écouter</td><td>hören</td></tr>
+      <tr><td>parler</td><td>sprechen</td></tr>
+      <tr><td>avoir</td><td>haben</td></tr>
+      <tr><td>aller</td><td>gehen</td></tr>
+      <tr><td>être</td><td>sein</td></tr>
+      <tr><td>je / tu / il / elle</td><td>ich / du / er / sie</td></tr>
+      <tr><td>nous / vous / ils / elles</td><td>wir / ihr / sie</td></tr>
+      <tr><td>vais, vas, va, allons, allez, vont</td><td>Formen von « aller »</td></tr>
+      <tr><td>au foot / au tennis</td><td>Fußball / Tennis (spielen)</td></tr>
+      <tr><td>à Paris / à Lyon</td><td>in Paris / in Lyon</td></tr>
+      <tr><td>une pizza / une pomme</td><td>eine Pizza / einen Apfel</td></tr>
+      <tr><td>la musique</td><td>die Musik</td></tr>
+      <tr><td>français</td><td>Französisch</td></tr>
+      <tr><td>ne ... pas</td><td>nicht (Verneinung)</td></tr>
+    </table>
+  </div>
+
+</div><!-- /.app -->
+<script>
+/* =========================================================
+   GLOBALER ZUSTAND
+   ========================================================= */
+let score = 0;          // erreichte Punkte gesamt
+let maxScore = 0;       // bisher maximal mögliche Punkte
+let task4Mode = "";     // "neg" | "gap" | "dnd"
+
+// Hilfsfunktion: Fortschrittsbalken
+function setProgress(p){
+  const bar = document.getElementById('progressBar');
+  bar.style.width = p + '%';
+  bar.textContent = p + '%';
+}
+
+function goToScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  // Fortschritt grob nach Screen
+  const map={'screen-1':20,'screen-2':40,'screen-3':60,'screen-4':80,'screen-end':100};
+  if(map[id]!==undefined) setProgress(map[id]);
+}
+
+function startGame(){
+  buildTask1();
+  goToScreen('screen-1');
+}
+
+/* =========================================================
+   AUFGABE 1 – aller-Formen anklicken (6 Sätze)
+   Pro richtig markierter Form: 2 P (oder 1 P nach Scaffolding)
+   ========================================================= */
+const task1Data = [
+  {words:["Je","vais","jouer","au","foot","."], correct:1},
+  {words:["Tu","vas","manger","une","pizza","."], correct:1},
+  {words:["Elle","va","habiter","à","Paris","."], correct:1},
+  {words:["Nous","allons","travailler","."], correct:1},
+  {words:["Vous","allez","parler","français","."], correct:1},
+  {words:["Ils","vont","écouter","la","musique","."], correct:1},
+];
+let task1Attempted = false;
+
+function buildTask1(){
+  const c = document.getElementById('task1-container');
+  c.innerHTML='';
+  task1Data.forEach((s,si)=>{
+    const div=document.createElement('div');
+    div.className='sentence';
+    s.words.forEach((w,wi)=>{
+      // Satzzeichen nicht klickbar
+      if(w==="."){ div.appendChild(document.createTextNode(" "+w)); return; }
+      const span=document.createElement('span');
+      span.className='word';
+      span.textContent=w;
+      span.dataset.s=si; span.dataset.w=wi;
+      span.onclick=()=>{ if(span.classList.contains('locked'))return;
+        span.classList.toggle('selected'); };
+      div.appendChild(span);
+      div.appendChild(document.createTextNode(" "));
+    });
+    c.appendChild(div);
+  });
+}
+
+function checkTask1(){
+  const fb=document.getElementById('fb1');
+  let allCorrect=true; let correctCount=0;
+  task1Data.forEach((s,si)=>{
+    const sel=document.querySelectorAll(`#task1-container .word[data-s="${si}"].selected`);
+    const selIdx=[...sel].map(e=>parseInt(e.dataset.w));
+    const ok = selIdx.length===1 && selIdx[0]===s.correct;
+    if(ok) correctCount++; else allCorrect=false;
+  });
+
+  if(allCorrect){
+    // Punkte: 2 pro Satz beim 1. Versuch, 1 pro Satz nach Scaffolding
+    const per = task1Attempted ? 1 : 2;
+    score += per * task1Data.length;
+    maxScore += 2 * task1Data.length;
+    lockTask1(true);
+    fb.className='feedback good show';
+    fb.innerHTML='🌟 Super! Alle « aller »-Formen richtig gefunden!';
+    document.getElementById('check1').style.display='none';
+    document.getElementById('next1').style.display='block';
+  } else if(!task1Attempted){
+    // erstes Mal falsch -> Scaffolding
+    task1Attempted=true;
+    fb.className='feedback help show';
+    fb.innerHTML='💡 Tipp: Suche in jedem Satz das Wort, das man auch im Wörterbuch unter '+
+      '« aller » findet. Es steht meist <b>direkt nach</b> dem Personalpronomen '+
+      '(je, tu, il...) und sieht so aus: <b>vais, vas, va, allons, allez, vont</b>. '+
+      'Klicke pro Satz nur EIN Wort an. Versuch es nochmal! 💪';
+  } else {
+    // zweiter Versuch falsch -> auflösen, 0 P für falsche Sätze
+    score += 0; // (richtige wären bereits oben gezählt, hier final 0 für Rest)
+    maxScore += 2 * task1Data.length;
+    revealTask1();
+    fb.className='feedback bad show';
+    fb.innerHTML='Kein Problem! 😊 Die richtigen Formen sind jetzt <b>grün</b> markiert. Schau sie dir an und klicke auf „Weiter".';
+    document.getElementById('check1').style.display='none';
+    document.getElementById('next1').style.display='block';
+  }
+}
+
+function lockTask1(){
+  task1Data.forEach((s,si)=>{
+    const correctSpan=document.querySelector(`#task1-container .word[data-s="${si}"][data-w="${s.correct}"]`);
+    if(correctSpan) correctSpan.classList.add('correct');
+    document.querySelectorAll(`#task1-container .word[data-s="${si}"]`).forEach(e=>e.classList.add('locked'));
+  });
+}
+function revealTask1(){
+  task1Data.forEach((s,si)=>{
+    document.querySelectorAll(`#task1-container .word[data-s="${si}"]`).forEach(e=>{
+      e.classList.remove('selected'); e.classList.add('locked');
+    });
+    const correctSpan=document.querySelector(`#task1-container .word[data-s="${si}"][data-w="${s.correct}"]`);
+    if(correctSpan) correctSpan.classList.add('correct');
+  });
+}
+
+/* =========================================================
+   AUFGABE 2 – richtige Übersetzung (Single Choice, 6 Sätze)
+   Distraktoren: falsches Pronomen / falsches Hilfsverb / konjugiert statt Infinitiv
+   ========================================================= */
+const task2Data = [
+  { de:"Ich werde Fußball spielen.",
+    options:["Je vais jouer au foot.","Tu vas jouer au foot.","Je vais joue au foot."], correct:0 },
+  { de:"Du wirst eine Pizza essen.",
+    options:["Tu as manger une pizza.","Tu vas manger une pizza.","Tu vas mange une pizza."], correct:1 },
+  { de:"Sie (elle) wird in Lyon wohnen.",
+    options:["Elle va habiter à Lyon.","Il va habiter à Lyon.","Elle va habite à Lyon."], correct:0 },
+  { de:"Wir werden Französisch sprechen.",
+    options:["Nous allez parler français.","Nous allons parle français.","Nous allons parler français."], correct:2 },
+  { de:"Ihr werdet Musik hören.",
+    options:["Vous allez écouter la musique.","Vous allez écoute la musique.","Ils vont écouter la musique."], correct:0 },
+  { de:"Sie (ils) werden arbeiten.",
+    options:["Ils vont travaille.","Ils vont travailler.","Elles vont travailler."], correct:1 },
+];
+let task2State = []; // pro Frage: {selected, attempted, done}
+
+function buildTask2(){
+  const c=document.getElementById('task2-container');
+  c.innerHTML='';
+  task2State = task2Data.map(()=>({selected:null,attempted:false,done:false}));
+  task2Data.forEach((q,qi)=>{
+    const card=document.createElement('div');
+    card.style.marginBottom='14px';
+    card.innerHTML=`<p style="font-weight:bold;margin-bottom:4px;">${qi+1}. ${q.de}</p>`;
+    q.options.forEach((opt,oi)=>{
+      const b=document.createElement('button');
+      b.className='choice'; b.textContent=opt;
+      b.dataset.q=qi; b.dataset.o=oi;
+      b.onclick=()=>{ if(task2State[qi].done)return;
+        document.querySelectorAll(`.choice[data-q="${qi}"]`).forEach(x=>x.classList.remove('selected'));
+        b.classList.add('selected'); task2State[qi].selected=oi; };
+      card.appendChild(b);
+    });
+    c.appendChild(card);
+  });
+}
+
+function checkTask2(){
+  const fb=document.getElementById('fb2');
+  let allDone=true, anyWrong=false;
+  task2Data.forEach((q,qi)=>{
+    const st=task2State[qi];
+    if(st.done) return;
+    if(st.selected===null){ allDone=false; return; }
+    if(st.selected===q.correct){
+      const per = st.attempted?1:2;
+      score+=per; maxScore+=2; st.done=true;
+      const b=document.querySelector(`.choice[data-q="${qi}"][data-o="${q.correct}"]`);
+      b.classList.remove('selected'); b.classList.add('correct');
+      document.querySelectorAll(`.choice[data-q="${qi}"]`).forEach(x=>x.disabled=true);
+    } else {
+      if(!st.attempted){ st.attempted=true; anyWrong=true; allDone=false;
+        const b=document.querySelector(`.choice[data-q="${qi}"][data-o="${st.selected}"]`);
+        b.classList.add('wrong');
+        setTimeout(()=>b.classList.remove('wrong','selected'),900);
+      } else {
+        // zweiter Versuch falsch -> 0 P, auflösen
+        maxScore+=2; st.done=true;
+        document.querySelectorAll(`.choice[data-q="${qi}"]`).forEach(x=>{
+          x.disabled=true;
+          if(parseInt(x.dataset.o)===q.correct) x.classList.add('correct');
+        });
+      }
+    }
+  });
+
+  if(allDone){
+    fb.className='feedback good show';
+    fb.innerHTML='🎉 Klasse! Du kennst dich mit den richtigen Formen aus!';
+    document.getElementById('check2').style.display='none';
+    document.getElementById('next2').style.display='block';
+  } else if(anyWrong){
+    fb.className='feedback help show';
+    fb.innerHTML='💡 Tipp: Achte genau auf <b>3 Dinge</b>: '+
+      '1) Passt das <b>Personalpronomen</b> (je/tu/il...)? '+
+      '2) Passt die Form von <b>aller</b> (vais/vas/va/allons/allez/vont)? '+
+      '3) Steht das zweite Verb im <b>Infinitif</b> (Endung -er, z.B. jouer, manger)? '+
+      'Versuch die markierten Sätze nochmal! 💪';
+  } else {
+    fb.className='feedback help show';
+    fb.innerHTML='👉 Bitte wähle bei jeder Frage eine Antwort aus.';
+  }
+}
+
+/* ---- weiter in Teil 4 ---- */
+</script>
+<script>
+/* =========================================================
+   AUFGABE 3 – Sortieren présent / futur composé
+   Bei >80% (bis Ende Aufg.2): zusätzlich passé-composé-Distraktoren
+   ========================================================= */
+let task3Data = [];
+let task3Attempted = false;
+let task3HasPasse = false;
+
+function buildTask3(){
+  // Schwelle bis hier prüfen (Aufgaben 1+2)
+  const pct = maxScore>0 ? (score/maxScore*100) : 0;
+  task3HasPasse = pct > 80;
+
+  // Basis-Sätze
+  task3Data = [
+    {txt:"Je joue au tennis.", zone:"present"},
+    {txt:"Tu vas manger une pomme.", zone:"futur"},
+    {txt:"Nous habitons à Paris.", zone:"present"},
+    {txt:"Elle va travailler.", zone:"futur"},
+    {txt:"Vous écoutez la musique.", zone:"present"},
+    {txt:"Ils vont parler français.", zone:"futur"},
+  ];
+  if(task3HasPasse){
+    // passé composé Distraktoren -> "Unbekannte Zeitform"
+    task3Data.push({txt:"J'ai mangé une pizza.", zone:"unbekannt"});
+    task3Data.push({txt:"Tu as joué au foot.", zone:"unbekannt"});
+  }
+  // mischen
+  task3Data = task3Data.map(d=>({...d,id:Math.random().toString(36).slice(2)}));
+  task3Data.sort(()=>Math.random()-0.5);
+
+  // Instruktion anpassen
+  const instr=document.getElementById('task3-instr');
+  if(task3HasPasse){
+    instr.innerHTML='Ziehe jeden Satz ins richtige Feld: <b>Présent</b> (jetzt) oder '+
+      '<b>Futur composé</b> (Zukunft)! 🧲 <br>⚠️ <b>Achtung:</b> Manche Sätze stehen in einer '+
+      '<b>Zeitform, die du noch nicht kennst</b> – ziehe diese ins Feld „Unbekannte Zeitform"!';
+  } else {
+    instr.innerHTML='Ziehe jeden Satz in das richtige Feld: <b>Présent</b> (jetzt) oder '+
+      '<b>Futur composé</b> (Zukunft)! 🧲';
+  }
+
+  // Pool
+  const pool=document.getElementById('task3-pool');
+  pool.innerHTML='';
+  task3Data.forEach(d=>{
+    const t=document.createElement('div');
+    t.className='token'; t.textContent=d.txt; t.id='t3_'+d.id;
+    t.draggable=true; t.dataset.zone=d.zone;
+    addDragEvents(t);
+    pool.appendChild(t);
+  });
+
+  // Zonen
+  const zones=document.getElementById('task3-zones');
+  zones.innerHTML='';
+  const zoneList = task3HasPasse
+    ? [["present","🕐 Présent"],["futur","🔮 Futur composé"],["unbekannt","❓ Unbekannte Zeitform"]]
+    : [["present","🕐 Présent"],["futur","🔮 Futur composé"]];
+  zoneList.forEach(([key,label])=>{
+    const z=document.createElement('div');
+    z.className='drop-zone'; z.dataset.zone=key;
+    z.innerHTML=`<h3>${label}</h3>`;
+    addDropEvents(z);
+    zones.appendChild(z);
+  });
+}
+
+function checkTask3(){
+  const fb=document.getElementById('fb3');
+  let correctCount=0, total=task3Data.length, allPlaced=true;
+  task3Data.forEach(d=>{
+    const tok=document.getElementById('t3_'+d.id);
+    const parent=tok.parentElement;
+    if(!parent.classList.contains('drop-zone')){ allPlaced=false; return; }
+    if(parent.dataset.zone===d.zone) correctCount++;
+  });
+
+  if(!allPlaced){
+    fb.className='feedback help show';
+    fb.innerHTML='👉 Ziehe bitte zuerst <b>alle</b> Sätze in ein Feld.';
+    return;
+  }
+
+  if(correctCount===total){
+    const per = task3Attempted?1:2;
+    score += per*total; maxScore += 2*total;
+    markTask3();
+    fb.className='feedback good show';
+    fb.innerHTML='🌟 Perfekt sortiert! Du erkennst die Zeitformen super!';
+    document.getElementById('check3').style.display='none';
+    document.getElementById('next3').style.display='block';
+  } else if(!task3Attempted){
+    task3Attempted=true;
+    fb.className='feedback help show';
+    fb.innerHTML='💡 Tipp: Steht im Satz eine Form von <b>aller</b> (vais/vas/va/allons/allez/vont) '+
+      '+ ein Verb im Infinitif? → Dann ist es <b>Futur composé</b> (Zukunft). '+
+      'Steht nur EIN konjugiertes Verb da? → Dann ist es <b>Présent</b> (jetzt).'+
+      (task3HasPasse?' Sätze mit <b>ai/as</b> + Verb auf <b>-é</b> kennst du noch nicht → „Unbekannte Zeitform".':'')+
+      ' Du kannst die Sätze noch verschieben. Versuch es nochmal! 💪';
+  } else {
+    maxScore += 2*total; // 0 Punkte final für falsch platzierte
+    // richtige zählen wir nicht extra, da Scaffolding-Logik: hier final
+    markTask3();
+    fb.className='feedback bad show';
+    fb.innerHTML='Alles gut! 😊 Schau dir die richtige Einteilung an (grün = richtig platziert) und klicke „Weiter".';
+    document.getElementById('check3').style.display='none';
+    document.getElementById('next3').style.display='block';
+  }
+}
+
+function markTask3(){
+  task3Data.forEach(d=>{
+    const tok=document.getElementById('t3_'+d.id);
+    tok.draggable=false;
+    const parent=tok.parentElement;
+    if(parent.classList.contains('drop-zone') && parent.dataset.zone===d.zone){
+      tok.classList.add('correct');
+    } else {
+      tok.classList.add('wrong');
+    }
+  });
+}
+
+/* =========================================================
+   DRAG & DROP – generische Helfer
+   ========================================================= */
+let draggedEl=null;
+function addDragEvents(el){
+  el.addEventListener('dragstart',e=>{ draggedEl=el; setTimeout(()=>el.style.opacity='0.4',0); });
+  el.addEventListener('dragend',e=>{ el.style.opacity='1'; });
+  // Touch-Unterstützung (einfach)
+  el.addEventListener('touchstart',e=>{ draggedEl=el; el.classList.add('selected'); },{passive:true});
+}
+function addDropEvents(zone){
+  zone.addEventListener('dragover',e=>{ e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave',e=>{ zone.classList.remove('over'); });
+  zone.addEventListener('drop',e=>{
+    e.preventDefault(); zone.classList.remove('over');
+    if(draggedEl){ zone.appendChild(draggedEl); draggedEl=null; }
+  });
+  // Touch: tippe Zone an, um ausgewähltes Token abzulegen
+  zone.addEventListener('click',e=>{
+    const sel=document.querySelector('.token.selected');
+    if(sel){ sel.classList.remove('selected'); zone.appendChild(sel); }
+  });
+}
+
+/* =========================================================
+   VERZWEIGUNG ZU AUFGABE 4
+   Schwelle bis Ende Aufgabe 3 entscheidet den Pfad.
+   ========================================================= */
+function branchToTask4(){
+  const pct = maxScore>0 ? (score/maxScore*100) : 0;
+  if(pct > 80)      task4Mode="neg";   // croissant-Pfad: Verneinung
+  else if(pct < 33) task4Mode="dnd";   // crêpe-Pfad: einfaches Drag&Drop
+  else              task4Mode="gap";   // baguette-Pfad: Lücke + DnD-Infinitiv
+  buildTask4();
+  goToScreen('screen-4');
+}
+
+/* ---------- AUFGABE 4: NEGATION (>80%) ---------- */
+const task4NegData = [
+  {de:"Ich werde NICHT Fußball spielen.", parts:["Je","ne","vais","pas","jouer","au foot."]},
+  {de:"Du wirst NICHT essen.",            parts:["Tu","ne","vas","pas","manger."]},
+  {de:"Sie (elle) wird NICHT arbeiten.",  parts:["Elle","ne","va","pas","travailler."]},
+];
+
+/* ---------- AUFGABE 4: GAP + DnD Infinitiv (33-80%) ---------- */
+const task4GapData = [
+  { de:"Du wirst eine Pizza essen.",
+    tpl:["Tu", "GAP", "SLOT", "une pizza."], gapAnswer:"vas",
+    slotCorrect:"manger", infOptions:["manger","mange","mangé"] },
+  { de:"Wir werden in Paris wohnen.",
+    tpl:["Nous", "GAP", "SLOT", "à Paris."], gapAnswer:"allons",
+    slotCorrect:"habiter", infOptions:["habiter","habite","habitons"] },
+  { de:"Sie (ils) werden Musik hören.",
+    tpl:["Ils", "GAP", "SLOT", "la musique."], gapAnswer:"vont",
+    slotCorrect:"écouter", infOptions:["écouter","écoute","écoutent"] },
+];
+
+/* ---------- AUFGABE 4: einfaches DnD (<33%) ---------- */
+const task4DndData = [
+  { de:"Ich werde spielen.",  pool:["Je","vais","jouer"], correct:["Je","vais","jouer"] },
+  { de:"Du wirst essen.",     pool:["Tu","vas","manger"], correct:["Tu","vas","manger"] },
+  { de:"Sie (elle) wird arbeiten.", pool:["Elle","va","travailler"], correct:["Elle","va","travailler"] },
+];
+
+let task4Attempted=false;
+
+function buildTask4(){
+  const intro=document.getElementById('task4-intro');
+  const c=document.getElementById('task4-container');
+  c.innerHTML=''; task4Attempted=false;
+  document.getElementById('fb4').className='feedback';
+
+  if(task4Mode==="neg"){
+    intro.innerHTML=`<div class="info-box">🔮➡️🚫 <b>Neu: Die Verneinung im futur composé!</b><br>
+      Du setzt <b>ne</b> und <b>pas</b> <u>um die Form von aller herum</u>:<br>
+      <span class="fr">Je vais jouer.</span> → <span class="fr">Je ne vais pas jouer.</span><br>
+      Ordne die Satzteile in die richtige Reihenfolge! 🧲</div>`;
+    task4NegData.forEach((q,qi)=>{
+      const block=document.createElement('div');
+      block.style.marginBottom='16px';
+      block.innerHTML=`<p style="font-weight:bold;">${qi+1}. ${q.de}</p>`;
+      const pool=document.createElement('div');
+      pool.className='token-pool'; pool.id='t4pool_'+qi;
+      const shuffled=[...q.parts].map((p,i)=>({p,i})).sort(()=>Math.random()-0.5);
+      shuffled.forEach(o=>{
+        const t=document.createElement('div');
+        t.className='token'; t.textContent=o.p; t.draggable=true;
+        t.id=`t4_${qi}_${o.i}`; addDragEvents(t);
+        pool.appendChild(t);
+      });
+      const line=document.createElement('div');
+      line.className='drop-zone'; line.style.minHeight='50px';
+      line.dataset.q=qi; line.id='t4line_'+qi;
+      line.innerHTML='<h3>➡️ Dein Satz</h3>';
+      addDropEvents(line);
+      block.appendChild(pool); block.appendChild(line);
+      c.appendChild(block);
+    });
+
+  } else if(task4Mode==="gap"){
+    intro.innerHTML=`<div class="info-box">✍️ <b>Vervollständige die Sätze!</b><br>
+      1) Schreibe die richtige Form von <b>aller</b> in die Lücke.<br>
+      2) Ziehe den <b>Infinitif</b> (Endung -er) an die richtige Stelle. 🎯</div>`;
+    task4GapData.forEach((q,qi)=>{
+      const block=document.createElement('div');
+      block.style.marginBottom='18px';
+      let html=`<p style="font-weight:bold;">${qi+1}. ${q.de}</p><p class="sentence">`;
+      q.tpl.forEach(part=>{
+        if(part==="GAP"){
+          html+=`<input class="gap-input" id="t4gap_${qi}" placeholder="aller?"> `;
+        } else if(part==="SLOT"){
+          html+=`<span class="gap-slot" id="t4slot_${qi}" data-q="${qi}"></span> `;
+        } else {
+          html+=part+" ";
+        }
+      });
+      html+=`</p>`;
+      block.innerHTML=html;
+      // Token-Pool (Distraktoren: nur eine Form ist der korrekte Infinitiv)
+      const pool=document.createElement('div');
+      pool.className='token-pool'; pool.id='t4ipool_'+qi;
+      const opts=[...q.infOptions].sort(()=>Math.random()-0.5);
+      opts.forEach((w,oi)=>{
+        const t=document.createElement('div');
+        t.className='token'; t.textContent=w; t.draggable=true;
+        t.id=`t4inf_${qi}_${oi}`; t.dataset.word=w; addDragEvents(t);
+        pool.appendChild(t);
+      });
+      block.appendChild(pool);
+      c.appendChild(block);
+      // Slot als Drop-Ziel
+      setTimeout(()=>{
+        const slot=document.getElementById('t4slot_'+qi);
+        addDropEvents(slot);
+      },0);
+    });
+
+  } else { // dnd (<33%)
+    intro.innerHTML=`<div class="info-box">🧩 <b>Baue den Satz!</b><br>
+      Ziehe die Wörter in die richtige Reihenfolge:<br>
+      <b>1.</b> Person (je/tu/...) → <b>2.</b> Form von aller → <b>3.</b> Verb (-er).<br>
+      Beispiel: <span class="fr">Je vais jouer.</span> 😊</div>`;
+    task4DndData.forEach((q,qi)=>{
+      const block=document.createElement('div');
+      block.style.marginBottom='16px';
+      block.innerHTML=`<p style="font-weight:bold;">${qi+1}. ${q.de}</p>`;
+      const pool=document.createElement('div');
+      pool.className='token-pool'; pool.id='t4dpool_'+qi;
+      const shuffled=[...q.pool].sort(()=>Math.random()-0.5);
+      shuffled.forEach((w,oi)=>{
+        const t=document.createElement('div');
+        t.className='token'; t.textContent=w; t.draggable=true;
+        t.id=`t4d_${qi}_${oi}`; t.dataset.word=w; addDragEvents(t);
+        pool.appendChild(t);
+      });
+      const line=document.createElement('div');
+      line.className='drop-zone'; line.style.minHeight='50px';
+      line.id='t4dline_'+qi; line.innerHTML='<h3>➡️ Dein Satz</h3>';
+      addDropEvents(line);
+      block.appendChild(pool); block.appendChild(line);
+      c.appendChild(block);
+    });
+  }
+}
+
+function checkTask4(){
+  const fb=document.getElementById('fb4');
+  let total=0, correct=0, allFilled=true;
+
+  if(task4Mode==="neg"){
+    task4NegData.forEach((q,qi)=>{
+      total++;
+      const line=document.getElementById('t4line_'+qi);
+      const tokens=[...line.querySelectorAll('.token')];
+      if(tokens.length!==q.parts.length){ allFilled=false; return; }
+      const order=tokens.map(t=>t.textContent);
+      if(JSON.stringify(order)===JSON.stringify(q.parts)) correct++;
+    });
+  } else if(task4Mode==="gap"){
+    task4GapData.forEach((q,qi)=>{
+      total++;
+      const gap=document.getElementById('t4gap_'+qi).value.trim().toLowerCase();
+      const slot=document.getElementById('t4slot_'+qi);
+      const placed=slot.querySelector('.token');
+      if(gap==="" || !placed){ allFilled=false; return; }
+      const gapOk = gap===q.gapAnswer;
+      const slotOk = placed.dataset.word===q.slotCorrect;
+      if(gapOk && slotOk) correct++;
+    });
+  } else { // dnd
+    task4DndData.forEach((q,qi)=>{
+      total++;
+      const line=document.getElementById('t4dline_'+qi);
+      const tokens=[...line.querySelectorAll('.token')];
+      if(tokens.length!==q.correct.length){ allFilled=false; return; }
+      const order=tokens.map(t=>t.dataset.word);
+      if(JSON.stringify(order)===JSON.stringify(q.correct)) correct++;
+    });
+  }
+
+  if(!allFilled){
+    fb.className='feedback help show';
+    fb.innerHTML='👉 Bitte fülle zuerst <b>alle</b> Sätze vollständig aus.';
+    return;
+  }
+
+  if(correct===total){
+    const per = task4Attempted?1:2;
+    score += per*total; maxScore += 2*total;
+    fb.className='feedback good show';
+    fb.innerHTML='🎉 Wunderbar! Du hast alles geschafft! 🌟';
+    lockTask4();
+    document.getElementById('check4').style.display='none';
+    document.getElementById('next4').style.display='block';
+  } else if(!task4Attempted){
+    task4Attempted=true;
+    fb.className='feedback help show';
+    if(task4Mode==="neg"){
+      fb.innerHTML='💡 Tipp: Reihenfolge = <b>Person → ne → Form von aller → pas → Verb (Infinitif)</b>. '+
+        'Beispiel: <span class="fr">Je / ne / vais / pas / jouer</span>. Versuch es nochmal! 💪';
+    } else if(task4Mode==="gap"){
+      fb.innerHTML='💡 Tipp: In die Lücke kommt die Form von <b>aller</b> (je→vais, tu→vas, '+
+        'il/elle→va, nous→allons, vous→allez, ils/elles→vont). Der gezogene Baustein muss '+
+        'ein <b>Infinitif</b> sein (Endung <b>-er</b>, NICHT -e oder -é). Versuch es nochmal! 💪';
+    } else {
+      fb.innerHTML='💡 Tipp: Erst die <b>Person</b> (je, tu, elle...), dann die <b>Form von aller</b> '+
+        '(vais, vas, va...), dann das <b>Verb auf -er</b>. Ziehe die Wörter neu! 💪';
+    }
+  } else {
+    maxScore += 2*total; // final 0 für falsche
+    fb.className='feedback bad show';
+    fb.innerHTML='Alles gut – das war ganz schön knifflig! 😊 Klicke auf „Fertig".';
+    lockTask4();
+    document.getElementById('check4').style.display='none';
+    document.getElementById('next4').style.display='block';
+  }
+}
+
+function lockTask4(){
+  document.querySelectorAll('#task4-container .token').forEach(t=>t.draggable=false);
+  document.querySelectorAll('#task4-container .gap-input').forEach(i=>i.disabled=true);
+}
+
+/* =========================================================
+   ENDE – Geheimwort vergeben (Differenzierung verdeckt)
+   ========================================================= */
+function showEnd(){
+  const pct = maxScore>0 ? (score/maxScore*100) : 0;
+  let word;
+  if(pct < 33)      word="🥞 crêpe";
+  else if(pct <= 80) word="🥖 baguette";
+  else              word="🥐 croissant";
+  document.getElementById('secretWord').textContent=word;
+  goToScreen('screen-end');
+}
+
+/* =========================================================
+   INITIALISIERUNG: Aufgaben vorbereiten, sobald nötig
+   ========================================================= */
+// Aufgabe 2 & 3 erst bauen, wenn man sie betritt:
+const _origGoTo = goToScreen;
+goToScreen = function(id){
+  if(id==='screen-2') buildTask2();
+  if(id==='screen-3') buildTask3();
+  _origGoTo(id);
+};
+</script>
+</body>
+</html>
