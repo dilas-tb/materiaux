@@ -625,10 +625,6 @@ function startTask4down(){
     let right=0, total=t4down.length*2;
     t4down.forEach((d,di)=>{
       let dz=document.querySelectorAll('#t4ds .word[data-di="'+di+'"]');
-      dz.forEach(drop=>
-            let right=0, total=t4down.length*2;
-    t4down.forEach((d,di)=>{
-      let dz=document.querySelectorAll('#t4ds .word[data-di="'+di+'"]');
       dz.forEach(drop=>{
         let role=drop.dataset.role;
         let correct = role==='aller' ? d.aller : d.inf;
@@ -639,6 +635,7 @@ function startTask4down(){
     maxScore+=total; addScore(right);
     t4finish(right,total);
   };
+
   document.getElementById('taskArea').firstChild.appendChild(btn);
 }
 
