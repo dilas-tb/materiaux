@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥐 Le Futur Composé – Mission Baguette</title>
+    <style>
+        :root {
+            --bg: #fdf6e3;
+            --card: #fffef9;
+            --primary: #ff8c42;
+            --secondary: #6cc4a1;
+            --accent: #f4a261;
+            --danger: #e76f51;
+            --text: #3d3d3d;
+            --light-text: #6b6b6b;
+            --border: #e9dccd;
+            --shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+            --shadow-sm: 0 3px 10px rgba(0, 0, 0, 0.05);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: var(--font);
+            background: linear-gradient(160deg, #fff3e0 0%, #fef9f0 30%, #fdf6e3 60%, #fefefe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background-attachment: fixed;
+        }
+        .phone-frame {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card);
+            border-radius: 28px;
+            box-shadow: var(--shadow), 0 0 0 2px #f0e4d0;
+            padding: 20px 18px 28px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #f5e6d3;
+            min-height: 680px;
+            display: flex;
+            flex-direction: column;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 8px;
+            background: #f0e4d0;
+            border-radius: 20px;
+            opacity: 0.7;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 4px;
+            padding-top: 4px;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #e07b3c;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .header .emoji-row {
+            font-size: 1.6rem;
+            animation: bounceEmoji 1.5s ease infinite;
+        }
+        @keyframes bounceEmoji {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-14px);
+            }
+            50% {
+                transform: translateY(0);
+            }
+            70% {
+                transform: translateY(-7px);
+            }
+            85% {
+                transform: translateY(0);
+            }
+        }
+        .progress-wrap {
+            margin: 6px 0 10px;
+            background: #f9f3e8;
+            border-radius: 30px;
+            padding: 5px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .progress-wrap .icon {
+            font-size: 1.4rem;
+        }
+        .progress-bar-outer {
+            flex: 1;
+            height: 14px;
+            background: #e8dccd;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #ffb347, #ff8c42);
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        .progress-label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #b8783e;
+            min-width: 38px;
+            text-align: right;
+        }
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 4px;
+            max-height: 56vh;
+            scroll-behavior: smooth;
+        }
+        .content-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .content-area::-webkit-scrollbar-thumb {
+            background: #e0d3c0;
+            border-radius: 10px;
+        }
+        .card {
+            background: #fffbee;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 14px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            animation: fadeSlideIn 0.4s ease;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .card h3 {
+            font-size: 1.05rem;
+            color: #d0793e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.2px;
+            font-family: var(--font);
+            text-align: center;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .btn:active {
+            transform: scale(0.94);
+            transition: 0.1s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(255, 140, 66, 0.35);
+        }
+        .btn-primary:hover {
+            background: #f08030;
+        }
+        .btn-secondary {
+            background: #fff;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-success {
+            background: var(--secondary);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(108, 196, 161, 0.35);
+        }
+        .btn-big {
+            padding: 16px 32px;
+            font-size: 1.15rem;
+            border-radius: 40px;
+        }
+        .btn:disabled {
+            opacity: 0.45;
+            pointer-events: none;
+            filter: grayscale(20%);
+        }
+        .sentence-word {
+            display: inline-block;
+            padding: 6px 11px;
+            margin: 3px 4px;
+            background: #fffdf7;
+            border: 2px solid #e8dccd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.9rem;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .sentence-word:hover {
+            background: #fff3e0;
+            border-color: #f4a261;
+            transform: translateY(-2px);
+        }
+        .sentence-word.selected-correct {
+            background: #d4f0e0 !important;
+            border-color: #6cc4a1 !important;
+            animation: popCorrect 0.5s ease;
+            pointer-events: none;
+        }
+        .sentence-word.selected-wrong {
+            background: #fde0d4 !important;
+            border-color: #e76f51 !important;
+            animation: shake 0.5s ease;
+        }
+        .sentence-word.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        @keyframes popCorrect {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            40% {
+                transform: scale(1.25);
+            }
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-8px);
+            }
+            40% {
+                transform: translateX(8px);
+            }
+            60% {
+                transform: translateX(-5px);
+            }
+            80% {
+                transform: translateX(5px);
+            }
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            margin: 6px 0;
+            background: #fffdf7;
+            border: 2px solid #e8dccd;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-family: var(--font);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .option-btn:hover {
+            background: #fff8eb;
+            border-color: #f4a261;
+        }
+        .option-btn.correct {
+            background: #d4f0e0;
+            border-color: #6cc4a1;
+            animation: popCorrect 0.5s ease;
+            pointer-events: none;
+            font-weight: 700;
+        }
+        .option-btn.wrong {
+            background: #fde0d4;
+            border-color: #e76f51;
+            animation: shake 0.5s ease;
+            pointer-events: none;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .option-btn:disabled {
+            pointer-events: none;
+        }
+        .drop-zone {
+            min-height: 70px;
+            border: 3px dashed #e0d3c0;
+            border-radius: var(--radius);
+            padding: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: flex-start;
+            transition: var(--transition);
+            background: #fefdf9;
+            margin: 6px 0;
+        }
+        .drop-zone.active-hover {
+            border-color: #f4a261;
+            background: #fff8eb;
+            box-shadow: 0 0 0 8px rgba(244, 162, 97, 0.1);
+        }
+        .drop-zone h4 {
+            width: 100%;
+            text-align: center;
+            color: #b8783e;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+        .tag-item {
+            display: inline-block;
+            padding: 8px 14px;
+            background: #fffdf7;
+            border: 2px solid #e8dccd;
+            border-radius: 22px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            animation: fadeSlideIn 0.3s ease;
+        }
+        .tag-item.selected-tag {
+            background: #fff3e0;
+            border-color: #f4a261;
+            box-shadow: 0 0 0 6px rgba(244, 162, 97, 0.15);
+            transform: scale(1.04);
+            z-index: 2;
+        }
+        .tag-item.placed {
+            pointer-events: none;
+            opacity: 0.75;
+            font-size: 0.82rem;
+            padding: 5px 10px;
+            background: #f0f7f0;
+            border-style: solid;
+        }
+        .tag-item.correct-place {
+            background: #d4f0e0 !important;
+            border-color: #6cc4a1 !important;
+        }
+        .tag-item.wrong-place {
+            background: #fde0d4 !important;
+            border-color: #e76f51 !important;
+            animation: shake 0.5s ease;
+        }
+        .gap-slot {
+            display: inline-block;
+            min-width: 70px;
+            height: 36px;
+            border: 2px dashed #d0c4b0;
+            border-radius: 18px;
+            margin: 0 4px;
+            cursor: pointer;
+            vertical-align: middle;
+            transition: var(--transition);
+            background: #fefdf9;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 600;
+            color: #b8783e;
+            padding: 0 8px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .gap-slot.filled {
+            border-style: solid;
+            border-color: #6cc4a1;
+            background: #f0faf4;
+            color: #2d6a4f;
+        }
+        .gap-slot.active-slot {
+            border-color: #f4a261;
+            background: #fff8eb;
+            box-shadow: 0 0 0 6px rgba(244, 162, 97, 0.15);
+            animation: pulse 1s ease infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 4px rgba(244, 162, 97, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(244, 162, 97, 0.05);
+            }
+        }
+        .input-inline {
+            display: inline-block;
+            width: 80px;
+            height: 36px;
+            border: 2px solid #d0c4b0;
+            border-radius: 18px;
+            text-align: center;
+            font-family: var(--font);
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: #fefdf9;
+            color: #3d3d3d;
+            transition: var(--transition);
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+        .input-inline:focus {
+            outline: none;
+            border-color: #f4a261;
+            box-shadow: 0 0 0 6px rgba(244, 162, 97, 0.1);
+        }
+        .input-inline.correct {
+            border-color: #6cc4a1;
+            background: #f0faf4;
+        }
+        .input-inline.wrong {
+            border-color: #e76f51;
+            background: #fef5f0;
+        }
+        .feedback-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: #fff;
+            border-radius: 30px;
+            padding: 10px 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+            font-size: 1rem;
+            animation: toastIn 0.4s ease, toastOut 0.3s ease 1.8s forwards;
+            pointer-events: none;
+            text-align: center;
+            max-width: 85vw;
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-30px);
+            }
+        }
+        .feedback-toast.success {
+            border: 2px solid #6cc4a1;
+            color: #2d6a4f;
+        }
+        .feedback-toast.error {
+            border: 2px solid #e76f51;
+            color: #a33d2a;
+        }
+        .feedback-toast.info {
+            border: 2px solid #f4a261;
+            color: #b8783e;
+        }
+        .scaffolding-box {
+            background: #fff8eb;
+            border: 2px solid #f4a261;
+            border-radius: var(--radius);
+            padding: 14px;
+            margin: 8px 0;
+            animation: fadeSlideIn 0.4s ease;
+        }
+        .scaffolding-box h4 {
+            color: #d0793e;
+            margin-bottom: 6px;
+        }
+        .scaffolding-box p {
+            font-size: 0.85rem;
+            color: #5a4a3a;
+            margin: 4px 0;
+        }
+        .scaffolding-box table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0;
+            font-size: 0.85rem;
+        }
+        .scaffolding-box td,
+        .scaffolding-box th {
+            padding: 6px 8px;
+            border: 1px solid #e8dccd;
+            text-align: center;
+        }
+        .scaffolding-box th {
+            background: #fef0d5;
+        }
+        .result-card {
+            text-align: center;
+            padding: 20px;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            from {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .result-emoji {
+            font-size: 5rem;
+            display: block;
+            animation: bounceEmoji 0.7s ease 3;
+        }
+        .key-word {
+            font-size: 2.2rem;
+            font-weight: 900;
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 40px;
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
+        .key-word.top {
+            background: #fef0d5;
+            color: #d0793e;
+            border: 3px solid #f4a261;
+        }
+        .key-word.mid {
+            background: #fdf6e3;
+            color: #8b6914;
+            border: 3px solid #d4b05a;
+        }
+        .key-word.low {
+            background: #fef5f0;
+            color: #a33d2a;
+            border: 3px solid #e8b4a0;
+        }
+        .vocab-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px 10px;
+            font-size: 0.78rem;
+            background: #fefdf9;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid #e8dccd;
+            margin-top: 6px;
+        }
+        .vocab-list .fr {
+            font-weight: 600;
+            color: #d0793e;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .sentence-line {
+            margin: 6px 0;
+            padding: 6px;
+            background: #fffdf7;
+            border-radius: 10px;
+            border: 1px solid #e8dccd;
+            font-size: 0.9rem;
+            line-height: 2;
+        }
+        @media (max-width: 400px) {
+            .phone-frame {
+                padding: 14px 10px 20px;
+                border-radius: 20px;
+            }
+            .btn {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+            .sentence-word {
+                padding: 4px 8px;
+                font-size: 0.78rem;
+                margin: 2px 2px;
+            }
+            .key-word {
+                font-size: 1.6rem;
+                padding: 8px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="header">
+            <h1><span class="emoji-row">🥐</span> Le Futur Composé <span class="emoji-row">🥖</span></h1>
+        </div>
+        <div class="progress-wrap">
+            <span class="icon">⭐</span>
+            <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+            <span class="progress-label" id="progressLabel">0%</span>
+        </div>
+        <div class="content-area" id="contentArea"></div>
+        <div id="toastContainer"></div>
+    </div>
+
+    <script>
+        (function() {
+            const contentArea = document.getElementById('contentArea');
+            const progressBar = document.getElementById('progressBar');
+            const progressLabel = document.getElementById('progressLabel');
+            const toastContainer = document.getElementById('toastContainer');
+
+            const state = {
+                phase: 'intro',
+                totalPoints: 0,
+                maxPossiblePoints: 0,
+                task1Points: 0,
+                task2Points: 0,
+                task3Points: 0,
+                task4Points: 0,
+                task1ScaffoldingShown: false,
+                task2QuestionIndex: 0,
+                task2ConsecutiveErrors: 0,
+                task2ScaffoldingActive: false,
+                task2CurrentQuestionAttempts: 0,
+            };
+
+            function updateProgress(current, max) {
+                const pct = max > 0 ? Math.round((current / max) * 100) : 0;
+                progressBar.style.width = pct + '%';
+                progressLabel.textContent = pct + '%';
+                state.maxPossiblePoints = max;
+            }
+
+            function showToast(msg, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = 'feedback-toast ' + type;
+                toast.textContent = msg;
+                toastContainer.appendChild(toast);
+                setTimeout(() => { if (toast.parentNode) toast.remove(); }, 2200);
+            }
+
+            function clearContent() { contentArea.innerHTML = ''; }
+
+            function scrollToBottom() { setTimeout(() => { contentArea.scrollTop = contentArea.scrollHeight; },
+                150); }
+
+            function getDifferenzierungLevel() {
+                if (state.maxPossiblePoints === 0) return 'normal';
+                const ratio = state.totalPoints / state.maxPossiblePoints;
+                if (ratio >= 0.7) return 'up';
+                if (ratio <= 0.35) return 'down';
+                return 'normal';
+            }
+
+            // ==================== INTRO ====================
+            function showIntro() {
+                state.phase = 'intro';
+                state.totalPoints = 0;
+                state.maxPossiblePoints = 0;
+                state.task1Points = 0;
+                state.task2Points = 0;
+                state.task3Points = 0;
+                state.task4Points = 0;
+                state.task1ScaffoldingShown = false;
+                updateProgress(0, 1);
+                clearContent();
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>📘 Was ist das <em>futur composé</em>?</h3>
+                    <p style="font-size:0.9rem;color:#5a4a3a;line-height:1.5;">
+                        Das <strong>futur composé</strong> (auch: <em>futur proche</em>) ist die <strong>nahe Zukunft</strong> im Französischen.
+                        Es wird gebildet mit einer konjugierten Form von <strong>« aller »</strong> (gehen) + <strong>Infinitiv</strong> des Verbs.
+                    </p>
+                    <p style="font-size:0.85rem;color:#6b6b6b;margin-top:4px;">
+                        🇫🇷 <strong>je vais</strong> + Infinitiv &nbsp;=&nbsp; 🇩🇪 <strong>ich werde</strong> + Infinitiv<br>
+                        Beispiel: <em>Je vais <u>chercher</u> mon livre.</em> = Ich werde mein Buch suchen.
+                    </p>
+                    <p style="font-size:0.8rem;color:#b8783e;margin-top:6px;">🧠 Merke: <strong>aller</strong> konjugieren, das zweite Verb bleibt <strong>Infinitiv</strong>!</p>
+                    <button class="btn btn-primary btn-big" id="btnStart" style="margin-top:12px;width:100%;">🚀 Start – Los geht's!</button>`;
+                contentArea.appendChild(card);
+                document.getElementById('btnStart').addEventListener('click', startTask1);
+            }
+
+            // ==================== TASK 1 ====================
+            const task1Sentences = [
+                { text: ['Je', 'vais', 'chercher', 'mes', 'clés.'], correctIndex: 1 },
+                { text: ['Tu', 'vas', 'arriver', 'à', "l'école."], correctIndex: 1 },
+                { text: ['Elle', 'va', 'trouver', 'la', 'solution.'], correctIndex: 1 },
+                { text: ['Nous', 'allons', 'habiter', 'à', 'Paris.'], correctIndex: 1 },
+                { text: ['Vous', 'allez', 'travailler', 'ensemble.'], correctIndex: 1 },
+                { text: ['Ils', 'vont', 'manger', 'au', 'restaurant.'], correctIndex: 1 },
+            ];
+
+            function startTask1() {
+                state.phase = 'task1';
+                state.task1Points = 0;
+                state.task1ScaffoldingShown = false;
+                updateProgress(state.totalPoints, state.maxPossiblePoints + 6);
+                clearContent();
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>🎯 Aufgabe 1: Finde die <em>aller</em>-Form!</h3>
+                    <p style="font-size:0.85rem;color:#6b6b6b;">Klicke in jedem Satz auf die <strong>konjugierte Form von « aller »</strong>.</p>
+                    <div id="task1SentencesContainer"></div>
+                    <p id="task1ScoreDisplay" style="text-align:center;font-weight:700;color:#d0793e;margin-top:8px;">✅ 0 / 6</p>
+                    <button class="btn btn-primary" id="btnTask1Done" style="width:100%;margin-top:8px;" disabled>Weiter ➡️</button>`;
+                contentArea.appendChild(card);
+                const container = document.getElementById('task1SentencesContainer');
+                const scoreDisplay = document.getElementById('task1ScoreDisplay');
+                const btnDone = document.getElementById('btnTask1Done');
+                let answeredCount = 0;
+                task1Sentences.forEach((sent, idx) => {
+                    const sentDiv = document.createElement('div');
+                    sentDiv.style.cssText =
+                        'margin:8px 0;padding:8px;background:#fffdf7;border-radius:12px;border:1px solid #e8dccd;';
+                    sent.text.forEach((word, wIdx) => {
+                        const span = document.createElement('span');
+                        span.className = 'sentence-word';
+                        span.textContent = word;
+                        span.dataset.isCorrect = (wIdx === sent.correctIndex) ? '1' : '0';
+                        span.addEventListener('click', function() {
+                            if (span.classList.contains('selected-correct') || span.classList
+                                .contains('selected-wrong')) return;
+                            const isCorrect = (wIdx === sent.correctIndex);
+                            if (isCorrect) {
+                                span.classList.add('selected-correct');
+                                state.task1Points++;
+                                state.totalPoints++;
+                                answeredCount++;
+                                showToast('✅ Super! Das ist die Form von « aller »!', 'success');
+                            } else {
+                                span.classList.add('selected-wrong');
+                                answeredCount++;
+                                showToast('❌ Das ist nicht die Form von « aller »…', 'error');
+                                setTimeout(() => {
+                                    const correctSpan = sentDiv.querySelector(
+                                        `[data-word-idx="${sent.correctIndex}"]`);
+                                    if (!correctSpan) {
+                                        const allSpans = sentDiv.querySelectorAll('.sentence-word');
+                                        allSpans.forEach(s => { if (s.dataset.isCorrect ===
+                                                '1') s.classList.add(
+                                                'selected-correct'); });
+                                    }
+                                }, 500);
+                            }
+                            sentDiv.querySelectorAll('.sentence-word').forEach(s => s.classList.add(
+                                'disabled'));
+                            scoreDisplay.textContent = '✅ ' + state.task1Points + ' / 6';
+                            updateProgress(state.totalPoints, state.maxPossiblePoints);
+                            if (answeredCount >= 6) { btnDone.disabled = false;
+                                btnDone.style.animation = 'pulse 1s ease infinite'; }
+                        });
+                        sentDiv.appendChild(span);
+                    });
+                    container.appendChild(sentDiv);
+                });
+                btnDone.addEventListener('click', finishTask1);
+                scrollToBottom();
+            }
+
+            function finishTask1() {
+                if (state.task1Points < 4 && !state.task1ScaffoldingShown) {
+                    state.task1ScaffoldingShown = true;
+                    showTask1Scaffolding();
+                } else { proceedToTask2(); }
+            }
+
+            function showTask1Scaffolding() {
+                clearContent();
+                const card = document.createElement('div');
+                card.className = 'card scaffolding-box';
+                card.innerHTML = `
+                    <h4>📋 Kleine Wiederholung: Die Konjugation von « aller »</h4>
+                    <table><tr><th>Person</th><th>« aller »</th><th>🇩🇪 « werden »</th></tr>
+                    <tr><td>je</td><td><strong>vais</strong></td><td>ich werde</td></tr>
+                    <tr><td>tu</td><td><strong>vas</strong></td><td>du wirst</td></tr>
+                    <tr><td>il/elle/on</td><td><strong>va</strong></td><td>er/sie/man wird</td></tr>
+                    <tr><td>nous</td><td><strong>allons</strong></td><td>wir werden</td></tr>
+                    <tr><td>vous</td><td><strong>allez</strong></td><td>ihr werdet / Sie werden</td></tr>
+                    <tr><td>ils/elles</td><td><strong>vont</strong></td><td>sie werden</td></tr></table>
+                    <p style="font-size:0.85rem;color:#5a4a3a;margin-top:8px;">🔑 <strong>Vorgehen:</strong> Konjugiere « aller » passend zur Person + hänge den <strong>Infinitiv</strong> an.<br><em>Beispiel: je <u>vais</u> + <u>chercher</u> = ich werde suchen</em></p>
+                    <button class="btn btn-primary" id="btnAfterScaffolding1" style="width:100%;margin-top:10px;">Verstanden! Weiter ➡️</button>`;
+                contentArea.appendChild(card);
+                document.getElementById('btnAfterScaffolding1').addEventListener('click', proceedToTask2);
+                scrollToBottom();
+            }
+
+            // ==================== TASK 2 ====================
+            const task2Questions = [
+                { de: 'Ich werde meine Schlüssel suchen.', help: 'chercher = suchen, mes clés = meine Schlüssel',
+                    correct: 'Je vais chercher mes clés.',
+                    options: ['Tu vas chercher mes clés.', 'Je vais chercher mes clés.',
+                        'Je vais cherche mes clés.', 'Je cherche mes clés.'
+                    ], present: 'Je cherche mes clés.' },
+                { de: 'Du wirst um 8 Uhr ankommen.', help: 'arriver = ankommen, à 8 heures = um 8 Uhr',
+                    correct: 'Tu vas arriver à 8 heures.',
+                    options: ['Tu vas arriver à 8 heures.', 'Tu va arriver à 8 heures.',
+                        'Tu vais arriver à 8 heures.', 'Tu arrives à 8 heures.'
+                    ], present: 'Tu arrives à 8 heures.' },
+                { de: 'Wir werden in Berlin wohnen.', help: 'habiter = wohnen, à Berlin = in Berlin',
+                    correct: 'Nous allons habiter à Berlin.',
+                    options: ['Nous allons habite à Berlin.', 'Nous allons habiter à Berlin.',
+                        'Nous va habiter à Berlin.', 'Nous avons habiter à Berlin.'
+                    ], present: 'Nous habitons à Berlin.' },
+                { de: 'Sie (Plural) werden im Garten spielen.', help: 'jouer = spielen, dans le jardin = im Garten',
+                    correct: 'Ils vont jouer dans le jardin.',
+                    options: ['Ils vont joue dans le jardin.', 'Ils vont jouer dans le jardin.',
+                        'Ils va jouer dans le jardin.', 'Ils jouent dans le jardin.'
+                    ], present: 'Ils jouent dans le jardin.' },
+                { de: 'Ihr werdet Musik hören.', help: 'écouter = hören, de la musique = Musik',
+                    correct: 'Vous allez écouter de la musique.',
+                    options: ['Vous allez écoutons de la musique.', 'Vous va écouter de la musique.',
+                        'Vous allez écouter de la musique.', 'Vous écoutez de la musique.'
+                    ], present: 'Vous écoutez de la musique.' },
+                { de: 'Er wird Französisch sprechen.', help: 'parler = sprechen, français = Französisch',
+                    correct: 'Il va parler français.',
+                    options: ['Il va parle français.', 'Il vas parler français.', 'Il va parler français.',
+                        'Il parle français.'
+                    ], present: 'Il parle français.' },
+            ];
+
+            const task2QuestionsUp = [
+                { de: 'Ich werde meine Schlüssel suchen.', help: 'chercher = suchen',
+                    futur: 'Je vais chercher mes clés.', present: 'Je cherche mes clés.', correct: 'futur' },
+                { de: 'Du wohnst in Paris.', help: 'habiter = wohnen', futur: 'Tu vas habiter à Paris.',
+                    present: 'Tu habites à Paris.', correct: 'présent' },
+                { de: 'Wir werden um 8 Uhr ankommen.', help: 'arriver = ankommen',
+                    futur: 'Nous allons arriver à 8 heures.', present: 'Nous arrivons à 8 heures.',
+                    correct: 'futur' },
+                { de: 'Sie essen im Restaurant.', help: 'manger = essen', futur: 'Ils vont manger au restaurant.',
+                    present: 'Ils mangent au restaurant.', correct: 'présent' },
+                { de: 'Ihr werdet im Garten spielen.', help: 'jouer = spielen',
+                    futur: 'Vous allez jouer dans le jardin.', present: 'Vous jouez dans le jardin.',
+                    correct: 'futur' },
+                { de: 'Er spricht Französisch.', help: 'parler = sprechen', futur: 'Il va parler français.',
+                    present: 'Il parle français.', correct: 'présent' },
+            ];
+
+            function proceedToTask2() {
+                state.phase = 'task2';
+                state.task2Points = 0;
+                state.task2QuestionIndex = 0;
+                state.task2ConsecutiveErrors = 0;
+                state.task2ScaffoldingActive = false;
+                state.task2CurrentQuestionAttempts = 0;
+                const diff = getDifferenzierungLevel();
+                const maxPts = 6;
+                updateProgress(state.totalPoints, state.maxPossiblePoints + maxPts);
+                clearContent();
+                if (diff === 'up') {
+                    renderTask2Up();
+                } else {
+                    renderTask2Normal();
+                }
+            }
+
+            function renderTask2Normal() {
+                const q = task2Questions[state.task2QuestionIndex];
+                clearContent();
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>📝 Aufgabe 2: Übersetze (Single Choice)</h3>
+                    <p style="font-weight:700;color:#3d3d3d;font-size:1rem;">🇩🇪 ${q.de}</p>
+                    <p style="font-size:0.8rem;color:#b8783e;">📖 Vokabelhilfe: ${q.help}</p>
+                    <div id="task2Options"></div>
+                    <div id="task2ScaffoldContainer"></div>
+                    <p style="text-align:center;color:#6b6b6b;margin-top:8px;">Frage ${state.task2QuestionIndex+1} / 6</p>`;
+                contentArea.appendChild(card);
+                const optContainer = document.getElementById('task2Options');
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = opt;
+                    btn.addEventListener('click', () => handleTask2Answer(opt, q, btn, optContainer));
+                    optContainer.appendChild(btn);
+                });
+                scrollToBottom();
+            }
+
+            function handleTask2Answer(selected, q, clickedBtn, optContainer) {
+                if (clickedBtn.classList.contains('correct') || clickedBtn.classList.contains('wrong')) return;
+                const isCorrect = (selected === q.correct);
+                if (isCorrect) {
+                    let points = 1;
+                    if (state.task2ScaffoldingActive) points = 0.5;
+                    state.task2Points += points;
+                    state.totalPoints += points;
+                    clickedBtn.classList.add('correct');
+                    showToast('✅ Richtig! (+' + points + ' Punkt)', 'success');
+                    state.task2ConsecutiveErrors = 0;
+                    state.task2ScaffoldingActive = false;
+                    disableAllOptions(optContainer);
+                    setTimeout(() => advanceTask2(), 1200);
+                } else {
+                    clickedBtn.classList.add('wrong');
+                    state.task2ConsecutiveErrors++;
+                    state.task2CurrentQuestionAttempts++;
+                    showToast('❌ Leider falsch…', 'error');
+                    if (state.task2ConsecutiveErrors >= 2 && !state.task2ScaffoldingActive) {
+                        state.task2ScaffoldingActive = true;
+                        showTask2Scaffolding(q);
+                    }
+                }
+                updateProgress(state.totalPoints, state.maxPossiblePoints);
+            }
+
+            function disableAllOptions(container) {
+                container.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+            }
+
+            function showTask2Scaffolding(q) {
+                const scaffoldDiv = document.getElementById('task2ScaffoldContainer');
+                if (!scaffoldDiv) return;
+                scaffoldDiv.innerHTML = `
+                    <div class="scaffolding-box">
+                        <h4>💡 Hilfe für diese Aufgabe</h4>
+                        <p>Der Satz im <strong>présent</strong> lautet: <em>${q.present}</em></p>
+                        <p style="font-size:0.8rem;">🔍 Fehler-Analyse der Optionen:</p>
+                        <ul style="font-size:0.78rem;color:#5a4a3a;padding-left:16px;">
+                            <li>Falsches Personalpronomen? → Schau auf die Person!</li>
+                            <li>Falsche/fehlende « aller »-Konjugation? → Prüfe je/tu/il/nous/vous/ils!</li>
+                            <li>Konjugierte Form statt Infinitiv? → Nach « aller » kommt immer der Infinitiv!</li>
+                        </ul>
+                        <p style="font-size:0.75rem;color:#e76f51;">⚠️ Bei richtiger Antwort jetzt nur noch 0,5 Punkte.</p>
+                    </div>`;
+                scrollToBottom();
+            }
+
+            function advanceTask2() {
+                state.task2QuestionIndex++;
+                state.task2CurrentQuestionAttempts = 0;
+                if (state.task2QuestionIndex >= 6) {
+                    finishTask2();
+                } else {
+                    const diff = getDifferenzierungLevel();
+                    if (diff === 'up') renderTask2Up();
+                    else renderTask2Normal();
+                }
+            }
+
+            function renderTask2Up() {
+                const q = task2QuestionsUp[state.task2QuestionIndex];
+                clearContent();
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>📝 Aufgabe 2+: Présent oder Futur composé?</h3>
+                    <p style="font-weight:700;color:#3d3d3d;font-size:1rem;">🇩🇪 ${q.de}</p>
+                    <p style="font-size:0.8rem;color:#b8783e;">📖 Vokabelhilfe: ${q.help}</p>
+                    <p style="font-size:0.85rem;color:#6b6b6b;">Welcher französische Satz passt? Ist es <strong>présent</strong> oder <strong>futur composé</strong>?</p>
+                    <div id="task2OptionsUp"></div>
+                    <p style="text-align:center;color:#6b6b6b;margin-top:8px;">Frage ${state.task2QuestionIndex+1} / 6</p>`;
+                contentArea.appendChild(card);
+                const optContainer = document.getElementById('task2OptionsUp');
+                const opts = [
+                    { text: q.present, type: 'présent' },
+                    { text: q.futur, type: 'futur' },
+                ];
+                // Shuffle
+                opts.sort(() => Math.random() - 0.5);
+                opts.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = opt.text;
+                    btn.addEventListener('click', () => {
+                        if (btn.classList.contains('correct') || btn.classList.contains('wrong'))
+                            return;
+                        const isCorrect = (opt.type === q.correct);
+                        if (isCorrect) {
+                            btn.classList.add('correct');
+                            state.task2Points += 1;
+                            state.totalPoints += 1;
+                            showToast('✅ Richtig! (+1 Punkt)', 'success');
+                            disableAllOptions(optContainer);
+                            setTimeout(() => advanceTask2(), 1200);
+                        } else {
+                            btn.classList.add('wrong');
+                            showToast('❌ Falsch…', 'error');
+                        }
+                        updateProgress(state.totalPoints, state.maxPossiblePoints);
+                    });
+                    optContainer.appendChild(btn);
+                });
+                scrollToBottom();
+            }
+
+            function finishTask2() {
+                proceedToTask3();
+            }
+
+            // ==================== TASK 3 ====================
+            const task3Data = {
+                down: [
+                    { text: 'Je cherche mon livre.', type: 'présent', de: 'Ich suche mein Buch.' },
+                    { text: 'Tu vas arriver.', type: 'futur', de: 'Du wirst ankommen.' },
+                    { text: 'Nous allons manger.', type: 'futur', de: 'Wir werden essen.' },
+                    { text: 'Elle habite à Paris.', type: 'présent', de: 'Sie wohnt in Paris.' },
+                    { text: 'Vous allez jouer.', type: 'futur', de: 'Ihr werdet spielen.' },
+                    { text: 'Ils écoutent.', type: 'présent', de: 'Sie hören zu.' },
+                ],
+                normal: [
+                    { text: 'Je cherche mon livre.', type: 'présent' },
+                    { text: 'Tu vas arriver.', type: 'futur' },
+                    { text: 'Nous allons manger.', type: 'futur' },
+                    { text: 'Elle habite à Paris.', type: 'présent' },
+                    { text: 'Vous allez jouer.', type: 'futur' },
+                    { text: 'Ils écoutent de la musique.', type: 'présent' },
+                ],
+                up: [
+                    { text: 'Je cherche mon livre.', type: 'présent' },
+                    { text: 'Tu vas arriver.', type: 'futur' },
+                    { text: 'Nous avons mangé.', type: 'unknown' },
+                    { text: 'Elle habite à Paris.', type: 'présent' },
+                    { text: 'Vous allez jouer.', type: 'futur' },
+                    { text: 'Ils ont écouté.', type: 'unknown' },
+                ],
+            };
+
+            function proceedToTask3() {
+                state.phase = 'task3';
+                state.task3Points = 0;
+                const diff = getDifferenzierungLevel();
+                let items;
+                if (diff === 'down') items = [...task3Data.down];
+                else if (diff === 'up') items = [...task3Data.up];
+                else items = [...task3Data.normal];
+                state.task3Items = items;
+                state.task3Placed = {};
+                state.task3SelectedTag = null;
+                const maxPts = items.length;
+                updateProgress(state.totalPoints, state.maxPossiblePoints + maxPts);
+                clearContent();
+                const card = document.createElement('div');
+                card.className = 'card';
+                let zoneHTML = '';
+                if (diff === 'up') {
+                    zoneHTML = `
+                        <div class="drop-zone" id="zonePresent" data-zone="présent"><h4>📌 Présent</h4></div>
+                        <div class="drop-zone" id="zoneFutur" data-zone="futur"><h4>🚀 Futur composé</h4></div>
+                        <div class="drop-zone" id="zoneUnknown" data-zone="unknown"><h4>❓ Unbekannte Zeitform</h4></div>`;
+                } else {
+                    zoneHTML = `
+                        <div class="drop-zone" id="zonePresent" data-zone="présent"><h4>📌 Présent</h4></div>
+                        <div class="drop-zone" id="zoneFutur" data-zone="futur"><h4>🚀 Futur composé</h4></div>`;
+                }
+                card.innerHTML = `
+                    <h3>🗂️ Aufgabe 3: Sortiere die Sätze</h3>
+                    <p style="font-size:0.85rem;color:#6b6b6b;">Klicke einen Satz an und dann die passende Zone.</p>
+                    <div id="task3Tags" style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;"></div>
+                    ${zoneHTML}
+                    <p id="task3Score" style="text-align:center;font-weight:700;color:#d0793e;">✅ 0 / ${items.length}</p>
+                    <button class="btn btn-primary" id="btnTask3Done" style="width:100%;margin-top:8px;" disabled>Weiter ➡️</button>`;
+                contentArea.appendChild(card);
+                const tagsContainer = document.getElementById('task3Tags');
+                items.forEach((item, idx) => {
+                    const tag = document.createElement('span');
+                    tag.className = 'tag-item';
+                    tag.textContent = item.text + (item.de ? ' (' + item.de + ')' : '');
+                    tag.dataset.index = idx;
+                    tag.dataset.type = item.type;
+                    tag.addEventListener('click', () => selectTag3(tag, idx));
+                    tagsContainer.appendChild(tag);
+                });
+                document.querySelectorAll('.drop-zone').forEach(zone => {
+                    zone.addEventListener('click', () => placeTag3(zone));
+                });
+                document.getElementById('btnTask3Done').addEventListener('click', finishTask3);
+                scrollToBottom();
+            }
+
+            function selectTag3(tag, idx) {
+                if (state.task3Placed[idx]) return;
+                document.querySelectorAll('#task3Tags .tag-item').forEach(t => t.classList.remove('selected-tag'));
+                tag.classList.add('selected-tag');
+                state.task3SelectedTag = idx;
+            }
+
+            function placeTag3(zone) {
+                if (state.task3SelectedTag === null) return;
+                const idx = state.task3SelectedTag;
+                const tag = document.querySelector(`#task3Tags .tag-item[data-index="${idx}"]`);
+                if (!tag || state.task3Placed[idx]) return;
+                const zoneType = zone.dataset.zone;
+                const item = state.task3Items[idx];
+                const isCorrect = (item.type === zoneType);
+                state.task3Placed[idx] = { zone: zoneType, correct: isCorrect };
+                if (isCorrect) {
+                    state.task3Points++;
+                    state.totalPoints++;
+                    tag.classList.add('correct-place');
+                    showToast('✅ Richtig zugeordnet!', 'success');
+                } else {
+                    tag.classList.add('wrong-place');
+                    showToast('❌ Falsche Zone…', 'error');
+                }
+                tag.classList.add('placed');
+                tag.classList.remove('selected-tag');
+                zone.appendChild(tag);
+                state.task3SelectedTag = null;
+                document.getElementById('task3Score').textContent = '✅ ' + state.task3Points + ' / ' + state.task3Items
+                    .length;
+                updateProgress(state.totalPoints, state.maxPossiblePoints);
+                if (Object.keys(state.task3Placed).length >= state.task3Items.length) {
+                    document.getElementById('btnTask3Done').disabled = false;
+                }
+            }
+
+            function finishTask3() {
+                proceedToTask4();
+            }
+
+            // ==================== TASK 4 ====================
+            function proceedToTask4() {
+                state.phase = 'task4';
+                state.task4Points = 0;
+                const diff = getDifferenzierungLevel();
+                const maxPts = 4;
+                updateProgress(state.totalPoints, state.maxPossiblePoints + maxPts);
+                clearContent();
+                if (diff === 'up') renderTask4Up();
+                else if (diff === 'down') renderTask4Down();
+                else renderTask4Normal();
+            }
+
+            // Task 4 Up: Übersetzen
+            const task4UpSentences = [
+                { de: 'Ich werde meine Katze suchen.', help: 'chercher = suchen, mon chat = meine Katze',
+                    answer: 'Je vais chercher mon chat.' },
+                { de: 'Wir werden um 9 Uhr ankommen.', help: 'arriver = ankommen, à 9 heures = um 9 Uhr',
+                    answer: 'Nous allons arriver à 9 heures.' },
+                { de: 'Sie (Pl.) werden die Lösung finden.', help: 'trouver = finden, la solution = die Lösung',
+                    answer: 'Ils vont trouver la solution.' },
+                { de: 'Du wirst im Garten arbeiten.', help: 'travailler = arbeiten, dans le jardin = im Garten',
+                    answer: 'Tu vas travailler dans le jardin.' },
+            ];
+
+            function renderTask4Up() {
+                state.task4Items = task4UpSentences;
+                let html = `
+                    <div class="card">
+                        <h3>✍️ Aufgabe 4+: Übersetze ins Französische!</h3>
+                        <p style="font-size:0.85rem;color:#6b6b6b;">Schreibe den ganzen Satz im <strong>futur composé</strong>.</p>`;
+                task4UpSentences.forEach((s, i) => {
+                    html += `
+                        <div style="margin:10px 0;padding:8px;background:#fffdf7;border-radius:12px;border:1px solid #e8dccd;">
+                            <p style="font-weight:700;">🇩🇪 ${s.de}</p>
+                            <p style="font-size:0.78rem;color:#b8783e;">📖 ${s.help}</p>
+                            <input type="text" class="input-inline" id="task4Input${i}" style="width:100%;max-width:350px;text-align:left;padding:8px 14px;" placeholder="Französischer Satz...">
+                            <span id="task4Feedback${i}" style="margin-left:8px;font-weight:700;"></span>
+                        </div>`;
+                });
+                html += `
+                        <p id="task4Score" style="text-align:center;font-weight:700;color:#d0793e;">✅ 0 / ${task4UpSentences.length}</p>
+                        <button class="btn btn-primary" id="btnTask4Check" style="width:100%;">✅ Überprüfen</button>
+                        <button class="btn btn-success hidden" id="btnTask4Done" style="width:100%;margin-top:6px;">Weiter ➡️</button>
+                    </div>`;
+                contentArea.innerHTML = html;
+                document.getElementById('btnTask4Check').addEventListener('click', checkTask4Up);
+                document.getElementById('btnTask4Done').addEventListener('click', showResult);
+                scrollToBottom();
+            }
+
+            function checkTask4Up() {
+                let correctCount = 0;
+                task4UpSentences.forEach((s, i) => {
+                    const input = document.getElementById('task4Input' + i);
+                    const fb = document.getElementById('task4Feedback' + i);
+                    const userAnswer = input.value.trim();
+                    const normalizedUser = userAnswer.replace(/\s+/g, ' ').replace(/[.!?]+ $ /, '').toLowerCase();
+                    const normalizedCorrect = s.answer.replace(/\s+/g, ' ').replace(/[.!?]+ $ /, '').toLowerCase();
+                    if (normalizedUser === normalizedCorrect) {
+                        input.classList.add('correct');
+                        input.classList.remove('wrong');
+                        fb.textContent = '✅';
+                        fb.style.color = '#2d6a4f';
+                        correctCount++;
+                    } else {
+                        input.classList.add('wrong');
+                        input.classList.remove('correct');
+                        fb.textContent = '❌ Richtig: ' + s.answer;
+                        fb.style.color = '#a33d2a';
+                    }
+                });
+                state.task4Points = correctCount;
+                state.totalPoints += correctCount;
+                updateProgress(state.totalPoints, state.maxPossiblePoints);
+                document.getElementById('task4Score').textContent = '✅ ' + correctCount + ' / ' + task4UpSentences.length;
+                document.getElementById('btnTask4Check').classList.add('hidden');
+                document.getElementById('btnTask4Done').classList.remove('hidden');
+                showToast(correctCount >= 3 ? '🌟 Toll gemacht!' : '💪 Weiter so!', correctCount >= 3 ? 'success' : 'info');
+            }
+
+            // Task 4 Normal: Lückensätze mit Input + Drag-and-drop Infinitiv
+            const task4NormalSentences = [
+                { parts: ['Je', '___', '___', 'mes', 'clés.'], gaps: [{ idx: 1, type: 'aller', correct: 'vais' }, { idx: 2,
+                        type: 'infinitif', correct: 'chercher'
+                    }], de: 'Ich werde meine Schlüssel suchen.', infinitif: 'chercher' },
+                { parts: ['Nous', '___', '___', 'au', 'restaurant.'], gaps: [{ idx: 1, type: 'aller', correct: 'allons' },
+                    { idx: 2, type: 'infinitif', correct: 'manger' }], de: 'Wir werden im Restaurant essen.',
+                infinitif: 'manger' },
+                { parts: ['Tu', '___', '___', 'de', 'la', 'musique.'], gaps: [{ idx: 1, type: 'aller', correct: 'vas' },
+                    { idx: 2, type: 'infinitif', correct: 'écouter' }], de: 'Du wirst Musik hören.', infinitif: 'écouter' },
+                { parts: ['Elle', '___', '___', 'français.'], gaps: [{ idx: 1, type: 'aller', correct: 'va' }, { idx: 2,
+                        type: 'infinitif', correct: 'parler' }], de: 'Sie wird Französisch sprechen.',
+                infinitif: 'parler' },
+            ];
+
+            function renderTask4Normal() {
+                state.task4Items = task4NormalSentences;
+                let html = `
+                    <div class="card">
+                        <h3>🔧 Aufgabe 4: Fülle die Lücken</h3>
+                        <p style="font-size:0.85rem;color:#6b6b6b;">Trage die <strong>aller</strong>-Form ein und ziehe den <strong>Infinitiv</strong> in die richtige Lücke.</p>
+                        <div id="task4DragSource" style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;padding:8px;background:#f9f3e8;border-radius:12px;">
+                            <span style="font-weight:700;color:#b8783e;">📦 Infinitive zum Ziehen:</span>`;
+                const infinitifs = [...new Set(task4NormalSentences.map(s => s.infinitif))];
+                infinitifs.forEach(inf => {
+                    html +=
+                        `<span class="tag-item task4-drag-inf" data-inf="${inf}" draggable="false" style="cursor:grab;">${inf}</span>`;
+                });
+                html += `</div><div id="task4Sentences"></div>
+                        <p id="task4Score" style="text-align:center;font-weight:700;color:#d0793e;">✅ 0 / 4</p>
+                        <button class="btn btn-primary" id="btnTask4Check" style="width:100%;">✅ Überprüfen</button>
+                        <button class="btn btn-success hidden" id="btnTask4Done" style="width:100%;margin-top:6px;">Weiter ➡️</button>
+                    </div>`;
+                contentArea.innerHTML = html;
+                const sentencesDiv = document.getElementById('task4Sentences');
+                task4NormalSentences.forEach((s, sIdx) => {
+                    const div = document.createElement('div');
+                    div.className = 'sentence-line';
+                    div.style.cssText =
+                        'display:flex;align-items:center;flex-wrap:wrap;gap:2px;padding:8px;';
+                    s.parts.forEach((part, pIdx) => {
+                        if (part === '___') {
+                            const gapInfo = s.gaps.find(g => g.idx === pIdx);
+                            if (gapInfo && gapInfo.type === 'aller') {
+                                const input = document.createElement('input');
+                                input.type = 'text';
+                                input.className = 'input-inline';
+                                input.style.width = '65px';
+                                input.dataset.sentenceIdx = sIdx;
+                                input.dataset.gapIdx = pIdx;
+                                input.dataset.correct = gapInfo.correct;
+                                input.placeholder = 'aller';
+                                div.appendChild(input);
+                            } else if (gapInfo && gapInfo.type === 'infinitif') {
+                                const slot = document.createElement('span');
+                                slot.className = 'gap-slot';
+                                slot.dataset.sentenceIdx = sIdx;
+                                slot.dataset.gapIdx = pIdx;
+                                slot.dataset.correct = gapInfo.correct;
+                                slot.textContent = '?';
+                                slot.addEventListener('click', () => selectGapSlot(slot));
+                                div.appendChild(slot);
+                            }
+                        } else {
+                            const span = document.createElement('span');
+                            span.textContent = part;
+                            span.style.cssText = 'padding:2px 4px;';
+                            div.appendChild(span);
+                        }
+                    });
+                    const deSpan = document.createElement('span');
+                    deSpan.textContent = ' (' + s.de + ')';
+                    deSpan.style.cssText = 'font-size:0.75rem;color:#6b6b6b;margin-left:6px;';
+                    div.appendChild(deSpan);
+                    sentencesDiv.appendChild(div);
+                });
+                // Drag-and-drop für Infinitive
+                state.task4SelectedTag = null;
+                state.task4GapFilled = {};
+                document.querySelectorAll('.task4-drag-inf').forEach(tag => {
+                    tag.addEventListener('click', function() {
+                        document.querySelectorAll('.task4-drag-inf').forEach(t => t.classList
+                            .remove('selected-tag'));
+                        tag.classList.add('selected-tag');
+                        state.task4SelectedTag = tag.dataset.inf;
+                    });
+                });
+                document.getElementById('btnTask4Check').addEventListener('click', checkTask4Normal);
+                document.getElementById('btnTask4Done').addEventListener('click', showResult);
+                scrollToBottom();
+            }
+
+            function selectGapSlot(slot) {
+                if (slot.classList.contains('filled')) return;
+                if (!state.task4SelectedTag) {
+                    showToast('👆 Wähle zuerst einen Infinitiv aus!', 'info');
+                    return;
+                }
+                document.querySelectorAll('.gap-slot').forEach(s => s.classList.remove('active-slot'));
+                slot.classList.add('active-slot');
+                slot.textContent = state.task4SelectedTag;
+                slot.dataset.placed = state.task4SelectedTag;
+                const sIdx = slot.dataset.sentenceIdx;
+                const gIdx = slot.dataset.gapIdx;
+                if (!state.task4GapFilled[sIdx]) state.task4GapFilled[sIdx] = {};
+                state.task4GapFilled[sIdx][gIdx] = state.task4SelectedTag;
+                slot.classList.add('filled');
+                state.task4SelectedTag = null;
+                document.querySelectorAll('.task4-drag-inf').forEach(t => t.classList.remove('selected-tag'));
+            }
+
+            function checkTask4Normal() {
+                let correctCount = 0;
+                task4NormalSentences.forEach((s, sIdx) => {
+                    let allCorrect = true;
+                    s.gaps.forEach(gap => {
+                        if (gap.type === 'aller') {
+                            const input = document.querySelector(
+                                `input[data-sentence-idx="${sIdx}"][data-gap-idx="${gap.idx}"]`);
+                            if (input) {
+                                const val = input.value.trim().toLowerCase();
+                                if (val === gap.correct) {
+                                    input.classList.add('correct');
+                                    input.classList.remove('wrong');
+                                } else {
+                                    input.classList.add('wrong');
+                                    input.classList.remove('correct');
+                                    allCorrect = false;
+                                }
+                            }
+                        } else if (gap.type === 'infinitif') {
+                            const placed = state.task4GapFilled[sIdx] && state.task4GapFilled[sIdx][gap.idx];
+                            const slot = document.querySelector(
+                                `span.gap-slot[data-sentence-idx="${sIdx}"][data-gap-idx="${gap.idx}"]`);
+                            if (slot && placed === gap.correct) {
+                                slot.classList.add('correct-place');
+                                slot.classList.remove('wrong-place');
+                            } else {
+                                if (slot) slot.classList.add('wrong-place');
+                                allCorrect = false;
+                            }
+                        }
+                    });
+                    if (allCorrect) correctCount++;
+                });
+                state.task4Points = correctCount;
+                state.totalPoints += correctCount;
+                updateProgress(state.totalPoints, state.maxPossiblePoints);
+                document.getElementById('task4Score').textContent = '✅ ' + correctCount + ' / 4';
+                document.getElementById('btnTask4Check').classList.add('hidden');
+                document.getElementById('btnTask4Done').classList.remove('hidden');
+                showToast(correctCount >= 3 ? '🌟 Super!' : 'Halte durch!', correctCount >= 3 ? 'success' : 'info');
+            }
+
+            // Task 4 Down: Drag-and-drop beider Elemente (nur 2 Lücken)
+            const task4DownSentences = [
+                { text: 'Je ___ ___.', de: 'Ich werde suchen.', aller: 'vais', infinitif: 'chercher' },
+                { text: 'Nous ___ ___.', de: 'Wir werden essen.', aller: 'allons', infinitif: 'manger' },
+                { text: 'Tu ___ ___.', de: 'Du wirst hören.', aller: 'vas', infinitif: 'écouter' },
+                { text: 'Elle ___ ___.', de: 'Sie wird sprechen.', aller: 'va', infinitif: 'parler' },
+            ];
+
+            function renderTask4Down() {
+                state.task4Items = task4DownSentences;
+                const allerForms = ['vais', 'vas', 'va', 'allons', 'allez', 'vont'];
+                const infs = ['chercher', 'manger', 'écouter', 'parler'];
+                let html = `
+                    <div class="card">
+                        <h3>🧩 Aufgabe 4: Ziehe die Wörter in die Lücken</h3>
+                        <p style="font-size:0.85rem;color:#6b6b6b;">Ziehe die passende <strong>aller</strong>-Form und den <strong>Infinitiv</strong> in die Sätze.</p>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;padding:8px;background:#f9f3e8;border-radius:12px;">
+                            <span style="font-weight:700;color:#b8783e;width:100%;">📦 aller-Formen:</span>`;
+                allerForms.forEach(f => {
+                    html +=
+                        `<span class="tag-item task4-down-drag" data-word="${f}" data-type="aller" style="cursor:grab;">${f}</span>`;
+                });
+                html += `<span style="font-weight:700;color:#b8783e;width:100%;margin-top:4px;">📦 Infinitive:</span>`;
+                infs.forEach(f => {
+                    html +=
+                        `<span class="tag-item task4-down-drag" data-word="${f}" data-type="inf" style="cursor:grab;">${f}</span>`;
+                });
+                        <div id="task4DownSentences"></div>
+                        <p id="task4Score" style="text-align:center;font-weight:700;color:#d0793e;">✅ 0 / 4</p>
+                        <button class="btn btn-primary" id="btnTask4DownCheck" style="width:100%;">✅ Überprüfen</button>
+                        <button class="btn btn-success hidden" id="btnTask4DownDone" style="width:100%;margin-top:6px;">Weiter ➡️</button>
+                    </div>`;
+                contentArea.innerHTML = html;
+                const sentencesDiv = document.getElementById('task4DownSentences');
+                task4DownSentences.forEach((s, sIdx) => {
+                    const div = document.createElement('div');
+                    div.className = 'sentence-line';
+                    div.style.cssText = 'display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding:8px;';
+                    const parts = s.text.split(' ');
+                    parts.forEach((part, pIdx) => {
+                        if (part === '___') {
+                            const slot = document.createElement('span');
+                            slot.className = 'gap-slot';
+                            slot.dataset.sentenceIdx = sIdx;
+                            slot.dataset.gapIdx = pIdx;
+                            slot.dataset.accepts = pIdx === 0 ? 'aller' : 'inf';
+                            slot.textContent = '?';
+                            slot.addEventListener('click', () => selectDownSlot(slot));
+                            div.appendChild(slot);
+                        } else {
+                            const span = document.createElement('span');
+                            span.textContent = part;
+                            span.style.cssText = 'padding:2px 4px;';
+                            div.appendChild(span);
+                        }
+                    });
+                    const deSpan = document.createElement('span');
+                    deSpan.textContent = ' (' + s.de + ')';
+                    deSpan.style.cssText = 'font-size:0.75rem;color:#6b6b6b;margin-left:6px;';
+                    div.appendChild(deSpan);
+                    sentencesDiv.appendChild(div);
+                });
+                state.task4DownSelected = null;
+                state.task4DownPlaced = {};
+                document.querySelectorAll('.task4-down-drag').forEach(tag => {
+                    tag.addEventListener('click', function() {
+                        document.querySelectorAll('.task4-down-drag').forEach(t => t.classList.remove(
+                            'selected-tag'));
+                        tag.classList.add('selected-tag');
+                        state.task4DownSelected = { word: tag.dataset.word, type: tag.dataset.type };
+                    });
+                });
+                document.getElementById('btnTask4DownCheck').addEventListener('click', checkTask4Down);
+                document.getElementById('btnTask4DownDone').addEventListener('click', showResult);
+                scrollToBottom();
+            }
+
+            function selectDownSlot(slot) {
+                if (slot.classList.contains('filled')) return;
+                if (!state.task4DownSelected) {
+                    showToast('👆 Wähle zuerst ein Wort aus!', 'info');
+                    return;
+                }
+                if (slot.dataset.accepts !== state.task4DownSelected.type) {
+                    showToast('❌ Diese Lücke erwartet eine andere Wortart!', 'error');
+                    return;
+                }
+                document.querySelectorAll('.gap-slot').forEach(s => s.classList.remove('active-slot'));
+                slot.classList.add('active-slot');
+                slot.textContent = state.task4DownSelected.word;
+                slot.dataset.placed = state.task4DownSelected.word;
+                const sIdx = slot.dataset.sentenceIdx;
+                const gIdx = slot.dataset.gapIdx;
+                if (!state.task4DownPlaced[sIdx]) state.task4DownPlaced[sIdx] = {};
+                state.task4DownPlaced[sIdx][gIdx] = state.task4DownSelected.word;
+                slot.classList.add('filled');
+                state.task4DownSelected = null;
+                document.querySelectorAll('.task4-down-drag').forEach(t => t.classList.remove('selected-tag'));
+            }
+
+            function checkTask4Down() {
+                let correctCount = 0;
+                task4DownSentences.forEach((s, sIdx) => {
+                    let allCorrect = true;
+                    const sData = state.task4DownPlaced[sIdx] || {};
+                    if (sData[0] !== s.aller) allCorrect = false;
+                    if (sData[1] !== s.infinitif) allCorrect = false;
+                    if (allCorrect) correctCount++;
+                    // Mark slots
+                    document.querySelectorAll(`.gap-slot[data-sentence-idx="${sIdx}"]`).forEach(slot => {
+                        const gIdx = parseInt(slot.dataset.gapIdx);
+                        if (sData[gIdx] === (gIdx === 0 ? s.aller : s.infinitif)) {
+                            slot.classList.add('correct-place');
+                            slot.classList.remove('wrong-place');
+                        } else {
+                            slot.classList.add('wrong-place');
+                            slot.classList.remove('correct-place');
+                        }
+                    });
+                });
+                state.task4Points = correctCount;
+                state.totalPoints += correctCount;
+                updateProgress(state.totalPoints, state.maxPossiblePoints);
+                document.getElementById('task4Score').textContent = '✅ ' + correctCount + ' / 4';
+                document.getElementById('btnTask4DownCheck').classList.add('hidden');
+                document.getElementById('btnTask4DownDone').classList.remove('hidden');
+                showToast(correctCount >= 3 ? '🌟 Klasse!' : 'Nicht aufgeben!', correctCount >= 3 ? 'success' : 'info');
+            }
+
+            // ==================== RESULT ====================
+            function showResult() {
+                clearContent();
+                state.phase = 'result';
+                const diff = getDifferenzierungLevel();
+                let emoji, keyWord, keyClass, message;
+                if (diff === 'up') {
+                    emoji = '🥐';
+                    keyWord = 'croissant';
+                    keyClass = 'top';
+                    message = 'Fantastisch! Du bist bereit für das nächste Level!';
+                } else if (diff === 'mid') {
+                    emoji = '🥖';
+                    keyWord = 'baguette';
+                    keyClass = 'mid';
+                    message = 'Gut gemacht! Weiter so!';
+                } else {
+                    emoji = '🥞';
+                    keyWord = 'crêpe';
+                    keyClass = 'low';
+                    message = 'Nicht schlecht! Übe noch ein bisschen, dann klappt es!';
+                }
+                const resultHTML = `
+                    <div class="card result-card">
+                        <span class="result-emoji">${emoji}</span>
+                        <h2 style="color:#d0793e;margin:8px 0;">Mission erfüllt!</h2>
+                        <p style="font-size:1rem;color:#6b6b6b;">${message}</p>
+                        <div class="key-word ${keyClass}">${emoji} ${keyWord}</div>
+                        <p style="font-size:0.85rem;color:#8b6b5b;margin:6px 0;">⭐ Gesamtpunkte: ${state.totalPoints}</p>
+                        <div style="margin-top:10px;">
+                            <button class="btn btn-secondary" onclick="location.reload();">🔄 Nochmal spielen</button>
+                        </div>
+                        <div class="vocab-list">
+                            <span><span class="fr">chercher</span> – suchen</span>
+                            <span><span class="fr">arriver</span> – ankommen</span>
+                            <span><span class="fr">trouver</span> – finden</span>
+                            <span><span class="fr">habiter</span> – wohnen</span>
+                            <span><span class="fr">travailler</span> – arbeiten</span>
+                            <span><span class="fr">manger</span> – essen</span>
+                            <span><span class="fr">jouer</span> – spielen</span>
+                            <span><span class="fr">écouter</span> – hören</span>
+                            <span><span class="fr">parler</span> – sprechen</span>
+                            <span><span class="fr">avoir</span> – haben</span>
+                            <span><span class="fr">aller</span> – gehen</span>
+                            <span><span class="fr">être</span> – sein</span>
+                        </div>
+                    </div>`;
+                contentArea.innerHTML = resultHTML;
+                updateProgress(state.totalPoints, state.totalPoints);
+            }
+
+            // ==================== UTILS ====================
+            function showToast(text, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = 'feedback-toast ' + type;
+                toast.textContent = text;
+                toastContainer.appendChild(toast);
+                setTimeout(() => { if (toast.parentNode) toast.remove(); }, 2200);
+            }
+
+            function clearContent() {
+                contentArea.innerHTML = '';
+            }
+
+            function scrollToBottom() {
+                setTimeout(() => { contentArea.scrollTop = contentArea.scrollHeight; }, 100);
+            }
+
+            // Init
+            renderIntro();
+
+            // Expose to global scope for reload button
+            window.location = window.location;
+        })();
+    </script>
+</body>
+</html>
